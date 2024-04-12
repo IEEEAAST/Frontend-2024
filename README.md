@@ -20,6 +20,10 @@ git clone https://github.com/IEEE-AAST-Alexandria-Student-Branch/Frontend-2024
 
 - Type: `npm run dev`
 
+## Design guide:
+
+Our design should follow [this template](https://xd.adobe.com/view/360876a4-a18b-4a86-9505-fdd8c336159f-635b/).
+
 ## Directory structure:
 
 The app is located at `src/App.tsx`
