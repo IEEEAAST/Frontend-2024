@@ -23,7 +23,9 @@ git clone https://github.com/IEEE-AAST-Alexandria-Student-Branch/Frontend-2024
 ## Directory structure:
 
 The app is located at `src/App.tsx`
+
 The pages accessed by the router are in `src/pages/`
+
 All components are stored in `src/components/`
 
 - Common components to be used in multiple pages are in `src/components/common/`
@@ -32,4 +34,5 @@ All components are stored in `src/components/`
 - All css files must be named after their component
 
 When editing or adding anything please respect the naming convention
+
 Happy coding!
