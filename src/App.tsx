@@ -1,11 +1,12 @@
-import { Test } from "./components/Test"
+import {Route, Routes} from "react-router-dom"
+import {Home} from "./pages/Home"
 
 function App() {
 
   return (
-    <>
-      <Test />
-    </>
+    <Routes>
+      <Route path="/" element={<Home />} />
+    </Routes>
   )
 }
 
