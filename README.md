@@ -37,6 +37,8 @@ All components are stored in `src/components/`
 - Each page inside `src/components/` has a "styles" folder for css files to be used for its components
 - All css files must be named after their component
 
-When editing or adding anything please respect the naming convention
+All assets (images, icons, etc.) go in `src/assets/`
+
+When editing or adding anything please respect the naming convention and keep the directory organized
 
 Happy coding!
