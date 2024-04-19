@@ -3,7 +3,7 @@ import './styles/Test.css'
 export const Test = () => {
   return (
     <div id="flex">
-      <a href="https://github.com/IEEE-AAST-Alexandria-Student-Branch/Frontend-2024">
+      <a href="https://github.com/IEEE-AAST-Alexandria-Student-Branch/Frontend-2024" target="_blank">
       <div id="circle"><img id="testimg" src={Logo}></img></div>
       </a>
       This is our test page; To be replaced with the actual home page.<br></br>
