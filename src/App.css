@@ -14,7 +14,7 @@ body {
     color:white;
     font-family: 'SF-Pro';
   }
-button{
+.defaultButton{
   background-color: white;
   color:black;
   font-family: 'SF-Pro-Medium';
