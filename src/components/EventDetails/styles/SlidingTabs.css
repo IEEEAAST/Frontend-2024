@@ -11,10 +11,17 @@
 .react-tabs__tab-list{
     display:flex;
     gap: 20px;
-    align-items: flex-start;
     padding:0px;
+    height:45px;
 
 }
-ul{
+.react-tabs__tab{
+    display:flex;
+    align-items: center;
     list-style-type: none;
+    height:100%;
+    cursor:pointer;
+}
+.react-tabs__tab--selected{
+    font-weight:bold;
 }
