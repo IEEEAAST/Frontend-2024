@@ -3,6 +3,10 @@
   font-family: 'SF-Pro';
   src: url("./assets/fonts/SF-Pro.ttf");
 }
+@font-face {
+  font-family: 'SF-Pro-Medium';
+  src: url("./assets/fonts/SF-Pro-Text-Medium.otf");
+}
 body {
     margin: 20px;
     padding: 0;
@@ -13,13 +17,12 @@ body {
 button{
   background-color: white;
   color:black;
-  font-family: 'SF-Pro';
+  font-family: 'SF-Pro-Medium';
   border:none;
   cursor:pointer;
   width: 100px;
   height: 40px;
   border-radius:40px;
-  font-weight:bolder;
 }
 button:active{
   background-color: #c2c2c2
