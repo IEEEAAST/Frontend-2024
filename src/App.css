@@ -17,10 +17,13 @@ body {
 .defaultButton{
   background-color: white;
   color:black;
+  font-size:12pt;
+  font-weight:600;
   font-family: 'SF-Pro-Medium';
   border:none;
   cursor:pointer;
-  width: 100px;
+  min-width:140px;
+  width: 140px;
   height: 40px;
   border-radius:40px;
 }
