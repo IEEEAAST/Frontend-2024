@@ -30,6 +30,8 @@ The app is located at `src/App.tsx`
 
 The pages accessed by the router are in `src/pages/`
 
+All page-specific styles are in `src/pages/styles`
+
 All components are stored in `src/components/`
 
 - Common components to be used in multiple pages are in `src/components/common/`
