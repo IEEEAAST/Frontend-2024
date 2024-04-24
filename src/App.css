@@ -13,6 +13,7 @@ body {
 button{
   background-color: white;
   color:black;
+  font-family: 'SF-Pro';
   border:none;
   cursor:pointer;
   width: 100px;
