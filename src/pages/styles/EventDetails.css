@@ -1,0 +1,25 @@
+body{
+    font-weight:300;    
+}
+#eventName{
+    font-size: 48pt;
+    font-weight: bolder;
+}
+#eventDetailsFlex{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#eventNameWrapper{
+    display:flex;
+    flex-direction: column  ;
+    width: 55%;
+}
+
+#eventDetailsWrapper{
+    display:flex;
+    flex-direction: column;
+    gap:20px;
+    width:15%;
+
+}

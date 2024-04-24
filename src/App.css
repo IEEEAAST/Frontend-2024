@@ -4,7 +4,7 @@
   src: url("./assets/fonts/OpenSans.ttf");
 }
 body {
-    margin: 0;
+    margin: 20px;
     padding: 0;
     background-color: #000B21;
     color:white;

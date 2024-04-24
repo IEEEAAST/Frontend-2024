@@ -7,7 +7,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/event" element={<EventDetails/>}/>
+      <Route path="/event/:name" element={<EventDetails/>}/>
     </Routes>
   );
 }
