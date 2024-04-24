@@ -50,5 +50,7 @@
 }
 .iconButton{
   width:fit-content;
+  border:none;
+  cursor:pointer;
   background-color: transparent !important;
 }
