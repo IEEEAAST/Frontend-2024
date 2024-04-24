@@ -1,5 +1,5 @@
 import "../App.css"
-import { SlidingTabs } from "../components/EventDetails/SlidingTabs"
+import CustomTabs from "../components/EventDetails/CustomTabs"
 import "./styles/EventDetails.css"
 import {useParams} from "react-router-dom"
 
@@ -19,8 +19,7 @@ export const EventDetails = () => {
           <span>Seats: <b>Limited (25 left)</b></span>
         </div>
       </div>
-
-      <SlidingTabs/ >
+      <CustomTabs/>
     </>
   )
 }
