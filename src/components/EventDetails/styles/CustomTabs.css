@@ -6,6 +6,7 @@
     width: 90px;
     padding: 0px 40px;
     height: 2px; 
+    max-height:2px;
     background-color: white; 
     transition: transform 0.3s ease; 
   }
@@ -60,6 +61,11 @@
 #plus{
   display:none;
 }
+.tabIcon{
+  display:none;
+  width:40px;
+
+}
 @media (max-width:1250px){
   .react-tabs__tab{
     width:2vw;
@@ -88,5 +94,21 @@
   }
   #buttonsWrapper{
     width:20%;
+  }
+}
+@media (max-width:600px){
+  .tabText{
+    display:none;
+  }
+  .tabIcon{
+    display:block;
+  }
+  .react-tabs__tab{
+    width:50px;
+    padding:0px 5px;
+  }
+  .tab-border{
+    width:50px;
+    padding:0px 5px;
   }
 }
