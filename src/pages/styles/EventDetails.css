@@ -12,6 +12,7 @@
     display:flex;
     justify-content: space-between;
     align-items: center;
+    min-width:calc(100% - 40px);
 }
 #eventNameWrapper{
     display:flex;

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Bell from '../../assets/notification-bell-white.png';
 import Star from '../../assets/fav-event-star-white.png';
+import Plus from '../../assets/plus.png';
 import './styles/CustomTabs.css'; // Import your CSS file for styling
 export const CustomTabs = () => {
 const [activeTab, setActiveTab] = useState<number>(0);
@@ -23,7 +24,10 @@ const [activeTab, setActiveTab] = useState<number>(0);
       <div id="buttonsWrapper">
         <button className="iconButton"><img src={Bell}></img></button>
         <button className="iconButton"><img src={Star}></img></button>
-        <button className='defaultButton'>Attend</button>
+        <button className='defaultButton'>
+          <span id="buttonText">Attend</span>
+          <button className="iconButton" id="plus"><img src={Plus}></img></button>
+          </button>
       </div>
       </div>
       <TabPanel>
