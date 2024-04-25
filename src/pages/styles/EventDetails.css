@@ -27,3 +27,10 @@
     width:15%;
 
 }
+.iconButton{
+    min-width: 35px;
+    border-radius: 100%;
+    align-self: center;
+    outline:none;
+    margin-right:40px;
+}
