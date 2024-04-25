@@ -1,0 +1,37 @@
+#eventPage{
+    width:calc(100% - 40px);
+    margin:20px;
+    font-weight:300;
+}
+#eventName{
+    font-size: 48pt;
+    font-family: 'SF-Pro-Display-Bold';
+
+}
+#eventDetailsFlex{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    min-width:calc(100% - 40px);
+}
+#eventNameWrapper{
+    display:flex;
+    flex-direction: column  ;
+    width: 55%;
+}
+
+#eventDetailsWrapper{
+    display:flex;
+    flex-direction: column;
+    gap:20px;
+    width:15%;
+
+}
+.iconButton{
+    min-width: 35px;
+    min-height: 35px;
+    border-radius: 100%;
+    align-self: center;
+    outline:none;
+    margin-right:40px;
+}

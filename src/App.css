@@ -16,11 +16,11 @@
   src: url("./assets/fonts/SF-Pro-Display-Black.otf");
 }
 body {
-    margin: 0;
+    margin: 0px;
     padding: 0;
     background-color: #000B21;
     color:white;
-    font-family: 'SF-Pro';
+    font-family: 'SF-Pro-Text-Medium';
   }
 .defaultButton{
   background-color: white;
