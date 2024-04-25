@@ -3,7 +3,8 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Bell from '../../assets/notification-bell-white.png';
 import Star from '../../assets/fav-event-star-white.png';
 import Plus from '../../assets/plus.png';
-import Person from '../../assets/profile-person-white@2x.png'
+import Person from '../../assets/speakers.png'
+import Sponsors from '../../assets/sponsorships.png'
 import './styles/CustomTabs.css'; // Import your CSS file for styling
 export const CustomTabs = () => {
 const [activeTab, setActiveTab] = useState<number>(0);
@@ -18,7 +19,7 @@ const [activeTab, setActiveTab] = useState<number>(0);
         <div className="tab-border" style={{ transform: `translateX(${activeTab * 100}%)` }}></div>
         <Tab><span className="tabText">Schedule</span></Tab>
         <Tab><span className="tabText">Speakers</span><img src={Person} className="tabIcon"></img></Tab>
-        <Tab><span className="tabText">Sponsors</span></Tab>
+        <Tab><span className="tabText">Sponsors</span><img src={Sponsors} className="tabIcon"></img></Tab>
         <Tab><span className="tabText">Resources</span></Tab>
         <Tab><span className="tabText">Gallery</span></Tab>
       </TabList>
