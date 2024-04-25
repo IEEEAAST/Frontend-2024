@@ -1,0 +1,27 @@
+.text{
+    display: flex;
+    /* flex-direction: row; */
+    justify-content: space-around;
+    border-bottom: solid  1px #70707071;
+}
+.list{
+    display: flex;
+    /* flex-direction: row; */
+    justify-content: space-around;
+    /* padding-right: 1rem; */
+    /*margin-right: rem;*/
+    margin-left: 1rem;
+    max-width: 1300px;
+}
+/* .list>p{
+
+} */
+
+#start{
+    margin-right: 2.5rem;
+}
+#name{
+    left: 2rem;
+    position: relative;
+
+}

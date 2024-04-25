@@ -3,6 +3,9 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Bell from '../../assets/notification-bell-white.png';
 import Star from '../../assets/fav-event-star-white.png';
 import './styles/CustomTabs.css'; // Import your CSS file for styling
+import { Schedule } from './schedule';
+import {ScheduelItem} from './Scheduel-item';
+import { Speakers } from './Speakers';
 export const CustomTabs = () => {
 const [activeTab, setActiveTab] = useState<number>(0);
 
@@ -27,10 +30,11 @@ const [activeTab, setActiveTab] = useState<number>(0);
       </div>
       </div>
       <TabPanel>
-          Schedule goes here!
+          <Schedule/>
+          <ScheduelItem/>
         </TabPanel>
         <TabPanel>
-          Speakers go here!
+          <Speakers/>
         </TabPanel>
         <TabPanel>
             Sponsors go here!
