@@ -7,7 +7,7 @@ import {useParams} from "react-router-dom"
 export const EventDetails = () => {
   const eventName = useParams().name
   return (
-    <>
+    <div id="eventPage">
       <div id="eventDetailsFlex">
         <div id="eventNameWrapper">
           <span id="eventName">{eventName}</span> {/* For now, this displays whatever is in the url params. Will interact with DB next phase */}
@@ -20,6 +20,6 @@ export const EventDetails = () => {
         </div>
       </div>
       <CustomTabs/>
-    </>
+    </div>
   )
 }
