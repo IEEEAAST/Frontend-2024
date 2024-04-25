@@ -29,6 +29,7 @@
 }
 .iconButton{
     min-width: 35px;
+    min-height: 35px;
     border-radius: 100%;
     align-self: center;
     outline:none;

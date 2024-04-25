@@ -5,6 +5,7 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from '@chakra-u
 
 import Bell from '../assets/notification-bell-white.png';
 import Star from '../assets/fav-event-star-white.png';
+import { url } from "inspector";
 
 
 export const EventDetails = () => {
@@ -29,8 +30,8 @@ export const EventDetails = () => {
           <Tab>Sponsors</Tab>
           <Tab>Resources</Tab>
           <Tab style={{marginRight:"20px"}}>Gallery</Tab>
-          <button className="iconButton" style={{marginLeft:"auto"}}><img src={Bell}></img></button>
-          <button className="iconButton"><img src={Star}></img></button>
+          <button className="iconButton" style={{marginLeft:"auto", backgroundImage:`url(${Bell})`}}></button>
+          <button className="iconButton" style={{backgroundImage:`url(${Star})`}}></button>
           <button className="defaultButton" style={{alignSelf:"center"}}>Attend</button>
         </TabList>
         <TabIndicator mt='-1.5px' height='2px' bg='white' borderRadius='1px' />
