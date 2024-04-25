@@ -10,8 +10,10 @@ export const Test = () => {
       </a>
       This is our test page; To be replaced with the actual home page.<br></br>
       For now, enjoy this spinning IEEE thing.
-      <input type='text' placeholder='Enter URL path here...' style={{width:"400px",height:"40px",borderRadius:"40px",padding:"15px",color:"black"}} onChange={event=>{setUrl(event.target.value);}}></input>
-      <button className='defaultButton' onClick={()=>{window.open(`/${url}`,"_self")}}>Go</button>
+      <form style={{display:"flex", flexDirection:"column", alignItems:"center", gap:"20px"}} onSubmit={(event)=>{event.preventDefault();window.open(`/${url}`,"_self")}}>
+      <input autoFocus type='text' placeholder='Enter URL path here...' style={{width:"400px",height:"40px",borderRadius:"40px",padding:"15px",color:"black"}} onChange={event=>{setUrl(event.target.value);}}></input>
+      <input type='submit' value="Go" className='defaultButton' ></input>
+      </form>
     </div>
   )
 }
