@@ -5,7 +5,6 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from '@chakra-u
 
 import Bell from '../assets/notification-bell-white.png';
 import Star from '../assets/fav-event-star-white.png';
-import { url } from "inspector";
 
 
 export const EventDetails = () => {
