@@ -11,7 +11,7 @@ export const Test = () => {
       This is our test page; To be replaced with the actual home page.<br></br>
       For now, enjoy this spinning IEEE thing.
       <input type='text' placeholder='Enter URL path here...' style={{width:"400px",height:"40px",borderRadius:"40px",padding:"15px",color:"black"}} onChange={event=>{setUrl(event.target.value);}}></input>
-      <button className='defaultButton' onClick={()=>{window.open(`/${url}`)}}>Go</button>
+      <button className='defaultButton' onClick={()=>{window.open(`/${url}`,"_self")}}>Go</button>
     </div>
   )
 }
