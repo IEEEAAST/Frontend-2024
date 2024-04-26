@@ -4,7 +4,7 @@
     font-weight:300;
 }
 #eventName{
-    font-size: 48pt;
+    font-size: calc(24px + 3.5vw);
     font-family: 'SF-Pro-Display-Bold';
 
 }
@@ -42,13 +42,13 @@
     display:none;
 }
 .iconButtonsWrapper{
-    width:10%;
-    padding:2px;
+    width:fit-content;
+    padding:0px 15px;
     min-width:fit-content;
-    
     margin-left:auto;
     justify-content: space-around;
     display:flex;
+    gap:10px;
     align-items: center;
     height:80%;
     border-radius: 999px;
@@ -63,6 +63,5 @@
     }
     .iconButtonsWrapper{
         background-color: hsl(220, 34%, 27%);
-        width:100%;
     }
 }
