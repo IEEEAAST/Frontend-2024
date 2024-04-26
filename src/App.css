@@ -1,6 +1,44 @@
 /* For global styling*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@font-face {
+  font-family: 'SF-Pro';
+  src: url("./assets/fonts/SF-Pro.ttf");
+}
+@font-face {
+  font-family: 'SF-Pro-Text-Medium';
+  src: url("./assets/fonts/SF-Pro-Text-Medium.otf");
+}
+@font-face {
+  font-family: 'SF-Pro-Display-Bold';
+  src: url("./assets/fonts/SF-Pro-Display-Bold.otf");
+}
+@font-face {
+  font-family: 'SF-Pro-Text-Light';
+  src: url("./assets/fonts/SF-Pro-Display-Black.otf");
+}
 body {
     margin: 0;
     padding: 0;
+    background-color: #000B21;
+    color:white;
+    font-family: 'SF-Pro';
   }
+.defaultButton{
+  background-color: white;
+  color:black;
+  font-size:12pt;
+  font-weight:600;
+  font-family: 'SF-Pro-Text-Medium';
+  border:none;
+  cursor:pointer;
+  min-width:140px;
+  width: 140px;
+  height: 40px;
+  border-radius:40px;
+}
+.defaultButton:active{
+  background-color: #c2c2c2
+}
   
