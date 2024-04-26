@@ -10,6 +10,7 @@ import SpeakersIcon from '../assets/speakers.png'
 import SponsorsIcon from '../assets/sponsorships.png'
 import ResourcesIcon from '../assets/resources.png'
 import GalleryIcon from '../assets/gallery.png'
+import PlusIcon from '../assets/plus.png'
 
 
 
@@ -34,12 +35,12 @@ export const EventDetails = () => {
         <Tab><span className="tabLabel">Speakers</span><span className="tabIcon"><img src={SpeakersIcon}/></span></Tab>
         <Tab><span className="tabLabel">Sponsors</span><span className="tabIcon"><img src={SponsorsIcon}/></span></Tab>
         <Tab><span className="tabLabel">Resources</span><span className="tabIcon"><img src={ResourcesIcon} /></span></Tab>
-        <Tab><span className="tabLabel">Gallery</span><span className="tabIcon"><img src={GalleryIcon} /></span></Tab>
+        <Tab className="mr-1"><span className="tabLabel">Gallery</span><span className="tabIcon"><img src={GalleryIcon} /></span></Tab>
           <div className="iconButtonsWrapper">
           <button className="iconButton" style={{backgroundImage:`url(${Bell})`}}></button>
           <button className="iconButton" style={{backgroundImage:`url(${Star})`}}></button>
           </div>
-          <button className="defaultButton" style={{alignSelf:"center"}}>Attend</button>
+          <button className="defaultButton" style={{alignSelf:"center"}}><span className="hidden sm:block">Attend</span><span className="block sm:hidden plusButton"><img src={PlusIcon} /></span></button>
         </TabList>
         <TabIndicator mt='-1.5px' height='2px' bg='white' borderRadius='1px' />
         <TabPanels>
