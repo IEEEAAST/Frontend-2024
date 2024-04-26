@@ -28,7 +28,7 @@ export const EventDetails = () => {
           <Tab>Speakers</Tab>
           <Tab>Sponsors</Tab>
           <Tab>Resources</Tab>
-          <Tab style={{marginRight:"20px"}}>Gallery</Tab>
+          <Tab className="mr-20">Gallery</Tab>
           <button className="iconButton" style={{marginLeft:"auto", backgroundImage:`url(${Bell})`}}></button>
           <button className="iconButton" style={{backgroundImage:`url(${Star})`}}></button>
           <button className="defaultButton" style={{alignSelf:"center"}}>Attend</button>
