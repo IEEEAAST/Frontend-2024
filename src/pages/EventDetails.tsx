@@ -3,8 +3,8 @@ import "./styles/EventDetails.css"
 import {useParams} from "react-router-dom"
 import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from '@chakra-ui/react'
 
-import Bell from '../assets/notification-bell-white.png';
-import Star from '../assets/fav-event-star-white.png';
+import Bell from '../assets/notification-bell-white@2x.png';
+import Star from '../assets/fav-event-star-white@2x.png';
 import ScheduleIcon from '../assets/schedule.png';
 import SpeakersIcon from '../assets/speakers.png'
 import SponsorsIcon from '../assets/sponsorships.png'

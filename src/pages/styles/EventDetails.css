@@ -33,14 +33,14 @@
     min-height: 35px;
     border-radius: 100%;
     outline:none;
+    background-size: contain;
 }
 .tabLabel{
     display:block;
 }
 .tabIcon{
-    min-width:35px;
-    min-height:35px;
     display:none;
+    margin: 4px;
 }
 .iconButtonsWrapper{
     width:fit-content;
@@ -61,6 +61,7 @@
     }
     .tabIcon{
         display:block;
+        width:40px;
     }
     .iconButtonsWrapper{
         background-color: hsl(220, 34%, 27%);
@@ -68,17 +69,15 @@
 }
 @media (max-width: 640px){
     .tabIcon{
-        width:27px;
-        height:27px;
-        min-width:0px;
-        min-height:0px;
+        width:calc(6px + 4vw);
+        max-width:30px;
     }
     .iconButton{
         width:27px;
         height:27px;
         min-width:0px;
         min-height:0px;
-        background-size: contain;
+        
     }
     .plusButton{
         display:block;
