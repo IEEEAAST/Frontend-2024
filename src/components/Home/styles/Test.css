@@ -12,10 +12,11 @@
     align-items: center;
     text-align: center;
     gap:60px;
-    height:100vh;
+    height:100%;
     width:100vw;
 }
 #circle{
+  margin-top: 60px;
     width:400px;
     height:400px;
     padding: 100px;
@@ -37,3 +38,11 @@
       transform: rotate(359deg);
     }
   }
+
+@media (max-width:640px){
+    #circle{
+        width:300px;
+        height:300px;
+        padding:75px;
+    }
+}
