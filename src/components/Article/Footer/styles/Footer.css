@@ -1,0 +1,54 @@
+
+/** The Footer **/
+
+.footer {
+    font-size: 12px;
+    color: gray;
+    display: flex;
+    align-items: center;
+    background-color: rgb(21, 31, 51);
+    margin: 10px;
+    padding-left: 100px;
+    border-radius: 10px;
+}
+
+/** The Footer Logo **/
+
+.footer-logo img{
+    width: 30px;
+    margin: 30px -30px 30px 0px;
+}
+
+/** The Footer Horizontal Line **/
+
+.footer-line {
+    margin-left: 50px;
+    width: 1.5px;
+    height: 25px;
+    background-color: gray; 
+}
+
+/** The Footer Links **/
+
+a {
+    color: gray;
+    text-decoration: none;
+}
+
+.footer-links li {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.footer-links li:first-child {
+    margin-left: -30px;
+}
+
+.footer-links li:first-child:before {
+    content: "";
+}
+
+.footer-links li:before {
+    content: "•";
+    margin-right: 5px;
+  }
