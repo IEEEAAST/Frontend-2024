@@ -16,7 +16,11 @@
 }
 @font-face {
   font-family: 'SF-Pro-Text-Light';
-  src: url("./assets/fonts/SF-Pro-Display-Black.otf");
+  src: url("./assets/fonts/SF-Pro-Text-Light.otf");
+}
+@font-face {
+  font-family: 'SF-Pro-Display-Regular';
+  src: url("./assets/fonts/SF-Pro-Display-Regular.otf");
 }
 body {
     margin: 0px;
