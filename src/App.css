@@ -20,6 +20,7 @@
 }
 body {
     margin: 0px;
+    margin-bottom:80px !important; /*for navigation footer, remove later*/
     padding: 0;
     background-color: #000B21;
     color:white;
@@ -33,7 +34,8 @@ body {
   font-family: 'SF-Pro-Text-Medium';
   border:none;
   cursor:pointer;
-  min-width:140px;
+  max-width:140px;
+  min-width:90px;
   width: 140px;
   height: 40px;
   border-radius:40px;
