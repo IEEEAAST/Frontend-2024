@@ -1,6 +1,6 @@
 import React from "react";
-import Card from "../Home/Card";
-import "../Home/styles/Card.css";
+import Card from "./Card";
+import NumbersCard from "./NumbersCard";
 
 import Growth from "../../assets/growth-arrow-green.png";
 import Integrity from "../../assets/integrity-scales-yellow.png";
@@ -8,6 +8,9 @@ import PartnerShip from "../../assets/partner-hands-orange.png";
 import Service from "../../assets/service-chip-flamenco.png";
 import Trust from "../../assets/trust-net-blue.png";
 import Community from "../../assets/community-globe-purple.png";
+import EventsNumber from "../../assets/events-number.png";
+import PartnerShipsNumber from "../../assets/partnerships-number.png";
+import VolunteersNumber from "../../assets/volunteers-number.png";
 
 export const cardsData = [
   {
@@ -54,19 +57,36 @@ export const cardsData = [
   },
 ];
 
+export const branchNumbers = [
+  {
+    title: "360+",
+    text: "Events until present",
+    imgSrc: EventsNumber,
+  },
+  {
+    title: "120+",
+    text: "Partnerships until present",
+    imgSrc: PartnerShipsNumber,
+  },
+  {
+    title: "200+",
+    text: "Volunteers until present",
+    imgSrc: VolunteersNumber,
+  },
+];
+
 const Test: React.FC = () => {
   return (
     <>
       <div className="card-container">
+        <h2 className="card-heading">IEEE Values. Our Core.</h2>
         {cardsData.map((card, index) => (
-          <Card
-            key={index}
-            title={card.title}
-            text={card.text}
-            imgSrc={card.imgSrc}
-            width={card.width}
-            backGround={card.backGround}
-          />
+          <Card key={index} {...card} />
+        ))}
+      </div>
+      <div className="box-container">
+        {branchNumbers.map((number, index) => (
+          <NumbersCard key={index} {...number} />
         ))}
       </div>
     </>
