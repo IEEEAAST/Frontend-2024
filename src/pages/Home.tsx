@@ -1,3 +1,4 @@
+
 import { NavBar } from "../components/common/navbar.tsx";
 import { HomeComp } from "../components/Home/home.tsx";
 import { Sponsor } from "../components/Home/Sponsor.tsx";
