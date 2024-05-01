@@ -1,3 +1,5 @@
+import { Route, Routes } from "react-router-dom";
+import { Home } from "./pages/Home";
 import { Header } from "./pages/Header";
 
 import "./App.css"; // Import CSS file
