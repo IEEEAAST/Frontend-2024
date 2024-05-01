@@ -3,9 +3,11 @@ export const HomeComp = () => {
     <div
       className={`flex flex-col bg-cover bg-center w-full h-screen bg-homeImage`}
     >
+      <div className="absolute  w-full h-screen bg-gradient-to-t from-[#000B21]/90 via-transparent to-[#000B21]/90 "></div>
+      <div className="absolute  w-full h-screen bg-gradient-to-r from-[#000B21]/90 via-transparent to-[#000B21]/90 "></div>
       <div className="flex flex-col justify-center w-full h-full">
-        <div className="flex flex-col justify-start ml-20 w-1/2 container ">
-          <div className="xl:text-4xl md:text-xl sm:text-sm  font-bold">
+        <div className="flex flex-col justify-start ml-20 w-1/2 container z-10 ">
+          <div className="xl:text-4xl md:text-xl sm:text-sm  font-bold ">
             <p>Fostering innovation through education </p>
             <p>technology, and professional</p>
             <p>development.</p>
@@ -28,7 +30,7 @@ export const HomeComp = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col items-center pb-4">
+      <div className="flex flex-col items-center pb-4 z-10">
         <p>Join 120+ trusted distinguished partners.</p>
       </div>
     </div>
