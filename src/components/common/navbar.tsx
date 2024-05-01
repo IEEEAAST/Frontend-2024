@@ -6,7 +6,7 @@ export const NavBar = () => {
   const [lang, setLang] = useState<string>("english");
   const disLang: string[] = ["english", "arabic"];
   return (
-    <div className="flex items-center justify-between py-2 ">
+    <div className="absolute flex items-center justify-between py-2 w-full ">
       {/* left */}
       <div className="ml-4 w-2/6">
         <img src={Logo} alt="IEEE branch logo" height={90} width={90} />
