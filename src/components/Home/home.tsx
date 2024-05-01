@@ -1,14 +1,11 @@
-import homeBgImage from "../../assets/home/ieeeHome.jpg";
-
 export const HomeComp = () => {
   return (
     <div
-      className="flex flex-col bg-cover bg-center w-full h-screen"
-      style={{ backgroundImage: `url(${homeBgImage})` }}
+      className={`flex flex-col bg-cover bg-center w-full h-screen bg-homeImage`}
     >
       <div className="flex flex-col justify-center w-full h-full">
         <div className="flex flex-col justify-start ml-20 w-1/2 container ">
-          <div className="text-4xl font-bold">
+          <div className="xl:text-4xl md:text-xl sm:text-sm  font-bold">
             <p>Fostering innovation through education </p>
             <p>technology, and professional</p>
             <p>development.</p>
