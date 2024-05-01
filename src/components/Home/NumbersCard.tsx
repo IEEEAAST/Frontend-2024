@@ -1,4 +1,3 @@
-import React from "react";
 import "./styles/Card.css";
 import "./styles/NumbersCard.css";
 
@@ -8,7 +7,7 @@ interface NumbersCardProps {
   imgSrc: string;
 }
 
-const NumbersCard: React.FC<NumbersCardProps> = ({ title, text, imgSrc }) => {
+const NumbersCard = ({ title, text, imgSrc }: NumbersCardProps) => {
   return (
     <div className="box">
       <img src={imgSrc} alt={title} />

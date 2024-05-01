@@ -1,4 +1,3 @@
-import React from "react";
 import Card from "./Card";
 import NumbersCard from "./NumbersCard";
 
@@ -12,7 +11,7 @@ import EventsNumber from "../../assets/events-number.png";
 import PartnerShipsNumber from "../../assets/partnerships-number.png";
 import VolunteersNumber from "../../assets/volunteers-number.png";
 
-export const cardsData = [
+const cardsData = [
   {
     title: "Growth",
     text: "Promote ongoing education for engineers, scientists, and technologists and maintain a student pipeline to sustain the profession.",
@@ -57,7 +56,7 @@ export const cardsData = [
   },
 ];
 
-export const branchNumbers = [
+const branchNumbers = [
   {
     title: "360+",
     text: "Events until present",
@@ -75,7 +74,7 @@ export const branchNumbers = [
   },
 ];
 
-const Test: React.FC = () => {
+const About = () => {
   return (
     <>
       <div className="card-container">
@@ -93,4 +92,4 @@ const Test: React.FC = () => {
   );
 };
 
-export default Test;
+export default About;

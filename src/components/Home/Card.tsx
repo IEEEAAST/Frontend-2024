@@ -1,4 +1,3 @@
-import React from "react";
 import "./styles/Card.css";
 
 interface CardProps {
@@ -9,13 +8,7 @@ interface CardProps {
   backGround: string;
 }
 
-const Card: React.FC<CardProps> = ({
-  title,
-  text,
-  imgSrc,
-  width,
-  backGround,
-}) => {
+const Card = ({ title, text, imgSrc, width, backGround }: CardProps) => {
   let w;
   if (width === "small") {
     w = "350px";

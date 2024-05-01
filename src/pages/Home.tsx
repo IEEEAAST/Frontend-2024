@@ -1,10 +1,9 @@
-import React from "react";
-import Test from "../components/Home/Test";
+import About from "../components/Home/About";
 
 const Home: React.FC = () => {
   return (
     <>
-      <Test />
+      <About />
     </>
   );
 };
