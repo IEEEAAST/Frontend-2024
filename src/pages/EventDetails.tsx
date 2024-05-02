@@ -5,7 +5,7 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from '@chakra-u
 
 import Bell from '../assets/notification-bell-white.png';
 import Star from '../assets/fav-event-star-white.png';
-import { Schedule } from "../components/EventDetails/schedule";
+import { Schedule } from "../components/EventDetails/Schedule";
 import { Speakers } from "../components/EventDetails/Speakers";
 
 export const EventDetails = () => {
