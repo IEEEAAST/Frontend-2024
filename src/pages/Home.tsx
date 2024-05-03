@@ -1,9 +1,10 @@
-import { Test } from "../components/Home/Test.tsx"
-
+import { NavBar } from "../components/common/navbar.tsx";
+// import { Test } from "../components/Home/Test.tsx";
 export const Home = () => {
   return (
-    <>
-    <Test/>
-    </>
-  )
-}
+    <div>
+      <NavBar/>
+      {/* <Test/> */}
+    </div>
+  );
+};
