@@ -11,9 +11,9 @@ interface CardProps {
 const Card = ({ title, text, imgSrc, width, backGround }: CardProps) => {
   let w;
   if (width === "small") {
-    w = "350px";
+    w = "420px";
   } else {
-    w = "550px";
+    w = "690px";
   }
   return (
     <div
