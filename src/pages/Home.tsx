@@ -1,5 +1,6 @@
 import { NavBar } from "../components/common/navbar.tsx";
 import About from "../components/Home/About.tsx";
+import { AchievementCarousel } from "../components/Home/AchievementCarousel.tsx";
 import { HomeComp } from "../components/Home/home.tsx";
 import { Sponsor } from "../components/Home/Sponsor.tsx";
 export const Home = () => {
@@ -9,6 +10,7 @@ export const Home = () => {
       <HomeComp />
       <Sponsor />
       <About/>
+      <AchievementCarousel/>
     </>
   );
 };
