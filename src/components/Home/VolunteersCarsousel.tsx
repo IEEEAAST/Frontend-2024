@@ -1,8 +1,6 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, useMotionValue } from "framer-motion";
-import { generateFakeImages } from "../../mock/home/generateFakeImages";
 
-const imgs = generateFakeImages(10);
 const ONE_SECOND = 1000;
 const AUTO_DELAY = ONE_SECOND * 10;
 const DRAG_BUFFER = 50;
@@ -14,7 +12,7 @@ const SPRING_OPTIONS = {
   damping: 50,
 };
 
-export const SwipeCarousel = () => {
+export const VolunteersCarsousel = ({imgs}:{imgs:string[]}) => {
   const [imgIndex, setImgIndex] = useState(0);
 
   const dragX = useMotionValue(0);
@@ -47,7 +45,7 @@ export const SwipeCarousel = () => {
   };
 
   return (
-    <div className="relative overflow-hidden rounded-2xl h-full" >
+    <div className="overflow-hidden rounded-2xl" >
       <motion.div
         drag="x"
         dragConstraints={{
@@ -62,21 +60,18 @@ export const SwipeCarousel = () => {
         }}
         transition={SPRING_OPTIONS}
         onDragEnd={onDragEnd}
-        className="flex cursor-grab items-center active:cursor-grabbing"
+        className="flex cursor-grab items-center active:cursor-grabbing w-full"
       >
-        <Images imgIndex={imgIndex}/>
+        <Images imgIndex={imgIndex} imgs={imgs} />
       </motion.div>
-
-      <Dots imgIndex={imgIndex} setImgIndex={setImgIndex} />
     </div>
   );
 };
 
-const Images = ({ imgIndex }: { imgIndex: number }) => {
+const Images = ({ imgIndex,imgs }: { imgIndex: number,imgs:string[]}) => {
   return (
     <>
       {imgs.map((imgSrc, idx) => {
-        const isSelected:string = (imgIndex==idx)? "w-4/5 filter-none":" w-20";
         return (
           <motion.div
             key={idx}
@@ -89,34 +84,10 @@ const Images = ({ imgIndex }: { imgIndex: number }) => {
               scale: imgIndex === idx ? 0.95 : 0.85,
             }}
             transition={SPRING_OPTIONS}
-            className={`aspect-video shrink-0 rounded-xl object-cover grayscale h-96 ${isSelected}`}
+            className={`rounded-xl object-cover grayscale h-60 w-[200px]`}
           />
         );
       })}
     </>
-  );
-};
-
-const Dots = ({
-  imgIndex,
-  setImgIndex,
-}: {
-  imgIndex: number;
-  setImgIndex: Dispatch<SetStateAction<number>>;
-}) => {
-  return (
-    <div className="mt-4 flex w-full justify-center gap-2">
-      {imgs.map((_, idx) => {
-        return (
-          <button
-            key={idx}
-            onClick={() => setImgIndex(idx)}
-            className={`h-3 w-3 rounded-full transition-colors ${
-              idx === imgIndex ? "bg-neutral-50" : "bg-neutral-500"
-            }`}
-          />
-        );
-      })}
-    </div>
   );
 };
