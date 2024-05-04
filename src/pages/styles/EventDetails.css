@@ -1,8 +1,10 @@
 #eventPage{
-    width:calc(100% - 40px);
-    margin:20px;
+    width:100%;
+    padding:20px;
     font-weight:300;
+    height:calc(100vh - 80px);
 }
+
 #eventName{
     font-size: calc(24px + 3.5vw);
     font-family: 'SF-Pro-Display-Bold';
@@ -55,37 +57,36 @@
     border-radius: 999px;
     margin-right:10px;
 }
-@media (max-width: 768px) {
+.plusButton{
+    display:none;
+    width:35px;
+    background-size: contain;
+}
+@media (max-width: 800px) {
     .tabLabel{
         display:none;
     }
     .tabIcon{
         display:block;
-        width:40px;
+        width:calc(10px + 4vw);
     }
     .iconButtonsWrapper{
         background-color: hsl(220, 34%, 27%);
     }
 }
-@media (max-width: 640px){
-    .tabIcon{
-        width:calc(6px + 4vw);
-        max-width:30px;
-    }
-    .iconButton{
-        width:27px;
-        height:27px;
-        min-width:0px;
-        min-height:0px;
-        
-    }
+@media (max-width: 650px){
     .plusButton{
         display:block;
-        width:27px;
-        height:27px;
-        min-width:0px;
-        min-height:0px;
-        background-size: contain;
+        width:30px;
+
+    }
+    .tabIcon{
+        width:calc(6vw - 2px);
+    }
+    .iconButton{
+        min-width: 25px;
+        min-height: 25px;
+        width:25px;
     }
     .iconButtonsWrapper{
         padding:0px 5px;
@@ -95,8 +96,8 @@
         margin:30px 0px !important;
     }
     .chakra-tabs__tablist{
-        height:40px !important;
         padding:0px 10px !important;
+        height:50px !important;
     }
     .chakra-tabs__tab{
         padding:5px !important;
@@ -107,4 +108,9 @@
         width: fit-content;
         background-color: transparent;
     }
+    .buttonText{
+        display: none;
+    }
+    
+    
 }

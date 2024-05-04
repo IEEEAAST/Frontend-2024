@@ -40,7 +40,7 @@ export const EventDetails = () => {
           <button className="iconButton" style={{backgroundImage:`url(${Bell})`}}></button>
           <button className="iconButton" style={{backgroundImage:`url(${Star})`}}></button>
           </div>
-          <button className="defaultButton" style={{alignSelf:"center"}}><span className="hidden sm:block">Attend</span><span className="block sm:hidden plusButton"><img src={PlusIcon} /></span></button>
+          <button className="defaultButton" style={{alignSelf:"center"}}><span className="buttonText">Attend</span><span className="plusButton"><img src={PlusIcon} /></span></button>
         </TabList>
         <TabIndicator mt='-1.5px' height='2px' bg='white' borderRadius='1px' />
         <TabPanels>
