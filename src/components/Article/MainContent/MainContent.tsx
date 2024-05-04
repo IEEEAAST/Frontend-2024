@@ -1,5 +1,6 @@
 import "./styles/MainContent.css";
 import { LikeSaveShare } from "./LikeSaveShare";
+import { Modal } from "../Modal/Modal";
 import { useState } from "react";
 
 interface Props {
@@ -15,6 +16,7 @@ interface Props {
 
 export const MainContent = (props: Props) => {
   const [isFollowing, setIsFollowing] = useState(true);
+  const [modal, setModal] = useState(false);
 
   const toggleFollow = () => {
     setIsFollowing(!isFollowing);
@@ -53,9 +55,10 @@ export const MainContent = (props: Props) => {
       <hr />
       <a href="">More from {props.author_name}</a>
       <hr />
-      <a href="">Report</a>
+      <a onClick={()=>setModal(true)}><u>Report</u></a>
       <hr />
       <a href="">Help</a>
+      {modal && <Modal closeModal={setModal}/>}
     </div>
   );
 };
