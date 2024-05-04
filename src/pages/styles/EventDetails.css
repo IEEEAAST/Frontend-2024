@@ -74,14 +74,14 @@
         background-color: hsl(220, 34%, 27%);
     }
 }
-@media (max-width: 650px){
+@media (max-width: 672px){
     .plusButton{
         display:block;
         width:30px;
 
     }
     .tabIcon{
-        width:calc(6vw - 2px);
+        width:28px;
     }
     .iconButton{
         min-width: 25px;
@@ -110,6 +110,12 @@
     }
     .buttonText{
         display: none;
+    }
+
+    @media (max-width: 400px) {
+        .tabIcon{
+            width:calc(13px + 2vw);
+        }
     }
     
     
