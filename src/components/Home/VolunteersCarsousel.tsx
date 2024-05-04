@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, useMotionValue } from "framer-motion";
+import { generateFakeImages } from "../../mock/home/generateFakeImages";
 
 const ONE_SECOND = 1000;
 const AUTO_DELAY = ONE_SECOND * 10;
@@ -45,7 +46,7 @@ export const VolunteersCarsousel = ({imgs}:{imgs:string[]}) => {
   };
 
   return (
-    <div className="overflow-hidden rounded-2xl" >
+    <div className="relative overflow-hidden rounded-2xl h-full" >
       <motion.div
         drag="x"
         dragConstraints={{
@@ -56,22 +57,23 @@ export const VolunteersCarsousel = ({imgs}:{imgs:string[]}) => {
           x: dragX,
         }}
         animate={{
-          translateX: `-${imgIndex * 7.2}%`,
+          translateX: `-${imgIndex * 32}%`,
         }}
         transition={SPRING_OPTIONS}
         onDragEnd={onDragEnd}
-        className="flex cursor-grab items-center active:cursor-grabbing w-full"
+        className="flex cursor-grab items-center active:cursor-grabbing"
       >
-        <Images imgIndex={imgIndex} imgs={imgs} />
+        <Images imgIndex={imgIndex} imgs={imgs}/>
       </motion.div>
     </div>
   );
 };
 
-const Images = ({ imgIndex,imgs }: { imgIndex: number,imgs:string[]}) => {
+const Images = ({ imgIndex,imgs }: { imgIndex: number ,imgs:string[]}) => {
   return (
     <>
       {imgs.map((imgSrc, idx) => {
+        const selected =(imgIndex==idx)?"filter-none":""
         return (
           <motion.div
             key={idx}
@@ -84,7 +86,7 @@ const Images = ({ imgIndex,imgs }: { imgIndex: number,imgs:string[]}) => {
               scale: imgIndex === idx ? 0.95 : 0.85,
             }}
             transition={SPRING_OPTIONS}
-            className={`rounded-xl object-cover grayscale h-60 w-[200px]`}
+            className={`aspect-video shrink-0 rounded-xl object-cover grayscale h-96 w-[350px] ${selected}`}
           />
         );
       })}
