@@ -81,7 +81,7 @@
 
     }
     .tabIcon{
-        width:23px;
+        width:calc(6vw - 2px);
     }
     .iconButton{
         min-width: 25px;
