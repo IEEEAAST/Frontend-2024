@@ -77,7 +77,16 @@
 @media (max-width: 650px){
     .plusButton{
         display:block;
+        width:30px;
 
+    }
+    .tabIcon{
+        width:23px;
+    }
+    .iconButton{
+        min-width: 25px;
+        min-height: 25px;
+        width:25px;
     }
     .iconButtonsWrapper{
         padding:0px 5px;
@@ -88,6 +97,7 @@
     }
     .chakra-tabs__tablist{
         padding:0px 10px !important;
+        height:50px !important;
     }
     .chakra-tabs__tab{
         padding:5px !important;
