@@ -1,5 +1,7 @@
 import Card from "./Card";
 import NumbersCard from "./NumbersCard";
+import EventHighlights from "./EventHighlights";
+import Footer from "../common/Footer";
 
 import Growth from "../../assets/growth-arrow-green.png";
 import Integrity from "../../assets/integrity-scales-yellow.png";
@@ -10,6 +12,7 @@ import Community from "../../assets/community-globe-purple.png";
 import EventsNumber from "../../assets/events-number.png";
 import PartnerShipsNumber from "../../assets/partnerships-number.png";
 import VolunteersNumber from "../../assets/volunteers-number.png";
+import IEEEHome from "../../assets/home/ieeeHome.jpg";
 
 const cardsData = [
   {
@@ -76,7 +79,7 @@ const branchNumbers = [
 
 const About = () => {
   return (
-    <>
+    <div className="about-container">
       <div className="card-container">
         <h2 className="card-heading">IEEE Values. Our Core.</h2>
         {cardsData.map((card, index) => (
@@ -88,7 +91,16 @@ const About = () => {
           <NumbersCard key={index} {...number} />
         ))}
       </div>
-    </>
+      <div className="event-highlights-container">
+        <EventHighlights imgSrc={IEEEHome} />
+        <EventHighlights imgSrc={IEEEHome} />
+        <EventHighlights imgSrc={IEEEHome} />
+        <EventHighlights imgSrc={IEEEHome} />
+        <EventHighlights imgSrc={IEEEHome} />
+        <EventHighlights imgSrc={IEEEHome} />
+      </div>
+      <Footer />
+    </div>
   );
 };
 

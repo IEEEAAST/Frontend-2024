@@ -1,3 +1,8 @@
+.about-container {
+  margin-bottom: -7px;
+  padding-bottom: 3px;
+}
+
 .card-heading {
   display: block;
   width: 75%;
