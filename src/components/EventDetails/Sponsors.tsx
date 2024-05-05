@@ -1,4 +1,6 @@
-import l_Img from '../../assets/linkedin-white.png'
+import linkedin_Img from '../../assets/linkedin-white.png'
+import twitter_Img from '../../assets/twitter-white@2x.png'
+import instagram_Img from '../../assets/community-globe-purple@2x.png'
 import {
     Table,
     Thead,
@@ -19,19 +21,14 @@ import {
         <Thead>
           <Tr>
             <Th></Th>
-            <Th color={"fff"} fontWeight={"Bold"}>Name</Th>
-            <Th color={"fff"} fontWeight={"Bold"}>Total Event Sponsored</Th>
-            <Th color={"fff"} fontWeight={"Bold"}>Social</Th>
+            <Th color={"fff"}>Name</Th>
+            <Th color={"fff"}>Total Event Sponsored</Th>
+            <Th color={"fff"}>Social</Th>
           </Tr>
         </Thead>
         <Tbody>
-        <Sponsor sponsorImg={img} name={'valeo'} totalEventSponsored={24} linkSocial={l_Img} />
-        <Sponsor sponsorImg={img} name={'valeo'} totalEventSponsored={24} linkSocial={l_Img} />
-        <Sponsor sponsorImg={img} name={'valeo'} totalEventSponsored={24} linkSocial={l_Img} />
-        <Sponsor sponsorImg={img} name={'valeo'} totalEventSponsored={24} linkSocial={l_Img} />
-        <Sponsor sponsorImg={img} name={'valeo'} totalEventSponsored={24} linkSocial={l_Img} />
-        <Sponsor sponsorImg={img} name={'valeo'} totalEventSponsored={24} linkSocial={l_Img} />
-        <Sponsor sponsorImg={img} name={'valeo'} totalEventSponsored={24} linkSocial={l_Img} />
+        <Sponsor sponsorImg={img} name={'valeo'} totalEventSponsored={24} linksSocial={{Twitter: "https://twitter.com", Instagram: "https://instagram.com", Linkedin: "https://linkedin.com"}} />  
+        {/* need to map here so it gets data from database */}
 
         </Tbody>
         <Tfoot>
