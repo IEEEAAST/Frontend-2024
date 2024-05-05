@@ -15,7 +15,7 @@ const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
   return (
     <div className='bg-white rounded-3xl h-[433px] p-2'>
         <div className='flex items-center h-full'>
-            { (isTabletOrMobile)? <img  className="rounded-3xl" src={data.image} height="100" width="100"/>: <img  className="rounded-3xl" src={data.image} height="410" width="410"/>}
+            { (isTabletOrMobile)? <img  className="rounded-3xl w-1 h-1/2" src={data.image} height="100" width="100"/>: <img  className="rounded-3xl" src={data.image} height="410" width="410"/>}
             <div className='flex flex-col justify-start w-1/3 h-full p-2 '>
                 <p className='text-black text-l'>{data.quote}</p>
                 <div className='flex items-center mt-auto'>

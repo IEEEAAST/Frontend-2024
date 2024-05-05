@@ -41,7 +41,7 @@ const branchQuotes = [
 
 export const AboutUs = () => {
   return (
-    <div className='flex flex-col gap-4 w-full px-[205px] container mx-auto'>
+    <div className='flex flex-col gap-4 w-full px-[190px] container mx-auto'>
         {
             branchQuotes.map((data,index)=>{
                 return <CardAboutUs key={index} {...data}/>
