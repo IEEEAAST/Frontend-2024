@@ -1,8 +1,9 @@
 import "../App.css"
 import "./styles/EventDetails.css"
 import {useParams} from "react-router-dom"
+import { Sponsors } from "../components/EventDetails/Sponsors"
+import { Resources } from "../components/EventDetails/Resources"
 import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from '@chakra-ui/react'
-
 import Bell from '../assets/notification-bell-white@2x.png';
 import Star from '../assets/fav-event-star-white@2x.png';
 import ScheduleIcon from '../assets/schedule.png';
@@ -29,7 +30,7 @@ export const EventDetails = () => {
           <span>Seats: <b>Limited (25 left)</b></span>
         </div>
       </div>
-      <Tabs variant='unstyled' style={{margin:"60px 0px"}}>
+      <Tabs variant='unstyled' style={{margin:"60px 0px"}}> 
         <TabList bg={"#151F33"} style={{alignItems:"center",borderRadius:"60px",height:"60px",border:"none", padding:"2px 25px"}}>
         <Tab><span className="tabLabel">Schedule</span><span className="tabIcon"><img src={ScheduleIcon}/></span></Tab>
         <Tab><span className="tabLabel">Speakers</span><span className="tabIcon"><img src={SpeakersIcon}/></span></Tab>
@@ -51,10 +52,12 @@ export const EventDetails = () => {
             <p className="text-3xl">Speakers</p>
           </TabPanel>
           <TabPanel>
-            <p className="text-3xl">Sponsors</p>
+          <p className="text-3xl">Sponsers</p>
+            <Sponsors />
           </TabPanel>
           <TabPanel>
-            <p className="text-3xl">Resources</p>
+          <p className="text-3xl">Resources</p>
+            <Resources />
           </TabPanel>
           <TabPanel>
             <p className="text-3xl">Gallery</p>
