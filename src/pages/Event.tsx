@@ -1,6 +1,8 @@
 import imgContainer from "../assets/images/eventarticlesImg.webp";
 import arrowRightIcon from "../assets/right-arrow-svgrepo-com.svg";
 import articlImg1 from "../assets/images/urn aaid sc US 360876a4-664a86-9505-fdd8c336159f;revision=0.webp";
+import saveicon from "../assets/bookmark-ribbon-white.png";
+import optionIcon from "../assets/more-ellipsis-white.png";
 //import articlImg3  from "../assets/images/urn aaid sc US 360876a4-a18b-4a86-9505-fdd8c336159f;revision=0.webp"
 import { NavBar } from "../components/common/navbar";
 export const Event = () => {
@@ -33,7 +35,7 @@ export const Event = () => {
         </div>
       </div>
 
-      <div className="LatestArticlesSection mt-[100px]  border-2 w-full  flex-col justify-center">
+      <div className="LatestArticlesSection    mt-[100px]  border-2 w-full  ">
         <div className="LatestArticlesViewall w-full  h-[54px]  flex justify-between  items-center">
           <h2 className="text-white text-[45px] font-SFproramy font-bold ml-[89px] ">
             Latest Articles
@@ -43,15 +45,47 @@ export const Event = () => {
             <img className="ml-[8px]" src={arrowRightIcon} width={24} alt="" />
           </button>
         </div>
-        <div className="ArticlesContainer mt-[59px]  w-[1733px]  ">
-          <div className="ArticlesImg w-[460px] h-[302px] mr-[58]">
-            <img src={articlImg1} alt="articleImg" style={{ borderRadius: "16px" }} />
+        <div className="ArticlesContainer mt-[59px]  w-[1733px] border-2 flex ">
+          <div className="ArticlesImg w-[460px] h-[302px] mr-[58px]">
+            <img
+              src={articlImg1}
+              alt="articleImg"
+              style={{ borderRadius: "16px" }}
+            />
           </div>
           <div className="ArtivlesDetails">
-            <div className="articleOwnerAndDate"></div>
-            <div className="articleTitle"></div>
-            <div className="articleSubTitle"></div>
-            <div className="articleLabelAndIcons"></div>
+            <div className="articleOwnerAndDate text-[15px] font-sansramy color[#F4F4F4] mb-[33px]">
+              <h5>--Natalie • Yesterday 􀫸 Member-only</h5>
+            </div>
+            <div className="articleTitle text-[27px] font-seriframy">
+              <h1>Swiftly approaching, an all new reality kit!</h1>
+            </div>
+            <div className="articleSubTitle w-[1133px] text-[22px] mb-[32px]">
+              <h3>
+                ultivating active, vibrant, and honest exchange among
+                cross-disciplinary and interdisciplinary global communities of
+                technical industry professionals is essential for fostering
+                innovation, collaboration, and progress. Here are some key
+                points to consider when working towards this goa
+              </h3>
+            </div>
+            <div className="articleLabelAndIcons flex items-center justify-between">
+              <div className="label">
+
+              <button className="text-[15px] font-sansramy w-[90px] h-[35px] bg-[#151F33] rounded-[20px] mr-[10px] ">
+                Swift
+              </button>
+              <p>• 5 min read</p>
+              </div>
+              <div className="iconsContainer">
+                <button className=" mr-[39px]">
+                  <img src={saveicon} alt="" />
+                </button>
+                <button>
+                  <img src={optionIcon} alt="" />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
