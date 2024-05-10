@@ -4,13 +4,13 @@
 }
 
 .photo-height{
-    height: 25px;
+    height: 30px;
 }
 
 /********** The Header **********/
 
 .header {
-    margin: 20px 60px;
+    margin: 20px 70px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -35,8 +35,16 @@
 .search input {
     border: none;
     background-color: #000B21;
+    height: 20px;
     width: 300px;
     margin-left: 5px;
+}
+
+.search input::placeholder {
+    color: white;
+    opacity: 0.8;
+    font-size: 16px;
+    padding-bottom: 20px;
 }
 
 /** Left Side of The Header **/

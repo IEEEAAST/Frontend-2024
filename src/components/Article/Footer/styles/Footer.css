@@ -2,14 +2,15 @@
 /** The Footer **/
 
 .footer {
-    font-size: 12px;
+    font-size: 16px;
     color: gray;
     display: flex;
     align-items: center;
     background-color: rgb(21, 31, 51);
+    height: 120px;
     margin: 10px;
     padding-left: 100px;
-    border-radius: 10px;
+    border-radius: 20px;
 }
 
 /** The Footer Logo **/
@@ -30,7 +31,7 @@
 
 /** The Footer Links **/
 
-a {
+li a {
     color: gray;
     text-decoration: none;
 }
