@@ -12,8 +12,12 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/event/:name" element={<EventDetails/>}/>
     </Routes>
+    <div className="fixed bottom-0 w-full h-20 flex items-center gap-5 p-5" style={{backgroundColor:"#00091a", boxShadow:"0px -2px 7px black"}}>
+      <span>Navigation:</span>
+      <button className="defaultButton" onClick={()=>{window.open("/","_self")}}>Home</button>
+      <button className="defaultButton"onClick={()=>{window.open("/event/Leading Your Career","_self")}}>Event</button>
+    </div>
     </ChakraProvider>
   );
 }
-
-export default App;
+export default App;	
