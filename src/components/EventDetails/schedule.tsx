@@ -13,6 +13,7 @@ import {
     Avatar,
     Stack,
 } from '@chakra-ui/react'
+import { ScheduleItem } from './ScheduleItem';
 
 
 export const Schedule = () => {
@@ -44,7 +45,7 @@ export const Schedule = () => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        <Tr>
+                        {/* <Tr>
                             <Td>
                                 <Stack direction={'row'} alignItems="center">
                                     <> AI</>
@@ -53,8 +54,10 @@ export const Schedule = () => {
                             <Td>Mariam </Td>
                             <Td>2:00</Td>
                             <Td>4:00</Td>
-                        </Tr>
-                        <Tr>
+                        </Tr> */}
+                        <ScheduleItem title='Ai' speaker='mariam' starting='2:00' duration='4:00'  />
+                        <ScheduleItem title='ML' speaker='hassan' starting='2:00' duration='4:00'  />
+                        {/* <Tr>
                             <Td>
                                 <Stack direction={'row'} alignItems="center">
                                     <> AI</>
@@ -73,7 +76,7 @@ export const Schedule = () => {
                             <Td>Mariam Hassan Rashad</Td>
                             <Td>2:00</Td>
                             <Td>4:00</Td>
-                        </Tr>
+                        </Tr> */}
                     </Tbody>
 
                 </Table>

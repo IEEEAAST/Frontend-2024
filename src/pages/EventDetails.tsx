@@ -13,6 +13,7 @@ import GalleryIcon from '../assets/gallery.png'
 import PlusIcon from '../assets/plus.png'
 import { Schedule } from "../components/EventDetails/Schedule";
 import { Speakers } from "../components/EventDetails/Speakers";
+import { Social } from "../components/EventDetails/Social";
 
 export const EventDetails = () => {
   const eventName = useParams().name
@@ -29,49 +30,42 @@ export const EventDetails = () => {
           <span>Seats: <b>Limited (25 left)</b></span>
         </div>
       </div>
-      <Tabs position='relative' variant='unstyled' style={{ margin: "60px 0px" }}>
-        <TabList bg={"#151F33"} style={{ borderRadius: "60px", height: "60px", border: "none", padding: "2px 25px" }}>
-          <Tab>Schedule</Tab>
-          <Tab>Speakers</Tab>
-          <Tab>Sponsors</Tab>
-          <Tab>Resources</Tab>
-          <Tab style={{ marginRight: "20px" }}>Gallery</Tab>
-          <button className="iconButton" style={{ marginLeft: "auto", backgroundImage: `url(${Bell})` }}></button>
-          <button className="iconButton" style={{ backgroundImage: `url(${Star})` }}></button>
-          <button className="defaultButton" style={{ alignSelf: "center" }}>Attend</button>
-      <Tabs variant='unstyled' style={{margin:"60px 0px"}}>
-        <TabList bg={"#151F33"} style={{alignItems:"center",borderRadius:"60px",height:"60px",border:"none", padding:"2px 25px"}}>
-        <Tab><span className="tabLabel">Schedule</span><span className="tabIcon"><img src={ScheduleIcon}/></span></Tab>
-        <Tab><span className="tabLabel">Speakers</span><span className="tabIcon"><img src={SpeakersIcon}/></span></Tab>
-        <Tab><span className="tabLabel">Sponsors</span><span className="tabIcon"><img src={SponsorsIcon}/></span></Tab>
-        <Tab><span className="tabLabel">Resources</span><span className="tabIcon"><img src={ResourcesIcon} /></span></Tab>
-        <Tab className="mr-1"><span className="tabLabel">Gallery</span><span className="tabIcon"><img src={GalleryIcon} /></span></Tab>
-          <div className="iconButtonsWrapper">
-          <button className="iconButton" style={{backgroundImage:`url(${Bell})`}}></button>
-          <button className="iconButton" style={{backgroundImage:`url(${Star})`}}></button>
-          </div>
-          <button className="defaultButton" style={{alignSelf:"center"}}><span className="hidden sm:block">Attend</span><span className="block sm:hidden plusButton"><img src={PlusIcon} /></span></button>
-        </TabList>
-        <TabIndicator mt='-1.5px' height='2px' bg='white' borderRadius='1px' />
-        <TabPanels>
-          <TabPanel>
-            <p className="text-3xl">Schedule</p>
-            <Schedule />
-          </TabPanel>
-          <TabPanel>
-            <p className="text-3xl">Speakers</p>
-            <Speakers />
-          </TabPanel>
-          <TabPanel>
-            <p className="text-3xl">Sponsors</p>
-          </TabPanel>
-          <TabPanel>
-          </TabPanel>
-          <TabPanel>
-            <p className="text-3xl">Gallery</p>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
-    </div>
-  )
+
+          <Tabs variant='unstyled' style={{ margin: "60px 0px" }}>
+            <TabList bg={"#151F33"} style={{ alignItems: "center", borderRadius: "60px", height: "60px", border: "none", padding: "2px 25px" }}>
+              <Tab><span className="tabLabel">Schedule</span><span className="tabIcon"><img src={ScheduleIcon} /></span></Tab>
+              <Tab><span className="tabLabel">Speakers</span><span className="tabIcon"><img src={SpeakersIcon} /></span></Tab>
+              <Tab><span className="tabLabel">Sponsors</span><span className="tabIcon"><img src={SponsorsIcon} /></span></Tab>
+              <Tab><span className="tabLabel">Resources</span><span className="tabIcon"><img src={ResourcesIcon} /></span></Tab>
+              <Tab className="mr-1"><span className="tabLabel">Gallery</span><span className="tabIcon"><img src={GalleryIcon} /></span></Tab>
+              <div className="iconButtonsWrapper">
+                <button className="iconButton" style={{ backgroundImage: `url(${Bell})` }}></button>
+                <button className="iconButton" style={{ backgroundImage: `url(${Star})` }}></button>
+              </div>
+              <button className="defaultButton" style={{ alignSelf: "center" }}><span className="hidden sm:block">Attend</span><span className="block sm:hidden plusButton"><img src={PlusIcon} /></span></button>
+            </TabList>
+
+            <TabIndicator mt='-1.5px' height='2px' bg='white' borderRadius='1px' />
+            <TabPanels>
+              <TabPanel>
+                <p className="text-3xl">Schedule</p>
+                <Schedule/>
+              </TabPanel>
+              <TabPanel>
+                <p className="text-3xl">Speakers</p>
+                <Speakers /> 
+                {/* <Social objectProp={{twitter:'https://i.pinimg.com/564x/e0/31/14/e0311482368c394b6461c0cb38979fa5.jpg', instagram:'https://github.com/IEEE-AAST-Alexandria-Student-Branch/Frontend-2024'}} /> */}
+              </TabPanel>
+              <TabPanel>
+                <p className="text-3xl">Sponsors</p>
+              </TabPanel>
+              <TabPanel>
+              </TabPanel>
+              <TabPanel>
+                <p className="text-3xl">Gallery</p>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </div>
+        )
 }
