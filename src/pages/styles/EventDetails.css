@@ -91,12 +91,14 @@
     align-items: center;
     height:75%;
     border-radius: 999px;
-    margin-right:10px;
 }
 .plusButton{
     display:none;
     width:35px;
     background-size: contain;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%); 
 }
 
 @media (max-width: 672px){
@@ -110,6 +112,7 @@
         height: fit-content;
         width: fit-content;
         background-color: transparent;
+        margin-left:5px;
     }
     .buttonText{
         display: none;
