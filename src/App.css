@@ -1,4 +1,3 @@
-/* For global styling*/
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -22,13 +21,29 @@
   font-family: 'SF-Pro-Display-Regular';
   src: url("./assets/fonts/SF-Pro-Display-Regular.otf");
 }
+
 body {
     margin: 0;
     padding: 0;
     background-color: #000B21;
     color:white;
     font-family: 'SF-Pro';
-  }
+}
+
+.form-container{
+  position: relative;
+}
+
+.form-container::before{
+  content: ''; 
+  position: absolute; 
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 8px; 
+  background-image: linear-gradient(to bottom, #1F396E, #1D0021);
+}
+
 .defaultButton{
   background-color: white;
   color:black;
@@ -42,7 +57,83 @@ body {
   height: 40px;
   border-radius:40px;
 }
-.defaultButton:active{
-  background-color: #c2c2c2
+
+.primary-heading {
+  font-weight: 1000;
+  padding:0;
+  font-size: 2rem; 
+  margin-top: 95px;
 }
-  
+
+.secondary-heading {
+  font-weight: lighter;
+  padding:0;
+  margin-bottom: 30px;
+  font-size:15px;
+  color: rgba(247, 253, 255, 0.815);
+}
+
+#firstName{
+  width: 80%;
+  padding: 17px;
+  border: none;
+  border-bottom: 1px solid rgb(4, 4, 62);
+  outline: none;
+}
+
+#lastName{
+  width: 80%;
+  padding: 17px;
+  border: none;
+  border-bottom: 1px solid rgb(4, 4, 62);
+  outline: none;
+}
+
+#email{
+  width: 80%;
+  padding: 17px;
+  border: none;
+  border-bottom: 1px solid rgb(4, 4, 62);
+  outline: none;
+}
+
+#password{
+  width: 80%;
+  padding: 17px;
+  border: none;
+  border-bottom: 1px solid rgb(4, 4, 62);
+  outline: none;
+}
+
+input::placeholder{
+  font-size: 13px;
+  color: rgba(232, 250, 255, 0.779);
+}
+
+
+.bottom-buttons {
+  display: flex;
+  margin-top: 5px;
+  margin-left: 10px;
+  gap: 13px;
+}
+
+#cancel {
+  background: transparent;
+  padding: 9px;
+  width: 140px;
+  font-size: 13px;
+  border: 2px solid #fff;
+  border-radius: 20px;
+}
+
+#email-sender {
+  background-color: #fff;
+  color: black;
+  font-size: 13px;
+  font-weight: bolder;
+  padding: 8px;
+  width: 190px;
+  border: 2px solid #fff;
+  border-radius: 20px;
+}
