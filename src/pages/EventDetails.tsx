@@ -1,6 +1,6 @@
 import "../App.css"
 import "./styles/EventDetails.css"
-import {useParams} from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { Sponsors } from "../components/EventDetails/Sponsors"
 import { Resources } from "../components/EventDetails/Resources"
 import { Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'
@@ -8,8 +8,9 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'
 import Bell from '../assets/notification-bell-white@2x.png';
 import Star from '../assets/fav-event-star-white@2x.png';
 import PlusIcon from '../assets/plus.png'
-
-
+import { Schedule } from "../components/EventDetails/schedule";
+import { Speakers } from "../components/EventDetails/Speakers";
+import { Social } from "../components/EventDetails/Social";
 
 export const EventDetails = () => {
   const tabsContainer = document.getElementById("tabsContainer");
@@ -57,8 +58,10 @@ export const EventDetails = () => {
         </TabList>
         <TabPanels>
           <TabPanel>
+            <Schedule />
           </TabPanel>
           <TabPanel>
+            <Speakers/>
           </TabPanel>
           <TabPanel>
             <Sponsors />
@@ -67,6 +70,7 @@ export const EventDetails = () => {
             <Resources />
           </TabPanel>
           <TabPanel>
+            {/* Gallery */} 
           </TabPanel>
         </TabPanels>
       </Tabs>
