@@ -61,11 +61,9 @@ export const EventDetails = () => {
           <TabPanel>
           </TabPanel>
           <TabPanel>
-          <p className="text-3xl">Sponsers</p>
             <Sponsors />
           </TabPanel>
           <TabPanel>
-          <p className="text-3xl">Resources</p>
             <Resources />
           </TabPanel>
           <TabPanel>

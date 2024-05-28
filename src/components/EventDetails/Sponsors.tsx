@@ -22,8 +22,8 @@ import {
           <Tr>
             <Th></Th>
             <Th color={"fff"}>Name</Th>
-            <Th color={"fff"}>Total Event Sponsored</Th>
-            <Th color={"fff"}>Social</Th>
+            <Th color={"fff"}>Total Events Sponsored</Th>
+            <Th color={"fff"}>Socials</Th>
           </Tr>
         </Thead>
         <Tbody>
