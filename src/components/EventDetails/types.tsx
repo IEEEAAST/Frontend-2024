@@ -1,5 +1,5 @@
 export type socialLinks = {
-    Twitter: string | undefined | null;
-    Instagram: string | undefined | null;
-    Linkedin: string | undefined | null;
-  };
+    Twitter?: string | null | undefined;
+    Instagram?: string | null | undefined;
+    Linkedin?: string | null | undefined;
+  }
