@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import t_icon from '../../assets/twitter-white@2x.png'
 import { Social } from './Social';
-import { socials } from '../EventDetails/Types';
+import { socialLinks } from '../EventDetails/Types';
 
 type txt={text:string;}
 
@@ -24,7 +24,7 @@ interface Props {
   name: string;
   src: string;
   bio: string;
-  Slinks:socials;
+  Slinks:socialLinks;
 }
 
 const CustomAvatar: React.FC<Props> = ({ name, src }) => {
