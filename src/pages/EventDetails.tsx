@@ -1,6 +1,8 @@
 import "../App.css"
 import "./styles/EventDetails.css"
 import {useParams} from "react-router-dom"
+import { Sponsors } from "../components/EventDetails/Sponsors"
+import { Resources } from "../components/EventDetails/Resources"
 import { Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'
 
 import Bell from '../assets/notification-bell-white@2x.png';
@@ -33,7 +35,7 @@ export const EventDetails = () => {
           <span>Seats: <b>Limited (25 left)</b></span>
         </div>
       </div>
-      <Tabs variant='unstyled' style={{margin:"60px 0px"}}>
+      <Tabs variant='unstyled' style={{margin:"60px 0px"}}> 
         <TabList bg={"#151F33"} style={{alignItems:"center",borderRadius:"60px",height:"60px",border:"none", padding:"2px 25px"}}>
         <div className="tabsContainer" onWheel={
           (event) => {
@@ -59,8 +61,12 @@ export const EventDetails = () => {
           <TabPanel>
           </TabPanel>
           <TabPanel>
+          <p className="text-3xl">Sponsers</p>
+            <Sponsors />
           </TabPanel>
           <TabPanel>
+          <p className="text-3xl">Resources</p>
+            <Resources />
           </TabPanel>
           <TabPanel>
           </TabPanel>
