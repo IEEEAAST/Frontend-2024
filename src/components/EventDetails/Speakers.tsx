@@ -55,12 +55,12 @@ export const Speakers = () => {
           
           <Speaker name='mariam' src={'https://i.pinimg.com/564x/e0/31/14/e0311482368c394b6461c0cb38979fa5.jpg'} bio={'this person is delulu'} 
           Slinks={{
-            twitter:  '',
-            instagram: 'https://www.google.com/search?client=opera-gx&q=solo+leveling&sourceid=opera&ie=UTF-8&oe=UTF-8',
-            linkedin: 'https://classroom.google.com/c/NjcxNjUxOTQzMjQx'
+            Twitter:  '',
+            Instagram: 'https://www.google.com/search?client=opera-gx&q=solo+leveling&sourceid=opera&ie=UTF-8&oe=UTF-8',
+            Linkedin: 'https://classroom.google.com/c/NjcxNjUxOTQzMjQx'
           }}  />
 
-          <Speaker name='hassan' src={''} bio={'this person is delulu'}  Slinks={{twitter:'www'}}/>
+          <Speaker name='hassan' src={''} bio={'this person is delulu'}  Slinks={{Twitter:'www'}}/>
           {/* <Speaker name={''} src={''} bio={''}/> */}
           {/* <Tr>
             <Td>
