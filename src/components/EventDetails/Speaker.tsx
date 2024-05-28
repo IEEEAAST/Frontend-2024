@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import t_icon from '../../assets/twitter-white@2x.png'
 import { Social } from './Social';
-import { socialLinks } from '../EventDetails/Types';
+import { socialLinks } from './types';
 
 type txt={text:string;}
 

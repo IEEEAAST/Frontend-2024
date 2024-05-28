@@ -37,7 +37,7 @@ const socialIcons: { [key: string]: string} = {
                 )
          else return null;
         })}
-        
+
         </>
   )
 }
