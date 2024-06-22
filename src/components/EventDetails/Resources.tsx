@@ -22,11 +22,13 @@ import {
         <Table variant='sm'>
           <Thead>
             <Tr>
-              <Th className="!text-lg !capitalize">Video</Th>
+              <Th className="!text-lg !capitalize">Videos</Th>
             </Tr>
           </Thead>
           <Tr>
           <Flex>
+            <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
+            <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
             <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
             <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
             <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />

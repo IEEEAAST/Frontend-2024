@@ -1,6 +1,3 @@
-import linkedin_Img from '../../assets/linkedin-white.png'
-import twitter_Img from '../../assets/twitter-white@2x.png'
-import instagram_Img from '../../assets/community-globe-purple@2x.png'
 import {
     Table,
     Thead,
@@ -22,8 +19,8 @@ import {
           <Tr>
             <Th></Th>
             <Th color={"fff"}>Name</Th>
-            <Th color={"fff"}>Total Event Sponsored</Th>
-            <Th color={"fff"}>Social</Th>
+            <Th color={"fff"}>Total Events Sponsored</Th>
+            <Th color={"fff"}>Socials</Th>
           </Tr>
         </Thead>
         <Tbody>
