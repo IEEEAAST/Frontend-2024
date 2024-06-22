@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion";
-import { socialLinks } from "./types.tsx"
+import { socialLinks } from "./Types.tsx"
 import t_icon from '../../assets/twitter-white@2x.png'
 import i_icon from '../../assets/language-globe-white@2x.png'
 import l_icon from '../../assets/linkedin-white@2x.png'

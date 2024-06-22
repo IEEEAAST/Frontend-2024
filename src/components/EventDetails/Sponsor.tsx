@@ -1,5 +1,5 @@
 
-import { socialLinks } from "./types.tsx"
+import { socialLinks } from "./Types.tsx"
 import { Social } from "./Social.tsx"
 import {
   Tr,

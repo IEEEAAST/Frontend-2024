@@ -33,6 +33,8 @@ import {
             <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
             <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
             <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
+            <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
+            <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
           </Flex>
           </Tr>
         </Table></TableContainer>

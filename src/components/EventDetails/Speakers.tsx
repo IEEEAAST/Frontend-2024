@@ -1,21 +1,11 @@
-import React from 'react'
-import logo from '../../assets/IEEEAAST.ico'
 import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
-  Td,
-  TableCaption,
   TableContainer,
-  Avatar,
-  Stack,
-  Icon,
-  Flex
 } from '@chakra-ui/react'
-import t_icon from '../../assets/twitter-white@2x.png'
 import { Speaker } from './Speaker'
 
 
@@ -23,24 +13,6 @@ import { Speaker } from './Speaker'
 export const Speakers = () => {
 
   return (
-    // <table>
-    //     <thead >
-    //         <tr>
-    //             <th>Name</th>
-    //             <th>Name</th>
-    //             <th>Name</th>
-    //         </tr>
-    //     </thead>
-
-    //     <tbody>
-    //         <tr>
-    //             <td><img src={logo} classNameName='logo' /></td>
-    //             <td><p>Mariam</p></td>
-    //             <td><p >Dean of Engineering college,AASTMT</p></td>
-    //         </tr>
-    //     </tbody>
-    // </table>
-
     <TableContainer mx={'auto'}>
       <Table variant='simple'>
         <Thead>
@@ -60,28 +32,7 @@ export const Speakers = () => {
             Linkedin: 'https://classroom.google.com/c/NjcxNjUxOTQzMjQx'
           }}  />
 
-          <Speaker name='hassan' src={''} bio={'this person is delulu'}  Slinks={{Twitter:'www'}}/>
-          {/* <Speaker name={''} src={''} bio={''}/> */}
-          {/* <Tr>
-            <Td>
-              <Stack direction={'row'} alignItems="center">
-                <Avatar name='Mariam Rashad' src='https://i.pinimg.com/564x/e0/31/14/e0311482368c394b6461c0cb38979fa5.jpg' />
-                <> Mariam</>
-              </Stack>
-            </Td>
-            <Td>This person is delulu</Td>
-            <Td><img src={t_icon} alt="Twitter Icon" width={'30px'} /></Td>
-          </Tr>
-          <Tr>
-            <Td>
-              <Stack direction={'row'} alignItems="center">
-                <Avatar name='Mariam Rashad' src='https://i.pinimg.com/564x/e0/31/14/e0311482368c394b6461c0cb38979fa5.jpg' />
-                <> Mariam</>
-              </Stack>
-            </Td>
-            <Td>This person is delulu and can code.</Td>
-            <Td><img src={t_icon} alt="Twitter Icon" width={'30px'} /></Td>
-          </Tr> */}
+          <Speaker name='hassan' src={''} bio={'this person is delulu'}  Slinks={{Twitter:'https://twitter.com', Instagram:'', Linkedin:''}}/>
         </Tbody>
 
       </Table>

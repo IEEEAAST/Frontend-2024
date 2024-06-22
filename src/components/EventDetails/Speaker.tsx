@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import t_icon from '../../assets/twitter-white@2x.png'
 import { Social } from './Social';
-import { socialLinks } from './types';
+import { socialLinks } from './Types.tsx';
 
 type txt={text:string;}
 
@@ -43,10 +43,7 @@ export const Speaker = ({name,src,bio,Slinks}:Props) => {
       <Tr>
             <Td>
               <Stack direction={'row'} alignItems="center">
-                < CustomAvatar name={name} bio={bio} src={src} Slinks={{twitter:'twitter.com'}} />
-                {/* <Avatar name='Mariam Rashad' src='https://i.pinimg.com/564x/e0/31/14/e0311482368c394b6461c0cb38979fa5.jpg'   /> */}
-                {/* <pic name="Mariam Rashad" src='https://i.pinimg.com/564x/e0/31/14/e0311482368c394b6461c0cb38979fa5.jpg' /> */}
-                {/* <Sname/> */}
+                < CustomAvatar name={name} bio={bio} src={src} Slinks={{Twitter:'twitter.com', Instagram:'', Linkedin: ''}} />
               </Stack>
             </Td>
             <Td>
@@ -55,13 +52,6 @@ export const Speaker = ({name,src,bio,Slinks}:Props) => {
             <Td>
               <>{bio}</>
             </Td>
-            {/* <Td>
-              <img src={src}></img>
-            </Td> */}
-            {/* <Bio text="This person is delulu"/> */}
-            {/* <Td>This person is delulu</Td> */}
-            {/* <Td>  <img src={t_icon} alt="Twitter Icon" width={'30px'} link='' /> </Td> */}
-            {/* <Social/> */}
             <Td>
             <Flex className='!space-x-3'><Social links={Slinks} /></Flex>
             </Td>
