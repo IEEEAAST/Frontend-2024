@@ -20,8 +20,9 @@ function App() {
       <button className="defaultButton" onClick={()=>{window.open("/","_self")}}>Home</button>
       <button className="defaultButton" onClick= {() => getDocument("events","0HCFKfeAsaD6VjOQA7Vq").then(data =>{
         console.log(data.result?.data());
-      })}></button>
+      })}>Test API</button>
       <button className="defaultButton"onClick={()=>{window.open("/event/Leading Your Career","_self")}}>Event</button>
+      <button className="defaultButton"onClick={()=>{window.open("/article/ArticleName","_self")}}>Article</button>
     </div>
     </ChakraProvider>
   );
