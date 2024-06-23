@@ -1,4 +1,4 @@
-import { app } from "../firebase/config";
+import { app } from "./config.js";
 import {
   signInWithEmailAndPassword,
   getAuth,
@@ -27,3 +27,4 @@ export default async function signIn(email, password) {
 
   return { result, error };
 }
+
