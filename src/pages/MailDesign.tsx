@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export const MailDesign = () => {
   return (
     /* <div className="flex flex-col flex-1 justify-center items-start h-screen max-w-[625px] text-wrap px-8 "> */
@@ -10,8 +12,9 @@ export const MailDesign = () => {
           Now it’s time to make sure it’s really you.
           <br /> Just click the link below ;)
         </p>
-
-        <button className="defaultButton mt-12">Yes, It’s Me</button>
+        <Link to="/verify">
+          <button className="defaultButton mt-12">Yes, It’s Me</button>
+        </Link>
         <p className="my-8">
           If you don’t know what this email is, you may have received it by
           mistake. Simply, ignore it.
