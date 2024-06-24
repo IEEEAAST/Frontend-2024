@@ -6,6 +6,10 @@ import "./App.css"; // Import CSS file
 import { ChakraProvider } from '@chakra-ui/react'
 import theme from './theme'
 import getDocument from "./firebase/getData"
+import { MailDesign } from "./pages/MailDesign";
+import { Onboarding } from "./pages/Onboarding";
+import { Verifying } from "./pages/Verification";
+import { SignUp } from "./pages/Signup";
 
 function App() {
   return (
@@ -14,6 +18,11 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/event/:name" element={<EventDetails/>}/>
       <Route path="/article/:name" element={<Article />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/mail2" element={<MailDesign />} />
+      <Route path="/onboard" element={<Onboarding />} />
+      <Route path="/verify" element={<Verifying />} />
+      <Route path="/Signup" element={<SignUp />} />
     </Routes>
     <div className="fixed bottom-0 w-full h-20 flex items-center gap-5 p-5" style={{backgroundColor:"#00091a", boxShadow:"0px -2px 7px black"}}>
       <span>Navigation:</span>
@@ -27,4 +36,5 @@ function App() {
     </ChakraProvider>
   );
 }
-export default App;	
+
+export default App;
