@@ -1,0 +1,117 @@
+.main-content {
+    margin: 5px 29%;
+    display: flex;
+    flex-direction: column;
+}
+
+/******Article Title and Description******/
+
+.title {
+    font-size: 45px;
+    font-family: 'SF-Pro-Display-Bold';
+}
+
+.discription {
+    font-size: 24px;
+    color: white;
+    opacity: 0.7;
+}
+
+/******Article Author Profile******/
+
+.profile {
+    display: flex;
+    margin: 15px 0px;
+}
+
+.pfp {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: white;
+}
+
+.profile-desc {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    color: white;
+    opacity: 0.7;
+}
+
+.desc-title {
+    font-size: 16px;
+}
+
+.desc-title span {
+    cursor: pointer;
+    padding-left: 5px;
+}
+
+.desc-time {
+    font-size: 12px;
+    padding-top: 5px;
+}
+
+/******Like, Save, and Share******/
+
+.main-content hr {
+    width: 100%;
+    border: 1px solid rgb(17, 25, 42);
+}
+
+.like-save-share {
+    display: flex;
+    justify-content: space-between;
+}
+
+.like-save-share img {
+    width: 25px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.like {
+    display: flex;
+    align-items: center;
+}
+
+.like span {
+    font-size: 12px;
+    color: white;
+    opacity: 0.7;
+}
+
+/******Article Image, Caption, & Description******/
+
+.article-img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: rgb(217, 223, 233);
+    border-radius: 20px;
+}
+
+.main-content caption {
+    font-size: 12px;
+    padding: 10px;
+    color: white;
+    opacity: 0.6;
+}
+
+.article-desc {
+    margin: 20px 0px;
+    color: white;
+    opacity: 0.7;
+    font-size: 16px;
+}
+
+.main-content a {
+    cursor: pointer;
+    font-size: 14px;
+    text-align: center;
+    color: white;
+    opacity: 0.8;
+    margin: 5px 0px;
+}
