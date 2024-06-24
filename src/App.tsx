@@ -18,7 +18,6 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/event/:name" element={<EventDetails/>}/>
       <Route path="/article/:name" element={<Article />} />
-      <Route path="/" element={<Home />} />
       <Route path="/mail2" element={<MailDesign />} />
       <Route path="/onboard" element={<Onboarding />} />
       <Route path="/verify" element={<Verifying />} />
