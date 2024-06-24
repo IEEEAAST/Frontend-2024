@@ -10,18 +10,22 @@ import { MailDesign } from "./pages/MailDesign";
 import { Onboarding } from "./pages/Onboarding";
 import { Verifying } from "./pages/Verification";
 import { SignUp } from "./pages/Signup";
+import { Dashboard } from "./pages/Dashboard";
 
 function App() {
   return (
     <ChakraProvider disableGlobalStyle={true} theme={theme}>
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/home" element={<Dashboard />} />
       <Route path="/event/:name" element={<EventDetails/>}/>
       <Route path="/article/:name" element={<Article />} />
+      
       <Route path="/mail2" element={<MailDesign />} />
       <Route path="/onboard" element={<Onboarding />} />
       <Route path="/verify" element={<Verifying />} />
       <Route path="/Signup" element={<SignUp />} />
+      
     </Routes>
     <div className="fixed bottom-0 w-full h-20 flex items-center gap-5 p-5" style={{backgroundColor:"#00091a", boxShadow:"0px -2px 7px black"}}>
       <span>Navigation:</span>
