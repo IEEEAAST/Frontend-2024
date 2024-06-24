@@ -10,8 +10,11 @@ export default {
         homeImage: "url('/src/assets/home/ieeeHome.jpg')",
       },
     },
+    fontFamily: {
+      display: ["SF Pro Display", "sans-serif"],
+      body:["SF Pro", "sans-serif"]
+    },
   },
   // eslint-disable-next-line no-undef
-  plugins: [require('daisyui')],
 }
 
