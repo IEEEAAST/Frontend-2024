@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Logo from "../../assets/IEEEAAST.ico";
 import { LangSelector } from "./langSelector";
 export const NavBar = () => {
