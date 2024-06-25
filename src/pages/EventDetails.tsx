@@ -31,6 +31,7 @@ export const EventDetails = () => {
         setEventData(data.result?.[0] || null);
         setLoading(false);
         console.log(data.result?.[0]);
+        window.open(data.result?.[0].coverPhoto, "_blank"); 
       }
     });
 

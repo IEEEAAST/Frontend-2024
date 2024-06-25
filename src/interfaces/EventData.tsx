@@ -5,6 +5,7 @@ export interface EventData {
     description: string;
     starttime: firebase.firestore.Timestamp;
     endtime: firebase.firestore.Timestamp;
+    coverPhoto: string;
     gallery: string[];
     keynotes: any;
     schedule: Schedule;
