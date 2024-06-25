@@ -19,25 +19,25 @@ const socialIcons: { [key: string]: string} = {
     Linkedin: l_icon
 };
 
-  export const Social = ({ links }: SocialProps) => {
+export const Social = ({ links }: SocialProps) => {
     console.log("this is social and the links i recieved are : ", links)
     return (
         <>
         {Object.entries(links).map(([socialMedia, link]) => {
             console.log(link)
-             if(link !== null && link !== undefined && link !== '')
+            if(link !== null && link !== undefined && link !== '')
                 return (
             <Box key={socialMedia} boxSize='sm' width={"30px"} height={"30px"}>
                 <Link target='_blank' to={link}>
                     <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>
                             <Image src={socialIcons[socialMedia]} alt={socialMedia} width={"30px"} height={"30px;"} _hover={{cursor: "pointer"}}/>
-                     </motion.div>
+                    </motion.div>
                 </Link>
             </Box>
                 )
-         else return null;
+        else return null;
         })}
 
         </>
-  )
+)
 }

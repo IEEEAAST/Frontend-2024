@@ -24,7 +24,7 @@ export const Speakers = () => {
           </Tr>
         </Thead>
         <Tbody>
-          
+
           <Speaker name='mariam' src={'https://i.pinimg.com/564x/e0/31/14/e0311482368c394b6461c0cb38979fa5.jpg'} bio={'this person is delulu'} 
           Slinks={{
             Twitter:  '',
