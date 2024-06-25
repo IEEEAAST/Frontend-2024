@@ -13,6 +13,7 @@ import { Verifying } from "./pages/Verification";
 import { SignUp } from "./pages/Signup";
 import { Dashboard } from "./pages/Dashboard";
 
+
 export const LangContext = createContext({
   lang: "English",
   setLang: (lang: string) => {}
