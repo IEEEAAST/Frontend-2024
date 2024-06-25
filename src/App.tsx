@@ -41,7 +41,8 @@ function App() {
           <Route path="/verify" element={<Verifying />} />
           <Route path="/Signup" element={<SignUp />} />
         </Routes>
-        <div className="fixed bottom-0 w-full h-20 flex items-center gap-5 p-5" style={{backgroundColor:"#00091a", boxShadow:"0px -2px 7px black"}}>
+
+        <div className="fixed bottom-0 w-full h-20 flex items-center gap-5 p-5 z-50" style={{backgroundColor:"#00091a", boxShadow:"0px -2px 7px black"}}>
           <span>Navigation:</span>
           <button className="defaultButton" onClick={() => getDocument("events","0HCFKfeAsaD6VjOQA7Vq").then(data => {
             console.log(data.result?.data());
