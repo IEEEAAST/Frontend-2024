@@ -1,7 +1,6 @@
 import Logo from "../../assets/IEEEAAST.ico";
 import { LangSelector } from "./langSelector";
 export const NavBar = () => {
-  const disLang: string[] = ["English", "Arabic"];
   return (
     <div className="absolute flex items-center justify-between py-2 w-full z-10">
       {/* left */}
