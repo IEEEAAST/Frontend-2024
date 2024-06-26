@@ -42,7 +42,7 @@ export const EventDetails = () => {
         }
         setLoading(false);
         console.log(data.result?.[0]);
-        window.open(data.result?.[0].coverPhoto, "_blank"); 
+        window.open(data.result?.[0].coverPhoto, "_blank");
       }
     });
      return () => { isMounted = false; }
