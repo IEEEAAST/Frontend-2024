@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, useMotionValue } from "framer-motion";
-import VolunteerData from '../../interfaces/Volunteer.tsx';
+import HeadVolunteer from '../../interfaces/HeadVolunteer.tsx';
 
 const ONE_SECOND = 1000;
 const AUTO_DELAY = ONE_SECOND * 10;
@@ -13,7 +13,7 @@ const SPRING_OPTIONS = {
   damping: 50,
 };
 
-export const VolunteersCarousel = ({ volunteers }: { volunteers: VolunteerData[] }) => {
+export const VolunteersCarousel = ({ volunteers }: { volunteers: HeadVolunteer[] }) => {
   const [volunteerIndex, setVolunteerIndex] = useState(0);
   const dragX = useMotionValue(0);
 
@@ -59,7 +59,7 @@ export const VolunteersCarousel = ({ volunteers }: { volunteers: VolunteerData[]
   );
 };
 
-const Volunteers = ({ volunteerIndex, volunteers }: { volunteerIndex: number; volunteers: VolunteerData[] }) => {
+const Volunteers = ({ volunteerIndex, volunteers }: { volunteerIndex: number; volunteers: HeadVolunteer[] }) => {
   return (
     <>
       {volunteers.map((volunteer, idx) => {
