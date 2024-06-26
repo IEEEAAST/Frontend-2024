@@ -20,7 +20,7 @@ import {
     return (
 
         <Flex direction={"column"}>
-        <TableContainer marginBottom={"56px"}>
+        <TableContainer marginBottom={"56px"} className='customScrollbar'>
          {/* table for videos */}
         <Table variant='sm'>
           <Thead>
@@ -38,7 +38,7 @@ import {
         </Table></TableContainer>
 
         {/* table for notes */}
-        <TableContainer>
+        <TableContainer className='customScrollbar'>
         <Table variant='sm'>
           <Thead>
             <Tr>
