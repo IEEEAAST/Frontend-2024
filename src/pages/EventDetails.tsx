@@ -55,7 +55,7 @@ export const EventDetails = () => {
       </div>
       <Tabs variant='unstyled' style={{ margin: "60px 0px" }}>
         <TabList bg={"#151F33"} style={{ alignItems: "center", borderRadius: "60px", height: "60px", border: "none", padding: "2px 25px" }}>
-          <div className="tabsContainer" onWheel={(event) => {
+          <div className="tabsContainer customScrollbar" onWheel={(event) => {
             const delta = Math.sign(event.deltaY);
             event.currentTarget.scrollLeft += delta * 30;
           }}>

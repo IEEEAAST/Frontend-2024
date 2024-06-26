@@ -41,7 +41,7 @@ const branchQuotes = [
 
 export const AboutUs = () => {
   return (
-    <div className='flex flex-col gap-4 w-full px-[205px] container mx-auto'>
+    <div className='flex flex-col gap-4 w-full px-[205px] container mx-auto' >
         <p className="font-bold text-4xl mt-20 my-5"> What People Say About Us</p>
         {
             branchQuotes.map((data,index)=>{
