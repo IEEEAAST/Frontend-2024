@@ -1,5 +1,5 @@
-import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator, Center } from '@chakra-ui/react'
-import { VolunteersCarousel } from './VolunteersCarousel.tsx';
+import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator, Center } from '@chakra-ui/react';
+import { VolunteersCarousel } from './VolunteersCarousel';
 import Committee from '../../interfaces/Committee.tsx';
 import VolunteerData from '../../interfaces/Volunteer.tsx';
 import { useState, useEffect } from 'react';
@@ -14,7 +14,7 @@ export const Volunteers = (props: Props) => {
   useEffect(() => {
     getCollection('committees').then((response) => {
       if (response.result) {
-        const sortedResponse = response.result.sort((a, b) => a.name.localeCompare(b.name));
+        const sortedResponse = response.result.sort((a, b) => a.index - b.index);
         setCommittees(sortedResponse);
         console.log(sortedResponse);
       } else {
