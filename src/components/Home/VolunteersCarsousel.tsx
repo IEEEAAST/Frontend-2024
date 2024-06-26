@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { motion, useMotionValue } from "framer-motion";
-import { generateFakeImages } from "../../mock/home/generateFakeImages";
 
 const ONE_SECOND = 1000;
 const AUTO_DELAY = ONE_SECOND * 10;

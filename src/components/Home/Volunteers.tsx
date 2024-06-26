@@ -18,7 +18,7 @@ export const Volunteers = (props: Props) => {
             <TabList className='gap-16 pt-10'>
               <Tab><p className='text-4xl '>IT</p></Tab>
               <Tab><p className='text-4xl'>Technical</p></Tab>
-              <Tab><p className='text-4xl'>Operation</p></Tab>
+              <Tab><p className='text-4xl'>Operations</p></Tab>
               <Tab><p className='text-4xl'>Creative</p></Tab>
             </TabList>
           </Center>
