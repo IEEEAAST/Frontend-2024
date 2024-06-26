@@ -46,4 +46,21 @@ body {
 .defaultButton:active{
   background-color: #c2c2c2
 }
-  
+/* global.css */
+
+.customScrollbar::-webkit-scrollbar {
+  height: 8px;
+}
+
+.customScrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.customScrollbar::-webkit-scrollbar-thumb {
+  background: hsl(220, 63%, 9%);
+  border-radius: 8px;
+}
+
+.customScrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(222, 52%, 12%);
+}
