@@ -8,9 +8,9 @@ import {
 
 interface VideoProps {
   thumbNail: string; //url to the thumbnail
-  vidName: string; //name of the video
-  vidLength: string; //the length of the video
-  speakerName: string; //name of the speaker
+  vidName: string | null | undefined; //name of the video
+  vidLength: string | null | undefined; //the length of the video
+  speakerName: string | null | undefined; //name of the speaker
   destUrl: string;  //the link to the video
 }
 
@@ -18,9 +18,9 @@ interface VideoProps {
     return (
         <Td>
             <Box><Link target='_blank' to={destUrl}>
-                    <Image src={thumbNail} width={"150px"}></Image>
-                    <Text>{vidName}</Text>
-                    <Text>{vidLength} . {speakerName}</Text>
+                    <Image src={thumbNail} width={"33vh"} height={"20vh"}></Image>
+                    <Text fontFamily={"SF-Pro-Display-Bold"} marginTop={"0.7vh"}>{vidName}</Text>
+                    <Text fontFamily={"SF-Pro"}>{vidLength} • {speakerName}</Text>
                 </Link></Box></Td>
   )
 }

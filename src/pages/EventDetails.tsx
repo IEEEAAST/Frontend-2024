@@ -16,6 +16,7 @@ import { Speakers } from "../components/EventDetails/Speakers";
 import getDataByField from "../firebase/getDataByField";
 
 import { EventData } from "../interfaces/EventData";
+import { Ivideo } from "../interfaces/EventData";
 
 export const EventDetails = () => {
   const { name: eventName } = useParams<{ name: string }>();
@@ -27,10 +28,10 @@ export const EventDetails = () => {
     let isMounted = true; // Flag to prevent state updates on unmounted component
 
     getDataByField("events", "title", "==", eventName).then(data => {
+      console.log(eventName)
       if (isMounted) {
         setEventData(data.result?.[0] || null);
         setLoading(false);
-        console.log(data.result?.[0]);
       }
     });
 
@@ -38,7 +39,6 @@ export const EventDetails = () => {
   }, [eventName]);
 
   // Handle cases where eventData is null or undefined
-
   return (
     <div id="eventPage">
       <div id="eventDetailsFlex">
@@ -84,10 +84,14 @@ export const EventDetails = () => {
             <Sponsors />
           </TabPanel>
           <TabPanel>
-            <Resources />
+           {eventData == null? null : 
+           
+           <Resources eventVideos= {eventData.videos}  />
+ 
+          }
           </TabPanel>
           <TabPanel>
-            {/* Gallery */}
+            {/* <Gallery eventData= {eventData} /> */}
           </TabPanel>
         </TabPanels>
       </Tabs>

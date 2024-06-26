@@ -20,11 +20,9 @@ const socialIcons: { [key: string]: string} = {
 };
 
   export const Social = ({ links }: SocialProps) => {
-    console.log("this is social and the links i recieved are : ", links)
     return (
         <>
         {Object.entries(links).map(([socialMedia, link]) => {
-            console.log(link)
              if(link !== null && link !== undefined && link !== '')
                 return (
             <Box key={socialMedia} boxSize='sm' width={"30px"} height={"30px"}>

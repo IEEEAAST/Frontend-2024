@@ -10,12 +10,18 @@ import {
     TableContainer,
 
   } from '@chakra-ui/react'
+import { EventData } from '../../interfaces/EventData'
+import { Ivideo } from '../../interfaces/EventData'
+import { useEffect, useState } from 'react'
 
 
-  export const Resources = () => {
+  export const Resources = ( eventVideos : Ivideo[]) => {
+      useEffect(()=> {
+
+      })
+      const [videos, setVideos] = useState<Ivideo[]>();
     const destUrl:string = "https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=ygUJcmljayByb2xs"
     return (
-        
         <Flex direction={"column"}>
         <TableContainer marginBottom={"56px"}>
          {/* table for videos */}
@@ -27,14 +33,9 @@ import {
           </Thead>
           <Tr>
           <Flex>
-            <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
-            <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
-            <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
-            <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
-            <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
-            <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
-            <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
-            <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
+            {videos && videos.map((video) => (
+              <ResourceVideo thumbNail={video.thumbnail} vidName={video.name} vidLength={video.length} speakerName={video.speaker} destUrl={video.url} />
+            ))}
           </Flex>
           </Tr>
         </Table></TableContainer>
