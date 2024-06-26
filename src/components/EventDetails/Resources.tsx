@@ -10,9 +10,12 @@ import {
     TableContainer,
 
   } from '@chakra-ui/react'
+  import { useEffect } from'react'
+  import getCollection  from '../../firebase/getCollection'
 
 
   export const Resources = () => {
+
     const destUrl:string = "https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=ygUJcmljayByb2xs"
     return (
         
