@@ -6,6 +6,9 @@ import { HomeComp } from "../components/Home/home.tsx";
 import { Joinus } from "../components/Home/Join-us.tsx";
 import { Sponsor } from "../components/Home/Sponsor.tsx";
 import { Volunteers } from "../components/Home/Volunteers.tsx";
+import Footer from "../components/common/Footer.tsx";
+import EventHighlights from "../components/Home/EventHighlights.tsx";
+import { Image } from "@chakra-ui/react";
 export const Home = () => {
   return (
     <>
@@ -14,9 +17,11 @@ export const Home = () => {
       <Sponsor />
       <About/>
       <AchievementCarousel/>
+      <EventHighlights/>
       <Volunteers/>
       <AboutUs/>
       <Joinus/>
+      <Footer/>
     </>
   );
 };
