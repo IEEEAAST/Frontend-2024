@@ -1,8 +1,9 @@
 import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator, Center, Spinner } from '@chakra-ui/react';
-import { VolunteersCarousel } from './VolunteersCarousel';
+import {VolunteersCarousel} from './VolunteersCarousel';
 import HeadVolunteer from '../../interfaces/HeadVolunteer.tsx';
 import { useState, useEffect } from 'react';
 import getCollection from '../../firebase/getCollection.js';
+import "./styles/tabs.css";
 
 type Props = {}
 
