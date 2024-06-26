@@ -1,0 +1,11 @@
+.event-highlights-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  padding: 20px 20px 50px;
+  max-width: 1160px;
+  margin: 20px auto 0px;
+  gap: 15px;
+}
+.event-highlights img {
+  border-radius: 20px;
+}
