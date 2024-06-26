@@ -12,9 +12,8 @@ const SPRING_OPTIONS = {
   damping: 50,
 };
 
-export const VolunteersCarsousel = ({imgs}:{imgs:string[]}) => {
+export const VolunteersCarousel = ({ imgs }: { imgs: string[] }) => {
   const [imgIndex, setImgIndex] = useState(0);
-
   const dragX = useMotionValue(0);
 
   useEffect(() => {
@@ -22,12 +21,7 @@ export const VolunteersCarsousel = ({imgs}:{imgs:string[]}) => {
       const x = dragX.get();
 
       if (x === 0) {
-        setImgIndex((pv) => {
-          if (pv === imgs.length - 1) {
-            return 0;
-          }
-          return pv + 1;
-        });
+        setImgIndex((prevIndex) => (prevIndex === imgs.length - 1 ? 0 : prevIndex + 1));
       }
     }, AUTO_DELAY);
 
@@ -38,41 +32,34 @@ export const VolunteersCarsousel = ({imgs}:{imgs:string[]}) => {
     const x = dragX.get();
 
     if (x <= -DRAG_BUFFER && imgIndex < imgs.length - 1) {
-      setImgIndex((pv) => pv + 1);
+      setImgIndex((prevIndex) => prevIndex + 1);
     } else if (x >= DRAG_BUFFER && imgIndex > 0) {
-      setImgIndex((pv) => pv - 1);
+      setImgIndex((prevIndex) => prevIndex - 1);
     }
   };
 
   return (
-    <div className="relative overflow-hidden rounded-2xl h-full" >
+    <div className="relative overflow-hidden rounded-2xl h-full">
       <motion.div
         drag="x"
-        dragConstraints={{
-          left: 0,
-          right: 0,
-        }}
-        style={{
-          x: dragX,
-        }}
-        animate={{
-          translateX: `-${imgIndex * 32}%`,
-        }}
+        dragConstraints={{ left: 0, right: 0 }}
+        style={{ x: dragX }}
+        animate={{ translateX: `-${imgIndex * 32}%` }}
         transition={SPRING_OPTIONS}
         onDragEnd={onDragEnd}
         className="flex cursor-grab items-center active:cursor-grabbing"
       >
-        <Images imgIndex={imgIndex} imgs={imgs}/>
+        <Images imgIndex={imgIndex} imgs={imgs} />
       </motion.div>
     </div>
   );
 };
 
-const Images = ({ imgIndex,imgs }: { imgIndex: number ,imgs:string[]}) => {
+const Images = ({ imgIndex, imgs }: { imgIndex: number; imgs: string[] }) => {
   return (
     <>
       {imgs.map((imgSrc, idx) => {
-        const selected =(imgIndex==idx)?"filter-none":""
+        const isSelected = imgIndex === idx;
         return (
           <motion.div
             key={idx}
@@ -81,12 +68,15 @@ const Images = ({ imgIndex,imgs }: { imgIndex: number ,imgs:string[]}) => {
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
-            animate={{
-              scale: imgIndex === idx ? 0.95 : 0.85,
-            }}
+            animate={{ scale: isSelected ? 0.95 : 0.85 }}
             transition={SPRING_OPTIONS}
-            className={`aspect-video shrink-0 rounded-xl object-cover grayscale h-96 w-[350px] ${selected}`}
-          />
+            className={`aspect-video shrink-0 rounded-xl object-cover grayscale h-96 w-[350px] ${isSelected ? "filter-none" : ""}`}
+          >
+            <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 text-white py-2 px-4">
+              <p className="text-3xl font-semibold">Volunteer Name</p>
+              <p className="text-sm">Volunteer Role</p>
+            </div>
+          </motion.div>
         );
       })}
     </>
