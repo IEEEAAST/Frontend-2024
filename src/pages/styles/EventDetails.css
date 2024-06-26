@@ -56,27 +56,7 @@
     margin-top:8px;
 }
 }
-/* width */
-.tabsContainer::-webkit-scrollbar {
-    height:8px;
 
-  }
-  
-  /* Track */
-  .tabsContainer::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  /* Handle */
-  .tabsContainer::-webkit-scrollbar-thumb {
-    background: hsl(220, 63%, 9%);
-    border-radius:8px;
-  }
-  
-  /* Handle on hover */
-  .tabsContainer::-webkit-scrollbar-thumb:hover {
-    background: hsl(222, 52%, 12%);
-  }
 .tabLabel{
     display:block;
 }
