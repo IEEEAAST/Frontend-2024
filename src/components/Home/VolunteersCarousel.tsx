@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, useMotionValue } from "framer-motion";
+import VolunteerData from '../../interfaces/Volunteer.tsx';
 
 const ONE_SECOND = 1000;
 const AUTO_DELAY = ONE_SECOND * 10;
@@ -12,8 +13,8 @@ const SPRING_OPTIONS = {
   damping: 50,
 };
 
-export const VolunteersCarousel = ({ imgs }: { imgs: string[] }) => {
-  const [imgIndex, setImgIndex] = useState(0);
+export const VolunteersCarousel = ({ volunteers }: { volunteers: VolunteerData[] }) => {
+  const [volunteerIndex, setVolunteerIndex] = useState(0);
   const dragX = useMotionValue(0);
 
   useEffect(() => {
@@ -21,7 +22,7 @@ export const VolunteersCarousel = ({ imgs }: { imgs: string[] }) => {
       const x = dragX.get();
 
       if (x === 0) {
-        setImgIndex((prevIndex) => (prevIndex === imgs.length - 1 ? 0 : prevIndex + 1));
+        setVolunteerIndex((prevIndex) => (prevIndex === volunteers.length - 1 ? 0 : prevIndex + 1));
       }
     }, AUTO_DELAY);
 
@@ -31,10 +32,10 @@ export const VolunteersCarousel = ({ imgs }: { imgs: string[] }) => {
   const onDragEnd = () => {
     const x = dragX.get();
 
-    if (x <= -DRAG_BUFFER && imgIndex < imgs.length - 1) {
-      setImgIndex((prevIndex) => prevIndex + 1);
-    } else if (x >= DRAG_BUFFER && imgIndex > 0) {
-      setImgIndex((prevIndex) => prevIndex - 1);
+    if (x <= -DRAG_BUFFER && volunteerIndex < volunteers.length - 1) {
+      setVolunteerIndex((prevIndex) => prevIndex + 1);
+    } else if (x >= DRAG_BUFFER && volunteerIndex > 0) {
+      setVolunteerIndex((prevIndex) => prevIndex - 1);
     }
   };
 
@@ -44,27 +45,30 @@ export const VolunteersCarousel = ({ imgs }: { imgs: string[] }) => {
         drag="x"
         dragConstraints={{ left: 0, right: 0 }}
         style={{ x: dragX }}
-        animate={{ translateX: `-${imgIndex * 32}%` }}
+        animate={{ translateX: `-${volunteerIndex * 32}%` }}
         transition={SPRING_OPTIONS}
         onDragEnd={onDragEnd}
         className="flex cursor-grab items-center active:cursor-grabbing"
       >
-        <Images imgIndex={imgIndex} imgs={imgs} />
+        <Volunteers
+          volunteerIndex={volunteerIndex}
+          volunteers={volunteers}
+        />
       </motion.div>
     </div>
   );
 };
 
-const Images = ({ imgIndex, imgs }: { imgIndex: number; imgs: string[] }) => {
+const Volunteers = ({ volunteerIndex, volunteers }: { volunteerIndex: number; volunteers: VolunteerData[] }) => {
   return (
     <>
-      {imgs.map((imgSrc, idx) => {
-        const isSelected = imgIndex === idx;
+      {volunteers.map((volunteer, idx) => {
+        const isSelected = volunteerIndex === idx;
         return (
           <motion.div
             key={idx}
             style={{
-              backgroundImage: `url(${imgSrc})`,
+              backgroundImage: `url(${volunteer.photo})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
@@ -73,8 +77,8 @@ const Images = ({ imgIndex, imgs }: { imgIndex: number; imgs: string[] }) => {
             className={`aspect-video shrink-0 rounded-xl object-cover grayscale h-96 w-[350px] ${isSelected ? "filter-none" : ""}`}
           >
             <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 text-white py-2 px-4">
-              <p className="text-3xl font-semibold">Volunteer Name</p>
-              <p className="text-sm">Volunteer Role</p>
+              <p className="text-3xl font-semibold">{volunteer.name}</p>
+              <p className="text-sm">{volunteer.role}</p>
             </div>
           </motion.div>
         );
