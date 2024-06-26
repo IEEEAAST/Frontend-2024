@@ -1,6 +1,6 @@
 import { ResourceVideo } from './ResourcesVideo'
 import { ResourceNote } from './ResourcesNote'
-import pic from '../../assets/IEEELogoWhite.png'
+import {  IResources } from '../../interfaces/EventData'
 import {
     Table,
     Thead,
@@ -11,11 +11,14 @@ import {
 
   } from '@chakra-ui/react'
 
+// interface Videos {
+//   videos: Ivideo[];
+// }
 
-  export const Resources = () => {
-    const destUrl:string = "https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=ygUJcmljayByb2xs"
+  export const Resources : React.FC<IResources> = ({ videos, notes })  => {
+
     return (
-        
+
         <Flex direction={"column"}>
         <TableContainer marginBottom={"56px"} className='customScrollbar'>
          {/* table for videos */}
@@ -26,15 +29,10 @@ import {
             </Tr>
           </Thead>
           <Tr>
-          <Flex >
-            <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
-            <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
-            <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
-            <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
-            <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
-            <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
-            <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
-            <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
+          <Flex>
+            {videos && videos.map((video) => (
+              <ResourceVideo thumbnail={video.thumbnail} name={video.name} length={video.length} speaker={video.speaker} url={video.url} />
+            ))}
           </Flex>
           </Tr>
         </Table></TableContainer>
@@ -49,14 +47,9 @@ import {
           </Thead>
           <Tr>
            <Flex>
-                <ResourceNote thumbNail={pic} noteName={'Sustainability in Design works...'} destUrl={destUrl} />
-                <ResourceNote thumbNail={pic} noteName={'Sustainability in Design works...'} destUrl={destUrl} />
-                <ResourceNote thumbNail={pic} noteName={'Sustainability in Design works...'} destUrl={destUrl} />
-                <ResourceNote thumbNail={pic} noteName={'Sustainability in Design works...'} destUrl={destUrl} />
-                <ResourceNote thumbNail={pic} noteName={'Sustainability in Design works...'} destUrl={destUrl} />
-                <ResourceNote thumbNail={pic} noteName={'Sustainability in Design works...'} destUrl={destUrl} />
-                <ResourceNote thumbNail={pic} noteName={'Sustainability in Design works...'} destUrl={destUrl} />
-                <ResourceNote thumbNail={pic} noteName={'Sustainability in Design works...'} destUrl={destUrl} />
+           {notes && notes.map((note) => (
+              <ResourceNote thumbnail={note.thumbnail} name={note.name} url={note.url} />
+            ))}
            </Flex>
           </Tr>
         </Table>

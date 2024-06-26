@@ -17,7 +17,6 @@ interface SponsorProps {
 }
 
   export const Sponsor = ({ sponsorImg, name, totalEventSponsored, linksSocial }: SponsorProps) => {
-
         return (
       <Tr>
       <Td><Box boxSize='sm' width={"50px"} height={"50px"}><Image src={sponsorImg} alt='test' width={"50px"} height={"50px;"}/></Box></Td>

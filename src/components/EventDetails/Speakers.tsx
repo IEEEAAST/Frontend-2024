@@ -9,7 +9,6 @@ import {
 import { Speaker } from './Speaker'
 
 
-
 export const Speakers = () => {
 
   return (
