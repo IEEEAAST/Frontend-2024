@@ -1,6 +1,6 @@
 import { ResourceVideo } from './ResourcesVideo'
 import { ResourceNote } from './ResourcesNote'
-import pic from '../../assets/IEEELogoWhite.png'
+import {  IResources } from '../../interfaces/EventData'
 import {
     Table,
     Thead,
@@ -10,18 +10,15 @@ import {
     TableContainer,
 
   } from '@chakra-ui/react'
-import { EventData } from '../../interfaces/EventData'
-import { Ivideo } from '../../interfaces/EventData'
-import { useEffect, useState } from 'react'
 
+// interface Videos {
+//   videos: Ivideo[];
+// }
 
-  export const Resources = ( eventVideos : Ivideo[]) => {
-      useEffect(()=> {
+  export const Resources : React.FC<IResources> = ({ videos, notes })  => {
 
-      })
-      const [videos, setVideos] = useState<Ivideo[]>();
-    const destUrl:string = "https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=ygUJcmljayByb2xs"
     return (
+
         <Flex direction={"column"}>
         <TableContainer marginBottom={"56px"}>
          {/* table for videos */}
@@ -34,7 +31,7 @@ import { useEffect, useState } from 'react'
           <Tr>
           <Flex>
             {videos && videos.map((video) => (
-              <ResourceVideo thumbNail={video.thumbnail} vidName={video.name} vidLength={video.length} speakerName={video.speaker} destUrl={video.url} />
+              <ResourceVideo thumbnail={video.thumbnail} name={video.name} length={video.length} speaker={video.speaker} url={video.url} />
             ))}
           </Flex>
           </Tr>
@@ -50,14 +47,9 @@ import { useEffect, useState } from 'react'
           </Thead>
           <Tr>
            <Flex>
-                <ResourceNote thumbNail={pic} noteName={'Sustainability in Design works...'} destUrl={destUrl} />
-                <ResourceNote thumbNail={pic} noteName={'Sustainability in Design works...'} destUrl={destUrl} />
-                <ResourceNote thumbNail={pic} noteName={'Sustainability in Design works...'} destUrl={destUrl} />
-                <ResourceNote thumbNail={pic} noteName={'Sustainability in Design works...'} destUrl={destUrl} />
-                <ResourceNote thumbNail={pic} noteName={'Sustainability in Design works...'} destUrl={destUrl} />
-                <ResourceNote thumbNail={pic} noteName={'Sustainability in Design works...'} destUrl={destUrl} />
-                <ResourceNote thumbNail={pic} noteName={'Sustainability in Design works...'} destUrl={destUrl} />
-                <ResourceNote thumbNail={pic} noteName={'Sustainability in Design works...'} destUrl={destUrl} />
+           {notes && notes.map((note) => (
+              <ResourceNote thumbnail={note.thumbnail} name={note.name} url={note.url} />
+            ))}
            </Flex>
           </Tr>
         </Table>

@@ -24,6 +24,17 @@ export interface Ivideo{
     length: string;
     name: string;
     speaker: string;
-    thumbnail: string;
+    thumbnail: string | null | undefined;
     url: string;
+}
+
+export interface Inote {
+    name: string;
+    thumbnail: string | null | undefined;
+    url: string;
+}
+
+export interface IResources {
+    videos: Ivideo[];
+    notes: Inote[];
 }

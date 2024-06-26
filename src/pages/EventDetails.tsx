@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Sponsors } from "../components/EventDetails/Sponsors";
 import { Resources } from "../components/EventDetails/Resources";
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Spinner } from '@chakra-ui/react';
 
 import Bell from '../assets/notification-bell-white@2x.png';
 import Star from '../assets/fav-event-star-white@2x.png';
@@ -16,30 +16,44 @@ import { Speakers } from "../components/EventDetails/Speakers";
 import getDataByField from "../firebase/getDataByField";
 
 import { EventData } from "../interfaces/EventData";
-import { Ivideo } from "../interfaces/EventData";
+import { Ivideo, Inote } from "../interfaces/EventData";
 
 export const EventDetails = () => {
   const { name: eventName } = useParams<{ name: string }>();
 
   const [eventData, setEventData] = useState<EventData|null>(null);
   const [loading, setLoading] = useState(true);
+  const [videos, setVideos] = useState<Ivideo[]>([]);
+  const [notes, setNotes] = useState<Inote[]>([]);
 
-  useEffect(() => {
+  const fetchData = async () => {
     let isMounted = true; // Flag to prevent state updates on unmounted component
-
     getDataByField("events", "title", "==", eventName).then(data => {
       console.log(eventName)
       if (isMounted) {
         setEventData(data.result?.[0] || null);
         setLoading(false);
+        if(data.result?.[0].videos){
+          setVideos(data.result?.[0].videos);
+        }
+        if(data.result?.[0].keynotes){
+          setNotes(data.result?.[0].keynotes);
+          console.log(data.result?.[0].keynotes)
+        }
+        setLoading(false);
       }
     });
+     return () => { isMounted = false; }
+  }
 
-    return () => { isMounted = false; }; // Clean up to prevent state updates on unmounted component
-  }, [eventName]);
 
+  useEffect(() => {
+    
+    fetchData();
+
+  }, []);
   // Handle cases where eventData is null or undefined
-  return (
+  return loading? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex "/></div> : (
     <div id="eventPage">
       <div id="eventDetailsFlex">
         <div id="eventNameWrapper">
@@ -84,11 +98,7 @@ export const EventDetails = () => {
             <Sponsors />
           </TabPanel>
           <TabPanel>
-           {eventData == null? null : 
-           
-           <Resources eventVideos= {eventData.videos}  />
- 
-          }
+          <Resources videos= {videos} notes= {notes} />
           </TabPanel>
           <TabPanel>
             {/* <Gallery eventData= {eventData} /> */}
