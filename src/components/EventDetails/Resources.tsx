@@ -17,7 +17,7 @@ import {
     return (
         
         <Flex direction={"column"}>
-        <TableContainer marginBottom={"56px"}>
+        <TableContainer marginBottom={"56px"} className='customScrollbar'>
          {/* table for videos */}
         <Table variant='sm'>
           <Thead>
@@ -26,7 +26,7 @@ import {
             </Tr>
           </Thead>
           <Tr>
-          <Flex>
+          <Flex >
             <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
             <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
             <ResourceVideo thumbNail={pic} vidName={'Sustainability in Design works...'} vidLength={'25 Min'} speakerName={'Speaker Name'} destUrl={destUrl} />
@@ -40,7 +40,7 @@ import {
         </Table></TableContainer>
 
         {/* table for notes */}
-        <TableContainer>
+        <TableContainer className='customScrollbar'>
         <Table variant='sm'>
           <Thead>
             <Tr>
