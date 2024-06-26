@@ -6,6 +6,18 @@ import { Article } from "./pages/Article";
 import "./App.css"; // Import CSS file
 import { ChakraProvider } from '@chakra-ui/react'
 import theme from './theme'
+import getDocument from "./firebase/getData"
+import { MailDesign } from "./pages/MailDesign";
+import { Onboarding } from "./pages/Onboarding";
+import { Verifying } from "./pages/Verification";
+import { SignUp } from "./pages/Signup";
+import { Dashboard } from "./pages/Dashboard";
+
+
+export const LangContext = createContext({
+  lang: "English",
+  setLang: (lang: string) => {}
+});
 
 function App() {
   const [lang, setLang] = useState(() => {

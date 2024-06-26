@@ -1,7 +1,6 @@
 import globe from "../../assets/public-visitor-globe-black.png"
 import member from "../../assets/members-people-black.png"
 
-
 export const Joinus = () => {
   return (
     <>
