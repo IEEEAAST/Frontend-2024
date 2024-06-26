@@ -54,7 +54,6 @@ import React, { useState, useEffect } from 'react';
 
 
 
-
 export const Speakers = () => {
 
   const [speakers, setSpeakers] = useState<any>([]);

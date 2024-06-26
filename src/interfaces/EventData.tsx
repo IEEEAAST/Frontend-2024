@@ -7,16 +7,35 @@ export interface EventData {
     endtime: firebase.firestore.Timestamp;
     coverPhoto: string;
     gallery: string[];
-    keynotes: any;
+    keynotes: string[];
     schedule: Schedule;
     speakers: string[];
     sponsors: string[];
     type: string;
-    videos: string[];
+    videos: Ivideo[];
 }
 export interface Schedule{
     duration: string;
     speaker: string;
     starting : string;
     title : string;
+}
+
+export interface Ivideo{
+    length: string;
+    name: string;
+    speaker: string;
+    thumbnail: string | null | undefined;
+    url: string;
+}
+
+export interface Inote {
+    name: string;
+    thumbnail: string | null | undefined;
+    url: string;
+}
+
+export interface IResources {
+    videos: Ivideo[];
+    notes: Inote[];
 }
