@@ -20,7 +20,7 @@ export const HomeComp = () => {
               autoComplete="email"
               aria-label="Email address"
             />
-            <button className="w-2/6 text-sm bg-blue-950 rounded-3xl p-2">
+            <button className="w-2/6 text-sm bg-black rounded-3xl p-2">
               Join Us
             </button>
           </div>
