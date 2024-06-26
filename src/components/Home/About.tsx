@@ -78,7 +78,7 @@ const About = () => {
   return (
     <>
       <div className="card-container">
-        <h2 className="card-heading">IEEE Values. Our Core.</h2>
+        <h2 className="card-heading font-bold text-4xl mt-20">IEEE Values. Our Core.</h2>
         {cardsData.map((card, index) => (
           <Card key={index} {...card} />
         ))}
