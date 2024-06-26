@@ -11,7 +11,7 @@ const EventHighlights = () => {
   return (
     <>
       <div className="flex flex-col items-start w-full container mx-auto">
-        <p className="font-bold text-[45px] mb-4 w-full">Event Highlights</p>
+        <p className="font-bold text-[45px] mb-5 w-full mt-20">Event Highlights</p>
         <div className="flex justify-center w-full">
           <div className="grid grid-cols-[285px_445px_370px_370px] gap-4 p-4">
             <div className="col-span-1 row-span-1" style={{ height: '300px' }}>
