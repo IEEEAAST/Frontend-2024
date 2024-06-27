@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { motion, useMotionValue } from "framer-motion";
-import { generateFakeImages } from "../../mock/home/generateFakeImages";
 
 const ONE_SECOND = 1000;
 const AUTO_DELAY = ONE_SECOND * 10;
@@ -9,9 +8,19 @@ const imgs = [
   'https://picsum.photos/300/300',
   'https://picsum.photos/300/300',
   'https://picsum.photos/300/300',
+  'https://picsum.photos/300/300',
+  'https://picsum.photos/300/300',
+  'https://picsum.photos/300/300',
+  'https://picsum.photos/300/300',
+  'https://picsum.photos/300/300',
+  'https://picsum.photos/300/300',
+  'https://picsum.photos/300/300',
+  'https://picsum.photos/300/300',
+  'https://picsum.photos/300/300',
+  'https://picsum.photos/300/300',
+  'https://picsum.photos/300/300',
   'https://picsum.photos/300/300'
 ];
-console.log(imgs)
 
 const SPRING_OPTIONS = {
   type: "spring",
@@ -64,7 +73,7 @@ export const SwipeCarousel = () => {
           x: dragX,
         }}
         animate={{
-          translateX: `-${imgIndex * 7.2}%`,
+          translateX: `-${imgIndex * 5.15}%`,
         }}
         transition={SPRING_OPTIONS}
         onDragEnd={onDragEnd}
@@ -82,7 +91,7 @@ const Images = ({ imgIndex }: { imgIndex: number }) => {
   return (
     <>
       {imgs.map((imgSrc, idx) => {
-        const isSelected:string = (imgIndex==idx)? "w-4/5 filter-none":" w-20";
+        const isSelected:string = (imgIndex==idx)? "w-2/5 filter-none":" w-20";
         return (
           <motion.div
             key={idx}

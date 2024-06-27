@@ -80,7 +80,7 @@ export const Volunteers = (props: Props) => {
   }, []);
 
   return (
-    <div className="flex flex-col w-full px-[205px] container mx-auto overflow-hidden pt-[100px]">
+    <div className="flex flex-col w-full container mx-auto overflow-hidden pt-[100px]">
       <p className="font-bold text-[45px] mx-auto">Meet Talent in Our Team</p>
 
       {/* Conditional rendering based on loading state */}
