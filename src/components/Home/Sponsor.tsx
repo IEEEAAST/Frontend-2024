@@ -1,4 +1,3 @@
-import logo from "../../assets/IEEELogoWhite.png";
 import { useEffect, useRef, useState } from 'react';
 import getCollection from '../../firebase/getCollection.js';
 import { Spinner } from '@chakra-ui/react';
