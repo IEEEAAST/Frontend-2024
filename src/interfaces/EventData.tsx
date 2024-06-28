@@ -56,3 +56,21 @@ export interface IsocialLinks {
     name: string;
     url: string;
 }
+
+export interface spk {
+    name: string;
+    src: string;
+    bio: string;
+    Slinks: socialLinks;
+}
+
+export interface scheduleItem {
+    title: string;
+    speaker: string;
+    starting: string;
+    duration: string;
+}
+
+export interface scheduleItems{
+    schedules: scheduleItem[];
+}

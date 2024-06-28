@@ -16,7 +16,8 @@ import { Speakers } from "../components/EventDetails/Speakers";
 import getDataByField from "../firebase/getDataByField";
 
 import { EventData } from "../interfaces/EventData";
-import { Ivideo, Inote, IsponsorsIds } from "../interfaces/EventData";
+import { Ivideo, Inote, IsponsorsIds, scheduleItem } from "../interfaces/EventData";
+
 
 export const EventDetails = () => {
   const { name: eventName } = useParams<{ name: string }>();
@@ -28,7 +29,8 @@ export const EventDetails = () => {
   const [sponsorIds, setSponsorIDs] = useState<IsponsorsIds>();
   const [isResourcesEnabled, setIsResourcesEnabled] = useState(false);
   const [isSponsorEnabled, setSponsorEnabled] = useState(false);
-  
+  const [speakers, setSpeakers] = useState<any[]>([]);
+  const [schedule, setSchdule] = useState<scheduleItem[]>([]);
 
   const fetchData = async () => {
     let isMounted = true; // Flag to prevent state updates on unmounted component
@@ -49,6 +51,14 @@ export const EventDetails = () => {
           setSponsorIDs(data.result?.[0].sponsors)
           setSponsorEnabled(true);
         }
+        if(data.result?.[0].speakers){
+          setSpeakers(data.result?.[0].speakers);
+        }
+        if (data.result?.[0].schedule) {
+          setSchdule(data.result ? data.result[0].schedule : []);
+          setLoading(false);
+          
+      }
         setLoading(false);
         // console.log(data.result?.[0]);
         window.open(data.result?.[0].coverPhoto, "_blank");
@@ -99,10 +109,10 @@ export const EventDetails = () => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Schedule />
+            <Schedule schedules={schedule}/>
           </TabPanel>
           <TabPanel>
-            <Speakers />
+            <Speakers speakers={speakers}/>
           </TabPanel>
           {isSponsorEnabled? 
           <TabPanel>

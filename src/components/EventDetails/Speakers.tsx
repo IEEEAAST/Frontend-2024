@@ -52,7 +52,7 @@ import React, { useState, useEffect } from 'react';
 
 
 
-export const Speakers = () => {
+export const Speakers = ({speakerIDs}:string[]) => {
 
   const [speakers, setSpeakers] = useState<any>([]);
   const [loading, setLoading] = useState(true);
@@ -67,7 +67,13 @@ const fetchData= async()=>{
     if (res.result) {
       // const speaker = res.result;
       // if (speaker){
-      setSpeakers(res.result); // Assuming res.result is an array of speakers
+
+      if (res.ids){
+        const wantedSpeakerIDs = res.result.filter((id,index)=>
+          speakerIDs.includes(res.ids?.[index]));
+        setSpeakers(wantedSpeakerIDs);
+      }
+       // Assuming res.result is an array of speakers
       setLoading(false);
       // console.log(res.result);
     // }
