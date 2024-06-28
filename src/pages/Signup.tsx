@@ -1,6 +1,8 @@
 import { NavBar } from "../components/common/navbar";
 import { useState, ChangeEvent, FormEvent } from "react";
 import { Link } from "react-router-dom";
+import register from "../firebase/register";
+import setData from "../firebase/setData";
 import { Input, FormControl, FormLabel, FormErrorMessage, Button } from "@chakra-ui/react";
 
 interface FormData {
@@ -34,6 +36,11 @@ export const SignUp = () => {
     if (!isErrorEmail && !isErrorPass) {
       setIsValid(true);
       setShowError(false);
+      register(formData.email, formData.password).then(res => {
+        console.log(res.result?.user.uid);
+        setData("users", formData, res.result?.user.uid);
+      });
+      
     } else {
       setIsValid(false);
       setShowError(true);
