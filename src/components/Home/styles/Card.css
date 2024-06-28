@@ -1,9 +1,9 @@
 .card-heading {
   display: block;
-  width: 75%;
-  margin: 30px 20px 20px;
+  width: 88%;
+  margin: 30px 30px 20px;
   color: white;
-  font-size: 25px;
+  font-size: 30px;
   font-weight: bold;
 }
 
@@ -11,23 +11,25 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  max-width: 1200px;
   margin: 0 auto 50px;
   color: #000b21;
-  padding: 10px;
 }
 .card {
   display: flex;
-  justify-content: center;
   align-items: center;
   padding: 20px;
   border-radius: 20px;
   margin: 5px;
   height: 200px;
 }
+@media (max-width: 1290px) {
+  .card {
+    width: 500px !important;
+  }
+}
 @media (max-width: 997px) {
   .card {
-    width: 350px !important;
+    width: 400px !important;
   }
 }
 @media (max-width: 797px) {

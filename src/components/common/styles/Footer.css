@@ -25,7 +25,7 @@
   justify-content: space-between;
   margin-right: 70px;
 }
-.social-box:not(:nth-last-child(1), :nth-last-child(2)) {
+.social-box {
   border-bottom: 1px solid #f9f7f4;
   padding-bottom: 15px;
 }
