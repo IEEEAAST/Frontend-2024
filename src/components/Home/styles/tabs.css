@@ -1,11 +1,19 @@
 
+.chakra-tabs__tab{
+    width:fit-content;
+}
 .chakra-tabs__tab[aria-selected="true"]{
     font-family:'SF-Pro-Display-Bold';
     font-size:14pt;
 }
+
 .chakra-tabs__tablist{
     background-color: #151F33;
     border-radius:999px;
     padding: 0px 30px 0px 30px;
     margin-top:15px;
+    gap:0;
+    justify-content:space-around;
+    width:fit-content;
+    margin:auto;
 }
