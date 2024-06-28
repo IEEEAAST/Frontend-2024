@@ -1,6 +1,6 @@
 import { NavBar } from "../components/common/navbar";
-import { useState, ChangeEvent, FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Input, FormControl, FormLabel, FormErrorMessage, Button } from "@chakra-ui/react";
 
 interface FormData {
@@ -12,12 +12,24 @@ interface FormData {
 
 export const SignUp = () => {
   const location = useLocation();
+  console.log(location);
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
   });
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const email = queryParams.get("email");
+    if (email) {
+      setFormData((prevData) => ({
+        ...prevData,
+        email: decodeURIComponent(email),
+      }));
+    }
+  }, [location.search]);
+  
   const [isValid, setIsValid] = useState(false);
   const [showError, setShowError] = useState(false);
 
