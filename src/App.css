@@ -3,46 +3,70 @@
 @tailwind components;
 @tailwind utilities;
 @font-face {
-  font-family: 'SF-Pro';
+  font-family: "SF-Pro";
   src: url("./assets/fonts/SF-Pro.ttf");
 }
 @font-face {
-  font-family: 'SF-Pro-Text-Medium';
+  font-family: "SF-Pro-Text-Medium";
   src: url("./assets/fonts/SF-Pro-Text-Medium.otf");
 }
 @font-face {
-  font-family: 'SF-Pro-Display-Bold';
+  font-family: "SF-Pro-Display-Bold";
   src: url("./assets/fonts/SF-Pro-Display-Bold.otf");
 }
 @font-face {
-  font-family: 'SF-Pro-Text-Light';
+  font-family: "SF-Pro-Text-Light";
   src: url("./assets/fonts/SF-Pro-Text-Light.otf");
 }
 @font-face {
-  font-family: 'SF-Pro-Display-Regular';
+  font-family: "SF-Pro-Display-Regular";
   src: url("./assets/fonts/SF-Pro-Display-Regular.otf");
 }
 body {
-    margin: 0;
-    padding: 0;
-    background-color: #000B21;
-    color:white;
-    font-family: 'SF-Pro';
-  }
-.defaultButton{
+  margin: 0;
+  padding: 0;
+  background-color: #000b21;
+  color: rgb(230, 230, 230);
+  font-family: "SF-Pro";
+}
+.defaultButton {
   background-color: white;
-  color:black;
-  font-size:12pt;
-  font-weight:600;
-  font-family: 'SF-Pro-Text-Medium';
-  border:none;
-  cursor:pointer;
-  min-width:140px;
+  color: black;
+  font-size: 12pt;
+  font-weight: 600;
+  font-family: "SF-Pro-Text-Medium";
+  border: none;
+  cursor: pointer;
+  min-width: 140px;
   width: 140px;
   height: 40px;
-  border-radius:40px;
+  border-radius: 40px;
 }
-.defaultButton:active{
-  background-color: #c2c2c2
+.defaultButton:active {
+  background-color: #c2c2c2;
 }
-  
+
+.primary-heading {
+  font-size: clamp(2rem, 5vw, 4rem);
+  color: #4c4c4c;
+  /* line-height: 5rem; */
+  max-width: 600px;
+}
+/* global.css */
+
+.customScrollbar::-webkit-scrollbar {
+  height: 8px;
+}
+
+.customScrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.customScrollbar::-webkit-scrollbar-thumb {
+  background: hsl(220, 63%, 9%);
+  border-radius: 8px;
+}
+
+.customScrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(222, 52%, 12%);
+}
