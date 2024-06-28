@@ -70,8 +70,8 @@ export const Volunteers = () => {
   }, []);
 
   return (
-    <div className="flex flex-col w-full container mx-auto overflow-hidden pt-[100px]">
-      <p className="font-bold text-[30px] sm:text-[35px] md:text-[45px] mb-5 w-full mt-20 text-center">Meet Talent in Our Team</p>
+    <div className="flex flex-col w-full container mx-auto overflow-hidden mt-[40px]">
+      <p className="font-bold text-[30px] sm:text-[35px] md:text-[45px] mb-5 w-full mt-10 text-center">Meet Talent in Our Team</p>
 
       {isLoading ? (
         <Center mt={8}>
