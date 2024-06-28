@@ -7,7 +7,7 @@ export default async function getCollection(collectionName) {
     const querySnapshot = await getDocs(colRef);
 
     let dataRes = [];
-    let dataIDs = [];
+    let dataIds = [];
 
     let result = null;
     let error = null;
@@ -17,13 +17,13 @@ export default async function getCollection(collectionName) {
         querySnapshot.forEach((doc) => {
             // console.log(`${doc.id} => ${doc.data()}`);
             dataRes.push(doc.data());
-            dataIDs.push(doc.id);
+            dataIds.push(doc.id);
         });
         result = dataRes;
-        ids = dataIDs;
-    } catch (e) {
+        ids = dataIds;
+    } catch (e) {   
         error = e;
     }
 
-    return { result, error, ids };
+    return { result, ids, error };
 }

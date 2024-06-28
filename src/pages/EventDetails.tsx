@@ -18,7 +18,7 @@ import  Gallery  from "../components/EventDetails/Gallery";
 import getDataByField from "../firebase/getDataByField";
 
 import { EventData } from "../interfaces/EventData";
-import { Ivideo, Inote, scheduleItem } from "../interfaces/EventData";
+import { Ivideo, Inote, IsponsorsIds, scheduleItem, IspksIds } from "../interfaces/EventData";
 
 
 export const EventDetails = () => {
@@ -28,7 +28,10 @@ export const EventDetails = () => {
   const [loading, setLoading] = useState(true);
   const [videos, setVideos] = useState<Ivideo[]>([]);
   const [notes, setNotes] = useState<Inote[]>([]);
-  const [speakers, setSpeakers] = useState<any[]>([]);
+  const [sponsorIds, setSponsorIDs] = useState<IsponsorsIds>();
+  const [isResourcesEnabled, setIsResourcesEnabled] = useState(false);
+  const [isSponsorEnabled, setSponsorEnabled] = useState(false);
+  const [speakers, setSpeakers] = useState<IspksIds>();
   const [schedule, setSchdule] = useState<scheduleItem[]>([]);
 
   const fetchData = async () => {
@@ -40,13 +43,19 @@ export const EventDetails = () => {
         setLoading(false);
         if(data.result?.[0].videos){
           setVideos(data.result?.[0].videos);
+          setIsResourcesEnabled(true);
         }
         if(data.result?.[0].keynotes){
           setNotes(data.result?.[0].keynotes);
-          console.log(data.result?.[0].keynotes)
+          setIsResourcesEnabled(true);
+        }
+        if(data.result?.[0].sponsors){
+          setSponsorIDs(data.result?.[0].sponsors)
+          setSponsorEnabled(true);
         }
         if(data.result?.[0].speakers){
           setSpeakers(data.result?.[0].speakers);
+          console.log(data.result?.[0].speakers)
         }
         if (data.result?.[0].schedule) {
           setSchdule(data.result ? data.result[0].schedule : []);
@@ -54,7 +63,7 @@ export const EventDetails = () => {
           
       }
         setLoading(false);
-        console.log(data.result?.[0]);
+        // console.log(data.result?.[0]);
         window.open(data.result?.[0].coverPhoto, "_blank");
       }
     });
@@ -63,11 +72,10 @@ export const EventDetails = () => {
 
 
   useEffect(() => {
-    
     fetchData();
-
   }, []);
   // Handle cases where eventData is null or undefined
+
   return loading? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex "/></div> : (
     <div id="eventPage">
       <img src={Banner} alt="banner"> 
@@ -91,8 +99,8 @@ export const EventDetails = () => {
           }}>
             <Tab><span className="tabLabel">Schedule</span></Tab>
             <Tab><span className="tabLabel">Speakers</span></Tab>
-            <Tab><span className="tabLabel">Sponsors</span></Tab>
-            <Tab><span className="tabLabel">Resources</span></Tab>
+            {isSponsorEnabled? <Tab><span className="tabLabel">Sponsors</span></Tab> : <Tab isDisabled><span className="tabLabel">Sponsors</span></Tab>} 
+            {isResourcesEnabled? <Tab><span className="tabLabel">Resources</span></Tab> : <Tab><span className="tabLabel">Resources</span></Tab>}
             <Tab className="mr-1"><span className="tabLabel">Gallery</span></Tab>
           </div>
           <div className="iconButtonsWrapper">
@@ -109,14 +117,18 @@ export const EventDetails = () => {
             <Schedule schedules={schedule}/>
           </TabPanel>
           <TabPanel>
-            <Speakers speakers={speakers}/>
+            <Speakers speakersIds={speakers}/>
           </TabPanel>
+          {isSponsorEnabled? 
           <TabPanel>
-            <Sponsors />
+            <Sponsors sponsorIds= {sponsorIds}/>
           </TabPanel>
-          <TabPanel>
-          <Resources videos= {videos} notes= {notes} />
-          </TabPanel>
+          :<TabPanel />}
+          {isResourcesEnabled? 
+            <TabPanel>
+            <Resources videos= {videos} notes= {notes} />
+            </TabPanel>
+            :<TabPanel />}
           <TabPanel>
             { <Gallery /> }
           </TabPanel>

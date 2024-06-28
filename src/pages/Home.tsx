@@ -14,13 +14,14 @@ export const Home = () => {
       <NavBar />
       <HomeComp />
       <Sponsor />
-      <About/>
-      <AchievementCarousel/>
-      <EventHighlights/>
-      <Volunteers/>
-      <AboutUs/>
-      <Joinus/>
-      <Footer/>
+      <About />
+      <AchievementCarousel />
+      <EventHighlights />
+      <Volunteers />
+      <AboutUs />
+      <Joinus />
+      <Footer />
+
     </>
   );
 };

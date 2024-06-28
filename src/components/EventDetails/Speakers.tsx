@@ -8,77 +8,27 @@ import {
   Spinner,
 } from '@chakra-ui/react'
 import { Speaker } from './Speaker'
-import getDocumentsByField from '../../firebase/getDataByField'
-import getData from '../../firebase/getData'
+import { IspksIds, Ispk } from '../../interfaces/EventData';
 import getCollection from '../../firebase/getCollection'
 import React, { useState, useEffect } from 'react';
 //import {Props} from '../EventDetails/Speaker'
 
 
-// getCollection('event').then ()
-// getCollection('speakers').then ((res) => {
-//         if (!res.error)
-//           {
-//             const speaker = res.result?.[0];
-//             speaker(speaker.name,speaker.bio,speaker.imgurl,speaker.bio,speaker.social)
-//             console.log(speaker);
-//           }})
+export const Speakers : React.FC<IspksIds> = ({speakersIds}) => {
 
-// getCollection('event').then((res) => {
-//   if (!res.error) {
-//     const speaker = res.result?.[0];
-//     return (
-//       <Speaker
-//         name={speaker.name}
-//         src={speaker.imgurl}
-//         bio={speaker.bio}
-//         Slinks={speaker.social}
-//       />
-//     );
-//   }
-// });
-
-
-// const speakers = () => {
-//   const [speakers, setSpeakers] = useState([]);
-
-//   useEffect(() => {
-//     getCollection('event').then((res) => {
-//       if (!res.error) {
-//         const speaker = res.result?.[0];
-//         setSpeakers(speaker); // Assuming res.result is an array of speakers
-//         console.log(speaker);
-//       }
-//     });
-//   }, []);}
-
-
-
-export const Speakers = ({speakerIDs}:string[]) => {
-
-  const [speakers, setSpeakers] = useState<any>([]);
+  const [speakers, setSpeakers] = useState<Ispk[]>();
   const [loading, setLoading] = useState(true);
-
-  // useEffect(()=> {
-  //   getCollection('speakers').then(res => {
-  //     console.log(res.result?.[0])
-  //   })
-  // })
+  
 const fetchData= async()=>{
   await getCollection('speakers').then((res) => {
-    if (res.result) {
-      // const speaker = res.result;
-      // if (speaker){
-
-      if (res.ids){
+    if (res.result && !res.error) {
+      
         const wantedSpeakerIDs = res.result.filter((id,index)=>
-          speakerIDs.includes(res.ids?.[index]));
+          speakersIds.includes(res.ids?.[index]));
         setSpeakers(wantedSpeakerIDs);
-      }
+
        // Assuming res.result is an array of speakers
       setLoading(false);
-      console.log(res.result);
-    // }
     }
   });
 }
@@ -100,7 +50,7 @@ const fetchData= async()=>{
         </Thead>
         <Tbody>
 
-        {speakers.map((speaker:any, index:number) => (
+        {speakers && speakers.map((speaker:Ispk, index:number) => (
         <Speaker
           key={index}
           name={speaker.name}
