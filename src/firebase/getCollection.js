@@ -21,7 +21,7 @@ export default async function getCollection(collectionName) {
         });
         result = dataRes;
         ids = dataIds;
-    } catch (e) {
+    } catch (e) {   
         error = e;
     }
 
