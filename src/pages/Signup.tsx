@@ -2,7 +2,7 @@ import { NavBar } from "../components/common/navbar.tsx";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-import { Input, FormControl, FormLabel } from "@chakra-ui/react";
+import { Input, FormControl, FormLabel, FormErrorMessage } from "@chakra-ui/react";
 export const SignUp = () => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -10,6 +10,7 @@ export const SignUp = () => {
     email: "",
     password: "",
   });
+  const [isValid, setIsValid] = useState(false);
 
   const handleChange = (event) => {
     const { id, value } = event.target;
@@ -22,20 +23,25 @@ export const SignUp = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (validateEmail(formData.email) && validatePassword(formData.password)) {
+    if (!isErrorEmail && !isErrorPass) {
       console.log(formData);
+      setIsValid(true);
     } else {
-      alert("Please enter a valid email and password (at least 6 characters)");
+      setIsValid(false);
     }
   };
 
-  const validateEmail = (email) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
 
-  const validatePassword = (password) => {
-    return password.length >= 6;
-  };
+  const isErrorEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) === (false);
+  const isErrorPass =  formData.password.length < 6;
+
+  // const validateEmail = (email) => {
+  //   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  // };
+
+  // const validatePassword = (password) => {
+  //   return password.length >= 6;
+  // };
 
   return (
     <div className="form-container">
@@ -59,7 +65,7 @@ export const SignUp = () => {
                 name="Name"
                 value={formData.firstName}
                 onChange={handleChange}
-                required
+                required                
               />{" "}
             </FormControl>
 
@@ -75,7 +81,7 @@ export const SignUp = () => {
               />{" "}
             </FormControl>
 
-            <FormControl mb={4}>
+            <FormControl mb={4} isInvalid={isErrorEmail}>
               <FormLabel>Your Email</FormLabel>
               <Input
                 type="email"
@@ -84,10 +90,14 @@ export const SignUp = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-              />{" "}
+               
+              />
+               {isErrorEmail? (
+                <FormErrorMessage>Email is required.</FormErrorMessage>)  : (null)}
+                {" "}
             </FormControl>
 
-            <FormControl>
+            <FormControl isInvalid={isErrorPass}>
               <FormLabel>Password</FormLabel>
               <Input
                 type="password"
@@ -99,6 +109,8 @@ export const SignUp = () => {
               />{" "}
             </FormControl>
           </form>
+
+          
 
           {/* <form onSubmit={handleSubmit}>
             <div>
@@ -122,11 +134,15 @@ export const SignUp = () => {
               </button>
             </Link>
             {/* Button 2 navigates to '/page2' */}
+            {isValid?
             <Link to="/verify">
               <button className="bg-white text-black text-sm font-bold py-2 px-4 w-36 border-2 border-white rounded-full m-2 ">
                 Send Email
               </button>
             </Link>
+            :<button className="bg-white text-black text-sm font-bold py-2 px-4 w-36 border-2 border-white rounded-full m-2 " onSubmit={handleSubmit}>
+            Send Email
+          </button> }
           </div>
           <div className="fixed bottom-0 w-80 h-auto right-0 p-4">
             <img src="src\assets\bg-triangle-ellipse@2x.png" alt="Triangle" />

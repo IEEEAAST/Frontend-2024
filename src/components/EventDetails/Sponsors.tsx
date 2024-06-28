@@ -16,8 +16,6 @@ import {
   export const Sponsors: React.FC<IsponsorsIds> = ({ sponsorIds } ) => {
     const [Sponsors, setSponsors] = useState<Isponsor[]>();
     const [isLoading, setIsLoading] = useState(true);
-
-
     const fetchData = async() => {
       try{
       await getCollection('sponsors').then((res) => {

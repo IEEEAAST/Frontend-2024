@@ -12,7 +12,6 @@ export default async function getCollection(collectionName) {
     let result = null;
     let error = null;
     let ids = null;
-    let ids = null;
 
     try {
         querySnapshot.forEach((doc) => {

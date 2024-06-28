@@ -52,17 +52,22 @@ export interface IsponsorsIds{
     sponsorIds: string[];
 }
 
+export interface IspksIds {
+    speakersIds: string[];
+}
+
 export interface IsocialLinks {
     name: string;
     url: string;
 }
 
-export interface spk {
+export interface Ispk {
     name: string;
-    src: string;
+    imgurl: string;
     bio: string;
-    Slinks: socialLinks;
+    socials: socialLinks;
 }
+
 
 export interface scheduleItem {
     title: string;
