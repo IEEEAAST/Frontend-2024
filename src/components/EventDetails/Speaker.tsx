@@ -17,15 +17,11 @@ import {
 import t_icon from '../../assets/twitter-white@2x.png'
 import { Social } from './Social';
 import { socialLinks } from './Types.tsx';
+import { spk } from '../../interfaces/EventData.tsx';
 
 // type txt = { text: string; }
 
-// export interface spk {
-//   name: string;
-//   src: string;
-//   bio: string;
-//   Slinks: socialLinks;
-// }
+
 
 // const CustomAvatar: React.FC<spk> = ({ name, src }) => {
 //   return <Avatar name={name} src={src} />;
