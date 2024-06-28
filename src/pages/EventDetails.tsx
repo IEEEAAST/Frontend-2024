@@ -26,6 +26,9 @@ export const EventDetails = () => {
   const [videos, setVideos] = useState<Ivideo[]>([]);
   const [notes, setNotes] = useState<Inote[]>([]);
   const [sponsorIds, setSponsorIDs] = useState<IsponsorsIds>();
+  const [isResourcesEnabled, setIsResourcesEnabled] = useState(false);
+  const [isSponsorEnabled, setSponsorEnabled] = useState(false);
+  
 
   const fetchData = async () => {
     let isMounted = true; // Flag to prevent state updates on unmounted component
@@ -36,12 +39,15 @@ export const EventDetails = () => {
         setLoading(false);
         if(data.result?.[0].videos){
           setVideos(data.result?.[0].videos);
+          setIsResourcesEnabled(true);
         }
         if(data.result?.[0].keynotes){
           setNotes(data.result?.[0].keynotes);
+          setIsResourcesEnabled(true);
         }
         if(data.result?.[0].sponsors){
           setSponsorIDs(data.result?.[0].sponsors)
+          setSponsorEnabled(true);
         }
         setLoading(false);
         // console.log(data.result?.[0]);
@@ -78,8 +84,8 @@ export const EventDetails = () => {
           }}>
             <Tab><span className="tabLabel">Schedule</span></Tab>
             <Tab><span className="tabLabel">Speakers</span></Tab>
-            <Tab><span className="tabLabel">Sponsors</span></Tab>
-            <Tab><span className="tabLabel">Resources</span></Tab>
+            {isSponsorEnabled? <Tab><span className="tabLabel">Sponsors</span></Tab> : <Tab isDisabled><span className="tabLabel">Sponsors</span></Tab>} 
+            {isResourcesEnabled? <Tab><span className="tabLabel">Resources</span></Tab> : <Tab><span className="tabLabel">Resources</span></Tab>}
             <Tab className="mr-1"><span className="tabLabel">Gallery</span></Tab>
           </div>
           <div className="iconButtonsWrapper">
@@ -98,12 +104,16 @@ export const EventDetails = () => {
           <TabPanel>
             <Speakers />
           </TabPanel>
+          {isSponsorEnabled? 
           <TabPanel>
             <Sponsors sponsorIds= {sponsorIds}/>
           </TabPanel>
-          <TabPanel>
-          <Resources videos= {videos} notes= {notes} />
-          </TabPanel>
+          :<TabPanel />}
+          {isResourcesEnabled? 
+            <TabPanel>
+            <Resources videos= {videos} notes= {notes} />
+            </TabPanel>
+            :<TabPanel />}
           <TabPanel>
             {/* <Gallery eventData= {eventData} /> */}
           </TabPanel>
