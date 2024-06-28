@@ -39,18 +39,6 @@ export const VolunteersCarousel = ({ volunteers }: { volunteers: HeadVolunteer[]
     }
   };
 
-  const handlePrev = () => {
-    if (volunteerIndex > 0) {
-      setVolunteerIndex((prevIndex) => prevIndex - 1);
-    }
-  };
-
-  const handleNext = () => {
-    if (volunteerIndex < volunteers.length - 1) {
-      setVolunteerIndex((prevIndex) => prevIndex + 1);
-    }
-  };
-
   return (
     <div className="relative overflow-hidden rounded-2xl h-full px-[45px] mx-[30px]" style={{ backgroundColor: "hsl(220, 100%, 5%)" }}>
       {/* Carousel container */}

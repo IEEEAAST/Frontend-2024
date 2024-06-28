@@ -10,6 +10,8 @@ interface GroupedHeads {
     heads: HeadVolunteer[]
   }
 }
+const years = [2024];
+const showHeads = false;
 
 export const Volunteers = () => {
   const [headsByYear, setHeadsByYear] = useState<GroupedHeads>({});
@@ -79,34 +81,29 @@ export const Volunteers = () => {
         </Center>
       ) : (
         <div>
-          <Tabs className='relative' variant='unstyled' defaultIndex={3}>
+          <Tabs className='relative' variant='unstyled' defaultIndex={0}>
             <TabList className='bg-[#151F33] rounded-full px-[20px] md:px-[30px] mt-4 gap-1 md:gap-2 justify-around w-fit mx-auto'>
-              <Tab w={'fit-content'} className="px-2 text-base md:text-lg lg:text-xl xl:text-2xl">
-                <p className='text-base sm:text-lg md:text-xl lg:text-3xl'>2021</p>
-              </Tab>
-              <Tab w={'fit-content'} className="px-2 text-base md:text-lg lg:text-xl xl:text-2xl">
-                <p className='text-base sm:text-lg md:text-xl lg:text-3xl'>2022</p>
-              </Tab>
-              <Tab w={'fit-content'} className="px-2 text-base md:text-lg lg:text-xl xl:text-2xl">
-                <p className='text-base sm:text-lg md:text-xl lg:text-3xl'>2023</p>
-              </Tab>
-              <Tab w={'fit-content'} className="px-2 text-base md:text-lg lg:text-xl xl:text-2xl">
-                <p className='text-base sm:text-lg md:text-xl lg:text-3xl'>2024</p>
-              </Tab>
+              {years.map((year) => (
+                <Tab key={year} w={'fit-content'} className="px-2 text-base md:text-lg lg:text-xl xl:text-2xl">
+                  <p className='text-base sm:text-lg md:text-xl lg:text-3xl'>{year}</p>
+                </Tab>
+              ))  
+              }
             </TabList>
             <TabIndicator mt='-1.5px' height='2px' bg='white' borderRadius='1px' />
             <TabPanels>
-              {[2021, 2022, 2023, 2024].map((year) => (
+              {years.map((year) => (
                 <TabPanel key={year}>
                   <Tabs className="relative" variant='unstyled' defaultIndex={0}>
                     <Center>
                       <TabList className="bg-[#151F33] rounded-full px-4 py-1 gap-2">
                         <Tab className="px-1 sm:px-2 md:px-3 text-xs sm:text-sm md:text-base lg:text-lg">
                           Board
-                        </Tab>
+                        </Tab>{ showHeads ? (
                         <Tab className="px-1 sm:px-2 md:px-3 text-xs sm:text-sm md:text-base lg:text-lg">
                           Heads
-                        </Tab>
+                        </Tab>) : null
+                        }
                       </TabList>
                     </Center>
                     <TabIndicator mt='-1.5px' height='2px' bg='white' borderRadius='1px' />
@@ -118,13 +115,16 @@ export const Volunteers = () => {
                           <p>No boards available for {year}</p>
                         )}
                       </TabPanel>
-                      <TabPanel>
-                        {headsByYear[year] && headsByYear[year].heads.length > 0 ? (
-                          <VolunteersCarousel volunteers={headsByYear[year].heads} />
+                      
+                      {
+                        showHeads ? (headsByYear[year] && headsByYear[year].heads.length > 0 ? (  
+                          <TabPanel>
+                            <VolunteersCarousel volunteers={headsByYear[year].heads} />
+                          </TabPanel>
                         ) : (
                           <p>No heads available for {year}</p>
-                        )}
-                      </TabPanel>
+                        )) : null
+                      }
                     </TabPanels>
                   </Tabs>
                 </TabPanel>
