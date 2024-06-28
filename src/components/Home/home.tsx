@@ -1,15 +1,36 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const HomeComp = () => {
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleJoinUsClick = () => {
     if (email) {
       navigate(`/signup?email=${encodeURIComponent(email)}`);
     }
   };
+
+  const handleKeyPress = (event: KeyboardEvent) => {
+    if (event.key === "Enter") {
+      handleJoinUsClick();
+    }
+  };
+
+  useEffect(() => {
+    const inputElement = inputRef.current;
+    if (inputElement) {
+      inputElement.addEventListener("keypress", handleKeyPress);
+    }
+
+    // Clean up the event listener
+    return () => {
+      if (inputElement) {
+        inputElement.removeEventListener("keypress", handleKeyPress);
+      }
+    };
+  }, [email]);
 
   return (
     <div
@@ -24,8 +45,9 @@ export const HomeComp = () => {
             <p>technology, and professional</p>
             <p>development.</p>
           </div>
-          <div className="flex mt-4 w-[80%] lg:w-96 p-2 bg-white rounded-3xl">
+          <div className="flex mt-4 w-96 p-2 bg-white rounded-3xl">
             <input
+              ref={inputRef}
               className="w-4/6 text-black placeholder-black pl-2 text-sm focus:outline-none bg-transparent"
               type="email"
               placeholder="Email address"
