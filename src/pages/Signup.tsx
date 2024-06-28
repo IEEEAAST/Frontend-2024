@@ -1,6 +1,6 @@
 import { NavBar } from "../components/common/navbar";
-import { useState, ChangeEvent, FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Input, FormControl, FormLabel } from "@chakra-ui/react";
 
 interface FormData {
@@ -11,6 +11,7 @@ interface FormData {
 }
 
 export const SignUp = () => {
+  const location = useLocation();
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
@@ -18,7 +19,18 @@ export const SignUp = () => {
     password: "",
   });
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const email = queryParams.get("email");
+    if (email) {
+      setFormData((prevData) => ({
+        ...prevData,
+        email: decodeURIComponent(email),
+      }));
+    }
+  }, [location.search]);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
     setFormData({
       ...formData,
@@ -26,7 +38,7 @@ export const SignUp = () => {
     });
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (validateEmail(formData.email) && validatePassword(formData.password)) {
@@ -48,7 +60,7 @@ export const SignUp = () => {
     <div className="form-container">
       <NavBar />
       <div className="flex flex-col justify-center p-16 h-screen">
-        <div className="max-w-[600px] ">
+        <div className="max-w-[600px]">
           <h1 className="primary-heading text-4xl sm:text-6xl pb-2">
             Let's get to know each other
           </h1>
@@ -100,19 +112,20 @@ export const SignUp = () => {
                 required
               />
             </FormControl>
-          </form>
-          <div className="pt-8">
-            <Link to="/page1">
-              <button className="bg-transparent py-2 px-4 w-28 border-2 border-white rounded-full">
-                Cancel
-              </button>
-            </Link>
-            <Link to="/verify">
-              <button className="bg-white text-black text-sm font-bold py-2 px-4 w-36 border-2 border-white rounded-full m-2">
+            <div className="pt-8">
+              <Link to="/page1">
+                <button className="bg-transparent py-2 px-4 w-28 border-2 border-white rounded-full">
+                  Cancel
+                </button>
+              </Link>
+              <button
+                type="submit"
+                className="bg-white text-black text-sm font-bold py-2 px-4 w-36 border-2 border-white rounded-full m-2"
+              >
                 Send Email
               </button>
-            </Link>
-          </div>
+            </div>
+          </form>
           <div className="fixed bottom-0 w-80 h-auto right-0 p-4">
             <img src="src/assets/bg-triangle-ellipse@2x.png" alt="Triangle" />
           </div>

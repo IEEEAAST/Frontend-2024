@@ -1,14 +1,26 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 export const HomeComp = () => {
+  const [email, setEmail] = useState("");
+  const navigate = useNavigate();
+
+  const handleJoinUsClick = () => {
+    if (email) {
+      navigate(`/signup?email=${encodeURIComponent(email)}`);
+    }
+  };
+
   return (
     <div
       className={`flex flex-col bg-cover bg-center w-full h-screen bg-homeImage`}
     >
-      <div className="absolute  w-full h-screen bg-gradient-to-t from-[#000B21]/90 via-transparent to-[#000B21]/90 "></div>
-      <div className="absolute  w-full h-screen bg-gradient-to-r from-[#000B21]/90 via-transparent to-[#000B21]/90 "></div>
+      <div className="absolute w-full h-screen bg-gradient-to-t from-[#000B21]/90 via-transparent to-[#000B21]/90"></div>
+      <div className="absolute w-full h-screen bg-gradient-to-r from-[#000B21]/90 via-transparent to-[#000B21]/90"></div>
       <div className="flex flex-col justify-center w-full h-full">
-        <div className="flex flex-col justify-start ml-20 w-1/2 container z-10 ">
-          <div className="xl:text-4xl md:text-xl sm:text-sm  font-bold ">
-            <p>Fostering innovation through education </p>
+        <div className="flex flex-col justify-start ml-20 w-1/2 container z-10">
+          <div className="xl:text-4xl md:text-xl sm:text-sm font-bold">
+            <p>Fostering innovation through education</p>
             <p>technology, and professional</p>
             <p>development.</p>
           </div>
@@ -19,8 +31,13 @@ export const HomeComp = () => {
               placeholder="Email address"
               autoComplete="email"
               aria-label="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-            <button className="w-2/6 text-sm bg-black rounded-3xl p-2">
+            <button
+              className="w-2/6 text-sm bg-black rounded-3xl p-2"
+              onClick={handleJoinUsClick}
+            >
               Join Us
             </button>
           </div>
