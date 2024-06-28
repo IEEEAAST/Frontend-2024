@@ -8,8 +8,6 @@ import {
   Spinner,
 } from '@chakra-ui/react'
 import { Speaker } from './Speaker'
-import getDocumentsByField from '../../firebase/getDataByField'
-import getData from '../../firebase/getData'
 import getCollection from '../../firebase/getCollection'
 import React, { useState, useEffect } from 'react';
 //import {Props} from '../EventDetails/Speaker'
@@ -22,7 +20,7 @@ import React, { useState, useEffect } from 'react';
 //             const speaker = res.result?.[0];
 //             speaker(speaker.name,speaker.bio,speaker.imgurl,speaker.bio,speaker.social)
 //             console.log(speaker);
-//           }})
+//           }})string
 
 // getCollection('event').then((res) => {
 //   if (!res.error) {
@@ -71,7 +69,7 @@ const fetchData= async()=>{
       // if (speaker){
       setSpeakers(res.result); // Assuming res.result is an array of speakers
       setLoading(false);
-      console.log(res.result);
+      // console.log(res.result);
     // }
     }
   });

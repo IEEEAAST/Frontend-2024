@@ -9,27 +9,39 @@ import {
   Image
 } from '@chakra-ui/react'
 
-// interface SocialProps {
-//     links: socialLinks;
-// }
+interface SocialProps {
+    links: socialLinks;
+}
 
-// const socialIcons: { [key: string]: string} = {
-//     twitter: t_icon,
-//     instagram: i_icon,
-//     linkedin: l_icon
-// };
+const socialIcons: { [key: string]: string} = {
+    twitter: t_icon,
+    instagram: i_icon,
+    linkedin: l_icon
+};
 
-export const Social = ({ links }: any) => {
-    console.log("this is social and the links i recieved are : ", links)
+export const Social = ({ links }: SocialProps) => {
+
+    const socialMediaOrder: (keyof socialLinks)[] = ['twitter', 'instagram', 'linkedin'];
+
     return (
         <>
-            <Box boxSize='sm' width={"30px"} height={"30px"}>
-                <a target='_blank' href={links.instagram != undefined ? links.instagram: "#"}>
+
+            {socialMediaOrder.map(socialMedia => {
+                const link = links[socialMedia];
+             if(link && link !== '')
+                return (
+            <Box key={socialMedia} boxSize='sm' width={"30px"} height={"30px"}>
+                <Link target='_blank' to={link}>
                     <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>
-                            <Image src={l_icon} alt={""} width={"30px"} height={"30px;"} _hover={{cursor: "pointer"}}/>
-                    </motion.div>
-                </a>
+                            <Image src={socialIcons[socialMedia]} alt={socialMedia} width={"30px"} height={"30px;"} _hover={{cursor: "pointer"}}/>
+                     </motion.div>
+                </Link>
             </Box>
+                )
+            else return null;
+            })
+        }
+            
         </>
 )
 }

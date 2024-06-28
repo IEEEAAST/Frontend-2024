@@ -1,4 +1,5 @@
 import firebase from "firebase/compat/app";
+import { socialLinks } from "../components/EventDetails/Types";
 
 export interface EventData {
     title: string;
@@ -38,4 +39,20 @@ export interface Inote {
 export interface IResources {
     videos: Ivideo[];
     notes: Inote[];
+}
+
+export interface Isponsor {
+    name: string;
+    imgurl: string;
+    socials: socialLinks;
+    totaleventssponsered: number;
+}
+
+export interface IsponsorsIds{
+    sponsorIds: string[];
+}
+
+export interface IsocialLinks {
+    name: string;
+    url: string;
 }

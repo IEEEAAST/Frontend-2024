@@ -16,7 +16,7 @@ import { Speakers } from "../components/EventDetails/Speakers";
 import getDataByField from "../firebase/getDataByField";
 
 import { EventData } from "../interfaces/EventData";
-import { Ivideo, Inote } from "../interfaces/EventData";
+import { Ivideo, Inote, IsponsorsIds } from "../interfaces/EventData";
 
 export const EventDetails = () => {
   const { name: eventName } = useParams<{ name: string }>();
@@ -25,11 +25,12 @@ export const EventDetails = () => {
   const [loading, setLoading] = useState(true);
   const [videos, setVideos] = useState<Ivideo[]>([]);
   const [notes, setNotes] = useState<Inote[]>([]);
+  const [sponsorIds, setSponsorIDs] = useState<IsponsorsIds>();
 
   const fetchData = async () => {
     let isMounted = true; // Flag to prevent state updates on unmounted component
     getDataByField("events", "title", "==", eventName).then(data => {
-      console.log(eventName)
+      // console.log(eventName)
       if (isMounted) {
         setEventData(data.result?.[0] || null);
         setLoading(false);
@@ -38,10 +39,12 @@ export const EventDetails = () => {
         }
         if(data.result?.[0].keynotes){
           setNotes(data.result?.[0].keynotes);
-          console.log(data.result?.[0].keynotes)
+        }
+        if(data.result?.[0].sponsors){
+          setSponsorIDs(data.result?.[0].sponsors)
         }
         setLoading(false);
-        console.log(data.result?.[0]);
+        // console.log(data.result?.[0]);
         window.open(data.result?.[0].coverPhoto, "_blank");
       }
     });
@@ -50,11 +53,10 @@ export const EventDetails = () => {
 
 
   useEffect(() => {
-    
     fetchData();
-
   }, []);
   // Handle cases where eventData is null or undefined
+
   return loading? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex "/></div> : (
     <div id="eventPage">
       <div id="eventDetailsFlex">
@@ -97,7 +99,7 @@ export const EventDetails = () => {
             <Speakers />
           </TabPanel>
           <TabPanel>
-            <Sponsors />
+            <Sponsors sponsorIds= {sponsorIds}/>
           </TabPanel>
           <TabPanel>
           <Resources videos= {videos} notes= {notes} />

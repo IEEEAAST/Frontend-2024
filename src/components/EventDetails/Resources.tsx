@@ -25,7 +25,7 @@ import {
         <Table variant='sm'>
           <Thead>
             <Tr>
-              <Th className="!text-lg !capitalize">Videos</Th>
+              <Th className="!text-lg !capitalize" fontFamily={'SF-Pro-Display-Bold'}>Videos</Th>
             </Tr>
           </Thead>
           <Tr>
@@ -42,7 +42,7 @@ import {
         <Table variant='sm'>
           <Thead>
             <Tr>
-              <Th className="!text-lg !capitalize">Key Notes</Th>
+              <Th className="!text-lg !capitalize" fontFamily={'SF-Pro-Display-Bold'}>Key Notes</Th>
             </Tr>
           </Thead>
           <Tr>
