@@ -12,23 +12,7 @@ import {
     const maxLength = 30; // Maximum number of characters
     // const [isValid, setIsValid] = useState(null);
     const [isHovered, setIsHovered] = useState(false);
-    const [isValidImage, setIsValidImage] = useState(false);
 
-    useEffect(() => {
-      fetch(thumbnail).then(res => {
-        setIsValidImage(res.status === 200);
-      })
-    }, [])
-
-
-    // useEffect(() => {
-    //   if(thumbnail){
-    //     const img = new url(thumbnail);
-    //     img.onload = () => setIsValidImage(true);
-    //     img.onerror = () => setIsValidImage(false);
-    //     img.src = thumbnail;
-    //   }
-    // }, [thumbnail])
 
     //truncate the name of the note beofer putting it.
     const truncateName = name.length > maxLength ? `${name.substring(0, maxLength)}...` : name;
@@ -39,7 +23,7 @@ import {
         <Td>
           <Box position="relative" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
             <Link target='_blank' to={url}>
-                {isValidImage  && thumbnail? (
+                {thumbnail? (
                   <Image src={thumbnail} className='w-[32.6vh] h-[20vh] mb-3' ></Image> 
                 ) : (
                   <Box className="flex bg-blue-950 w-[32.6vh] h-[20vh] mb-3"></Box>
