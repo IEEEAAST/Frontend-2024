@@ -14,16 +14,6 @@ const SocialInfo = [
     link: "https://www.ieee.org/",
   },
   {
-    title: "Twitter",
-    imgSrc: Twitter,
-    link: "https://www.ieee.org/",
-  },
-  {
-    title: "Discord",
-    imgSrc: Discord,
-    link: "https://www.ieee.org/",
-  },
-  {
     title: "Contact Us",
     imgSrc: Contact,
     link: "https://www.ieee.org/",
@@ -31,7 +21,7 @@ const SocialInfo = [
   {
     title: "LinkedIn",
     imgSrc: Linkedin,
-    link: "https://www.ieee.org/",
+    link: "https://www.linkedin.com/company/ieeeaast",
   },
 ];
 
