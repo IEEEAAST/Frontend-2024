@@ -1,5 +1,5 @@
 import { NavBar } from "../components/common/navbar";
-import { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Input, FormControl, FormLabel, FormErrorMessage, Button, Center } from "@chakra-ui/react";
 import {
@@ -35,7 +35,9 @@ export const SignUp = () => {
     email: "",
     password: "",
   });
-  
+
+  const lastNameRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const email = queryParams.get("email");
@@ -114,6 +116,9 @@ export const SignUp = () => {
                 id="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
+                readOnly
+                onFocus={() => { lastNameRef.current?.removeAttribute('readonly'); }}
+                ref={lastNameRef}
                 required
               />
             </FormControl>
