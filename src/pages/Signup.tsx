@@ -34,6 +34,7 @@ export const SignUp = () => {
   const [showError, setShowError] = useState(false);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
     setFormData({
       ...formData,
@@ -47,6 +48,11 @@ export const SignUp = () => {
     if (!isErrorEmail && !isErrorPass) {
       setIsValid(true);
       setShowError(false);
+      register(formData.email, formData.password).then(res => {
+        console.log(res.result?.user.uid);
+        setData("users", formData, res.result?.user.uid);
+      });
+      
     } else {
       setIsValid(false);
       setShowError(true);
