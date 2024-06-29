@@ -5,8 +5,22 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    fontFamily: {
+            'sansramy': ['SF-Pro-Display-Regular', 'Arial', 'sans-serif'],
+            'seriframy': ['SF-Pro-Display-Bold', 'Georgia', 'serif'],
+            'SFproramy': ['SF-Pro', 'Georgia', 'serif'],
+            // Add other font families as needed
+        },
+    extend: {
+      backgroundImage: {
+        homeImage: "url('/src/assets/home/ieeeHome.jpg')",
+      },
+    },
+    fontFamily: {
+      display: ["SF-Pro-Display", "sans-serif"],
+      body:["SF-Pro", "sans-serif"],
+      bold:["SF-Pro-Display-Bold", "sans-serif"]
+    },
   },
   // eslint-disable-next-line no-undef
 }
-
