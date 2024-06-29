@@ -11,6 +11,7 @@ export default async function register(email, password) {
     error = null;
   try {
     result = await createUserWithEmailAndPassword(auth, email, password);
+    
   } catch (e) {
     if (e.code == "auth/invalid-email") {
       error = "Invalid email address format.";
