@@ -5,8 +5,22 @@ import Bell from "../../../assets/notify-me-bell-white.png";
 import Profile from "../../../assets/profile-person-white.png";
 import Arrow from "../../../assets/language-arrow-white.png";
 import "./styles/Header.css";
+import React, { useState } from 'react';
 
-export const Header = () => {
+interface searchProps {
+  onSearch: (value: string) => void;
+}
+
+export const Header: React.FC<searchProps> = ({onSearch}) => {
+
+  const [searchVal, setSearchVal] = useState<string>('');
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchVal(e.target.value);
+    onSearch(e.target.value);
+    console.log(`searched val: ${searchVal}`)
+  };
+
   return (
     <div className="header">
       <div className="header-right">
@@ -18,6 +32,8 @@ export const Header = () => {
           <input
             type="text"
             placeholder="Search members, articles, events..."
+            value={searchVal}
+            onChange={handleSearchChange}
           />
         </div>
       </div>

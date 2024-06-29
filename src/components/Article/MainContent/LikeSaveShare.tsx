@@ -4,11 +4,26 @@ import OrangeSparkles from "../../../assets/sparkles-orange.png";
 import Bookmark from "../../../assets/bookmark-ribbon-white.png";
 import FilledBookmark from "../../../assets/bookmark-ribbon-filled-white.png";
 import More from "../../../assets/more-ellipsis-white.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import getCollection from "../../../firebase/getCollection.js";
+
+
+interface ArticleLikes{
+  likes: number;
+}
 
 export const LikeSaveShare = () => {
   const [like, setLike] = useState(true);
   const [save, setSave] = useState(true);
+  const [likes_no, setLikes_no] = useState<ArticleLikes | null>(null);
+
+  useEffect(()=>{
+    getCollection('articles').then(res =>{
+      if (res.result){
+        setLikes_no(res.result[5] as ArticleLikes)
+      }
+    })
+  },[])
 
   const toggleLike = () => {
     setLike(!like);
@@ -26,7 +41,7 @@ export const LikeSaveShare = () => {
           alt="Sparkles"
           onClick={toggleLike}
         />
-        <span>30</span>
+        <span>{likes_no?.likes}</span>
       </div>
       <div className="save-share">
         <img
