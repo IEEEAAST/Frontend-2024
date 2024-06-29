@@ -1,9 +1,7 @@
 .box-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  padding: 20px;
-  max-width: 950px;
-  margin: 0 auto 50px;
+  grid-template-columns: repeat(auto-fill, minmax(370px, 1fr));
+  margin: 0 80px 50px;
   gap: 15px;
 }
 .box {
