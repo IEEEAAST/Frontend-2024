@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import register from "../firebase/register";
 import setData from "../firebase/setData";
 import { Input, FormControl, FormLabel, FormErrorMessage, Button } from "@chakra-ui/react";
+import getUser from "../firebase/auth";
+import sendVerifyEmail from "../firebase/sendVerificationEmail";
 
 interface FormData {
   firstName: string;
@@ -12,6 +14,7 @@ interface FormData {
   password: string;
 }
 
+
 export const SignUp = () => {
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
@@ -19,7 +22,6 @@ export const SignUp = () => {
     email: "",
     password: "",
   });
-  const [isValid, setIsValid] = useState(false);
   const [showError, setShowError] = useState(false);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -29,20 +31,22 @@ export const SignUp = () => {
       [id]: value,
     });
   };
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  
+  const handleSubmit = async(event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     
     if (!isErrorEmail && !isErrorPass) {
-      setIsValid(true);
       setShowError(false);
-      register(formData.email, formData.password).then(res => {
-        console.log(res.result?.user.uid);
-        setData("users", formData, res.result?.user.uid);
-      });
-      
+      const storedFormData = {
+        firstname: formData.firstName,
+        lastname: formData.lastName,
+        email: formData.email,
+        }
+        const res = await register(formData.email, formData.password);
+        await setData("users", storedFormData, res.result?.user.uid);
+        window.open("/verify", "_self");
     } else {
-      setIsValid(false);
       setShowError(true);
     }
   };
@@ -60,111 +64,139 @@ export const SignUp = () => {
   // };
 
   return (
-    <div className="form-container">
+    <div>
+      <div className="h-screen w-[1vh] absolute left-0" style={{
+        backgroundImage: "linear-gradient(to bottom, #1F396E, #1D0021)"
+      }}></div>
       <NavBar />
-      <div className="flex flex-col justify-center p-16 h-screen">
-        <div className="max-w-[600px] ">
-          <h1 className="primary-heading text-4xl sm:text-6xl pb-2">
+    <div className="form-container">
+      <div className="p-20 h-screen">
+        <div className="max-w-[600px] mt-40 max-sm:mt-10" style={{ }}>
+        <h1 className="text-4xl sm:text-4xl" style={{ fontWeight: 'bold' }}>
             Let's get to know each other
           </h1>
-          <p className="pt-4 pb-8 text-left">
+          <p className="pt-2 pb-10 text-left" style={{ fontWeight: 'lighter',
+            fontSize: '13px'
+           }}>
             Tell us who you are. We will send you an email to verify it's you ;)
           </p>
-          <form onSubmit={handleSubmit}>
-            <FormControl mb={4}>
-              <FormLabel>First Name</FormLabel>
-              <Input
-                type="text"
-                id="firstName"
-                name="Name"
-                value={formData.firstName}
-                onChange={handleChange}
-                required                
-              />{" "}
-            </FormControl>
-            <FormControl mb={4}>
-              <FormLabel>Last Name</FormLabel>
-              <Input
-                type="text"
-                id="lastName"
-                name="Last Name"
-                value={formData.lastName}
-                onChange={handleChange}
-                required
-              />
-            </FormControl>
+          <form className="" onSubmit={handleSubmit}>
+        <FormControl mb={4}>
+        <Input
+            type="text"
+            id="firstName"
+            name="Name"
+            value={formData.firstName}
+            onChange={handleChange}
+            required
+            placeholder="First name"
+            style={{
+            width: '80%',
+            border: 'none',
+            borderBottom: '1px solid rgb(4, 4, 62)',
+            outline: 'none',
+            }}
+        />
+        </FormControl>
 
-            <FormControl mb={4} isInvalid={isErrorEmail && showError}>
-              <FormLabel>Your Email</FormLabel>
-              <Input
-                type="email"
-                id="email"
-                name="Your Email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-               
-              />
-               {isErrorEmail && showError && (
-                <FormErrorMessage>Please enter a valid Email.</FormErrorMessage>)}
-                {" "}
-            </FormControl>
+    <FormControl mb={4}>
+      <Input
+        type="text"
+        id="lastName"
+        name="Last Name"
+        value={formData.lastName}
+        onChange={handleChange}
+        required
+        placeholder="Last name"
+        style={{
+          width: '80%',
+          border: 'none',
+          borderBottom: '1px solid rgb(4, 4, 62)',
+          outline: 'none',
+        }}
+      />
+    </FormControl>
 
-            <FormControl isInvalid={isErrorPass && showError}>
-              <FormLabel>Password</FormLabel>
-              <Input
-                type="password"
-                id="password"
-                name="Password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
-{isErrorPass && showError && (
-                <FormErrorMessage>Please enter a 6 character password.</FormErrorMessage>)}
-            </FormControl>
-             {/* <Link to="/verify"> */}
-             <FormControl>
-              <Button className="bg-white text-black text-sm font-bold py-2 px-4 w-36 border-2 border-white rounded-full m-2" type="submit">
-                Send Email
-              </Button></FormControl>
-            {/* </Link> */}
-          </form>
-
+    <FormControl mb={4} isInvalid={isErrorEmail && showError}>
+      <Input
+        type="email"
+        id="email"
+        name="Your Email"
+        value={formData.email}
+        onChange={handleChange}
+        required
+        placeholder="Your Email"
+        style={{
+          width: '80%',
+          border: 'none',
+          borderBottom: '1px solid rgb(4, 4, 62)',
+          outline: 'none',
           
+        }}
+      />
+      {isErrorEmail && showError && (
+        <FormErrorMessage>Please enter a valid Email.</FormErrorMessage>
+      )}
+    </FormControl>
 
-          {/* <form onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="mobile">Mobile Number:</label>
-              <input
-                type="tel"
-                id="mobile"
-                name="mobile"
-                value={formData.mobile}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </form> */}
+    <FormControl isInvalid={isErrorPass && showError}>
+      <Input
+        type="password"
+        id="password"
+        name="Password"
+        value={formData.password}
+        onChange={handleChange}
+        required
+        placeholder="Password"
+        style={{
+          width: '80%',
+          border: 'none',
+          borderBottom: '1px solid rgb(4, 4, 62)',
+          outline: 'none',
+        }}
+      />
+      {isErrorPass && showError && (
+        <FormErrorMessage>Please enter a 6 character password.</FormErrorMessage>
+      )}
 
-          <div className="pt-8">
+    </FormControl>
+
+
+{/* //button divs */}
+            <div className = "flex flex-nowrap"> 
+            <div className="pt-8 flex flex-nowrap">
             <Link to="/page1">
-              <button className="bg-transparent py-2 px-4 w-28 border-2 border-white rounded-full">
-                Cancel
-              </button>
+            <button style={{
+            background: 'transparent',
+            padding: '8px',
+            width: '120px',
+            fontSize: '11px',
+            border: '2px solid #fff',
+            borderRadius: '20px',
+            color: '#fff',
+            textAlign: 'center',
+            marginBottom: "2vh",
+            }}>
+            Cancel
+            </button>
             </Link>
-            {/* Button 2 navigates to '/page2' */}
-            {/* {isValid?
-           
-            :<button className="bg-white text-black text-sm font-bold py-2 px-4 w-36 border-2 border-white rounded-full m-2 " onSubmit={handleSubmit}>
-            Send Email
-          </button> } */}
+          
+             <button className="defaultButton ml-2" style = {{fontSize: '11px',
+                width: '155px',
+                height: '35px',
+             }}>
+                Send Email
+            </button>
           </div>
-          <div className="fixed bottom-0 w-80 h-auto right-0 p-4">
+        </div>
+    </form>
+
+          <div className="bottom-0 w-80 h-auto right-[-2vh] p-4 fixed max-sm:w-[45%] " >
             <img src="src/assets/bg-triangle-ellipse@2x.png" alt="Triangle" />
           </div>
         </div>
       </div>
     </div>
+</div>
   );
 };
