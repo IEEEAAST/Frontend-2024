@@ -17,8 +17,8 @@ export default {
       },
     },
     fontFamily: {
-      display: ["SF Pro Display", "sans-serif"],
-      body:["SF Pro", "sans-serif"],
+      display: ["SF-Pro-Display", "sans-serif"],
+      body:["SF-Pro", "sans-serif"],
       bold:["SF-Pro-Display-Bold", "sans-serif"]
     },
   },

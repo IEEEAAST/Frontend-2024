@@ -14,16 +14,21 @@ interface SocialProps {
 }
 
 const socialIcons: { [key: string]: string} = {
-    Twitter: t_icon,
-    Instagram: i_icon,
-    Linkedin: l_icon
+    twitter: t_icon,
+    instagram: i_icon,
+    linkedin: l_icon
 };
 
-  export const Social = ({ links }: SocialProps) => {
+export const Social = ({ links }: SocialProps) => {
+
+    const socialMediaOrder: (keyof socialLinks)[] = ['twitter', 'instagram', 'linkedin'];
+
     return (
         <>
-        {Object.entries(links).map(([socialMedia, link]) => {
-             if(link !== null && link !== undefined && link !== '')
+
+            {socialMediaOrder.map(socialMedia => {
+                const link = links[socialMedia];
+             if(link && link !== '')
                 return (
             <Box key={socialMedia} boxSize='sm' width={"30px"} height={"30px"}>
                 <Link target='_blank' to={link}>
@@ -33,9 +38,10 @@ const socialIcons: { [key: string]: string} = {
                 </Link>
             </Box>
                 )
-         else return null;
-        })}
-
+            else return null;
+            })
+        }
+            
         </>
-  )
+)
 }

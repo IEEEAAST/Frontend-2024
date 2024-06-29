@@ -17,7 +17,7 @@ export const LangSelector = () => {
     };
 
     return (
-        <div className="relative inline-block text-left">
+        <div className="hidden relative inline-block text-left">
             <div 
                 className="z-10 px-4 flex rounded-full border h-12 bg-black bg-opacity-55 text-white text-lg font-body cursor-pointer appearance-none outline-none items-center justify-between w-40"
                 onClick={() => setIsOpen(!isOpen)}

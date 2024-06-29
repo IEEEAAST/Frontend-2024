@@ -20,15 +20,11 @@ interface SponsorProps {
         return (
       <Tr>
       <Td><Box boxSize='sm' width={"50px"} height={"50px"}><Image src={sponsorImg} alt='test' width={"50px"} height={"50px;"}/></Box></Td>
-      <Td>{name}</Td>
-      <Td>{totalEventSponsored} Events</Td>
+      <Td fontFamily={'SF-Pro-Display-Regular'}>{name}</Td>
+      <Td fontFamily={'SF-Pro-Display-Regular'}>{totalEventSponsored} Events</Td>
       <Td>
       <Flex className="!space-x-5">
-      <Social links={{
-              Twitter: linksSocial.Twitter,
-              Instagram: linksSocial.Instagram,
-              Linkedin: linksSocial.Linkedin
-            }} />
+      <Social links={linksSocial} />
         </Flex>
         </Td>
       </Tr>
