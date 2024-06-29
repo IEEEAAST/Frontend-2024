@@ -19,8 +19,8 @@ export const Home = () => {
       <AchievementCarousel />
       <EventHighlights />
       <Volunteers />
-      <AboutUs />
-      <Joinus />
+      {/*<AboutUs />*/}
+      {/*<Joinus />*/}
       <Footer />
 
     </>
