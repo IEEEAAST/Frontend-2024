@@ -3,6 +3,8 @@ import { LikeSaveShare } from "./LikeSaveShare";
 import { Modal } from "../Modal/Modal";
 import { useState , useEffect} from "react";
 import getCollection from "../../../firebase/getCollection.js";
+import getDocument from "../../../firebase/getData.js";
+import { ar, da } from "@faker-js/faker";
 
 interface ArticleData {
   article: string;
@@ -34,8 +36,9 @@ export const MainContent: React.FC<headerSearch> = ({searchQuery}) => {
   const [modal, setModal] = useState(false);
   const [articleData, setArticleData] = useState<ArticleData[]>([])
   const [authorData, setAuthorData] = useState<AuthorData | null>(null);
-  const [authors, setAuthors] = useState<AuthorData[]>([]);
+  const [lastActive, setLastActive] = useState('')
 
+  //fetch articles
   useEffect(() => {
     getCollection('articles').then(res => {
       if (res.result) {
@@ -44,35 +47,47 @@ export const MainContent: React.FC<headerSearch> = ({searchQuery}) => {
     });
   }, []);
 
-  useEffect(()=>{
-    getCollection('users').then(res =>{
-      if(res.result){
-        setAuthorData(res.result[5] as AuthorData)
-        setAuthors(res.result as AuthorData[]);
+  //fetch authors based on article index
+  useEffect(() => {
+    const fetchAuthorData = async () => {
+      if (articleData.length > 0) {
+        const defaultArticleIndex = 0; 
+        const articleIndex = filteredArticles.length > 0 ? articleData.indexOf(filteredArticles[0]) : defaultArticleIndex;
+        const authorId = articleData[articleIndex]?.author;
+        if (authorId) {
+          const res = await getDocument("users", authorId);
+          if (res.result) {
+            const auth = res.result.data() as AuthorData
+            setAuthorData(auth);
+            //date
+            const { seconds, nanoseconds } = auth.lastactive;
+            const date = new Date(seconds * 1000 + nanoseconds / 1e6);
+            setLastActive(date.toISOString());
+          }
+        }
       }
-    })
-  },[])
+    };
+    fetchAuthorData();
+  }, [articleData, searchQuery]);
 
-  console.log(articleData)
-  console.log(authors)
+  console.log("articleData", articleData)
   console.log("search query:", searchQuery)
-
-  // const date = authorData?.lastactive.toDate()
-  // const formattedDate = date.toLocaleDateString();
+  console.log("authdata", authorData)
 
   const toggleFollow = () => {
     setIsFollowing(!isFollowing);
   };
 
-  const filteredArticles = articleData.filter(article =>
-    article.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  const filteredAuthors = authors.filter(author =>
-    `${author.firstname} ${author.lastname}`.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  //filter article displayed based on search query
+  const filteredArticles = searchQuery
+    ? articleData.filter((article) =>
+        article.title.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
+    
+  const displayedArticle = filteredArticles.length > 0 ? filteredArticles[0] : articleData[0];
 
-  const displayedArticle = filteredArticles.length > 0 ? filteredArticles[0] : articleData[5];
-  const displayedAuthor = filteredAuthors.length > 0 ? filteredAuthors[0] : authorData;
+  console.log("disp art", displayedArticle)
 
   if (!articleData) {
     return <div>Loading...</div>;
@@ -84,16 +99,15 @@ export const MainContent: React.FC<headerSearch> = ({searchQuery}) => {
 
   return (
     <div className="main-content">
-
         <span className="title">{displayedArticle.title}</span>
         <span className="description">{displayedArticle.description}</span>
         <div className="profile">
           <div className="pfp">
-            <img src={displayedAuthor?.imgurl} alt={`${displayedAuthor?.firstname} ${displayedAuthor?.lastname}`}></img>
+            <img src={authorData?.imgurl} alt={`${authorData?.firstname} ${authorData?.lastname}`}></img>
           </div>
           <div className="profile-desc">
             <span className="desc-title">
-            {`${displayedAuthor?.firstname} ${displayedAuthor?.lastname}`} •
+            {`${authorData?.firstname} ${authorData?.lastname}`} •
               <span
                 onClick={toggleFollow}
                 style={{ color: isFollowing ? "dodgerblue" : "" }}
@@ -101,11 +115,11 @@ export const MainContent: React.FC<headerSearch> = ({searchQuery}) => {
                 {isFollowing ? "Follow" : "Following"}
               </span>
             </span>
-            <span className="desc-time">{}</span>
+            <span className="desc-time">{lastActive.slice(0,10)}</span>
           </div>
         </div>
         <hr />
-        <LikeSaveShare />
+        <LikeSaveShare articleID = {articleData.indexOf(displayedArticle)}/>
         <hr />
         <div className="article-img">
           <img src={displayedArticle.image} alt="Article" />
@@ -114,9 +128,9 @@ export const MainContent: React.FC<headerSearch> = ({searchQuery}) => {
         <div className="article-desc">
           {displayedArticle.article}
         </div>
-        <LikeSaveShare />
+        <LikeSaveShare articleID = {articleData.indexOf(displayedArticle)}/>
         <hr />
-        <a href="">More from {`${displayedAuthor?.firstname} ${displayedAuthor?.lastname}`}</a>
+        <a href="">More from {`${authorData?.firstname} ${authorData?.lastname}`}</a>
         <hr />
         <a onClick={()=>setModal(true)}><u>Report</u></a>
         <hr />
