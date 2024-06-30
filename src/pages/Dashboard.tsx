@@ -160,9 +160,44 @@ export const Dashboard = () => {
               </div>
             </div>
           </div>
-
         </div>
       </div>
-    </div>
+
+      <div className="mt-[100px] w-full px-[89px]">
+        <h2 className="text-white text-[45px] font-bold">Events</h2>
+        <div className="mt-[59px] overflow-x-scroll scrollbar-hide">
+          <div className="flex space-x-[20px]">
+            <div className="flex-shrink-0 w-[537px] h-[686px] bg-purple-600 rounded-[12px] flex flex-col justify-center items-center text-center">
+              <h3 className="text-[45px] font-bold mb-[20px]">Swiftly Approaching</h3>
+              <p className="text-[24px]">Hackathon</p>
+              <p className="text-[24px]">1<sup>st</sup> of September</p>
+            </div>
+            <div className="flex-shrink-0 w-[537px] h-[686px] bg-blue-600 rounded-[12px] flex flex-col justify-center items-center text-center">
+              <h3 className="text-[45px] font-bold mb-[20px]">Leading Your Career</h3>
+              <p className="text-[24px]">Mega Event</p>
+              <p className="text-[24px]">12 - 16 of July</p>
+            </div>
+            <div className="flex-shrink-0 w-[537px] h-[686px] bg-green-600 rounded-[12px] flex flex-col justify-center items-center text-center">
+              <h3 className="text-[45px] font-bold mb-[20px]">From Zero to Hero</h3>
+              <p className="text-[24px]">Workshop</p>
+              <p className="text-[24px]">10, 11, 12 of August</p>
+            </div>
+            <div className="flex-shrink-0 w-[537px] h-[686px] bg-red-600 rounded-[12px] flex flex-col justify-center items-center text-center">
+              <h3 className="text-[45px] font-bold mb-[20px]">Mastering the Basics</h3>
+              <p className="text-[24px]">Workshop</p>
+              <p className="text-[24px]">20, 21, 22 of September</p>
+            </div>
+            <div className="flex-shrink-0 w-[537px] h-[686px] bg-yellow-600 rounded-[12px] flex flex-col justify-center items-center text-center">
+              <h3 className="text-[45px] font-bold mb-[20px]">Advanced Techniques</h3>
+              <p className="text-[24px]">Workshop</p>
+              <p className="text-[24px]">15, 16, 17 of October</p>
+            </div>
+          </div>
+        </div>
+      </div>
+        <p className="text-white text-[24px] mt-[10px]">More services coming out soon... stay tuned.<br />
+        <a href="#" className="underline block text-center">Tell us what you expect</a>
+        </p>
+      </div>
   );
 };
