@@ -1,28 +1,46 @@
-import logo from "../../assets/IEEELogoWhite.png";
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import getCollection from '../../firebase/getCollection.js';
+import { Spinner } from '@chakra-ui/react';
+import SponsorData from '../../interfaces/Sponsor.tsx';
 
 export const Sponsor = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [sponsors, setSponsors] = useState<SponsorData[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const container = containerRef.current;
 
+    getCollection('sponsors').then((response) => {
+      if (response.result) {
+        console.log(response.result)
+        setSponsors([...response.result, ...response.result]);
+        setLoading(false);
+      }
+    });
+
+    let scrollInterval: NodeJS.Timeout | null = null;
     if (container) {
-      const handleWheelScroll = (event: WheelEvent) => {
-        const delta = Math.sign(event.deltaY);
+      const scrollSpeed = 1; // Adjust scroll speed as needed
+      const scrollDelay = 30; // Delay between each scroll update in ms
 
-        const canScrollHorizontally = container.scrollWidth > container.clientWidth;
+      const startScrolling = () => {
+        scrollInterval = setInterval(() => {
+          container.scrollLeft += scrollSpeed;
+        }, scrollDelay);
+      };
 
-        if (canScrollHorizontally) {
-          container.scrollLeft += delta * 30;
-          event.preventDefault();
+      const stopScrolling = () => {
+        if (scrollInterval) {
+          clearInterval(scrollInterval);
+          scrollInterval = null;
         }
       };
 
-      container.addEventListener('wheel', handleWheelScroll);
+      startScrolling(); // Start scrolling initially
 
       return () => {
-        container.removeEventListener('wheel', handleWheelScroll);
+        stopScrolling(); // Clean up interval
       };
     }
   }, []);
@@ -30,14 +48,16 @@ export const Sponsor = () => {
   return (
     <div
       ref={containerRef}
-      className="flex justify-center items-center gap-12 border-4 border-y-blue-950/55 w-full border-x-transparent h-40 overflow-x-scroll overflow-y-hidden customScrollbar"
+      className="flex justify-center items-center gap-12 border-4 border-y-blue-950/55 w-full border-x-transparent h-40 overflow-hidden customScrollbar"
+      style={{ overflowX: 'hidden', whiteSpace: 'nowrap' }}
     >
-      <img src={logo} alt="logo" width="120" />
-      <img src={logo} alt="logo" width="120" />
-      <img src={logo} alt="logo" width="120" />
-      <img src={logo} alt="logo" width="120" />
-      <img src={logo} alt="logo" width="120" />
-      <img src={logo} alt="logo" width="120" />
+      {loading ? (
+        <Spinner size="xl" />
+      ) : (
+        sponsors.map((sponsor, idx) => (
+          <img key={idx} src={sponsor.imgurl} alt={sponsor.name} className="h-20 mx-4" />
+        ))
+      )}
     </div>
   );
 };

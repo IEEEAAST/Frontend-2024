@@ -1,6 +1,16 @@
 import { NavBar } from "../components/common/navbar";
-import { useState, ChangeEvent, FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { useState, ChangeEvent, FormEvent, useEffect, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Input, FormControl, FormLabel, FormErrorMessage, Button, Center } from "@chakra-ui/react";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from '@chakra-ui/react';
 import register from "../firebase/register";
 import setData from "../firebase/setData";
 import { Input, FormControl, FormLabel, FormErrorMessage, Button } from "@chakra-ui/react";
@@ -14,12 +24,34 @@ interface FormData {
 
 
 export const SignUp = () => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [error, setError] = useState<string>("");
+  const onOpen = (errorString:string) =>{
+    setModalIsOpen(true);
+    setError(errorString);
+  }
+  const location = useLocation();
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
   });
+
+  const lastNameRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const email = queryParams.get("email");
+    if (email) {
+      setFormData((prevData) => ({
+        ...prevData,
+        email: decodeURIComponent(email),
+      }));
+    }
+  }, [location.search]);
+  
+  const [isValid, setIsValid] = useState(false);
   const [showError, setShowError] = useState(false);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -49,17 +81,8 @@ export const SignUp = () => {
     }
   };
 
-
-  const isErrorEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) === (false);
-  const isErrorPass =  formData.password.length < 6;
-
-  // const validateEmail = (email) => {
-  //   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  // };
-
-  // const validatePassword = (password) => {
-  //   return password.length >= 6;
-  // };
+  const isErrorEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) === false;
+  const isErrorPass = formData.password.length < 6;
 
   return (
     <div>

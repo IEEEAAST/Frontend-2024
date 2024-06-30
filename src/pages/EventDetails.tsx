@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Sponsors } from "../components/EventDetails/Sponsors";
 import { Resources } from "../components/EventDetails/Resources";
+import Banner from "../assets/banner.jpg";
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Spinner } from '@chakra-ui/react';
 
 import Bell from '../assets/notification-bell-white@2x.png';
@@ -13,6 +14,7 @@ import Star from '../assets/fav-event-star-white@2x.png';
 import PlusIcon from '../assets/plus.png';
 import { Schedule } from "../components/EventDetails/schedule";
 import { Speakers } from "../components/EventDetails/Speakers";
+import  Gallery  from "../components/EventDetails/Gallery";
 import getDataByField from "../firebase/getDataByField";
 
 import { EventData } from "../interfaces/EventData";
@@ -76,6 +78,8 @@ export const EventDetails = () => {
 
   return loading? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex "/></div> : (
     <div id="eventPage">
+      <img src={Banner} alt="banner"> 
+        </img>
       <div id="eventDetailsFlex">
         <div id="eventNameWrapper">
           <span id="eventName">{loading ? "Loading..." : eventData?.title ?? "Error"}</span>
@@ -126,7 +130,7 @@ export const EventDetails = () => {
             </TabPanel>
             :<TabPanel />}
           <TabPanel>
-            {/* <Gallery eventData= {eventData} /> */}
+            { <Gallery /> }
           </TabPanel>
         </TabPanels>
       </Tabs>

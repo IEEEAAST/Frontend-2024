@@ -8,7 +8,7 @@ export interface EventData {
     endtime: firebase.firestore.Timestamp;
     coverPhoto: string;
     gallery: string[];
-    keynotes: string[];
+    keynotes: Inote[];
     schedule: Schedule;
     speakers: string[];
     sponsors: string[];
