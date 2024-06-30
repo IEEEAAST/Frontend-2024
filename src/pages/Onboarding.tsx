@@ -67,7 +67,6 @@ export const Onboarding = () => {
   };
 
   useEffect(() => {
-    delay(fetchUser, 1000);
     fetchUser();
   }, [])
 
