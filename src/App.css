@@ -42,6 +42,7 @@ body {
   height: 40px;
   border-radius: 40px;
 }
+
 .defaultButton:active {
   background-color: #c2c2c2;
 }
