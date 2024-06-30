@@ -30,6 +30,7 @@ export const Signin = () => {
 
   const goback = () => {
     window.history.back();
+    window.location.reload();
   }
   
   const handleSubmit = async(event: FormEvent<HTMLFormElement>) => {
