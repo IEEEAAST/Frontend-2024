@@ -4,7 +4,7 @@ import { EventDetails } from "./pages/EventDetails.tsx";
 import { Home } from "./pages/Home";
 import { Article } from "./pages/Article";
 import "./App.css"; // Import CSS file
-import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider, Spinner } from '@chakra-ui/react'
 import theme from './theme'
 import getDocument from "./firebase/getData"
 import { MailDesign } from "./pages/MailDesign";
@@ -36,6 +36,7 @@ function App() {
         if (!docRef.error && docRef.result) {
           setUserData(docRef.result.data());
         }
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error fetching user or user data:", error);
@@ -47,7 +48,8 @@ function App() {
     return savedLang || "en";
     });
     
-    const [userData, setUserData] = useState<any>([])
+    const [userData, setUserData] = useState<any>([]);
+    const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     localStorage.setItem("lang", lang);
@@ -56,7 +58,8 @@ function App() {
   }, [lang]);
 
 
-  return (
+
+  return loading? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex "/></div> : (
     <ChakraProvider disableGlobalStyle={true} theme={theme}>
       <LangContext.Provider value={{ lang, setLang }}>
         <LangContext.Provider value = {userData}>
