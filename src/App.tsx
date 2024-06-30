@@ -24,22 +24,37 @@ export const LangContext = createContext({
   setLang: (lang: string) => {}
 });
 
+export const userContext = createContext({
+
+})
+
 function App() {
 
-  const fetchUser = () => {
-    console.log(getUser());
-  }
+  const fetchUser = async () => {
+    try {
+      const user = await getUser();
+      if (user) {
+        const docRef = await getDocument("users", user.uid);
+        if (!docRef.error && docRef.result) {
+          setUserData(docRef.result.data());
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching user or user data:", error);
+    }
+  };
   const [lang, setLang] = useState(() => {
     const savedLang = localStorage.getItem("lang");
     return savedLang || "en";
-  });
+    });
+    
+    const [userData, setUserData] = useState<any>([])
 
   useEffect(() => {
     localStorage.setItem("lang", lang);
-    delay(fetchUser, 800);
+    delay(fetchUser, 1000);
     fetchUser();
   }, [lang]);
-
 
 
   return (
