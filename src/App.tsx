@@ -16,6 +16,8 @@ import { Dashboard } from "./pages/Dashboard";
 import getUser from "./firebase/auth";
 import { delay } from "framer-motion";
 import { set } from "firebase/database";
+import { getAuth } from "firebase/auth";
+import { app } from "./firebase/config";
 
 export const LangContext = createContext({
   lang: "English",
@@ -42,12 +44,14 @@ function App() {
   const fetchUser = async () => {
     try {
       const user = await getUser();
+      console.log(user);
       if (user) {
         const docRef = await getDocument("users", user.uid);
         if (!docRef.error && docRef.result) {
           setUserData(docRef.result.data());
         }
         setLoading(false);
+        console.log(userData)
       } else { setLoading(false) }
     } catch (error) {
       console.error("Error fetching user or user data:", error);

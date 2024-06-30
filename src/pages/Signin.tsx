@@ -2,6 +2,8 @@ import { NavBar } from "../components/common/navbar";
 import { useState, ChangeEvent, FormEvent } from "react";
 import { Input, FormControl, FormLabel, FormErrorMessage, Button } from "@chakra-ui/react";
 import signIn from "../firebase/signin";
+import getUser from "../firebase/auth";
+import { delay } from "framer-motion";
 
 interface FormData {
   firstName: string;
@@ -29,8 +31,7 @@ export const Signin = () => {
   };
 
   const goback = () => {
-    window.history.back();
-    window.location.reload();
+    window.open("/", "_self")
   }
   
   const handleSubmit = async(event: FormEvent<HTMLFormElement>) => {
@@ -45,6 +46,7 @@ export const Signin = () => {
                 console.log("sign in successful to user: ", res.result);        
             }
       })
+      if(await getUser())
         goback();
     } else {
       setShowError(true);
