@@ -70,3 +70,6 @@ body {
 .customScrollbar::-webkit-scrollbar-thumb:hover {
   background: hsl(222, 52%, 12%);
 }
+html {
+  scroll-behavior: smooth;
+}
