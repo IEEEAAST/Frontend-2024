@@ -35,6 +35,8 @@ function App() {
   });
 
   const [userData, setUserData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
 
 
   const fetchUser = async () => {
@@ -46,20 +48,13 @@ function App() {
           setUserData(docRef.result.data());
         }
         setLoading(false);
-      }
+      } else { setLoading(false) }
     } catch (error) {
       console.error("Error fetching user or user data:", error);
     }
   };
 
-  const [lang, setLang] = useState(() => {
-    const savedLang = localStorage.getItem("lang");
-    return savedLang || "en";
-    });
-    
-    const [userData, setUserData] = useState<any>([]);
-    const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
     localStorage.setItem("lang", lang);
     // delay(fetchUser, 1000);
