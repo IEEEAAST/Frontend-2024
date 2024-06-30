@@ -51,7 +51,7 @@ function App() {
 
   useEffect(() => {
     localStorage.setItem("lang", lang);
-    delay(fetchUser, 1000);
+    // delay(fetchUser, 1000);
     fetchUser();
   }, [lang]);
 
