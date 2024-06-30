@@ -86,7 +86,7 @@ export const NavBar = () => {
         <div className="items-center justify-end text-3xl gap-8 mr-8 text-black hidden sm:flex">
           <LangSelector />
           <button className="font-bold text-base">
-            <a className="text-base bg-white px-8 py-4 rounded-full">Sign In</a>
+            <Link to="/signin" className="text-base bg-white px-8 py-4 rounded-full">Sign In</Link>
           </button>
         </div>
 
@@ -138,16 +138,17 @@ export const NavBar = () => {
                 Contact
               </button>
             </ScrollLink>
+            <Link to="/signin">
             <button
               className="w-full h-12 border-solid border-b my-2 flex justify-center items-center text-2xl"
               style={{ borderColor: "#00050f" }}
               onClick={() => {
                 setMenuOpen(false);
-                window.location.pathname === "/" ? animateScroll.scrollToTop({ duration: 0 }) : window.open("/", "_self");
               }}
             >
               Sign In
             </button>
+            </Link>
           </div>
           
 

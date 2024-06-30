@@ -2,17 +2,8 @@ import { NavBar } from "../components/common/navbar";
 import { useState, ChangeEvent, FormEvent, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Input, FormControl, FormLabel, FormErrorMessage, Button, Center } from "@chakra-ui/react";
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-} from '@chakra-ui/react';
-import register from "../firebase/register";
 import setData from "../firebase/setData";
+import register from "../firebase/register";
 
 interface FormData {
   firstName: string;
