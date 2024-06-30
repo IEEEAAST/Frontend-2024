@@ -14,10 +14,10 @@ export const MailDesign = () => {
 
 
   const fetchUser = async() => {
-    const auth = getAuth(app)
-    console.log(auth.currentUser?.uid)
-      if(auth.currentUser)
-        await getDocument("users", auth.currentUser?.uid).then(res =>{
+    const user = await getUser()
+    console.log(user.uid)
+      if(user.uid)
+        await getDocument("users", user.uid).then(res =>{
         if(res.result && !res.error){
           setUserData(res.result?.data());
           setIsLoading(false);
@@ -25,7 +25,7 @@ export const MailDesign = () => {
  })
   };
   useEffect(() => {
-    delay(fetchUser,1000);
+    // delay(fetchUser,1000);
     fetchUser(); 
   }, []);
 
