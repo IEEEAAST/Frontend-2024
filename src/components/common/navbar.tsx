@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Logo from "../../assets/IEEEAAST.ico";
 import { LangSelector } from "./langSelector";
 export const NavBar = () => {
@@ -24,7 +25,9 @@ export const NavBar = () => {
         
         <LangSelector/>
         <button className="font-bold text-base ">
+          <Link to={"/signin"}>
           <a className="bg-white px-8 py-4 rounded-full text-l">Sign In</a>
+          </Link>
         </button>
       </div>
       

@@ -1,9 +1,7 @@
 import { NavBar } from "../components/common/navbar";
 import { useState, ChangeEvent, FormEvent } from "react";
-import { Link } from "react-router-dom";
-import register from "../firebase/register";
-import setData from "../firebase/setData";
 import { Input, FormControl, FormLabel, FormErrorMessage, Button } from "@chakra-ui/react";
+import signIn from "../firebase/signin";
 
 interface FormData {
   firstName: string;
@@ -13,7 +11,7 @@ interface FormData {
 }
 
 
-export const SignUp = () => {
+export const Signin = () => {
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
@@ -29,6 +27,10 @@ export const SignUp = () => {
       [id]: value,
     });
   };
+
+  const goback = () => {
+    window.history.back();
+  }
   
   const handleSubmit = async(event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -36,14 +38,13 @@ export const SignUp = () => {
     
     if (!isErrorEmail && !isErrorPass) {
       setShowError(false);
-      const storedFormData = {
-        firstname: formData.firstName,
-        lastname: formData.lastName,
-        email: formData.email,
-        }
-        const res = await register(formData.email, formData.password);
-        await setData("users", storedFormData, res.result?.user.uid);
-        window.open("/verify", "_self");
+      await signIn(formData.email, formData.password).then (res => {
+        if(!res.error && res.result)
+            {
+                console.log("sign in successful to user: ", res.result);        
+            }
+      })
+        goback();
     } else {
       setShowError(true);
     }
@@ -52,14 +53,6 @@ export const SignUp = () => {
 
   const isErrorEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) === (false);
   const isErrorPass =  formData.password.length < 6;
-
-  // const validateEmail = (email) => {
-  //   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  // };
-
-  // const validatePassword = (password) => {
-  //   return password.length >= 6;
-  // };
 
   return (
     <div>
@@ -70,52 +63,12 @@ export const SignUp = () => {
     <div className="form-container">
       <div className="p-20 h-screen">
         <div className="max-w-[600px] mt-40 max-sm:mt-10" style={{ }}>
-        <h1 className="text-4xl sm:text-4xl" style={{ fontWeight: 'bold' }}>
-            Let's get to know each other
+        <h1 className="text-4xl sm:text-4xl mb-8" style={{ fontWeight: 'bold' }}>
+            Let's Sign you in!
           </h1>
-          <p className="pt-2 pb-10 text-left" style={{ fontWeight: 'lighter',
-            fontSize: '13px'
-           }}>
-            Tell us who you are. We will send you an email to verify it's you ;)
-          </p>
           <form className="" onSubmit={handleSubmit}>
-        <FormControl mb={4}>
-        <Input
-            type="text"
-            id="firstName"
-            name="Name"
-            value={formData.firstName}
-            onChange={handleChange}
-            required
-            placeholder="First name"
-            style={{
-            width: '80%',
-            border: 'none',
-            borderBottom: '1px solid rgb(4, 4, 62)',
-            outline: 'none',
-            }}
-        />
-        </FormControl>
 
-    <FormControl mb={4}>
-      <Input
-        type="text"
-        id="lastName"
-        name="Last Name"
-        value={formData.lastName}
-        onChange={handleChange}
-        required
-        placeholder="Last name"
-        style={{
-          width: '80%',
-          border: 'none',
-          borderBottom: '1px solid rgb(4, 4, 62)',
-          outline: 'none',
-        }}
-      />
-    </FormControl>
-
-    <FormControl mb={4} isInvalid={isErrorEmail && showError}>
+    <FormControl mb={10} isInvalid={isErrorEmail && showError}>
       <Input
         type="email"
         id="email"
@@ -163,7 +116,6 @@ export const SignUp = () => {
 {/* //button divs */}
             <div className = "flex flex-nowrap"> 
             <div className="pt-8 flex flex-nowrap">
-            <Link to="/page1">
             <button style={{
             background: 'transparent',
             padding: '8px',
@@ -174,16 +126,14 @@ export const SignUp = () => {
             color: '#fff',
             textAlign: 'center',
             marginBottom: "2vh",
-            }}>
+            }} onClick={goback}>
             Cancel
             </button>
-            </Link>
-          
              <button className="defaultButton ml-2" style = {{fontSize: '11px',
                 width: '155px',
                 height: '35px',
              }}>
-                Send Email
+                Signin
             </button>
           </div>
         </div>

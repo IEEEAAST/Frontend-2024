@@ -11,6 +11,7 @@ import { MailDesign } from "./pages/MailDesign";
 import { Onboarding } from "./pages/Onboarding";
 import { Verifying } from "./pages/Verification";
 import { SignUp } from "./pages/Signup";
+import { Signin } from "./pages/Signin.tsx";
 import { Dashboard } from "./pages/Dashboard";
 
 
@@ -41,6 +42,7 @@ function App() {
           <Route path="/onboard" element={<Onboarding />} />
           <Route path="/verify" element={<Verifying />} />
           <Route path="/Signup" element={<SignUp />} />
+          <Route path ="/signin" element = {<Signin />} />
         </Routes>
 
         <div className="fixed bottom-0 w-full h-20 flex items-center gap-5 p-5 z-50" style={{backgroundColor:"#00091a", boxShadow:"0px -2px 7px black"}}>
