@@ -24,9 +24,7 @@ export const LangContext = createContext({
   setLang: (lang: string) => {}
 });
 
-export const userContext = createContext({
-
-})
+export const userContext = createContext<any>(null);
 
 function App() {
 
@@ -43,6 +41,7 @@ function App() {
       console.error("Error fetching user or user data:", error);
     }
   };
+
   const [lang, setLang] = useState(() => {
     const savedLang = localStorage.getItem("lang");
     return savedLang || "en";
@@ -60,6 +59,7 @@ function App() {
   return (
     <ChakraProvider disableGlobalStyle={true} theme={theme}>
       <LangContext.Provider value={{ lang, setLang }}>
+        <LangContext.Provider value = {userData}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Dashboard />} />
@@ -82,6 +82,7 @@ function App() {
           <button className="defaultButton" onClick={() => { window.open("/event/Leading Your Career", "_self") }}>Event</button>
           <button className="defaultButton" onClick={() => { window.open("/article/ArticleName", "_self") }}>Article</button>
         </div>
+        </LangContext.Provider>
       </LangContext.Provider>
     </ChakraProvider>
   );
