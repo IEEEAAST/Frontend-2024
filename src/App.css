@@ -42,6 +42,7 @@ body {
   height: 40px;
   border-radius: 40px;
 }
+
 .defaultButton:active {
   background-color: #c2c2c2;
 }
@@ -52,6 +53,8 @@ body {
   /* line-height: 5rem; */
   max-width: 600px;
 }
+<<<<<<<<< Temporary merge branch 1
+=========
 /* global.css */
 
 .customScrollbar::-webkit-scrollbar {

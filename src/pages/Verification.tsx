@@ -1,8 +1,46 @@
 import { NavBar } from "../components/common/navbar.tsx";
 import { Link } from "react-router-dom";
+import sendVerifyEmail from "../firebase/sendVerificationEmail.js";
+import { useEffect, useState } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { app } from "../firebase/config.js";
+import signIn from "../firebase/signin.js";
+import { Spinner } from "@chakra-ui/react";
+
+
 
 export const Verifying = () => {
-  return (
+  
+  const [loading, isLoading] = useState(true);
+  const auth = getAuth(app)
+  const checkVerification = () => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        if (user.emailVerified) {
+          window.open("/mail2", "_self"); // Redirect to "/mail2" route
+        } else {
+          sendVerifyEmail();
+          isLoading(false);
+        }
+      } else {
+        alert("User is not authenticated.");
+      }
+    });
+  }
+  useEffect(() => {
+    checkVerification()
+    }, []);
+
+    const reloadPage = () => {
+      if(auth.currentUser)
+      window.location.reload();
+    }
+
+
+  
+
+  
+  return  loading? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex "/></div> :  (
     <div>
       <NavBar />
       <div className="flex flex-col justify-center p-16 h-screen">
@@ -12,11 +50,11 @@ export const Verifying = () => {
           <div className="fixed bottom-0 w-80 h-auto right-0 p-4">
             <img src="src\assets\bg-triangle-ellipse@2x.png" alt="Triangle" />
           </div>
-          <Link to="/onboard">
-            <button className="bg-white text-black text-sm font-bold py-2 px-4 w-36 border-2 border-white rounded-full m-2 ">
+          {/* <Link to="/onboard"> */}
+            <button className="bg-white text-black text-sm font-bold py-2 px-4 w-36 border-2 border-white rounded-full m-2 " onClick={reloadPage}>
               Finish
             </button>
-          </Link>
+          {/* </Link> */}
         </div>
       </div>
     </div>

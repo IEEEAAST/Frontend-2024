@@ -37,7 +37,7 @@ function App() {
           <Route path="/home" element={<Dashboard />} />
           <Route path="/event/:name" element={<EventDetails/>}/>
           <Route path="/article/:name" element={<Article />} />
-          <Route path="/mail2" element={<MailDesign />} />
+          <Route path="/mailconfirm" element={<MailDesign />} />
           <Route path="/onboard" element={<Onboarding />} />
           <Route path="/verify" element={<Verifying />} />
           <Route path="/Signup" element={<SignUp />} />
