@@ -1,13 +1,16 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import Logo from "../../assets/IEEEAAST.ico";
 import { LangSelector } from "./langSelector";
 import { Link, useLocation } from "react-router-dom";
 import { Link as ScrollLink, animateScroll, scroller } from 'react-scroll';
+import {UserContext} from "../../App"
+import SignOut from "../../firebase/signout"
 
 export const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const location = useLocation(); // Get the current location
+  const {userData} = useContext(UserContext);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -85,8 +88,8 @@ export const NavBar = () => {
         {/* end */}
         <div className="items-center justify-end text-3xl gap-8 mr-8 text-black hidden sm:flex">
           <LangSelector />
-          <button className="font-bold text-base">
-            <Link to="/signin" className="text-base bg-white px-8 py-4 rounded-full">Sign In</Link>
+          <button className="font-bold text-base" onClick={userData?()=>{SignOut();window.location.reload()}:()=>{}}>
+            <Link to={userData?"":"/signin"} className="text-base bg-white px-8 py-4 rounded-full">{userData?"Sign Out":"Sign In"}</Link>
           </button>
         </div>
 
@@ -138,15 +141,17 @@ export const NavBar = () => {
                 Contact
               </button>
             </ScrollLink>
-            <Link to="/signin">
+            <Link to={userData?"":"/signin"}>
             <button
+            
               className="w-full h-12 border-solid border-b my-2 flex justify-center items-center text-2xl"
               style={{ borderColor: "#00050f" }}
               onClick={() => {
                 setMenuOpen(false);
+                if(userData){SignOut();window.location.reload()}
               }}
             >
-              Sign In
+              {userData?"Sign Out":"Sign In"}
             </button>
             </Link>
           </div>
