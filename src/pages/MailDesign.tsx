@@ -25,7 +25,7 @@ export const MailDesign = () => {
  })
   };
   useEffect(() => {
-    delay(fetchUser,500);
+    delay(fetchUser,1000);
     fetchUser(); 
   }, []);
 

@@ -13,7 +13,6 @@ import {
 } from '@chakra-ui/react';
 import register from "../firebase/register";
 import setData from "../firebase/setData";
-import { Input, FormControl, FormLabel, FormErrorMessage, Button } from "@chakra-ui/react";
 
 interface FormData {
   firstName: string;

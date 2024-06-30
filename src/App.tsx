@@ -13,6 +13,10 @@ import { Verifying } from "./pages/Verification";
 import { SignUp } from "./pages/Signup";
 import { Signin } from "./pages/Signin.tsx";
 import { Dashboard } from "./pages/Dashboard";
+import getUser from "./firebase/auth.js";
+import { getAuth } from "firebase/auth";
+import { app } from "./firebase/config.js";
+import { delay } from "framer-motion";
 
 
 export const LangContext = createContext({
@@ -21,6 +25,10 @@ export const LangContext = createContext({
 });
 
 function App() {
+
+  const fetchUser = () => {
+    console.log(getUser());
+  }
   const [lang, setLang] = useState(() => {
     const savedLang = localStorage.getItem("lang");
     return savedLang || "en";
@@ -28,7 +36,11 @@ function App() {
 
   useEffect(() => {
     localStorage.setItem("lang", lang);
+    delay(fetchUser, 800);
+    fetchUser();
   }, [lang]);
+
+
 
   return (
     <ChakraProvider disableGlobalStyle={true} theme={theme}>
