@@ -54,7 +54,7 @@ export const NavBar = () => {
         <div className="flex-1 justify-center hidden sm:flex">
           <div className="flex justify-center text-3xl gap-8">
             <button>
-              <Link to="/" className="text-3xl">Home</Link>
+              <Link to={userData?"/home":"/"} className="text-3xl">Home</Link>
             </button>
             <button>
               <ScrollLink to="aboutSection" smooth={true} duration={0}>
@@ -88,7 +88,7 @@ export const NavBar = () => {
         {/* end */}
         <div className="items-center justify-end text-3xl gap-8 mr-8 text-black hidden sm:flex">
           <LangSelector />
-          <button className="font-bold text-base" onClick={userData?()=>{SignOut();window.location.reload()}:()=>{}}>
+          <button className="font-bold text-base" onClick={userData?()=>{SignOut();window.location.href="/"}:()=>{}}>
             <Link to={userData?"":"/signin"} className="text-base bg-white px-8 py-4 rounded-full">{userData?"Sign Out":"Sign In"}</Link>
           </button>
         </div>
@@ -115,7 +115,7 @@ export const NavBar = () => {
             >
               Home
             </button>
-            <ScrollLink to="aboutSection" className="cursor-pointer text-2xl" smooth={true} duration={500}>
+            <ScrollLink to="aboutSection" className="cursor-pointer text-2xl" smooth={true} duration={0}>
               <button
                 className="w-full h-12 border-solid border-b my-2 flex justify-center items-center"
                 style={{ borderColor: "#00050f" }}

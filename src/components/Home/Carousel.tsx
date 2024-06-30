@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { motion, useMotionValue } from "framer-motion";
 import Trophy from '../../assets/award.png';
 import getCollection from "../../firebase/getCollection";
+import Award from "../../interfaces/Award";
 
 const ONE_SECOND = 1000;
 const AUTO_DELAY = ONE_SECOND * 10;
@@ -14,12 +15,6 @@ const SPRING_OPTIONS = {
   damping: 50,
 };
 
-interface Award {
-  name: string;
-  description: string;
-  year: string;
-}
-
 export const SwipeCarousel = () => {
   const [awards, setAwards] = useState<Award[]>([]);
   const [awardIndex, setAwardIndex] = useState(0);
@@ -28,9 +23,11 @@ export const SwipeCarousel = () => {
   useEffect(() => {
     getCollection("awards").then((response) => {
       if (response.result) {
-        setAwards(response.result);
+        const sortedAwards = response.result.sort((a: Award, b: Award) => a.year - b.year);
+        setAwards(sortedAwards);
       }
     });
+
     const intervalRef = setInterval(() => {
       const x = dragX.get();
 
@@ -87,7 +84,7 @@ const Awards = ({ awards, awardIndex }: { awards: Award[], awardIndex: number })
   return (
     <>
       {awards.map((award, idx) => {
-        const isSelected = (awardIndex === idx) ? true : false;
+        const isSelected = awardIndex === idx;
         return (
           <motion.div
             key={idx}
@@ -104,6 +101,7 @@ const Awards = ({ awards, awardIndex }: { awards: Award[], awardIndex: number })
               </div>
               <div className="flex flex-col items-center justify-around mt-6 h-20">
                 <div className="w-fit h-fit text-[16pt] md:text-[18pt] xl:text-[24pt] text-nowrap">{isSelected ? award.description : ""}</div>
+                {award.recipient ? <div className="w-fit h-fit text-[12pt] md:text-[18pt] xl:text-[24pt] text-nowrap">{isSelected && award.recipient}</div> : null}
                 <div className="w-fit h-fit text-[18pt] md:text-[30pt] mt-8">{isSelected ? award.year : ""}</div>
               </div>
             </div>
