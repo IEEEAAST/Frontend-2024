@@ -1,5 +1,6 @@
 import { NavBar } from "../components/common/navbar";
 import { useState, ChangeEvent, FormEvent } from "react";
+import {Link} from "react-router-dom";
 import { Input, FormControl, FormLabel, FormErrorMessage, Button } from "@chakra-ui/react";
 import signIn from "../firebase/signin";
 import getUser from "../firebase/auth";
@@ -118,7 +119,8 @@ export const Signin = () => {
 
 {/* //button divs */}
             <div className = "flex flex-nowrap"> 
-            <div className="pt-8 flex flex-nowrap">
+            <div className="pt-8 flex flex-nowrap items-center gap-4 flex-col">
+            <div className="flex flex-col sm:flex-row items-center gap-2">
             <button style={{
             background: 'transparent',
             padding: '8px',
@@ -128,7 +130,6 @@ export const Signin = () => {
             borderRadius: '20px',
             color: '#fff',
             textAlign: 'center',
-            marginBottom: "2vh",
             }} onClick={goback}>
             Cancel
             </button>
@@ -136,8 +137,10 @@ export const Signin = () => {
                 width: '155px',
                 height: '35px',
              }}>
-                Signin
+                Sign In
             </button>
+            </div>
+            <Link to="/Signup" className="text-blue-500">Don't have an account yet? Sign up!</Link>
           </div>
         </div>
     </form>
