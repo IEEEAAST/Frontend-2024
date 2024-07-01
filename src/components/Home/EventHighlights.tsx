@@ -25,7 +25,7 @@ const EventHighlights = () => {
     console.log(sortedHighlights);
     setImages(sortedHighlights.map((highlight: EventHighlight) => highlight.url));
   });
-}),[];
+},[])
   const onClose = () => setIsOpen(false);
   const onOpen = (img:string) =>{
     setIsOpen(true);
