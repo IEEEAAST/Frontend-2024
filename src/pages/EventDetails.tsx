@@ -14,7 +14,7 @@ import Star from '../assets/fav-event-star-white@2x.png';
 import PlusIcon from '../assets/plus.png';
 import { Schedule } from "../components/EventDetails/schedule";
 import { Speakers } from "../components/EventDetails/Speakers";
-import  Gallery  from "../components/EventDetails/Gallery";
+import Gallery from "../components/EventDetails/Gallery";
 import getDataByField from "../firebase/getDataByField";
 
 import { EventData } from "../interfaces/EventData";
@@ -24,7 +24,7 @@ import { Ivideo, Inote, IsponsorsIds, scheduleItem, IspksIds } from "../interfac
 export const EventDetails = () => {
   const { name: eventName } = useParams<{ name: string }>();
 
-  const [eventData, setEventData] = useState<EventData|null>(null);
+  const [eventData, setEventData] = useState<EventData | null>(null);
   const [loading, setLoading] = useState(true);
   const [videos, setVideos] = useState<Ivideo[]>([]);
   const [notes, setNotes] = useState<Inote[]>([]);
@@ -41,49 +41,47 @@ export const EventDetails = () => {
       if (isMounted) {
         setEventData(data.result?.[0] || null);
         setLoading(false);
-        if(data.result?.[0].videos){
+        if (data.result?.[0].videos) {
           setVideos(data.result?.[0].videos);
           setIsResourcesEnabled(true);
         }
-        if(data.result?.[0].keynotes){
+        if (data.result?.[0].keynotes) {
           setNotes(data.result?.[0].keynotes);
           setIsResourcesEnabled(true);
         }
-        if(data.result?.[0].sponsors){
+        if (data.result?.[0].sponsors) {
           setSponsorIDs(data.result?.[0].sponsors)
           setSponsorEnabled(true);
         }
-        if(data.result?.[0].speakers){
+        if (data.result?.[0].speakers) {
           setSpeakers(data.result?.[0].speakers);
           console.log(data.result?.[0].speakers)
         }
         if (data.result?.[0].schedule) {
           setSchdule(data.result ? data.result[0].schedule : []);
           setLoading(false);
-          
-      }
+        }
         setLoading(false);
         // console.log(data.result?.[0]);
-        window.open(data.result?.[0].coverPhoto, "_blank");
       }
     });
-     return () => { isMounted = false; }
+    return () => { isMounted = false; }
   }
-
 
   useEffect(() => {
     fetchData();
   }, []);
-  // Handle cases where eventData is null or undefined
 
-  return loading? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex "/></div> : (
+  // Handle cases where eventData is null or undefined
+  return loading ? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex " /></div> : (
     <div id="eventPage">
-      <img src={Banner} alt="banner"> 
-        </img>
+      <div className="flex items-center justify-center rounded-3xl mt-4" style={{backgroundImage:eventData?.coverPhoto, backgroundSize:"cover"}}>
+        <img src={eventData?.coverPhoto} alt="banner" className="h-[450px]"></img>
+      </div>
       <div id="eventDetailsFlex">
         <div id="eventNameWrapper">
           <span id="eventName">{loading ? "Loading..." : eventData?.title ?? "Error"}</span>
-          <span id="eventDesc">{loading ? "Please wait...":eventData?.description ?? "Event not found."}</span>
+          <span id="eventDesc">{loading ? "Please wait..." : eventData?.description ?? "Event not found."}</span>
         </div>
         <div id="eventDetailsWrapper">
           <span>Time: <b>from 12 July 12:00 PM to 15 July 9:00 PM</b></span>
@@ -99,8 +97,8 @@ export const EventDetails = () => {
           }}>
             <Tab><span className="tabLabel">Schedule</span></Tab>
             <Tab><span className="tabLabel">Speakers</span></Tab>
-            {isSponsorEnabled? <Tab><span className="tabLabel">Sponsors</span></Tab> : <Tab isDisabled><span className="tabLabel">Sponsors</span></Tab>} 
-            {isResourcesEnabled? <Tab><span className="tabLabel">Resources</span></Tab> : <Tab><span className="tabLabel">Resources</span></Tab>}
+            {isSponsorEnabled ? <Tab><span className="tabLabel">Sponsors</span></Tab> : <Tab isDisabled><span className="tabLabel">Sponsors</span></Tab>}
+            {isResourcesEnabled ? <Tab><span className="tabLabel">Resources</span></Tab> : <Tab><span className="tabLabel">Resources</span></Tab>}
             <Tab className="mr-1"><span className="tabLabel">Gallery</span></Tab>
           </div>
           <div className="iconButtonsWrapper">
@@ -114,23 +112,23 @@ export const EventDetails = () => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Schedule schedules={schedule}/>
+            <Schedule schedules={schedule} />
           </TabPanel>
           <TabPanel>
-            <Speakers speakersIds={speakers}/>
+            <Speakers speakersIds={speakers} />
           </TabPanel>
-          {isSponsorEnabled? 
-          <TabPanel>
-            <Sponsors sponsorIds= {sponsorIds}/>
-          </TabPanel>
-          :<TabPanel />}
-          {isResourcesEnabled? 
+          {isSponsorEnabled ?
             <TabPanel>
-            <Resources videos= {videos} notes= {notes} />
+              <Sponsors sponsorIds={sponsorIds} />
             </TabPanel>
-            :<TabPanel />}
+            : <TabPanel />}
+          {isResourcesEnabled ?
+            <TabPanel>
+              <Resources videos={videos} notes={notes} />
+            </TabPanel>
+            : <TabPanel />}
           <TabPanel>
-            { <Gallery /> }
+            <Gallery images={eventData?.gallery || []} />
           </TabPanel>
         </TabPanels>
       </Tabs>
