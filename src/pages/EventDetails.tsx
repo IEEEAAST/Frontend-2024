@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Sponsors } from "../components/EventDetails/Sponsors";
 import { Resources } from "../components/EventDetails/Resources";
+import { NavBar } from "../components/common/navbar";
 import Banner from "../assets/banner.jpg";
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Spinner } from '@chakra-ui/react';
 
@@ -73,10 +74,21 @@ export const EventDetails = () => {
   }, []);
 
   // Handle cases where eventData is null or undefined
+  
   return loading ? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex " /></div> : (
-    <div id="eventPage">
-      <div className="flex items-center justify-center rounded-3xl mt-4" style={{backgroundImage:eventData?.coverPhoto, backgroundSize:"cover"}}>
-        <img src={eventData?.coverPhoto} alt="banner" className="h-[450px]"></img>
+      <>
+      <NavBar/>
+      <div className="h-28" style={{borderColor: "#00091A", borderWidth:"4px"}}></div>
+      <div id="eventPage">
+        <div className="flex items-center justify-center mt-4 w-full h-[400px] rounded-3xl border-8" 
+        style={{
+          backgroundImage: `url(${eventData?.coverPhoto})`, 
+          backgroundColor: "white",
+          backgroundSize: "cover", // Optionally add to cover the entire div
+          backgroundPosition: "center", // Optionally add to center the image
+          borderColor: "#00091A"
+        }}
+      >
       </div>
       <div id="eventDetailsFlex">
         <div id="eventNameWrapper">
@@ -105,8 +117,8 @@ export const EventDetails = () => {
             <button className="iconButton" style={{ backgroundImage: `url(${Bell})` }}></button>
             <button className="iconButton" style={{ backgroundImage: `url(${Star})` }}></button>
           </div>
-          <button className="defaultButton" style={{ alignSelf: "center" }}>
-            <span className="buttonText">Attend</span>
+          <button className="defaultButton" style={{ alignSelf: "center" }} disabled={!eventData?.formLink || eventData?.formLink === ""} onClick={eventData?.formLink && !(eventData?.formLink === "")?()=>{window.open(eventData?.formLink,"_blank")}:()=>{}}>
+            <span className="buttonText" >Attend</span>
             <span className="plusButton"><img src={PlusIcon} alt="plus" /></span>
           </button>
         </TabList>
@@ -133,5 +145,6 @@ export const EventDetails = () => {
         </TabPanels>
       </Tabs>
     </div>
+    </>
   );
 };

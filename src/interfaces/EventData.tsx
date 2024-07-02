@@ -14,7 +14,7 @@ export interface EventData {
     sponsors: string[];
     type: string;
     videos: Ivideo[];
-    link?:string;
+    formLink?:string;
 }
 export interface Schedule{
     duration: string;
