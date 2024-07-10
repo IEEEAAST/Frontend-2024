@@ -174,8 +174,8 @@ export const Dashboard = () => {
         </div>
       </div>
 
-      <div className="w-full min-h-screen flex justify-center items-center">
-        <div className="relative w-[1733px] h-[988px] rounded-[38px] overflow-hidden">
+      <div className="w-full min-h-screen flex justify-center items-center px-20">
+        <div className="relative w-[1733px] h-[810px] rounded-[38px] overflow-hidden">
           <div className="absolute z-10 w-full h-screen bg-gradient-to-t from-[#000B21A5] via-transparent bottom-0"></div>
 
           <div className="absolute bottom-[83px] z-10 left-[35px] text-white">
@@ -206,11 +206,11 @@ export const Dashboard = () => {
         <div className="mt-[59px] flex flex-col gap-[58px]">
         {filterArticles.map((article, index)=>(
           <div className="flex" key={index}>
-            <div className="w-[460px] h-[302px] mr-[58px]">
+            <div className="w-[550px] h-[250px] mr-[58px]">
             <img
                 src={article.image || "#"}
                 alt="Article"
-                className="w-[460px] h-[302px] object-cover rounded-[16px]"
+                className="w-[550px] h-[250px] object-cover rounded-[16px]"
               />
             </div>
             <div className="flex flex-col justify-between w-full">
@@ -256,7 +256,7 @@ export const Dashboard = () => {
           <div className="flex space-x-[20px]">
 
             {filterEvents.map((event, index)=>(
-              <div className="flex-shrink-0 w-[537px] h-[686px] bg-purple-600 rounded-[12px] flex flex-col justify-center items-center text-center" key={index}>
+              <div className="flex-shrink-0 w-[450px] h-[590px] bg-purple-600 rounded-[9px] flex flex-col justify-center items-center text-center" key={index}>
                 <h3 className="text-[45px] font-bold mb-[20px]">{event.title}</h3>
                 <p className="text-[24px]">
                   {event.description}
