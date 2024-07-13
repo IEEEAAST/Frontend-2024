@@ -1,4 +1,3 @@
-import imgContainer from "../assets/images/eventarticlesImg.webp";
 import arrowRightIcon from "../assets/right-arrow-svgrepo-com.svg";
 import saveicon from "../assets/bookmark-ribbon-white.png";
 import optionIcon from "../assets/more-ellipsis-white.png";
@@ -7,7 +6,8 @@ import "./styles/Dashboard.css";
 import getCollection from "../firebase/getCollection.js";
 import getDocument from "../firebase/getData.js";
 import { useEffect, useState } from "react";
-import { Article } from "./Article.js";
+import { useNavigate } from 'react-router-dom';
+
 
 interface ArticleData {
   article: string;
@@ -68,13 +68,12 @@ interface EventData {
 }
 
 export const Dashboard = () => {
-
+  const navigate = useNavigate(); 
   const [articles, setArticles] = useState<ArticleData[]>([]);
   const [events, setEvents] = useState<EventData[]>([])
   const [authors, setAuthors] = useState<{ [key: string]: AuthorData }>({});
   const [searched, setSearched] = useState('');
 
-  //fetch articles and authors
   useEffect(() => {
     getCollection("articles").then((res) => {
       if (res.result) {
@@ -86,7 +85,7 @@ export const Dashboard = () => {
         uniqueAuthorIds.forEach(authorId => {
           getDocument("users", authorId).then((res) => {
             if (res.result) {
-              const authorData = res.result.data() as AuthorData; // Extract data from DocumentSnapshot
+              const authorData = res.result.data() as AuthorData; 
               setAuthors(prevAuthors => ({
                 ...prevAuthors,
                 [authorId]: authorData,
@@ -109,7 +108,6 @@ export const Dashboard = () => {
     return date.toLocaleDateString(undefined, options);
   };
 
-  //fetch events
   useEffect(()=>{
     getCollection('events').then(res=>{
       if(res.result){
@@ -130,6 +128,24 @@ export const Dashboard = () => {
     setSearched(e.target.value);
   };
 
+  const handleFocus = () => {
+    document.querySelector(".body")?.classList.add("blur-background");
+  };
+
+  const handleBlur = () => {
+    document.querySelector(".body")?.classList.remove("blur-background");
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleBlur();
+    }
+  };
+
+  const handleArticleClick = (article: ArticleData) => {
+    navigate(`/article/${article.title}`);
+  };
+
   if (articles.length===0){
     return <div>Loading....</div>
   }
@@ -138,36 +154,40 @@ export const Dashboard = () => {
   }
 
   return (
-    //header
+
     <div className="flex flex-col items-center bg-[#000B21] text-white header">
       <div className="h-[150px] w-full">
         <NavBar />
-        {/* add search */}
         <div className="search">
           <input      
             type="text"
             placeholder="Search articles, events..."
             value={searched}
             onChange={handleSearch}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            onKeyDown={handleKeyDown}
           />
         </div>
       </div>
 
-      <div className="w-full lg:min-h-screen flex justify-center items-center px-4 md:px-20">
+      <div className="w-full lg:min-h-screen flex justify-center items-center px-4 md:px-20 body">
         <div className="relative w-full lg:w-[1733px] lg:h-[810px]  h-[400px] md:h-[520px] rounded-[38px] overflow-hidden">
           <div className="absolute z-10 w-full lg:h-screen h-full bg-gradient-to-t from-[#000B21A5] via-transparent bottom-0"></div>
 
           <div className="absolute bottom-[83px] z-10 left-[35px] text-white">
             <h2 className="text-[24px] lg:text-[50px] font-serif font-black">{filterArticles[0].title || "no title"}</h2>
             <h3 className="text-[14px] lg:text-[24px]">Article • Design • {authors[filterArticles[0].author]?.firstname || "unknown author"}</h3>
-            <button className="w-[100px] lg:w-[169px] h-[40px] lg:h-[59px] text-[14px] lg:text-[21px] bg-white text-black font-bold rounded-[20px] lg:rounded-[29px] mt-[20px] lg:mt-[45px]">
-              View
+            <button className="w-[100px] lg:w-[169px] h-[40px] lg:h-[59px] text-[14px] lg:text-[21px] bg-white text-black font-bold rounded-[20px] lg:rounded-[29px] mt-[20px] lg:mt-[45px]"
+              onClick={() =>navigate(`/article/${filterArticles[0].title}`)}
+              >
+                View
             </button>
           </div>
 
           <img
             className="object-cover w-full h-full md:h-[1000px] lg:-translate-y-[125px]"
-            src={imgContainer}
+            src={filterArticles[0].image}
             alt="Event"
           />
         </div>
@@ -184,7 +204,7 @@ export const Dashboard = () => {
 
         <div className="mt-[30px] lg:mt-[59px] flex flex-col gap-[30px] lg:gap-[58px]">
         {filterArticles.map((article, index)=>(
-          <div className="flex flex-col md:flex-row" key={index}>
+          <div className="flex flex-col md:flex-row" key={index} >
             <div className="w-full md:w-[550px] h-[200px] md:h-[250px] md:mr-[58px]">
               <img
                 src={article.image || "#"}
@@ -208,7 +228,8 @@ export const Dashboard = () => {
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-[10px]">
-                  <button className="text-[12px] lg:text-[15px] w-[70px] lg:w-[90px] h-[30px] lg:h-[35px] bg-[#151F33] rounded-[20px]">
+                  <button className="text-[12px] lg:text-[15px] w-[70px] lg:w-[90px] h-[30px] lg:h-[35px] bg-[#151F33] rounded-[20px]"
+                  onClick={() => handleArticleClick(article)}>
                     Swift
                   </button>
                   <p>• 5 min read</p>
@@ -228,8 +249,7 @@ export const Dashboard = () => {
         </div>
       </div>
 
-     {/* events */}
-     <div className="mt-[50px] lg:mt-[100px] w-full px-4 lg:px-[89px]">
+    <div className="mt-[50px] lg:mt-[100px] w-full px-4 lg:px-[89px]">
         <h2 className="text-white text-[24px] lg:text-[45px] font-bold">Events</h2>
         <div className="mt-[30px] lg:mt-[59px] overflow-x-scroll scrollbar-hide">
           <div className="flex space-x-[20px]">

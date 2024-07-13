@@ -14,10 +14,10 @@ import { SignUp } from "./pages/Signup";
 import { Signin } from "./pages/Signin";
 import { Dashboard } from "./pages/Dashboard";
 import getUser from "./firebase/auth";
-import { delay } from "framer-motion";
-import { set } from "firebase/database";
-import { getAuth } from "firebase/auth";
-import { app } from "./firebase/config";
+// import { delay } from "framer-motion";
+// import { set } from "firebase/database";
+// import { getAuth } from "firebase/auth";
+// import { app } from "./firebase/config";
 
 export const LangContext = createContext({
   lang: "English",
