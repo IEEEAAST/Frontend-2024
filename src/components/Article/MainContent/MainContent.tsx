@@ -4,7 +4,6 @@ import { Modal } from "../Modal/Modal";
 import { useState , useEffect} from "react";
 import getCollection from "../../../firebase/getCollection.js";
 import getDocument from "../../../firebase/getData.js";
-import { ar, da } from "@faker-js/faker";
 
 interface ArticleData {
   article: string;
@@ -27,18 +26,18 @@ interface AuthorData{
   role: string;
 }
 
-interface headerSearch {
+interface MainContentProps {
   searchQuery : string;
+  articleName : any;
 }
 
-export const MainContent: React.FC<headerSearch> = ({searchQuery}) => {
+export const MainContent: React.FC<MainContentProps> = ({searchQuery, articleName}) => {
   const [isFollowing, setIsFollowing] = useState(true);
   const [modal, setModal] = useState(false);
   const [articleData, setArticleData] = useState<ArticleData[]>([])
   const [authorData, setAuthorData] = useState<AuthorData | null>(null);
-  const [lastActive, setLastActive] = useState('')
 
-  //fetch articles
+
   useEffect(() => {
     getCollection('articles').then(res => {
       if (res.result) {
@@ -47,28 +46,42 @@ export const MainContent: React.FC<headerSearch> = ({searchQuery}) => {
     });
   }, []);
 
-  //fetch authors based on article index
   useEffect(() => {
     const fetchAuthorData = async () => {
       if (articleData.length > 0) {
-        const defaultArticleIndex = 0; 
-        const articleIndex = filteredArticles.length > 0 ? articleData.indexOf(filteredArticles[0]) : defaultArticleIndex;
-        const authorId = articleData[articleIndex]?.author;
-        if (authorId) {
-          const res = await getDocument("users", authorId);
+        let article;
+        if (articleName) {
+          article = articleData.find(article => article.title === articleName);
+        } else if (searchQuery) {
+          article = articleData.find(article => article.title.toLowerCase().includes(searchQuery.toLowerCase()));
+        }
+        if (!article) {
+          article = articleData[0];
+        }
+
+        if (article) {
+          const res = await getDocument("users", article.author);
           if (res.result) {
-            const auth = res.result.data() as AuthorData
+            const auth = res.result.data() as AuthorData;
             setAuthorData(auth);
-            //date
-            const { seconds, nanoseconds } = auth.lastactive;
-            const date = new Date(seconds * 1000 + nanoseconds / 1e6);
-            setLastActive(date.toISOString());
           }
         }
       }
     };
+
     fetchAuthorData();
-  }, [articleData, searchQuery]);
+  }, [articleName, searchQuery, articleData]);
+
+  const formatDate = (timestamp: { seconds: number; nanoseconds: number }) => {
+    if (!timestamp) return "N/A";
+    const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    };
+    return date.toLocaleDateString(undefined, options);
+  };
 
   console.log("articleData", articleData)
   console.log("search query:", searchQuery)
@@ -78,23 +91,25 @@ export const MainContent: React.FC<headerSearch> = ({searchQuery}) => {
     setIsFollowing(!isFollowing);
   };
 
-  //filter article displayed based on search query
-  const filteredArticles = searchQuery
-    ? articleData.filter((article) =>
-        article.title.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : [];
-    
-  const displayedArticle = filteredArticles.length > 0 ? filteredArticles[0] : articleData[0];
+  const displayedArticle = articleName != "ArticleName"
+    ? articleData.find(article => article.title === articleName)
+    : (searchQuery
+      ? articleData.find(article => article.title.toLowerCase().includes(searchQuery.toLowerCase()))
+      : articleData[0]);
 
-  console.log("disp art", displayedArticle)
+  console.log("articleName:", articleName);
+  console.log("displayedArticle:", displayedArticle);
+
+  if (!displayedArticle) {
+    return <div>No article found.</div>;
+  }
 
   if (!articleData) {
     return <div>Loading...</div>;
   }
 
   if (!authorData){
-    return<div>Loading ....</div>
+    return <div>loading...</div>
   }
 
   return (
@@ -115,7 +130,8 @@ export const MainContent: React.FC<headerSearch> = ({searchQuery}) => {
                 {isFollowing ? "Follow" : "Following"}
               </span>
             </span>
-            <span className="desc-time">{lastActive.slice(0,10)}</span>
+            
+            <span className="desc-time">{formatDate(authorData?.lastactive)}</span>
           </div>
         </div>
         <hr />
