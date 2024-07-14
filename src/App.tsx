@@ -14,21 +14,24 @@ import { SignUp } from "./pages/Signup";
 import { Signin } from "./pages/Signin";
 import { Dashboard } from "./pages/Dashboard";
 import getUser from "./firebase/auth";
-// import { delay } from "framer-motion";
-// import { set } from "firebase/database";
-// import { getAuth } from "firebase/auth";
-// import { app } from "./firebase/config";
+import { delay } from "framer-motion";
+import { set } from "firebase/database";
+import { getAuth } from "firebase/auth";
+import { app } from "./firebase/config";
+import UserData from "./interfaces/userData";
 
 export const LangContext = createContext({
   lang: "English",
   setLang: (lang: string) => {}
 });
 
-export const UserContext = createContext({
+export const UserContext = createContext<{
+  userData: UserData | null;
+  setUserData: React.Dispatch<React.SetStateAction<UserData | null>>;
+}>({
   userData: null,
-  setUserData: (data: any) => {},
+  setUserData: () => {},
 });
-
 
 function App() {
   const [lang, setLang] = useState(() => {
