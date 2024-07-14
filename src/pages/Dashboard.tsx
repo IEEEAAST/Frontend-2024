@@ -256,7 +256,8 @@ export const Dashboard = () => {
 
           <div className="mt-[40px] flex overflow-x-scroll space-x-[40px] scrollbar-hide">
             {filterEvents.map((event, index)=>(
-              <div className="flex-shrink-0 w-[450px] h-[350px] lg:h-[590px] bg-purple-600 rounded-[20px] md:rounded-[9px] flex flex-col justify-center items-center text-center" key={index}>
+              <div className="flex-shrink-0 w-[450px] h-[350px] lg:h-[590px] bg-purple-600 rounded-[20px] md:rounded-[9px] flex flex-col justify-center items-center text-center" key={index}
+                onClick={() => navigate(`/event/${event.title}`)}>
                 <h3 className="text-[24px] lg:text-[45px] font-bold mb-[20px]">{event.title}</h3>
                 <p className="text-[16px] lg:text-[24px]">
                   {event.description}
