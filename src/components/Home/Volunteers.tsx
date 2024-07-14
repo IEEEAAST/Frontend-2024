@@ -3,6 +3,7 @@ import { VolunteersCarousel } from './VolunteersCarousel';
 import HeadVolunteer from '../../interfaces/HeadVolunteer.tsx';
 import { useState, useEffect } from 'react';
 import getCollection from '../../firebase/getCollection.js';
+import getDocument from '../../firebase/getData.js';
 
 interface GroupedHeads {
   [year: number]: {
@@ -10,8 +11,8 @@ interface GroupedHeads {
     heads: HeadVolunteer[]
   }
 }
-const years = [2024];
-const showHeads = false;
+let years:number[];
+let showHeads:boolean;
 
 export const Volunteers = () => {
   const [headsByYear, setHeadsByYear] = useState<GroupedHeads>({});
@@ -33,6 +34,16 @@ export const Volunteers = () => {
 
     const fetchData = async () => {
       try {
+        const config = await getDocument('headsconfig',"29AGClKuziF9Vv2sqEIh");
+        if (config.result) {
+          const data = config.result.data();
+          if (data) {
+            years=data.years;
+            showHeads=data.showHeads;
+          }
+        } else {
+          console.error('Failed to retrieve heads config:', config.error);
+        }
         const response = await getCollection('heads');
 
         if (response.result) {
@@ -83,7 +94,7 @@ export const Volunteers = () => {
         <div>
           <Tabs className='relative' variant='unstyled' defaultIndex={0}>
             <TabList className='bg-[#151F33] rounded-full px-[20px] md:px-[30px] mt-4 gap-1 md:gap-2 justify-around w-fit mx-auto'>
-              {years.map((year) => (
+              {years?.map((year) => (
                 <Tab key={year} w={'fit-content'} className="px-2 text-base md:text-lg lg:text-xl xl:text-2xl">
                   <p className='text-[9vw] sm:text-[40pt]'>{year}</p>
                 </Tab>
@@ -92,7 +103,7 @@ export const Volunteers = () => {
             </TabList>
             <TabIndicator mt='-1.5px' height='2px' bg='white' borderRadius='1px' />
             <TabPanels>
-              {years.map((year) => (
+              {years?.map((year) => (
                 <TabPanel key={year}>
                   <Tabs className="relative" variant='unstyled' defaultIndex={0}>
                     <Center>
