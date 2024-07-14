@@ -19,17 +19,20 @@ import { set } from "firebase/database";
 import { getAuth } from "firebase/auth";
 import { app } from "./firebase/config";
 import { Profile } from "./pages/Profile";
+import UserData from "./interfaces/userData";
 
 export const LangContext = createContext({
   lang: "English",
   setLang: (lang: string) => {}
 });
 
-export const UserContext = createContext({
+export const UserContext = createContext<{
+  userData: UserData | null;
+  setUserData: React.Dispatch<React.SetStateAction<UserData | null>>;
+}>({
   userData: null,
-  setUserData: (data: any) => {},
+  setUserData: () => {},
 });
-
 
 function App() {
   const [lang, setLang] = useState(() => {
