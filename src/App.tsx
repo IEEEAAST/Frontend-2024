@@ -18,6 +18,7 @@ import { delay } from "framer-motion";
 import { set } from "firebase/database";
 import { getAuth } from "firebase/auth";
 import { app } from "./firebase/config";
+import { Profile } from "./pages/Profile";
 
 export const LangContext = createContext({
   lang: "English",
@@ -81,6 +82,7 @@ function App() {
             <Route path="/verify" element={<Verifying />} />
             <Route path="/Signup" element={<SignUp />} />
             <Route path="/signin" element={<Signin />} />
+            <Route path="/Profile" element = {<Profile />} />
           </Routes>
 
           <div
