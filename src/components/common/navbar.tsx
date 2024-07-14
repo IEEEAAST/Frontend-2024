@@ -56,9 +56,13 @@ export const NavBar = () => {
         <div className="flex-1 justify-center hidden sm:flex">
           <div className="flex justify-center text-3xl gap-8">
             <button>
-              <Link to={userData?"/home":"/"} className="text-3xl">Home</Link>
+              <Link to="/" className="text-3xl">Home</Link>
             </button>
             <button>
+              <Link to="/home" className="text-3xl">Browse</Link>
+            </button>
+            <button>
+            
               <ScrollLink to="aboutSection" smooth={true} duration={0}>
                 <button className="cursor-pointer text-3xl" onClick={
                   () => {
@@ -116,6 +120,16 @@ export const NavBar = () => {
               }}
             >
               Home
+            </button>
+            <button
+            className="w-full h-12 border-solid border-b my-2 flex justify-center items-center text-2xl"
+            style={{ borderColor: "#00050f" }}
+            onClick={() => {
+              setMenuOpen(false);
+              window.open("/home", "_self");
+            }}
+            >
+              Browse
             </button>
             <ScrollLink to="aboutSection" className="cursor-pointer text-2xl" smooth={true} duration={0}>
               <button
