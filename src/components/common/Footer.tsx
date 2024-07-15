@@ -53,7 +53,7 @@ const Footer = () => {
       const sortedFaq = (data.result || []).sort((a: FAQ, b: FAQ) => a.index - b.index);
       setFaq(sortedFaq);
     });
-    getData("contact", "zIwQeUb767qHByj118FY").then((response) => {SocialInfo[1].link = "mailto:"+response.result?.data()?.email || ""});
+    getData("adminSettings", "contactEmail").then((response) => {SocialInfo[1].link = "mailto:"+response.result?.data()?.email || ""});
   }, []);
 
   return (

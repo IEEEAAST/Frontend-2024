@@ -2,6 +2,7 @@ import arrowRightIcon from "../assets/right-arrow-svgrepo-com.svg";
 import saveicon from "../assets/bookmark-ribbon-white.png";
 import optionIcon from "../assets/more-ellipsis-white.png";
 import { NavBar } from "../components/common/navbar";
+import {Spinner, Center} from "@chakra-ui/react";
 import "./styles/Dashboard.css";
 import getCollection from "../firebase/getCollection.js";
 import getDocument from "../firebase/getData.js";
@@ -146,11 +147,12 @@ export const Dashboard = () => {
     navigate(`/article/${article.title}`);
   };
 
-  if (articles.length===0){
-    return <div>Loading....</div>
-  }
-  if(!authors){
-    return <div>Loading....</div>
+  if (!articles || articles.length===0){
+  
+    return <>
+    <NavBar />
+    <div className="flex items-center justify-center w-full h-[99vh]"><Spinner size="xl" /></div>
+    </>
   }
 
   return (

@@ -19,6 +19,7 @@ export default {
         display: ["SF Pro Display", "sans-serif"],
         body: ["SF Pro", "sans-serif"],
         bold: ["SF-Pro-Display-Bold", "sans-serif"],
+        textmedium: ["SF-Pro-Text-Medium", "sans-serif"],
       },
     },
   },

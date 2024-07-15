@@ -31,9 +31,13 @@ export const LangContext = createContext({
 export const UserContext = createContext<{
   userData: UserData | null;
   setUserData: React.Dispatch<React.SetStateAction<UserData | null>>;
+  userId: string | null;
+  setUserId: React.Dispatch<React.SetStateAction<string | null>>;
 }>({
   userData: null,
   setUserData: () => {},
+  userId: null,
+  setUserId: () => {}
 });
 
 function App() {
@@ -44,6 +48,7 @@ function App() {
   });
 
   const [userData, setUserData] = useState<any>(null);
+  const [userId, setUserId] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
 
@@ -56,6 +61,7 @@ function App() {
         const docRef = await getDocument("users", user.uid);
         if (!docRef.error && docRef.result) {
           setUserData(docRef.result.data());
+          setUserId(user.uid);
         }
         setLoading(false);
         console.log(userData)
@@ -68,7 +74,6 @@ function App() {
   
   useEffect(() => {
     localStorage.setItem("lang", lang);
-    // delay(fetchUser, 1000);
     fetchUser();
   }, [lang]);
 
@@ -77,7 +82,7 @@ function App() {
   return loading? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex "/></div> : (
     <ChakraProvider disableGlobalStyle={true} theme={theme}>
       <LangContext.Provider value={{ lang, setLang }}>
-        <UserContext.Provider value={{ userData, setUserData}}>
+        <UserContext.Provider value={{ userData, setUserData, userId, setUserId}}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Dashboard />} />

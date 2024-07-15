@@ -34,7 +34,7 @@ export const Volunteers = () => {
 
     const fetchData = async () => {
       try {
-        const config = await getDocument('headsconfig',"29AGClKuziF9Vv2sqEIh");
+        const config = await getDocument('adminSettings',"headsCarouselSettings");
         if (config.result) {
           const data = config.result.data();
           if (data) {

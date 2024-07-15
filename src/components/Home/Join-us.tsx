@@ -11,7 +11,7 @@ export const Joinus = () => {
 
   useEffect(() => {
     // Fetch data from Firebase when the component mounts
-    getData("recruiting", "OUQ1yzQyGdapR9BT5auy").then((response) => {
+    getData("adminSettings", "recruitment").then((response) => {
       const data = response.result?.data() as Recruiting;
       setRecruiting(data); 
     });
