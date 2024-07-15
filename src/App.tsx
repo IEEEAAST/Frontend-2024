@@ -13,12 +13,15 @@ import { Verifying } from "./pages/Verification";
 import { SignUp } from "./pages/Signup";
 import { Signin } from "./pages/Signin";
 import { Dashboard } from "./pages/Dashboard";
+import { WriteArticle } from "./pages/WriteArticle";
 import getUser from "./firebase/auth";
 import { delay } from "framer-motion";
 import { set } from "firebase/database";
 import { getAuth } from "firebase/auth";
 import { app } from "./firebase/config";
 import UserData from "./interfaces/userData";
+
+
 
 export const LangContext = createContext({
   lang: "English",
@@ -34,6 +37,7 @@ export const UserContext = createContext<{
 });
 
 function App() {
+  const [nav, setNav] = useState(true);
   const [lang, setLang] = useState(() => {
     const savedLang = localStorage.getItem("lang");
     return savedLang || "en";
@@ -79,6 +83,7 @@ function App() {
             <Route path="/home" element={<Dashboard />} />
             <Route path="/event/:name" element={<EventDetails />} />
             <Route path="/article/:name" element={<Article />} />
+            <Route path="/write" element={<WriteArticle />} />
             <Route path="/mailconfirm" element={<MailDesign />} />
             <Route path="/onboard" element={<Onboarding />} />
             <Route path="/verify" element={<Verifying />} />
@@ -87,7 +92,7 @@ function App() {
           </Routes>
 
           <div
-            className="fixed bottom-0 w-full h-20 flex items-center gap-5 p-5 z-50"
+            className={`fixed bottom-0 w-full h-20 flex items-center gap-5 p-5 z-50 ${nav? "block" : "hidden"}`}
             style={{ backgroundColor: "#00091a", boxShadow: "0px -2px 7px black" }}
           >
             <span>Navigation:</span>
@@ -112,6 +117,9 @@ function App() {
             </button>
             <button className="defaultButton" onClick={() => window.open("/article/ArticleName", "_self")}>
               Article
+            </button>
+            <button className="defaultButton ml-auto" onClick={() =>{setNav(false)}}>
+              Hide
             </button>
           </div>
         </UserContext.Provider>
