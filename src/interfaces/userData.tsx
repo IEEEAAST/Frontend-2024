@@ -4,4 +4,5 @@ export default interface UserData {
     email: string;
     link: string;
     mobile: string;
+    desc: string;
 }

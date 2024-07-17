@@ -14,10 +14,6 @@ import { SignUp } from "./pages/Signup";
 import { Signin } from "./pages/Signin";
 import { Dashboard } from "./pages/Dashboard";
 import getUser from "./firebase/auth";
-import { delay } from "framer-motion";
-import { set } from "firebase/database";
-import { getAuth } from "firebase/auth";
-import { app } from "./firebase/config";
 import { Profile } from "./pages/Profile";
 import UserData from "./interfaces/userData";
 
@@ -87,7 +83,7 @@ function App() {
             <Route path="/signin" element={<Signin />} />
             <Route path="/Profile" element = {<Profile />} />
           </Routes>
-
+{/* 
           <div
             className="fixed bottom-0 w-full h-20 flex items-center gap-5 p-5 z-50"
             style={{ backgroundColor: "#00091a", boxShadow: "0px -2px 7px black" }}
@@ -115,7 +111,7 @@ function App() {
             <button className="defaultButton" onClick={() => window.open("/article/ArticleName", "_self")}>
               Article
             </button>
-          </div>
+          </div> */}
         </UserContext.Provider>
       </LangContext.Provider>
     </ChakraProvider>
