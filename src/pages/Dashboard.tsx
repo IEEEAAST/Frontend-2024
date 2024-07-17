@@ -6,8 +6,10 @@ import {Spinner, Center} from "@chakra-ui/react";
 import "./styles/Dashboard.css";
 import getCollection from "../firebase/getCollection.js";
 import getDocument from "../firebase/getData.js";
-import { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState, useContext } from "react";
+import { useNavigate, Link } from 'react-router-dom';
+import { UserContext } from '../App';
+import UserData from "../interfaces/userData.js";
 
 
 interface ArticleData {
@@ -74,6 +76,7 @@ export const Dashboard = () => {
   const [events, setEvents] = useState<EventData[]>([])
   const [authors, setAuthors] = useState<{ [key: string]: AuthorData }>({});
   const [searched, setSearched] = useState('');
+  const {userData,setUserData} = useContext(UserContext);
 
   useEffect(() => {
     getCollection("articles").then((res) => {
@@ -172,7 +175,7 @@ export const Dashboard = () => {
           />
         </div>
       </div>
-
+      {userData?.roles?.includes("admin") || userData?.roles?.includes("author") ? <Link to="/write"><button className="defaultButton mb-12 lg:mb-0">Create Article</button></Link>:null}
       <div className="w-full lg:min-h-screen flex justify-center items-center px-4 md:px-20 body">
         <div className="relative w-full lg:w-[1733px] lg:h-[810px]  h-[400px] md:h-[520px] rounded-[38px] overflow-hidden">
           <div className="absolute z-10 w-full lg:h-screen h-full bg-gradient-to-t from-[#000B21A5] via-transparent bottom-0"></div>

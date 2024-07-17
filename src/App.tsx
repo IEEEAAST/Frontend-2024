@@ -91,39 +91,8 @@ function App() {
             <Route path="/verify" element={<Verifying />} />
             <Route path="/Signup" element={<SignUp />} />
             <Route path="/signin" element={<Signin />} />
-            <Route path="/Profile" element = {<Profile />} />
+            <Route path="/Profile/:name" element = {<Profile />} />
           </Routes>
-          <div
-            className={`fixed bottom-0 w-full h-20 flex items-center gap-5 p-5 z-50 ${nav? "block" : "hidden"}`}
-            style={{ backgroundColor: "#00091a", boxShadow: "0px -2px 7px black" }}
-          >
-            <span>Navigation:</span>
-            <button
-              className="defaultButton"
-              onClick={() =>console.log(userData)
-              }
-            >
-              Test API
-            </button>
-            <button className="defaultButton" onClick={() => window.open("/", "_self")}>
-              Home
-            </button>
-            <button className="defaultButton" onClick={() => window.open("/home", "_self")}>
-              Dashboard
-            </button>
-            <button
-              className="defaultButton"
-              onClick={() => window.open("/event/Leading Your Career", "_self")}
-            >
-              Event
-            </button>
-            <button className="defaultButton" onClick={() => window.open("/article/ArticleName", "_self")}>
-              Article
-            </button>
-            <button className="defaultButton ml-auto" onClick={() =>{setNav(false)}}>
-              Hide
-            </button>
-          </div>
         </UserContext.Provider>
       </LangContext.Provider>
     </ChakraProvider>

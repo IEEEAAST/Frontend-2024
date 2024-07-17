@@ -7,7 +7,6 @@ import { useState, useEffect } from "react";
 import { Sponsors } from "../components/EventDetails/Sponsors";
 import { Resources } from "../components/EventDetails/Resources";
 import { NavBar } from "../components/common/navbar";
-import Banner from "../assets/banner.jpg";
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Spinner } from '@chakra-ui/react';
 
 import Bell from '../assets/notification-bell-white@2x.png';

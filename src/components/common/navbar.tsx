@@ -3,17 +3,15 @@ import Logo from "../../assets/IEEEAAST.ico";
 import { LangSelector } from "./langSelector";
 import { Link, useLocation } from "react-router-dom";
 import { Link as ScrollLink, animateScroll, scroller } from 'react-scroll';
-import {Avatar} from '@chakra-ui/react'
-import {UserContext} from "../../App"
+import { UserContext } from "../../App"
 import SignOut from "../../firebase/signout"
 import ProfileMenu from "./profileMenu";
-import { Profile } from "../../pages/Profile";
 
 export const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const location = useLocation(); // Get the current location
-  const {userData} = useContext(UserContext);
+  const { userData } = useContext(UserContext);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -40,9 +38,14 @@ export const NavBar = () => {
   useEffect(() => {
     // If the pathname changes, scroll to the section if it's specified in the URL hash
     const hash = location.hash;
-    if(hash==="#contactSection") {animateScroll.scrollToBottom({ duration: 0, smooth: 'easeInOutQuart'}); console.log("scrolling to bottom");}
-    else if (hash) {
-      scroller.scrollTo(hash.substring(1), { duration: 0, smooth: 'easeInOutQuart',offset: 100});
+    if (hash === "#contactSection") {
+      setTimeout(() => {
+        animateScroll.scrollToBottom({ duration: 0, smooth: 'easeInOutQuart' });
+        window.history.replaceState(null, '', location.pathname);
+      }, 700);
+    } else if (hash) {
+      scroller.scrollTo(hash.substring(1), { duration: 0, smooth: 'easeInOutQuart', offset: 100 });
+      window.history.replaceState(null, '', location.pathname);
     }
   }, [location]);
 
@@ -51,9 +54,9 @@ export const NavBar = () => {
       <div className="absolute flex items-start sm:items-center justify-between py-2 w-full z-50">
         {/* left */}
         <Link to="/">
-        <div className="ml-[40vw] sm:ml-auto">
-          <img src={Logo} alt="IEEE branch logo" height={90} width={90} />
-        </div>
+          <div className="ml-[40vw] sm:ml-auto">
+            <img src={Logo} alt="IEEE branch logo" height={90} width={90} />
+          </div>
         </Link>
         {/* mid */}
         <div className="flex-1 justify-center hidden sm:flex">
@@ -65,29 +68,23 @@ export const NavBar = () => {
               <Link to="/home" className="text-2xl md:text-3xl">Browse</Link>
             </button>
             <button>
-            
               <ScrollLink to="aboutSection" smooth={true} duration={0}>
-                <button className="cursor-pointer text-2xl md:text-3xl" onClick={
-                  () => {
-                    if(window.location.pathname != "/") {
-                      window.location.href="/#aboutSection";
-                    }
+                <button className="cursor-pointer text-2xl md:text-3xl" onClick={() => {
+                  if (window.location.pathname !== "/") {
+                    window.location.href = "/#aboutSection";
                   }
-                
-                }>
+                }}>
                   About
                 </button>
               </ScrollLink>
             </button>
             <button>
               <ScrollLink to="contactSection" smooth={true} duration={0}>
-                <button className="cursor-pointer text-2xl md:text-3xl" onClick={
-                  () => {
-                    if(window.location.pathname != "/") {
-                      window.location.href="/#contactSection";
-                    }
+                <button className="cursor-pointer text-2xl md:text-3xl" onClick={() => {
+                  if (window.location.pathname !== "/") {
+                    window.location.href = "/#contactSection";
                   }
-                }>
+                }}>
                   Contact
                 </button>
               </ScrollLink>
@@ -97,12 +94,11 @@ export const NavBar = () => {
         {/* end */}
         <div className="items-center justify-end text-3xl gap-8 mr-8 text-black hidden sm:flex">
           <LangSelector />
-          {!userData? <button className="font-bold text-base">
+          {!userData ? <button className="font-bold text-base">
             <Link to={"/signin"} className="text-base bg-white px-8 py-4 rounded-full">{"Sign In"}</Link>
           </button> : <ProfileMenu />
           }
         </div>
-
 
         {/*Hamburger menu for small screens*/}
         <div className="sm:hidden flex items-center ml-4 z-50">
@@ -126,12 +122,12 @@ export const NavBar = () => {
               Home
             </button>
             <button
-            className="w-full h-12 border-solid border-b my-2 flex justify-center items-center text-2xl"
-            style={{ borderColor: "#00050f" }}
-            onClick={() => {
-              setMenuOpen(false);
-              window.open("/home", "_self");
-            }}
+              className="w-full h-12 border-solid border-b my-2 flex justify-center items-center text-2xl"
+              style={{ borderColor: "#00050f" }}
+              onClick={() => {
+                setMenuOpen(false);
+                window.open("/home", "_self");
+              }}
             >
               Browse
             </button>
@@ -141,8 +137,8 @@ export const NavBar = () => {
                 style={{ borderColor: "#00050f" }}
                 onClick={() => {
                   setMenuOpen(false);
-                  if(window.location.pathname != "/") {
-                    window.location.href="/#aboutSection";
+                  if (window.location.pathname !== "/") {
+                    window.location.href = "/#aboutSection";
                   }
                 }}>
                 About
@@ -154,30 +150,30 @@ export const NavBar = () => {
                 style={{ borderColor: "#00050f" }}
                 onClick={() => {
                   setMenuOpen(false);
-                  if(window.location.pathname != "/") {
-                    window.location.href="/#contactSection";
+                  if (window.location.pathname !== "/") {
+                    window.location.href = "/#contactSection";
                   }
                 }}>
                 Contact
               </button>
             </ScrollLink>
-            <Link to={userData?"":"/signin"}>
-            <button
-              className="w-full h-12 border-solid border-b my-2 flex justify-center items-center text-2xl"
-              style={{ borderColor: "#00050f" }}
-              onClick={() => {
-                setMenuOpen(false);
-                if(userData){SignOut();window.location.reload()}
-              }}
-            >
-              {userData?"Sign Out":"Sign In"}
-            </button>
+            <Link to={userData ? "" : "/signin"}>
+              <button
+                className="w-full h-12 border-solid border-b my-2 flex justify-center items-center text-2xl"
+                style={{ borderColor: "#00050f" }}
+                onClick={() => {
+                  setMenuOpen(false);
+                  if (userData) { SignOut(); window.location.reload() }
+                }}
+              >
+                {userData ? "Sign Out" : "Sign In"}
+              </button>
             </Link>
           </div>
 
           <button onClick={toggleMenu} className="text-black top-2 left-2 p-1 rounded-lg fixed" style={{ backgroundColor: "#000b21", boxShadow: "0px 0px 4px rgba(255, 255, 255, 1.0)", opacity: "0.8" }}>
             <svg
-              className="w-8 h-8"
+              className="w-12 h-12"
               fill="none"
               stroke="white"
               viewBox="0 0 24 24"
@@ -191,7 +187,7 @@ export const NavBar = () => {
               />
             </svg>
           </button>
-          <div className="fixed top-2 right-2 w-fit rounded-full" style={{boxShadow:'0 0 5px 3px #000B21'}}><ProfileMenu></ProfileMenu></div>
+          <div className="fixed top-2 right-2 w-fit rounded-full" style={{ boxShadow: '0 0 5px 3px #000B21' }}><ProfileMenu></ProfileMenu></div>
         </div>
       </div>
     </>
