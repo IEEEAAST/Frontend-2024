@@ -1,7 +1,7 @@
 import { NavBar } from "../components/common/navbar";
 import { useState, ChangeEvent, FormEvent, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Input, FormControl, FormErrorMessage } from "@chakra-ui/react";
+import { Input, FormControl, FormErrorMessage, List, ListIcon, ListItem } from "@chakra-ui/react";
 import setData from "../firebase/setData";
 import register from "../firebase/register";
 
@@ -60,16 +60,20 @@ export const SignUp = () => {
         likes: [],
         follows: [],
       };
-      const res = await register(formData.email, formData.password);
-      await setData("users", storedFormData, res.result?.user.uid);
-      window.open("/verify", "_self");
+      // const res = await register(formData.email, formData.password);
+      // await setData("users", storedFormData, res.result?.user.uid);
+      // window.open("/verify", "_self");
     } else {
       setShowError(true);
+
     }
   };
 
+  //password regix
+  const passwordRegix = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/
+
   const isErrorEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) === false;
-  const isErrorPass = formData.password.length < 6;
+  const isErrorPass = passwordRegix.test(formData.password) === false;
 
   return (
     <div>
@@ -140,7 +144,7 @@ export const SignUp = () => {
                   }}
                 />
                 {isErrorEmail && showError && (
-                  <FormErrorMessage>Please enter a valid Email.</FormErrorMessage>
+                  <FormErrorMessage>Please Enter a Valid Email.</FormErrorMessage>
                 )}
               </FormControl>
 
@@ -161,7 +165,26 @@ export const SignUp = () => {
                   }}
                 />
                 {isErrorPass && showError && (
-                  <FormErrorMessage>Please enter a 6 character password.</FormErrorMessage>
+                 <FormErrorMessage>
+                 <List spacing={1} mt={2}>
+                  <ListItem>Invalid Password! Passwords should:</ListItem>
+                   <ListItem>
+                     ! Be at least 8 characters long
+                   </ListItem>
+                   <ListItem>
+                     ! Contain at least one lowercase letter
+                   </ListItem>
+                   <ListItem>
+                     ! Contain at least one uppercase letter
+                   </ListItem>
+                   <ListItem>
+                     ! Contain at least one digit
+                   </ListItem>
+                   <ListItem>
+                     ! Contain at least one special character (e.g., !@#$%^&*)
+                   </ListItem>
+                 </List>
+               </FormErrorMessage>
                 )}
               </FormControl>
 
