@@ -53,11 +53,13 @@ export const NavBar = () => {
     <>
       <div className="absolute flex items-start sm:items-center justify-between py-2 w-full z-50">
         {/* left */}
-        <Link to="/">
+        
           <div className="ml-[40vw] sm:ml-auto">
+          <Link to="/">
             <img src={Logo} alt="IEEE branch logo" height={90} width={90} />
+          </Link>
           </div>
-        </Link>
+        
         {/* mid */}
         <div className="flex-1 justify-center hidden sm:flex">
           <div className="flex justify-center text-3xl gap-8">
