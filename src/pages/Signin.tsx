@@ -13,7 +13,6 @@ interface FormData {
   password: string;
 }
 
-
 export const Signin = () => {
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
@@ -44,11 +43,10 @@ export const Signin = () => {
       await signIn(formData.email, formData.password).then (res => {
         if(!res.error && res.result)
             {
-                console.log("sign in successful to user: ", res.result);        
+                goback();   
             }
-      })
-      if(await getUser())
-        goback();
+        else{console.log(res.error)}
+      })        
     } else {
       setShowError(true);
     }

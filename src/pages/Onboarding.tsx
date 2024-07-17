@@ -28,8 +28,8 @@ export const Onboarding = () => {
 
 
   const fetchUser = async() => {
-      console.log(getUser()?.uid)
-      await getDocument("users", getUser()?.uid).then (  (res) => {
+      const user = await getUser();
+      await getDocument("users", user.uid).then (  (res) => {
         if(res.result && !res.error)
           {
         setUserData(res.result?.data());
@@ -44,10 +44,11 @@ export const Onboarding = () => {
     link : ""
 
   }
-  await addStorage(formData.profilePicture, getUser()?.uid).then(res => {
+  const user = await getUser();
+  await addStorage(formData.profilePicture, user.uid).then(res => {
     storedFormData.link = res.link;
   });
-  await updateData("users", getUser()?.uid, storedFormData);
+  await updateData("users", user.uid, storedFormData);
   window.open("/", "_self");
  }
   const handleFileChange = (e) => {

@@ -15,10 +15,7 @@ import { Signin } from "./pages/Signin";
 import { Dashboard } from "./pages/Dashboard";
 import { WriteArticle } from "./pages/WriteArticle";
 import getUser from "./firebase/auth";
-import { delay } from "framer-motion";
-import { set } from "firebase/database";
-import { getAuth } from "firebase/auth";
-import { app } from "./firebase/config";
+import { Profile } from "./pages/Profile";
 import UserData from "./interfaces/userData";
 
 
@@ -94,8 +91,9 @@ function App() {
             <Route path="/verify" element={<Verifying />} />
             <Route path="/Signup" element={<SignUp />} />
             <Route path="/signin" element={<Signin />} />
+            <Route path="/Profile" element = {<Profile />} />
           </Routes>
-
+{/* 
           <div
             className={`fixed bottom-0 w-full h-20 flex items-center gap-5 p-5 z-50 ${nav? "block" : "hidden"}`}
             style={{ backgroundColor: "#00091a", boxShadow: "0px -2px 7px black" }}

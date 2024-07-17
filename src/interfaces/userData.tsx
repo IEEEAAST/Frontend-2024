@@ -5,4 +5,5 @@ export default interface UserData {
     link: string;
     mobile: string;
     roles?: string[];
+    desc: string;
 }

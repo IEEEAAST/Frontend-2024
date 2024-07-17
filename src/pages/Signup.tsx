@@ -168,7 +168,7 @@ export const SignUp = () => {
               <div className="flex flex-nowrap">
                 <div className="pt-8 flex flex-nowrap items-center gap-2 flex-col">
                 <div className="flex">
-                  <Link to="/page1">
+                  <Link to="/">
                     <button style={{
                       background: 'transparent',
                       padding: '8px',
