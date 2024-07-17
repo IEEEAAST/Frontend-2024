@@ -7,6 +7,7 @@ import { EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 import { setNewPassword } from "../firebase/updatePassword";
 import addStorage from "../firebase/addStorage";
 import updateData from "../firebase/updateData";
+import ProfileMenu from "../components/common/profileMenu";
 
 interface FormData {
     mobile: string;

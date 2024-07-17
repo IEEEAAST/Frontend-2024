@@ -93,7 +93,6 @@ function App() {
             <Route path="/signin" element={<Signin />} />
             <Route path="/Profile" element = {<Profile />} />
           </Routes>
-{/* 
           <div
             className={`fixed bottom-0 w-full h-20 flex items-center gap-5 p-5 z-50 ${nav? "block" : "hidden"}`}
             style={{ backgroundColor: "#00091a", boxShadow: "0px -2px 7px black" }}

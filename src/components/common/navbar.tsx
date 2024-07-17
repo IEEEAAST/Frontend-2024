@@ -5,6 +5,8 @@ import { Link, useLocation } from "react-router-dom";
 import { Link as ScrollLink, animateScroll, scroller } from 'react-scroll';
 import {UserContext} from "../../App"
 import SignOut from "../../firebase/signout"
+import ProfileMenu from "./profileMenu";
+import { Profile } from "../../pages/Profile";
 
 export const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -94,9 +96,10 @@ export const NavBar = () => {
         {/* end */}
         <div className="items-center justify-end text-3xl gap-8 mr-8 text-black hidden sm:flex">
           <LangSelector />
-          <button className="font-bold text-base" onClick={userData?()=>{SignOut();window.location.href="/"}:()=>{}}>
-            <Link to={userData?"":"/signin"} className="text-base bg-white px-8 py-4 rounded-full">{userData?"Sign Out":"Sign In"}</Link>
-          </button>
+          {!userData? <button className="font-bold text-base">
+            <Link to={"/signin"} className="text-base bg-white px-8 py-4 rounded-full">{"Sign In"}</Link>
+          </button> : <ProfileMenu />
+          }
         </div>
 
 
@@ -159,7 +162,6 @@ export const NavBar = () => {
             </ScrollLink>
             <Link to={userData?"":"/signin"}>
             <button
-            
               className="w-full h-12 border-solid border-b my-2 flex justify-center items-center text-2xl"
               style={{ borderColor: "#00050f" }}
               onClick={() => {
