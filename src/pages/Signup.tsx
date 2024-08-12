@@ -60,9 +60,9 @@ export const SignUp = () => {
         likes: [],
         follows: [],
       };
-      // const res = await register(formData.email, formData.password);
-      // await setData("users", storedFormData, res.result?.user.uid);
-      // window.open("/verify", "_self");
+      const res = await register(formData.email, formData.password);
+      await setData("users", storedFormData, res.result?.user.uid);
+      window.open("/verify", "_self");
     } else {
       setShowError(true);
 

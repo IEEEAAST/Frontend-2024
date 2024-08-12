@@ -11,7 +11,7 @@ const ProfileMenu = () => {
     <Menu>
       <MenuButton>
         <Avatar
-          size='lg'
+          size='md'
           src={userData?.link ? `${userData.link}` : 'src/assets/add-profile-picture-white@2x.png'}
         />
       </MenuButton>

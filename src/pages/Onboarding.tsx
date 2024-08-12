@@ -16,7 +16,6 @@ import addStorage from "../firebase/addStorage.js";
 import getUser from "../firebase/auth.js";
 import getDocument from "../firebase/getData.js";
 import updateData from "../firebase/updateData.js";
-import { delay } from "framer-motion";
 
 export const Onboarding = () => {
   const [formData, setFormData] = useState({
