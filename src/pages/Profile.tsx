@@ -31,6 +31,8 @@ import Triangle from "../assets/bg-triangle-ellipse@2x.png"
 
 interface currentUserData {
   mobile: string;
+  firstname: string;
+  lastname: string;
   desc: string;
   profilePicture: File | null | string;
   newPassword: string;
@@ -63,6 +65,8 @@ export const Profile = () => {
   // Define currentUserData state
   const [currentUserData, setCurrentUserData] = useState<currentUserData>({
     mobile: "",
+    firstname: "",
+    lastname: "",
     desc: "",
     profilePicture: null,
     newPassword: "",
@@ -74,18 +78,17 @@ export const Profile = () => {
   // Fetch user data and check if the `id` matches the logged-in user ID
   useEffect(() => {
     const fetchData = async () => {
-      if (id && userData) {
         const { result } = await getDocument("users", id);
         if (result) {
           console.log(id);
           console.log(userId);
           if (id === userId) {
             setSelf(true);
-          } else {
-            setSelf(false);
           }
           setCurrentUserData({
             mobile: result.data()?.mobile || "",
+            firstname: result.data()?.firstname || "",
+            lastname: result.data()?.lastname || "",
             desc: result.data()?.desc || "",
             profilePicture: result.data()?.link || null,
             newPassword: "",
@@ -94,7 +97,6 @@ export const Profile = () => {
             roles: result.data()?.roles || [],
           });
         }
-      }
     };
 
     fetchData();
@@ -198,7 +200,9 @@ export const Profile = () => {
       setShowSuccess(true);
       setTimeout(() => {
         setShowSuccess(false);
-        // window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 500)
       }, 1000);
     } catch (error) {
       console.error("Error updating user data:", error);
@@ -224,15 +228,13 @@ export const Profile = () => {
   const showSettingsTab = self; // ??? use self ??
 
   return (
-    <div>
-      {showSuccess && (
+    <div>     
         <Slide direction="top" in={showSuccess} style={{ zIndex: 300 }}>
           <Alert status="success" variant="solid" zIndex={300}>
             <AlertIcon />
             Data edited and uploaded successfully!
           </Alert>
         </Slide>
-      )}
       <NavBar />
       <div className="pt-[100px] w-full flex justify-center">
         {showTabs ? (
@@ -248,12 +250,40 @@ export const Profile = () => {
               }
             </TabList>
             <TabPanels>
+            <TabPanel>
+            <Box className="w-full flex flex-col" m={5} ml={20}>
+            <Text fontFamily={"SF-Pro-Display-Bold"} fontSize={40} mb={4}>Profile Details:</Text>
+                  <Avatar
+                    size="lg"
+                    src={
+                      currentUserData.profilePicture
+                        ? typeof currentUserData.profilePicture === "string"
+                          ? `${currentUserData.profilePicture}`
+                          : URL.createObjectURL(currentUserData.profilePicture)
+                        : "src/assets/add-profile-picture-white@2x.png"
+                    }
+                    borderRadius="full"
+                    boxShadow="lg"
+                    mb={4}
+                  />
+                  <Text fontFamily={"SF-Pro-Text-Medium"} mb={4}>Name: {currentUserData.firstname} {currentUserData.lastname}</Text>
+                  <Text fontFamily={"SF-Pro-Text-Medium"} mb={4}>Mobile: {currentUserData.mobile}</Text>
+                  <Text fontFamily={"SF-Pro-Text-Medium"} mb={2}>Description: </Text>
+                  <Textarea value={currentUserData.desc} readOnly width={800} height={300}></Textarea>
+                </Box>
+              </TabPanel>
               <TabPanel>
-                {self? (
+                <p>Articles</p>
+              </TabPanel>
+              <TabPanel>
+                <p>Bookmarks</p>
+              </TabPanel>
+              <TabPanel>
+              {self && (
                   <div className="form-container">
                   <div className="px-20 h-screen">
-                    <div className="max-w-[600px] mt-20 max-sm:mt-10">
-                      <h1 className="text-3xl font-bold mb-8 text-white">Edit Profile</h1>
+                    <div className="max-w-[600px] mt-5 max-sm:mt-10">
+                      <Text fontFamily={"SF-Pro-Display-Bold"} fontSize={40} mb={4}>Edit Profile</Text>
                       <form onSubmit={handleSubmit}>
                         <Text fontFamily={"SF-Pro-Display-Bold"} mb={4}>Change your Profile Picture:</Text>
                         <FormControl isInvalid={showError && mobileInvalid}>
@@ -439,42 +469,13 @@ export const Profile = () => {
                     </div>
                   </div>
                 </div>
-                ) : (
-                  // Display profile details 
-                  <div>
-                     <Text fontFamily={"SF-Pro-Display-Bold"} mb={2}>Profile Details:</Text>
-                    <Text>Mobile: {currentUserData.mobile}</Text>
-                    <Text>Description: {currentUserData.desc}</Text>
-                    {/* Display profile picture */}
-                    <Avatar
-                    size="lg"
-                    src={
-                      currentUserData.profilePicture
-                        ? typeof currentUserData.profilePicture === "string"
-                          ? `${currentUserData.profilePicture}`
-                          : URL.createObjectURL(currentUserData.profilePicture)
-                        : "src/assets/add-profile-picture-white@2x.png"
-                    }
-                    borderRadius="full"
-                    boxShadow="lg"
-                                />                          
-                  </div>
-                  
-                 )}
-              </TabPanel>
-              <TabPanel>
-                <p>Articles</p>
-              </TabPanel>
-              <TabPanel>
-                <p>Bookmarks</p>
+                )}
               </TabPanel>
             </TabPanels>
           </Tabs>
         ) : (
-          <div className="w-full flex flex-col items-center">
-            <Text fontFamily={"SF-Pro-Display-Bold"} mb={2}>Profile Details:</Text>
-            <Text>Mobile: {currentUserData.mobile}</Text>
-            <Text>Description: {currentUserData.desc}</Text>
+          <Box className="w-full flex flex-col" m={20}>
+            <Text fontFamily={"SF-Pro-Display-Bold"} fontSize={40} mb={4}>Profile Details:</Text>
             <Avatar
               size="lg"
               src={
@@ -486,8 +487,13 @@ export const Profile = () => {
               }
               borderRadius="full"
               boxShadow="lg"
+              mb={4}
             />
-          </div>
+            <Text fontFamily={"SF-Pro-Text-Medium"} mb={4}>Name: {currentUserData.firstname} {currentUserData.lastname}</Text>
+            <Text fontFamily={"SF-Pro-Text-Medium"} mb={4}>Mobile: {currentUserData.mobile}</Text>
+            <Text fontFamily={"SF-Pro-Text-Medium"} mb={2}>Description: </Text>
+            <Textarea value={currentUserData.desc} readOnly width={800} height={300}></Textarea>
+          </Box>
         )}
         <div className="bottom-0 w-80 h-auto right-[-2vh] p-4 fixed max-sm:w-[45%]">
           <img src={Triangle} alt="Triangle" />
