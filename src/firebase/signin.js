@@ -21,7 +21,7 @@ export default async function signIn(email, password) {
     } else if (e.code == 'auth/wrong-password') {
       error = "Invalid password.";
     } else {
-        error = "Unknown Error, please contact the administrator.";
+        error = "Email / Password is incorrect";
     }
   }
 

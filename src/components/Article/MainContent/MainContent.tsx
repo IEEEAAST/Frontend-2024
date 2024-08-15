@@ -4,6 +4,8 @@ import { Modal } from "../Modal/Modal";
 import { useState , useEffect} from "react";
 import getCollection from "../../../firebase/getCollection.js";
 import getDocument from "../../../firebase/getData.js";
+import { Timestamp } from "@firebase/firestore";
+import { TotpMultiFactorGenerator } from "firebase/auth/web-extension";
 
 interface ArticleData {
   article: string;
@@ -46,6 +48,7 @@ export const MainContent: React.FC<MainContentProps> = ({searchQuery, articleNam
     });
   }, []);
 
+
   useEffect(() => {
     const fetchAuthorData = async () => {
       if (articleData.length > 0) {
@@ -72,8 +75,9 @@ export const MainContent: React.FC<MainContentProps> = ({searchQuery, articleNam
     fetchAuthorData();
   }, [articleName, searchQuery, articleData]);
 
-  const formatDate = (timestamp: { seconds: number; nanoseconds: number }) => {
-    if (!timestamp) return "N/A";
+  // gets the timestamp from the database and turns it into a formatted date for the articles 
+  const formatDate = (timestamp : Timestamp) => {
+    if(!timestamp) return "N/A";
     const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
     const options: Intl.DateTimeFormatOptions = {
       year: 'numeric',
@@ -81,7 +85,7 @@ export const MainContent: React.FC<MainContentProps> = ({searchQuery, articleNam
       day: 'numeric',
     };
     return date.toLocaleDateString(undefined, options);
-  };
+  }
 
   console.log("articleData", articleData)
   console.log("search query:", searchQuery)
@@ -112,6 +116,9 @@ export const MainContent: React.FC<MainContentProps> = ({searchQuery, articleNam
     return <div>loading...</div>
   }
 
+
+  console.log(authorData)
+
   return (
     <div className="main-content">
         <span className="title">{displayedArticle.title}</span>
@@ -131,7 +138,7 @@ export const MainContent: React.FC<MainContentProps> = ({searchQuery, articleNam
               </span>
             </span>
             
-            <span className="desc-time">{formatDate(authorData?.lastactive)}</span>
+            <span className="desc-time">{formatDate(articleData[0]?.publishdate)}</span>
           </div>
         </div>
         <hr />

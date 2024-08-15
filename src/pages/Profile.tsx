@@ -90,7 +90,7 @@ export const Profile = () => {
             firstname: result.data()?.firstname || "",
             lastname: result.data()?.lastname || "",
             desc: result.data()?.desc || "",
-            profilePicture: result.data()?.link || null,
+            profilePicture: result.data()?.imgurl || null,
             newPassword: "",
             confirmPassword: "",
             oldPassword: "",
@@ -133,7 +133,7 @@ export const Profile = () => {
     resetError();
     const storedcurrentUserData = {
       mobile: currentUserData.mobile,
-      link: typeof currentUserData.profilePicture === "string" ? currentUserData.profilePicture : "",
+      imgurl: typeof currentUserData.profilePicture === "string" ? currentUserData.profilePicture : "",
       desc: currentUserData.desc,
     };
 
@@ -181,7 +181,7 @@ export const Profile = () => {
       console.log(currentUserData.profilePicture)
       if (typeof profilePicture !== "string") {
         await addStorage(currentUserData.profilePicture, user.uid).then((res) => {
-          storedcurrentUserData.link = res.link;
+          storedcurrentUserData.imgurl = res.link;
         });
       }
     }
@@ -273,7 +273,9 @@ export const Profile = () => {
                 </Box>
               </TabPanel>
               <TabPanel>
+                <Box>
                 <p>Articles</p>
+                </Box>
               </TabPanel>
               <TabPanel>
                 <p>Bookmarks</p>
@@ -346,8 +348,8 @@ export const Profile = () => {
                             value={currentUserData.desc}
                             onChange={handleChange}
                             placeholder="Describe yourself"
-                            w={'80%'}
-                            h={'30vh'}
+                            width={800}
+                            height={300}
                             boxSizing="border-box"
                             flexWrap={"wrap"}
                             flex={"flexbox"}

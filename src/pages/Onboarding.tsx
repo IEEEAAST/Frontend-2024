@@ -40,12 +40,12 @@ export const Onboarding = () => {
  const handleUploadAndEditData = async () => {
   const storedFormData = {
     mobile : formData.mobile,
-    link : ""
+    imgurl : ""
 
   }
   const user = await getUser();
   await addStorage(formData.profilePicture, user.uid).then(res => {
-    storedFormData.link = res.link;
+    storedFormData.imgurl = res.link;
   });
   await updateData("users", user.uid, storedFormData);
   window.open("/", "_self");

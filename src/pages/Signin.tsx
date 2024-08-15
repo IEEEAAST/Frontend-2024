@@ -21,8 +21,10 @@ export const Signin = () => {
     password: "",
   });
   const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setShowError(false);
     const { id, value } = event.target;
     setFormData({
       ...formData,
@@ -36,25 +38,17 @@ export const Signin = () => {
   
   const handleSubmit = async(event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    
-    if (!isErrorEmail && !isErrorPass) {
       setShowError(false);
       await signIn(formData.email, formData.password).then (res => {
-        if(!res.error && res.result)
-            {
-                goback();   
-            }
-        else{console.log(res.error)}
-      })        
-    } else {
-      setShowError(true);
-    }
-  };
-
-
-  const isErrorEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) === (false);
-  const isErrorPass =  formData.password.length < 6;
+          if (!res.error)
+                goback();
+          else {
+            setShowError(true);
+            setErrorMessage(res.error);
+          }   
+        }
+      )
+    };
 
   return (
     <div>
@@ -70,7 +64,7 @@ export const Signin = () => {
           </h1>
           <form className="" onSubmit={handleSubmit}>
 
-    <FormControl mb={10} isInvalid={isErrorEmail && showError}>
+    <FormControl mb={10} isInvalid={ showError }>
       <Input
         type="email"
         id="email"
@@ -79,6 +73,7 @@ export const Signin = () => {
         onChange={handleChange}
         required
         placeholder="Your Email"
+        mb={8}
         style={{
           width: '80%',
           border: 'none',
@@ -87,12 +82,7 @@ export const Signin = () => {
           
         }}
       />
-      {isErrorEmail && showError && (
-        <FormErrorMessage>Please enter a valid Email.</FormErrorMessage>
-      )}
-    </FormControl>
-
-    <FormControl isInvalid={isErrorPass && showError}>
+    
       <Input
         type="password"
         id="password"
@@ -101,6 +91,7 @@ export const Signin = () => {
         onChange={handleChange}
         required
         placeholder="Password"
+        mb={4}
         style={{
           width: '80%',
           border: 'none',
@@ -108,10 +99,12 @@ export const Signin = () => {
           outline: 'none',
         }}
       />
-      {isErrorPass && showError && (
-        <FormErrorMessage>Please enter a 6 character password.</FormErrorMessage>
-      )}
 
+      { showError && (
+        <FormErrorMessage>
+          {errorMessage}
+        </FormErrorMessage>
+      )}
     </FormControl>
 
 

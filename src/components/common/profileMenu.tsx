@@ -12,7 +12,7 @@ const ProfileMenu = () => {
       <MenuButton>
         <Avatar
           size='md'
-          src={userData?.link ? `${userData.link}` : 'src/assets/add-profile-picture-white@2x.png'}
+          src={userData?.imgurl ? `${userData.imgurl}` : 'src/assets/add-profile-picture-white@2x.png'}
         />
       </MenuButton>
       <MenuList bg={'#00091A'} color={'white'} className='text-xl'>
