@@ -158,9 +158,36 @@ const filterArticles = (filter: string) => {
       <div className="w-full px-4 lg:px-[89px]">
         <div className="flex justify-between items-center">
           <h2 className="text-white text-[24px] lg:text-[45px] font-bold">All Articles</h2>
-          <button className="w-1/6 border-b border-[#141E32] flex justify-between items-center" onClick={()=>{changeFilter("date")}}>Date<img src={getArrowIcon("date")} className="w-5 my-2 opacity-50"></img></button>
-          <button className="w-1/6 border-b border-[#141E32] flex justify-between items-center">Topic<img src={sort} className="w-5 my-2 opacity-50"></img></button>
-          <button className="w-1/6 border-b border-[#141E32] flex justify-between items-center" onClick={()=>{changeFilter("likes")}}>Likes<img src={getArrowIcon("likes")} className="w-5 my-2 opacity-50"></img></button>
+
+            <button className="w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-14" onClick={()=>{changeFilter("date")}}>
+              Date
+              <div className="relative w-5 my-2">
+                <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "date" ? 'opacity-100' : 'opacity-0'}`}></img>
+                <img src={sortdown} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "date-reverse" ? 'opacity-100' : 'opacity-0'}`}></img>
+                <img src={sort} className={`absolute inset-0 w-full transition-opacity duration-300 ${!(filter.includes("date")) ? 'opacity-100' : 'opacity-0'}`}></img>
+              </div>
+              <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter=='date'||filter=='date-reverse')?'w-full':'w-0'} h-[1px] bg-white transition-all`}></div>
+            </button>
+
+            <button className="w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-14" onClick={()=>{}}>
+              Topic
+              <div className="relative w-5 my-2">
+                <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "topic" ? 'opacity-100' : 'opacity-0'}`}></img>
+                <img src={sortdown} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "topic-reverse" ? 'opacity-100' : 'opacity-0'}`}></img>
+                <img src={sort} className={`absolute inset-0 w-full transition-opacity duration-300 ${!(filter.includes("topic")) ? 'opacity-100' : 'opacity-0'}`}></img>
+              </div>
+              <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter=='topic'||filter=='topic-reverse')?'w-full':'w-0'} h-[1px] bg-white transition-all`}></div>
+            </button>
+
+            <button className="w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-14" onClick={()=>{changeFilter("likes")}}>
+              Likes
+              <div className="relative w-5 my-2">
+                <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "likes" ? 'opacity-100' : 'opacity-0'}`}></img>
+                <img src={sortdown} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "likes-reverse" ? 'opacity-100' : 'opacity-0'}`}></img>
+                <img src={sort} className={`absolute inset-0 w-full transition-opacity duration-300 ${!(filter.includes("likes")) ? 'opacity-100' : 'opacity-0'}`}></img>
+              </div>
+              <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter=='likes'||filter=='likes-reverse')?'w-full':'w-0'} h-[1px] bg-white transition-all`}></div>
+            </button>
         </div>
 
         <div className="mt-[30px] lg:mt-[59px] flex flex-col gap-[30px] lg:gap-[58px]">
