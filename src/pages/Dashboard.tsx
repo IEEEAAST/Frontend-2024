@@ -201,10 +201,12 @@ export const Dashboard = () => {
       <div className="mt-[50px] lg:mt-[100px] w-full px-4 lg:px-[89px]">
         <div className="flex justify-between items-center">
           <h2 className="text-white text-[24px] lg:text-[45px] font-bold">Latest Articles</h2>
+          <Link to="/articles">
           <button className="flex items-center text-[16px] lg:text-[30px] text-white">
             View all
             <img className="ml-[8px]" src={arrowRightIcon} width={24} alt="arrow right" />
           </button>
+          </Link>
         </div>
 
         <div className="mt-[30px] lg:mt-[59px] flex flex-col gap-[30px] lg:gap-[58px]">

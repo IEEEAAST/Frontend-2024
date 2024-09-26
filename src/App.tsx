@@ -14,6 +14,7 @@ import { SignUp } from "./pages/Signup";
 import { Signin } from "./pages/Signin";
 import { Dashboard } from "./pages/Dashboard";
 import { WriteArticle } from "./pages/WriteArticle";
+import { ViewAllArticles } from "./pages/ViewAllArticles";
 import getUser from "./firebase/auth";
 import { Profile } from "./pages/Profile";
 import UserData from "./interfaces/userData";
@@ -92,6 +93,7 @@ function App() {
             <Route path="/Signup" element={<SignUp />} />
             <Route path="/signin" element={<Signin />} />
             <Route path="/Profile/:name" element = {<Profile />} />
+            <Route path="/articles" element = {<ViewAllArticles />} />
           </Routes>
         </UserContext.Provider>
       </LangContext.Provider>
