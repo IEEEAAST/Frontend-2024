@@ -1,63 +1,57 @@
 import saveicon from "../assets/bookmark-ribbon-white.png";
 import optionIcon from "../assets/more-ellipsis-white.png";
 import { NavBar } from "../components/common/navbar";
-import {Spinner, Center} from "@chakra-ui/react";
+import {Spinner, Avatar} from "@chakra-ui/react";
 import "./styles/Dashboard.css";
 import getCollection from "../firebase/getCollection.js";
 import getDocument from "../firebase/getData.js";
+import updateData from "../firebase/updateData.js";
 import { useEffect, useState, useContext } from "react";
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { UserContext } from '../App';
 import UserData from "../interfaces/userData.js";
 import sort from "../assets/sort.png";
 import sortup from "../assets/sortup.png";
 import sortdown from "../assets/sortdown.png";
-import likes from "../assets/sparkles-white@2x.png";
+import likes from "../assets/sparkles-white.png";
+import likesTrue from "../assets/sparkles-orange.png";
 import { Timestamp } from "firebase/firestore";
 
-
 interface ArticleData {
+  id:string|null;
   article: string;
   author: string;
   caption: string;
   description: string;
   image: string;
-  likes : number;
+  likes: number;
   publishdate: Timestamp;
   title: string;
+  topic: string;
+  liked: boolean; // Add liked property
 }
-
-interface AuthorData {
-  email : string;
-  firstname : string;
-  imgurl: string;
-  lastactive: any;
-  lastname: string;
-  phonenumber: number;
-  role: string;
-}
-
-
-
 
 export const ViewAllArticles = () => {
-  const navigate = useNavigate(); 
   const [articles, setArticles] = useState<ArticleData[]>([]);
-  const [authors, setAuthors] = useState<{ [key: string]: AuthorData }>({});
+  const [authors, setAuthors] = useState<{ [key: string]: UserData }>({});
   const [filter, setFilter] = useState("date");
+  const {userData, setUserData ,userId} = useContext(UserContext);
 
-  const getArrowIcon = (button: string) => {
-    if(filter.includes(button)){
-        if(filter.includes("reverse")){
-            return sortdown
-        }
-        return sortup
-    }
-    return sort
-  }
+  const getAuthorNamesFromSet = async (authorIdsSet: Set<string>): Promise<void> => {
+    console.log(userData);
+    const authorIds = Array.from(authorIdsSet);
+    authorIds.forEach(async (authorId) => {
+      const { result } = await getDocument("users", authorId);
+      if (result) {
+        const authorData = result?.data() as UserData;
+        setAuthors((prevAuthors) => ({ ...prevAuthors, [authorId]: authorData }));
+      }
+    });
+  };
+
   const changeFilter = (newfilter: string) => {
     let finalFilter = newfilter;
-    
+
     if (filter.includes(newfilter)) {
       if (filter.includes("reverse")) {
         finalFilter = newfilter;
@@ -65,58 +59,70 @@ export const ViewAllArticles = () => {
         finalFilter = newfilter + "-reverse";
       }
     }
-  
+
     // Set the filter state with the final filter
     setFilter(finalFilter);
-    
+
     // Use the final filter to sort articles immediately
     filterArticles(finalFilter);
   };
-  
-const filterArticles = (filter: string) => {
+
+  const filterArticles = (filter: string) => {
     const sortedArticles = [...articles]; // Create a new array to avoid mutating state directly
-  
+
     switch (filter) {
-        case "date":
-            sortedArticles.sort((a, b) => b.publishdate.seconds - a.publishdate.seconds);
-            break;
-        case "date-reverse":
-            sortedArticles.sort((a, b) => a.publishdate.seconds - b.publishdate.seconds);
-            break;
-        case "likes":
-            sortedArticles.sort((a, b) => b.likes - a.likes);
-            break;
-        case "likes-reverse":
-            sortedArticles.sort((a, b) => a.likes - b.likes);
-            break;
+      case "date":
+        sortedArticles.sort((a, b) => b.publishdate.seconds - a.publishdate.seconds);
+        break;
+      case "date-reverse":
+        sortedArticles.sort((a, b) => a.publishdate.seconds - b.publishdate.seconds);
+        break;
+      case "likes":
+        sortedArticles.sort((a, b) => b.likes - a.likes);
+        break;
+      case "likes-reverse":
+        sortedArticles.sort((a, b) => a.likes - b.likes);
+        break;
     }
     setArticles(sortedArticles);
-    console.log(sortedArticles);
-    }
+  };
 
+  const toggleLike = (index: number) => {
+    if (!userData) return;
+    updateData('users',userId,{likes:{articles:articles[index].liked?userData.likes.articles.filter((id)=>id!=articles[index].id):[...userData.likes.articles,articles[index].id]}}).then((res)=>{
+      console.log(res);
+    });
+    updateData('articles',articles[index].id,{likes:articles[index].liked?articles[index].likes-1:articles[index].likes+1}).then((res)=>{
+      console.log(res);
+    });
+    setArticles((prevArticles) => 
+      prevArticles.map((article, i) => {
+        if (i === index) {
+          const liked = !article.liked;
+          return {
+            ...article,
+            liked,
+            likes: liked ? article.likes + 1 : article.likes - 1,
+          };
+        }
+        return article;
+      })
+    );
+  };
   
-  
-
 
   useEffect(() => {
     getCollection("articles").then((res) => {
-      if (res.result) {
-        const newarticles = res.result as ArticleData[];
+      if (res.result && res.ids) {
+        const newarticles = (res.result as ArticleData[]).map((article, index) => ({
+          ...article,
+          id: res.ids ? res.ids[index] : null, // Set the id from res.ids if not null
+          liked: userData?.likes.articles.includes(res.ids ? res.ids[index] : "") || false, // Set liked property based on user data
+        }));
         setArticles(newarticles.sort((a, b) => b.publishdate.seconds - a.publishdate.seconds));
 
-        const authorIds = articles.map(article => article.author);
-        const uniqueAuthorIds = [...new Set(authorIds)];
-        uniqueAuthorIds.forEach(authorId => {
-          getDocument("users", authorId).then((res) => {
-            if (res.result) {
-              const authorData = res.result.data() as AuthorData; 
-              setAuthors(prevAuthors => ({
-                ...prevAuthors,
-                [authorId]: authorData,
-              }));
-            }
-          });
-        });
+        const authorIds = newarticles.map((article) => article.author);
+        getAuthorNamesFromSet(new Set(authorIds));
       }
     });
   }, []);
@@ -132,114 +138,106 @@ const filterArticles = (filter: string) => {
     return date.toLocaleDateString(undefined, options);
   };
 
-
-
-
-
-  const handleArticleClick = (article: ArticleData) => {
-    navigate(`/article/${article.title}`);
-  };
-
-  if (!articles || articles.length===0){
-  
+  if (!articles || articles.length === 0) {
     return <>
-    <NavBar />
-    <div className="flex items-center justify-center w-full h-[99vh]"><Spinner size="xl" /></div>
-    </>
+      <NavBar />
+      <div className="flex items-center justify-center w-full h-[99vh]"><Spinner size="xl" /></div>
+    </>;
   }
 
   return (
-
     <div className="flex flex-col items-center bg-[#000B21] text-white header mb-6">
       <div className="h-[150px] w-full">
         <NavBar />
       </div>
-      
+
       <div className="w-full px-4 lg:px-[89px]">
         <div className="flex justify-between items-center">
           <h2 className="text-white text-[24px] lg:text-[45px] font-bold">All Articles</h2>
 
-            <button className="w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-14" onClick={()=>{changeFilter("date")}}>
-              Date
-              <div className="relative w-5 my-2">
-                <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "date" ? 'opacity-100' : 'opacity-0'}`}></img>
-                <img src={sortdown} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "date-reverse" ? 'opacity-100' : 'opacity-0'}`}></img>
-                <img src={sort} className={`absolute inset-0 w-full transition-opacity duration-300 ${!(filter.includes("date")) ? 'opacity-100' : 'opacity-0'}`}></img>
-              </div>
-              <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter=='date'||filter=='date-reverse')?'w-full':'w-0'} h-[1px] bg-white transition-all`}></div>
-            </button>
+          <button className="w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-14" onClick={() => { changeFilter("date") }}>
+            Date
+            <div className="relative w-5 my-2">
+              <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "date" ? 'opacity-100' : 'opacity-0'}`}></img>
+              <img src={sortdown} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "date-reverse" ? 'opacity-100' : 'opacity-0'}`}></img>
+              <img src={sort} className={`absolute inset-0 w-full transition-opacity duration-300 ${!(filter.includes("date")) ? 'opacity-100' : 'opacity-0'}`}></img>
+            </div>
+            <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter == 'date' || filter == 'date-reverse') ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`}></div>
+          </button>
 
-            <button className="w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-14" onClick={()=>{}}>
-              Topic
-              <div className="relative w-5 my-2">
-                <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "topic" ? 'opacity-100' : 'opacity-0'}`}></img>
-                <img src={sortdown} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "topic-reverse" ? 'opacity-100' : 'opacity-0'}`}></img>
-                <img src={sort} className={`absolute inset-0 w-full transition-opacity duration-300 ${!(filter.includes("topic")) ? 'opacity-100' : 'opacity-0'}`}></img>
-              </div>
-              <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter=='topic'||filter=='topic-reverse')?'w-full':'w-0'} h-[1px] bg-white transition-all`}></div>
-            </button>
+          <button className="w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-14" onClick={() => { }}>
+            Topic
+            <div className="relative w-5 my-2">
+              <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "topic" ? 'opacity-100' : 'opacity-0'}`}></img>
+              <img src={sortdown} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "topic-reverse" ? 'opacity-100' : 'opacity-0'}`}></img>
+              <img src={sort} className={`absolute inset-0 w-full transition-opacity duration-300 ${!(filter.includes("topic")) ? 'opacity-100' : 'opacity-0'}`}></img>
+            </div>
+            <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter == 'topic' || filter == 'topic-reverse') ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`}></div>
+          </button>
 
-            <button className="w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-14" onClick={()=>{changeFilter("likes")}}>
-              Likes
-              <div className="relative w-5 my-2">
-                <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "likes" ? 'opacity-100' : 'opacity-0'}`}></img>
-                <img src={sortdown} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "likes-reverse" ? 'opacity-100' : 'opacity-0'}`}></img>
-                <img src={sort} className={`absolute inset-0 w-full transition-opacity duration-300 ${!(filter.includes("likes")) ? 'opacity-100' : 'opacity-0'}`}></img>
-              </div>
-              <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter=='likes'||filter=='likes-reverse')?'w-full':'w-0'} h-[1px] bg-white transition-all`}></div>
-            </button>
+          <button className="w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-14" onClick={() => { changeFilter("likes") }}>
+            Likes
+            <div className="relative w-5 my-2">
+              <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "likes" ? 'opacity-100' : 'opacity-0'}`}></img>
+              <img src={sortdown} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "likes-reverse" ? 'opacity-100' : 'opacity-0'}`}></img>
+              <img src={sort} className={`absolute inset-0 w-full transition-opacity duration-300 ${!(filter.includes("likes")) ? 'opacity-100' : 'opacity-0'}`}></img>
+            </div>
+            <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter == 'likes' || filter == 'likes-reverse') ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`}></div>
+          </button>
         </div>
 
         <div className="mt-[30px] lg:mt-[59px] flex flex-col gap-[30px] lg:gap-[58px]">
-        {articles.map((article, index)=>(
+          {articles.map((article, index) => (
             <Link to={`/article/${article.title}`} className="flex flex-col md:flex-row" key={index} >
-          <div className="flex flex-col md:flex-row w-full" key={index} >
-            <div className="w-full md:w-[550px] h-[200px] md:h-[250px] md:mr-[58px]">
-              <img
-                src={article.image || "#"}
-                alt="Article"
-                className="w-full h-full object-cover rounded-[16px]"
-              />
-            </div>
-            <div className="flex flex-col justify-between w-full mt-4 lg:mt-0">
-              <div className="text-[12px] lg:text-[15px] mb-[20px] lg:mb-[33px] text-[#F4F4F4]">
-                <h5>-- {authors[article.author]?.firstname || "unknown author"} {authors[article.author]?.lastname || "author"} • {formatDate(authors[article.author]?.lastactive)} ✨ Member-only</h5>
-              </div>
-              <div className="text-[20px] lg:text-[27px] font-serif">
-                <h1>{article.title}</h1>
-              </div>
-              <div className="text-[16px] lg:text-[22px] mb-[20px] lg:mb-[32px]">
-                <h3>
-                  {article.caption} 
-                  <br/>
-                  {article.description}
-                </h3>
-              </div>
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-[10px]">
-                  <button className="text-[12px] lg:text-[15px] w-[70px] lg:w-[90px] h-[30px] lg:h-[35px] bg-[#151F33] rounded-[20px]"
-                  onClick={() => handleArticleClick(article)}>
-                    Swift
-                  </button>
-                  <p>• 5 min read</p>
-                  <p className="opacity-50 italic text-sm ml-4">{`${article.publishdate.toDate().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })} at ${article.publishdate.toDate().toLocaleTimeString()}`}</p>
+              <div className="flex flex-col md:flex-row w-full" key={index} >
+                <div className="w-full md:w-[550px] h-[200px] md:h-[250px] md:mr-[58px]">
+                  <img
+                    src={article.image || "#"}
+                    alt="Article"
+                    className="w-full h-full object-cover rounded-[16px]"
+                  />
                 </div>
-                <div className="flex items-center gap-[20px] lg:gap-[39px]">
-                <div className="flex gap-1 items-center w-20"><img className="w-8" src={likes}></img>{article.likes}</div>
-                  <button>
-                    <img src={saveicon} alt="save" />
-                  </button>
-                  <button>
-                    <img src={optionIcon} alt="options" />
-                  </button>
+                <div className="flex flex-col justify-between w-full mt-4 lg:mt-0">
+                  <div className="text-[12px] lg:text-[15px] mb-[20px] lg:mb-[33px] text-[#F4F4F4]">
+                    <Link className="flex items-center gap-2" to={`/profile/${article.author}`}><Avatar src={authors[article.author]?.imgurl}></Avatar><h5>{authors[article.author]?.firstname || "unknown author"} {authors[article.author]?.lastname || "author"}</h5></Link>
+                  </div>
+                  <div className="text-[20px] lg:text-[27px] font-serif">
+                    <h1>{article.title}</h1>
+                  </div>
+                  <div className="text-[16px] lg:text-[22px] mb-[20px] lg:mb-[32px]">
+                    <h3>
+                      {article.caption}
+                      <br />
+                      {article.description}
+                    </h3>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-[10px]">
+                      <div className="text-[12px] lg:text-[15px] w-[70px] lg:w-[90px] h-[30px] lg:h-[35px] bg-[#151F33] rounded-[20px] flex items-center justify-center">
+                        {article.topic || "Article"}
+                      </div>
+                      <p>• 5 min read</p>
+                      <p className="opacity-50 italic text-sm ml-4">{`${article.publishdate.toDate().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })} at ${article.publishdate.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`}</p>
+                    </div>
+                    <div className="flex items-center gap-[20px] lg:gap-[39px]">
+                      <div className="flex gap-1 items-center w-20">
+                        <img className="w-8" src={article.liked?likesTrue:likes} onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleLike(index); }} />
+                        {article.likes}
+                      </div>
+                      <button>
+                        <img src={saveicon} alt="save" />
+                      </button>
+                      <button>
+                        <img src={optionIcon} alt="options" />
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          </Link>
-        ))}
+            </Link>
+          ))}
         </div>
       </div>
-      </div>
+    </div>
   );
 };
