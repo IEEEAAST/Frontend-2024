@@ -31,7 +31,7 @@ export const ViewAllArticles = () => {
   const [articles, setArticles] = useState<ArticleData[]>([]);
   const [authors, setAuthors] = useState<{ [key: string]: UserData }>({});
   const [filter, setFilter] = useState("date");
-  const {userData, setUserData ,userId} = useContext(UserContext);
+  const {userData , userId} = useContext(UserContext);
 
   const getAuthorNamesFromSet = async (authorIdsSet: Set<string>): Promise<void> => {
     console.log(userData);
@@ -73,6 +73,12 @@ export const ViewAllArticles = () => {
       case "date-reverse":
         sortedArticles.sort((a, b) => a.publishdate.seconds - b.publishdate.seconds);
         break;
+      case "topic":
+        sortedArticles.sort((a, b) => (b.topic||"Article").localeCompare(a.topic||"Article"));
+        break;
+      case "topic-reverse":
+        sortedArticles.sort((a, b) => (a.topic||"Article").localeCompare(b.topic||"Article"));
+        break
       case "likes":
         sortedArticles.sort((a, b) => b.likes - a.likes);
         break;
@@ -116,23 +122,11 @@ export const ViewAllArticles = () => {
           liked: userData?.likes.articles.includes(res.ids ? res.ids[index] : "") || false, // Set liked property based on user data
         }));
         setArticles(newarticles.sort((a, b) => b.publishdate.seconds - a.publishdate.seconds));
-
         const authorIds = newarticles.map((article) => article.author);
         getAuthorNamesFromSet(new Set(authorIds));
       }
     });
   }, []);
-
-  const formatDate = (timestamp: { seconds: number; nanoseconds: number }) => {
-    if (!timestamp) return "N/A";
-    const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
-    const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    };
-    return date.toLocaleDateString(undefined, options);
-  };
 
   if (!articles || articles.length === 0) {
     return <>
@@ -161,7 +155,7 @@ export const ViewAllArticles = () => {
             <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter == 'date' || filter == 'date-reverse') ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`}></div>
           </button>
 
-          <button className="w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-14" onClick={() => { }}>
+          <button className="w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-14" onClick={() => {changeFilter('topic')}}>
             Topic
             <div className="relative w-5 my-2">
               <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "topic" ? 'opacity-100' : 'opacity-0'}`}></img>

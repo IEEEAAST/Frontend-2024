@@ -4,8 +4,8 @@ import likes from "../../../assets/sparkles-white.png";
 import likesTrue from "../../../assets/sparkles-orange.png";
 import saveicon from "../../../assets/bookmark-ribbon-white.png";
 import optionIcon from "../../../assets/more-ellipsis-white.png";
-import UserData from "../../../interfaces/userData"; // Add necessary imports
-import ArticleData from "../../../interfaces/ArticleData"; // Add necessary imports
+import UserData from "../../../interfaces/userData";
+import ArticleData from "../../../interfaces/ArticleData";
 
 interface ArticleCardProps {
   article: ArticleData;
