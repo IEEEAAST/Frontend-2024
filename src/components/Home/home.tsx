@@ -43,7 +43,7 @@ export const HomeComp = () => {
         <div className={`flex flex-col bg-cover bg-center w-full h-screen bg-homeImage`}>
             <div className="absolute w-full h-screen bg-gradient-to-t from-[#000B21]/90 via-transparent to-[#000B21]/90"></div>
             <div className="absolute w-full h-screen bg-gradient-to-r from-[#000B21]/90 via-transparent to-[#000B21]/90"></div>
-            <div className={`flex flex-col justify-center w-full h-full ${appConfig.recruiting && 'mt-24'}`}>
+            <div className={`flex flex-col justify-center w-full h-full ${appConfig.recruiting? 'mt-36':'mt-14'}`}>
                 <div className="flex flex-col justify-start mx-20 w-full container z-10">
                     <div className="xl:text-4xl md:text-xl sm:text-sm font-bold">
                         <p>Fostering innovation through education</p>

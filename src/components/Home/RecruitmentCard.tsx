@@ -34,13 +34,13 @@ export const RecruitmentCard = () => {
         <div className='w-full mt-4 h-0 border opacity-10 border-black'></div>
         </>
         }
-        <p className='font-textmedium font-extrabold text-lg mt-2 text-center'>
+        <p className='font-textmedium font-extrabold text-md mt-2 text-center'>
             Connect with us on our socials!
         </p>
         <div className='flex justify-center mt-2 gap-2'>
             {socials.map((social, index) => (
                 <a href={social.link} key={index} target='_blank'>
-                    <div className='rounded-full bg-white h-10 w-10 flex items-center justify-center p-[7px] border-black border-2'>
+                    <div className='rounded-full bg-white h-8 w-8 flex items-center justify-center p-[4px] border-black border-2'>
                         <img
                             src={social.icon}
                             alt={social.name}
