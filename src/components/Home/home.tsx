@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import {Link} from "react-router-dom";
 import { UserContext } from "../../App";
+import { AppConfigContext } from "../../App";
 import { RecruitmentCard } from "./RecruitmentCard";
 import UserData from "../../interfaces/userData";
 import { Center } from "@chakra-ui/react";
@@ -11,6 +12,7 @@ export const HomeComp = () => {
     const navigate = useNavigate();
     const inputRef = useRef<HTMLInputElement>(null);
     const { userData } = useContext(UserContext);
+    const { appConfig } = useContext(AppConfigContext);
 
     const handleJoinUsClick = () => {
         if (email) {
@@ -41,7 +43,7 @@ export const HomeComp = () => {
         <div className={`flex flex-col bg-cover bg-center w-full h-screen bg-homeImage`}>
             <div className="absolute w-full h-screen bg-gradient-to-t from-[#000B21]/90 via-transparent to-[#000B21]/90"></div>
             <div className="absolute w-full h-screen bg-gradient-to-r from-[#000B21]/90 via-transparent to-[#000B21]/90"></div>
-            <div className="flex flex-col justify-start w-full h-full mt-40">
+            <div className={`flex flex-col justify-center w-full h-full ${appConfig.recruiting && 'mt-24'}`}>
                 <div className="flex flex-col justify-start mx-20 w-full container z-10">
                     <div className="xl:text-4xl md:text-xl sm:text-sm font-bold">
                         <p>Fostering innovation through education</p>

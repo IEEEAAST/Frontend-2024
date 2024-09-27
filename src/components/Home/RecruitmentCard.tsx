@@ -26,7 +26,7 @@ export const RecruitmentCard = () => {
             We're currently recruiting new volunteers right now!
             <br />You can register here:
         </p>
-        <a href={appConfig.recruitingLink ?? '#'} target='_blank'>
+        <a href={appConfig.recruitingLink ?? '#'} target='_blank' className='self-center mt-2'>
         <button className='bg-white rounded-full py-2 px-6 font-black border-2 border-[#a2bdd6] w-40 text-xs'>
             Volunteer
         </button>
