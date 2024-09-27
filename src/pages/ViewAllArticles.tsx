@@ -216,7 +216,6 @@ export const ViewAllArticles = () => {
                       <div className="text-[12px] lg:text-[15px] w-[70px] lg:w-[90px] h-[30px] lg:h-[35px] bg-[#151F33] rounded-[20px] flex items-center justify-center">
                         {article.topic || "Article"}
                       </div>
-                      <p>• 5 min read</p>
                       <p className="opacity-50 italic text-sm ml-4">{`${article.publishdate.toDate().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })} at ${article.publishdate.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`}</p>
                     </div>
                     <div className="flex items-center gap-[20px] lg:gap-[39px]">
