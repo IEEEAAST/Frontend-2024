@@ -42,20 +42,16 @@ export const AppConfigContext = createContext<{
   appConfig: {
     contactEmail: string | null;
     headsCarouselSettings: any | null;
-    recruitment: boolean | null;
+    recruiting: boolean | null;
+    recruitingLink: string | null;
   };
-  setContactEmail: (email: string | null) => void;
-  setHeadsCarouselSettings: (settings: any | null) => void;
-  setRecruitment: (recruit: boolean | null) => void;
 }>({
   appConfig: {
     contactEmail: null,
     headsCarouselSettings: null,
-    recruitment: null
-  },
-  setContactEmail: () => {},
-  setHeadsCarouselSettings: () => {},
-  setRecruitment: () => {}
+    recruiting: null,
+    recruitingLink: null
+  }
 });
 
 function App() {
@@ -72,7 +68,8 @@ function App() {
   const [appConfig, setAppConfig] = useState({
     contactEmail: null as string | null,
     headsCarouselSettings: null as any | null,
-    recruitment: null as boolean | null,
+    recruiting: null as boolean | null,
+    recruitingLink: null as string | null,
   });
 
   const setContactEmail = (email: string | null) => {
@@ -83,9 +80,13 @@ function App() {
     setAppConfig((prevConfig) => ({ ...prevConfig, headsCarouselSettings: settings }));
   };
 
-  const setRecruitment = (recruit: boolean | null) => {
-    setAppConfig((prevConfig) => ({ ...prevConfig, recruitment: recruit }));
+  const setRecruiting = (recruit: boolean | null) => {
+    setAppConfig((prevConfig) => ({ ...prevConfig, recruiting: recruit }));
   };
+
+  const setRecruitingLink = (link: string | null) => {
+    setAppConfig((prevConfig) => ({ ...prevConfig, recruitingLink: link }));
+  }
 
 
 
@@ -93,7 +94,6 @@ function App() {
   const fetchUser = async () => {
     try {
       const user = await getUser();
-      console.log(user);
       if (user) {
         const docRef = await getDocument("users", user.uid);
         if (!docRef.error && docRef.result) {
@@ -101,7 +101,6 @@ function App() {
           setUserId(user.uid);
         }
         setLoading(false);
-        console.log(userData)
       } else { setLoading(false) }
     } catch (error) {
       console.error("Error fetching user or user data:", error);
@@ -110,11 +109,15 @@ function App() {
 
   const fetchAppConfig = async () => {
     try {
-      const contactEmail = await getDocument("adminSettings", "contactEmail");
+      const contactEmail = (await getDocument("adminSettings", "contactEmail"))
       const headsCarouselSettings = await getDocument("adminSettings", "headsCarouselSettings");
       const recruitment = await getDocument("adminSettings", "recruitment");
-      console.log(contactEmail,headsCarouselSettings,recruitment
-      )
+      setAppConfig({
+        contactEmail: contactEmail.result?.data()?.email,
+        headsCarouselSettings: headsCarouselSettings.result?.data(),
+        recruiting: recruitment.result?.data()?.recruiting,
+        recruitingLink: recruitment.result?.data()?.formlink
+      });
     } catch (error) {
       console.error("Error fetching app config:", error);
     }
@@ -135,6 +138,7 @@ function App() {
     <ChakraProvider disableGlobalStyle={true} theme={theme}>
       
         <UserContext.Provider value={{ userData, setUserData, userId, setUserId}}>
+        <AppConfigContext.Provider value={{appConfig}}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Dashboard />} />
@@ -149,6 +153,7 @@ function App() {
             <Route path="/Profile/:name" element = {<Profile />} />
             <Route path="/articles" element = {<ViewAllArticles />} />
           </Routes>
+        </AppConfigContext.Provider>
         </UserContext.Provider>
 
     </ChakraProvider>
