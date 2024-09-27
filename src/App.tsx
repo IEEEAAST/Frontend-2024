@@ -38,6 +38,26 @@ export const UserContext = createContext<{
   setUserId: () => {}
 });
 
+export const AppConfigContext = createContext<{
+  appConfig: {
+    contactEmail: string | null;
+    headsCarouselSettings: any | null;
+    recruitment: boolean | null;
+  };
+  setContactEmail: (email: string | null) => void;
+  setHeadsCarouselSettings: (settings: any | null) => void;
+  setRecruitment: (recruit: boolean | null) => void;
+}>({
+  appConfig: {
+    contactEmail: null,
+    headsCarouselSettings: null,
+    recruitment: null
+  },
+  setContactEmail: () => {},
+  setHeadsCarouselSettings: () => {},
+  setRecruitment: () => {}
+});
+
 function App() {
   const [nav, setNav] = useState(true);
   const [lang, setLang] = useState(() => {
@@ -48,6 +68,25 @@ function App() {
   const [userData, setUserData] = useState<any>(null);
   const [userId, setUserId] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+
+  const [appConfig, setAppConfig] = useState({
+    contactEmail: null as string | null,
+    headsCarouselSettings: null as any | null,
+    recruitment: null as boolean | null,
+  });
+
+  const setContactEmail = (email: string | null) => {
+    setAppConfig((prevConfig) => ({ ...prevConfig, contactEmail: email }));
+  };
+
+  const setHeadsCarouselSettings = (settings: any | null) => {
+    setAppConfig((prevConfig) => ({ ...prevConfig, headsCarouselSettings: settings }));
+  };
+
+  const setRecruitment = (recruit: boolean | null) => {
+    setAppConfig((prevConfig) => ({ ...prevConfig, recruitment: recruit }));
+  };
+
 
 
 
@@ -69,17 +108,32 @@ function App() {
     }
   };
 
+  const fetchAppConfig = async () => {
+    try {
+      const contactEmail = await getDocument("adminSettings", "contactEmail");
+      const headsCarouselSettings = await getDocument("adminSettings", "headsCarouselSettings");
+      const recruitment = await getDocument("adminSettings", "recruitment");
+      console.log(contactEmail,headsCarouselSettings,recruitment
+      )
+    } catch (error) {
+      console.error("Error fetching app config:", error);
+    }
+  }
+
+
+
   
   useEffect(() => {
     localStorage.setItem("lang", lang);
     fetchUser();
+    fetchAppConfig();
   }, [lang]);
 
 
 
   return loading? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex "/></div> : (
     <ChakraProvider disableGlobalStyle={true} theme={theme}>
-      <LangContext.Provider value={{ lang, setLang }}>
+      
         <UserContext.Provider value={{ userData, setUserData, userId, setUserId}}>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -96,7 +150,7 @@ function App() {
             <Route path="/articles" element = {<ViewAllArticles />} />
           </Routes>
         </UserContext.Provider>
-      </LangContext.Provider>
+
     </ChakraProvider>
   );
 }
