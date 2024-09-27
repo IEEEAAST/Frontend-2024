@@ -205,9 +205,7 @@ export const ViewAllArticles = () => {
                     <h1>{article.title}</h1>
                   </div>
                   <div className="text-[16px] lg:text-[22px] mb-[20px] lg:mb-[32px]">
-                    <h3>
-                      {article.caption}
-                      <br />
+                    <h3 className="font-extralight">
                       {article.description}
                     </h3>
                   </div>
