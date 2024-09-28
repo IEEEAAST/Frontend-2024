@@ -8,16 +8,27 @@ import sortdown from "../assets/sortdown.png";
 import { EventCard } from "../components/common/EventCard";
 
 
-const formatEventDate = (date: Date) => {
+const formatEventDate = (date: Date, format: string) => {
+  if (format === "long") {
     const options: Intl.DateTimeFormatOptions = {
-        weekday: 'short',
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
+      weekday: 'short',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
     };
     const formattedDate = date.toLocaleDateString('en-US', options);
     const time = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
     return `${formattedDate} at ${time}`;
+  } else if (format === "short") {
+    const options: Intl.DateTimeFormatOptions = {
+      month: 'short',
+      year: 'numeric'
+    };
+    const formattedDate = date.toLocaleDateString('en-US', options);
+    const parts = formattedDate.split(' ');
+    return `${parts[0]}, ${parts[1]}`;
+  }
+  return date.toString(); // Fallback if format is not recognized
 };
 
 export const ViewAllEvents = () => {
@@ -118,18 +129,18 @@ export const ViewAllEvents = () => {
           </button>
         </div>
         <div className="w-full px-10">
-        <div className="grid grid-cols-[100px_auto_1fr] mt-4 gap-8 mb-10">
-            {events.map((event) => (
+        <div className="grid grid-cols-[100px_auto_1fr] mt-4 gap-y-8 mb-10">
+            {events.map((event,index) => (
                 <>
-                <p className="mt-2">{event.starttime.toDate().toLocaleDateString('en-US',{month:'short'})}, {event.starttime.toDate().toLocaleDateString('en-US',{year:'numeric'})}</p>
-                <div className="flex justify-center w-2 bg-[#151F33] h-[calc(100%+32px)] overflow-visible mx-4"><div className="bg-[#151F33] rounded-full w-10 h-10 flex items-center justify-center absolute"><div className="bg-white rounded-full w-4 h-4"></div></div></div>
-                <div className="flex gap-4 w-full">
-                    <EventCard event={event} size="sm" color="red" />
+                <p className={`mt-2 text-right mr-2 ${(index>0 && event.starttime.toDate().getMonth()==events[index-1].starttime.toDate().getMonth()||!filter.includes("date")&&'opacity-0')&&'opacity-0'}`}>{formatEventDate(event.starttime.toDate(),"short")}</p>
+                <div className={`flex justify-center w-2 bg-[#151F33] h-[calc(100%+32px)] overflow-visible mx-4 ${!filter.includes("date")&&'opacity-0'}`}><div className={`bg-[#151F33] rounded-full w-10 h-10 flex ${index>0 && event.starttime.toDate().getMonth()==events[index-1].starttime.toDate().getMonth()&&'opacity-0'} items-center justify-center absolute`}><div className="bg-white rounded-full w-4 h-4"></div></div></div>
+                <div className="flex gap-4 w-full ml-4">
+                    <EventCard event={event} size="sm"/>
                     <div className="flex flex-col w-[700px]">
                     <h1 className="font-extrabold text-[42px]">{event.title}</h1>
                     <p className="font-extralight mb-4 h-24">{event.description}</p>
                     <div className="w-full h-0 border border-[#151F33] my-4"></div>
-                    <p className="mt-2 text-sm">Time: from <strong>{formatEventDate(event.starttime.toDate())}</strong> to <strong>{formatEventDate(event.starttime.toDate())}</strong></p>
+                    <p className="mt-2 text-sm">Time: from <strong>{formatEventDate(event.starttime.toDate(),"long")}</strong> to <strong>{formatEventDate(event.starttime.toDate(),"long")}</strong></p>
                     <p className="mt-2">Type: <strong>{event.type}</strong></p>
                     </div>
                 </div>
