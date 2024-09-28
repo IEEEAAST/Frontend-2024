@@ -32,7 +32,11 @@ const formatEventDate = (date: Date, format: string) => {
 };
 
 const isEventOngoing = (event: EventData) => {
-  return event.endtime && event.endtime.toDate() > new Date();
+  const today = new Date();
+  if(event.endtime && (event.starttime.toDate()<today) && (event.endtime.toDate() > today) && event.formLink &&event.formLink.length>0) return "This event is currently ongoing! Register now!";
+  if((event.starttime.toDate() > today) && event.formLink &&event.formLink.length>0) return "This event is happening soon! Register now!"
+  if((event.starttime.toDate() > today)) return "This event is happening soon!";
+  return null;
 };
 
 export const ViewAllEvents = () => {
@@ -144,7 +148,7 @@ export const ViewAllEvents = () => {
                 <div className="flex flex-col w-[700px]">
                   <h1 className="font-extrabold text-[42px]">{event.title}</h1>
                   <div>
-                    {isEventOngoing(event) && <p className="italic text-yellow-600">This event is currently ongoing! Register now!</p>}
+                    {isEventOngoing(event) && <p className="italic text-yellow-600">{isEventOngoing(event)}</p>}
                     <p className="font-extralight mb-4 h-24">{event.description}</p>
                   </div>
                   <div className="w-full h-0 border border-[#151F33] my-4"></div>
