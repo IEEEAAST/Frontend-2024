@@ -18,6 +18,7 @@ import { ViewAllArticles } from "./pages/ViewAllArticles";
 import getUser from "./firebase/auth";
 import { Profile } from "./pages/Profile";
 import UserData from "./interfaces/userData";
+import { ViewAllEvents } from "./pages/ViewAllEvents";
 
 
 
@@ -152,6 +153,7 @@ function App() {
             <Route path="/signin" element={<Signin />} />
             <Route path="/Profile/:name" element = {<Profile />} />
             <Route path="/articles" element = {<ViewAllArticles />} />
+            <Route path="/events" element = {<ViewAllEvents/>}></Route>
           </Routes>
         </AppConfigContext.Provider>
         </UserContext.Provider>
