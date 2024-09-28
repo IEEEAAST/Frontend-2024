@@ -107,7 +107,7 @@ export const ViewAllEvents = () => {
       <div className="flex justify-between items-center w-full px-4 lg:px-[89px]">
         <h2 className="text-white text-[24px] lg:text-[45px] font-bold">All Events</h2>
 
-        <button className="w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-14" onClick={() => { changeFilter("date") }}>
+        <button className="w-1/6 ml-6 border-b border-[#141E32] flex justify-between items-center relative h-14" onClick={() => { changeFilter("date") }}>
           Date
           <div className="relative w-5 my-2">
             <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "date" ? 'opacity-100' : 'opacity-0'}`}></img>
