@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { EventData } from "../interfaces/EventData";
 import getCollection from "../firebase/getCollection";
 import { NavBar } from "../components/common/navbar";

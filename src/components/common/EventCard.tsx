@@ -1,7 +1,8 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { EventData } from '../../interfaces/EventData';
 import Card from '../../assets/card.png';
+import { motion, useAnimation } from "framer-motion";
+import { useState } from 'react';
 
 interface EventCardProps {
     event: EventData;
@@ -40,22 +41,67 @@ export const EventCard = ({ event, size, color, className }: EventCardProps) => 
         };
         return topicColors[topic] || "#000000"; // Default to black if topic not found
     };
-    
+
+    const controls = useAnimation();
+    const [isFlipped, setIsFlipped] = useState(false);
+
+    const handleMouseEnter = () => {
+        setIsFlipped(true);
+        controls.start({ rotateY: 180 });
+    };
+
+    const handleMouseLeave = () => {
+        setIsFlipped(false);
+        controls.start({ rotateY: 0 });
+    };
+
     return (
         <Link to={`/event/${event.title}`} className={className}>
             <div
-                style={{ backgroundImage: `url(${Card})`, backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', backgroundColor: colors[color as keyof typeof colors] || colors[autoColorByTopic(event.type) as keyof typeof colors] }}
-                className={`${isLarge ? 'w-[400px] px-[80px] pt-[260px] h-[500px]' : 'w-[250px] px-[50px] pt-[160px] h-[310px]'} rounded-[20px] md:rounded-[9px] flex flex-col items-center text-center justify-between`}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                style={{ perspective: 1000 }}
             >
-                <h3 className={`font-bold w-full ${isLarge ? 'text-[40px]' : 'text-[24px]'}`}>{event.title}</h3>
-                <div className='flex flex-col py-1'>
-                    <p className={`${isLarge ? 'text-[24px]' : 'text-[14px]'}`}>
-                        {event.type}
-                    </p>
-                    <p className={`${isLarge ? 'text-[20px]' : 'text-[12px]'} opacity-50`}>
-                        {new Date(event.starttime.toDate()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                    </p>
-                </div>
+                <motion.div
+                    style={{ 
+                        backgroundImage: `url(${Card})`, 
+                        backgroundSize: 'cover', 
+                        backgroundRepeat: 'no-repeat', 
+                        backgroundPosition: 'center', 
+                        backgroundColor: colors[color as keyof typeof colors] || colors[autoColorByTopic(event.type) as keyof typeof colors],
+                        transformStyle: 'preserve-3d',
+                        transition: 'transform 0.1s'
+                    }}
+                    className={`${isLarge ? 'w-[400px] h-[500px]' : 'w-[250px] h-[310px]'} rounded-[20px] md:rounded-[9px] flex flex-col items-center text-center justify-between relative`}
+                    animate={controls}
+                >
+                    <motion.div
+                        className={`absolute w-full h-full backface-hidden px-[50px] ${isLarge?'pt-[270px]':'pt-[160px]'} flex flex-col justify-between`}
+                        style={{ backfaceVisibility: 'hidden' }}
+                    >
+                        <h3 className={`font-bold w-full ${isLarge ? 'text-[40px]' : 'text-[24px]'}`}>{event.title}</h3>
+                        <div className='flex flex-col py-1'>
+                            <p className={`${isLarge ? 'text-[24px]' : 'text-[14px]'}`}>
+                                {event.type}
+                            </p>
+                            <p className={`${isLarge ? 'text-[20px]' : 'text-[12px]'} opacity-50`}>
+                                {new Date(event.starttime.toDate()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                            </p>
+                        </div>
+                    </motion.div>
+                    <motion.div
+                        className="absolute w-full h-full backface-hidden rounded-[20px] md:rounded-[9px]"
+                        style={{ 
+                            backfaceVisibility: 'hidden', 
+                            transform: 'rotateY(180deg)', 
+                            backgroundImage: `url(${event.coverPhoto})`, 
+                            backgroundSize: 'cover', 
+                            backgroundRepeat: 'no-repeat', 
+                            backgroundPosition: 'center' 
+                        }}
+                    />
+                    <div className='bg-[rgba(0,0,0,0.8)] w-full' style={{backfaceVisibility: 'hidden',transform: 'rotateY(180deg)'}}><p className={`font-bold ${isLarge?'text-2xl':'text-lg'}`}>{event.title}</p></div>
+                </motion.div>
             </div>
         </Link>
     );
