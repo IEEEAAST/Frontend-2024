@@ -158,7 +158,7 @@ export const Dashboard = () => {
   if (!articles || articles.length===0){
   
     return <>
-    <NavBar onSearch={handleSearch}/>
+    <NavBar/>
     <div className="flex items-center justify-center w-full h-[99vh]"><Spinner size="xl" /></div>
     </>
   }
@@ -167,7 +167,7 @@ export const Dashboard = () => {
 
     <div className="flex flex-col items-center bg-[#000B21] text-white header">
       <div className="h-[150px] w-full">
-        <NavBar onSearch={handleSearch}/>
+        <NavBar/>
         {/* <div className="search">
           <input      
             type="text"

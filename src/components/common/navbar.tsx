@@ -10,6 +10,11 @@ import ProfileMenu from "./profileMenu";
 import getCollection from "../../firebase/getCollection.js";
 import getDocument from "../../firebase/getData.js";
 import "../common/styles/Navbar.css";
+import Home from "../../assets/home.png";
+import Browse from "../../assets/browse.png";
+import Bookmark from "../../assets/save.png";
+import Write from "../../assets/write.png"
+import Bell from "../../assets/bell.png"
 
 
 
@@ -133,7 +138,7 @@ export const NavBar : React.FC = () => {
       <div className="wrapper absolute flex items-start sm:items-center justify-between py-2 w-full z-50">
       
         {/* left */}        
-          <div className="ml-[40vw] sm:ml-auto">
+          <div className="ml-[40vw] sm:ml-[20px]">
           <Link to="/">
             <img src={Logo} alt="IEEE branch logo" height={90} width={90} />
           </Link>
@@ -141,17 +146,19 @@ export const NavBar : React.FC = () => {
         
         {/* mid */}
         <div className="flex-1 justify-start hidden sm:flex">
-          <div className="flex justify-center gap-3 ml-5">
+          <div className="flex justify-center gap-3 ml-5 w-full">
             <button>
               <Link to="/" >
-                {/* <img src={} alt="home icon" height={90} width={45}/> */}
-                home
+              <div className="border-2 rounded-full border-white w-[40px]">
+                <img src={Home} alt="Home" height={90} width={45}  />
+              </div>
               </Link>
             </button>
             <button>
               <Link to="/home" >
-                {/* <img src={} alt="browsing icon" height={90} width={40}/> */}
-                browse
+              <div className="border-2 rounded-full border-white w-[40px] p-1">
+                <img src={Browse} alt="Browse" height={90} width={45}  />
+              </div>
               </Link>
             </button>
 
@@ -164,9 +171,10 @@ export const NavBar : React.FC = () => {
                   placeholder="Search articles, events..."
                   value={searched}
                   onChange={handleSearch}
+                  className="w-full"
                 />
                 </div>
-                <div className="search-results">
+                <div className={`search-results ${((filterArticles?.length==0&&filterEvents?.length==0)||searched.length==0)&&'hidden'}`}>
                   {filterArticles?.map((a)=>(
                     <div className="result" onClick={() => handleClick(a)}>{a}</div>
                   ))}
@@ -175,35 +183,32 @@ export const NavBar : React.FC = () => {
                   ))}
                 </div>
             </div>
-
-            {/* removed buttons: about, contact */}
-            {/* <button>
-              <ScrollLink to="aboutSection" smooth={true} duration={0}>
-                <button className="cursor-pointer text-2xl md:text-3xl" onClick={() => {
-                  if (window.location.pathname !== "/") {
-                    window.location.href = "/#aboutSection";
-                  }
-                }}>
-                  About
-                </button>
-              </ScrollLink>
+            <div className="flex gap-2 mr-4">
+            {
+              (userData?.roles?.includes("admin") || userData?.roles?.includes("author")) &&
+            <button>
+              <Link to="/write" >
+              <div className="border-2 rounded-full border-white w-[40px] p-1">
+                <img src={Write} alt="Write Article" height={90} width={45}  />
+              </div>
+              </Link>
+            </button>
+            }
+            <button>
+              <div className="border-2 rounded-full border-white w-[40px] p-[7px]">
+                <img src={Bookmark} alt="Bookmarks" height={90} width={45}  />
+              </div>
             </button>
             <button>
-              <ScrollLink to="contactSection" smooth={true} duration={0}>
-                <button className="cursor-pointer text-2xl md:text-3xl" onClick={() => {
-                  if (window.location.pathname !== "/") {
-                    window.location.href = "/#contactSection";
-                  }
-                }}>
-                  Contact
-                </button>
-              </ScrollLink>
-            </button> */}
+              <div className="border-2 rounded-full border-white w-[40px] p-1">
+                <img src={Bell} alt="Notifications" height={90} width={45}  />
+              </div>
+            </button>
+            </div>
+
           </div>
         </div>
-        {/* end */}
         <div className="items-center justify-end text-3xl gap-8 mr-8 text-black hidden sm:flex">
-          <LangSelector />
           {!userData ? <button className="font-bold text-base">
             <Link to={"/signin"} className="text-base bg-white px-8 py-4 rounded-full">{"Sign In"}</Link>
           </button> : <ProfileMenu />
