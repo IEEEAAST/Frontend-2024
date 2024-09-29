@@ -25,6 +25,7 @@ export const WriteArticle = () => {
         description: '',
         title: '',
         image: '',
+        topic: 'Other',
     });
     const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
     const [userCanWrite, setUserCanWrite] = useState<boolean>(false);
@@ -40,7 +41,7 @@ export const WriteArticle = () => {
         }
     }, [userData]);
 
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormState(prevState => ({
             ...prevState,
@@ -132,6 +133,24 @@ export const WriteArticle = () => {
                             className="bg-gray-700 rounded-full px-4 py-4 w-[40%] min-w-[215px] self-center sm:self-start"
                             onChange={handleInputChange}
                         />
+                        <select
+                            name="topic"
+                            value={formState.topic}
+                            className="bg-gray-700 rounded-full px-4 py-4 w-[40%] min-w-[215px] self-center sm:self-start"
+                            onChange={handleInputChange}
+                            >
+                            <option value="Other">Other</option>
+                            <option value="Technical">Technical</option>
+                            <option value="AI">AI</option>
+                            <option value="Swift">Swift</option>
+                            <option value="Python">Python</option>
+                            <option value="Web">Web</option>
+                            <option value="Mobile">Mobile</option>
+                            <option value="Database">Database</option>
+                            <option value="Security">Security</option>
+                            <option value="Media">Media</option>
+                            <option value="Game">Game</option>
+                            </select>
                         
                         <div className="w-full flex flex-col sm:flex-row items-center gap-4 self-start">
                             <input
@@ -189,6 +208,7 @@ export const WriteArticle = () => {
                                 description: '',
                                 title: '',
                                 image: '',
+                                topic: 'Other'
                             })}>Clear</button>
                             <button className="bg-white rounded-full text-black font-semibold font-textmedium px-2 sm:px-12 h-10 w-20 sm:w-fit" onClick={submitArticle}>Submit</button>
                         </div>

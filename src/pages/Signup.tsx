@@ -1,7 +1,7 @@
 import { NavBar } from "../components/common/navbar";
-import { useState, ChangeEvent, FormEvent, useEffect, useRef } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Input, FormControl, FormErrorMessage, List, ListIcon, ListItem } from "@chakra-ui/react";
+import { Input, FormControl, FormErrorMessage, List, ListItem } from "@chakra-ui/react";
 import setData from "../firebase/setData";
 import register from "../firebase/register";
 
@@ -65,29 +65,38 @@ export const SignUp = () => {
       window.open("/verify", "_self");
     } else {
       setShowError(true);
-
     }
   };
 
-  //password regix
-  const passwordRegix = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/
+  // Individual criteria for password validation
+  const minLength = formData.password.length >= 8;
+  const hasLowercase = /[a-z]/.test(formData.password);
+  const hasUppercase = /[A-Z]/.test(formData.password);
+  const hasDigit = /\d/.test(formData.password);
+  const hasSpecialChar = /[@$!%*?&]/.test(formData.password);
 
+  // Determine if the password is invalid
+  const isErrorPass = !minLength || !hasLowercase || !hasUppercase || !hasDigit || !hasSpecialChar;
+
+  // Email validation
   const isErrorEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) === false;
-  const isErrorPass = passwordRegix.test(formData.password) === false;
 
   return (
     <div>
-      <div className="h-screen w-[1vh] absolute left-0" style={{
-        backgroundImage: "linear-gradient(to bottom, #1F396E, #1D0021)"
-      }}></div>
+      <div
+        className="h-screen w-[1vh] absolute left-0"
+        style={{
+          backgroundImage: "linear-gradient(to bottom, #1F396E, #1D0021)",
+        }}
+      ></div>
       <NavBar />
       <div className="form-container relative z-10">
         <div className="p-20 h-screen">
-          <div className="max-w-[600px] mt-40 max-sm:mt-10" style={{}}>
-            <h1 className="text-4xl sm:text-4xl" style={{ fontWeight: 'bold' }}>
+          <div className="max-w-[600px] mt-40 max-sm:mt-10">
+            <h1 className="text-4xl sm:text-4xl" style={{ fontWeight: "bold" }}>
               Let's get to know each other
             </h1>
-            <p className="pt-2 pb-10 text-left" style={{ fontWeight: 'lighter', fontSize: '13px' }}>
+            <p className="pt-2 pb-10 text-left" style={{ fontWeight: "lighter", fontSize: "13px" }}>
               Tell us who you are. We will send you an email to verify it's you ;)
             </p>
             <form onSubmit={handleSubmit}>
@@ -101,10 +110,10 @@ export const SignUp = () => {
                   required
                   placeholder="First name"
                   style={{
-                    width: '80%',
-                    border: 'none',
-                    borderBottom: '1px solid rgb(4, 4, 62)',
-                    outline: 'none',
+                    width: "80%",
+                    border: "none",
+                    borderBottom: "1px solid rgb(4, 4, 62)",
+                    outline: "none",
                   }}
                 />
               </FormControl>
@@ -119,10 +128,10 @@ export const SignUp = () => {
                   required
                   placeholder="Last name"
                   style={{
-                    width: '80%',
-                    border: 'none',
-                    borderBottom: '1px solid rgb(4, 4, 62)',
-                    outline: 'none',
+                    width: "80%",
+                    border: "none",
+                    borderBottom: "1px solid rgb(4, 4, 62)",
+                    outline: "none",
                   }}
                 />
               </FormControl>
@@ -137,10 +146,10 @@ export const SignUp = () => {
                   required
                   placeholder="Your Email"
                   style={{
-                    width: '80%',
-                    border: 'none',
-                    borderBottom: '1px solid rgb(4, 4, 62)',
-                    outline: 'none',
+                    width: "80%",
+                    border: "none",
+                    borderBottom: "1px solid rgb(4, 4, 62)",
+                    outline: "none",
                   }}
                 />
                 {isErrorEmail && showError && (
@@ -158,69 +167,78 @@ export const SignUp = () => {
                   required
                   placeholder="Password"
                   style={{
-                    width: '80%',
-                    border: 'none',
-                    borderBottom: '1px solid rgb(4, 4, 62)',
-                    outline: 'none',
+                    width: "80%",
+                    border: "none",
+                    borderBottom: "1px solid rgb(4, 4, 62)",
+                    outline: "none",
                   }}
                 />
                 {isErrorPass && showError && (
-                 <FormErrorMessage>
-                 <List spacing={1} mt={2}>
-                  <ListItem>Invalid Password! Passwords should:</ListItem>
-                   <ListItem>
-                     ! Be at least 8 characters long
-                   </ListItem>
-                   <ListItem>
-                     ! Contain at least one lowercase letter
-                   </ListItem>
-                   <ListItem>
-                     ! Contain at least one uppercase letter
-                   </ListItem>
-                   <ListItem>
-                     ! Contain at least one digit
-                   </ListItem>
-                   <ListItem>
-                     ! Contain at least one special character (e.g., !@#$%^&*)
-                   </ListItem>
-                 </List>
-               </FormErrorMessage>
+                  <FormErrorMessage>
+                    <List spacing={1} mt={2}>
+                      {!minLength && (
+                        <ListItem>Password must be at least 8 characters long.</ListItem>
+                      )}
+                      {!hasLowercase && (
+                        <ListItem>Password must contain at least one lowercase letter.</ListItem>
+                      )}
+                      {!hasUppercase && (
+                        <ListItem>Password must contain at least one uppercase letter.</ListItem>
+                      )}
+                      {!hasDigit && <ListItem>Password must contain at least one digit.</ListItem>}
+                      {!hasSpecialChar && (
+                        <ListItem>
+                          Password must contain at least one special character (e.g., !@#$%^&*).
+                        </ListItem>
+                      )}
+                    </List>
+                  </FormErrorMessage>
                 )}
               </FormControl>
 
               <div className="flex flex-nowrap">
                 <div className="pt-8 flex flex-nowrap items-center gap-2 flex-col">
-                <div className="flex">
-                  <Link to="/">
-                    <button style={{
-                      background: 'transparent',
-                      padding: '8px',
-                      width: '120px',
-                      fontSize: '11px',
-                      border: '2px solid #fff',
-                      borderRadius: '20px',
-                      color: '#fff',
-                      textAlign: 'center',
-                      marginBottom: "2vh",
-                    }}>
-                      Cancel
+                  <div className="flex">
+                    <Link to="/">
+                      <button
+                        style={{
+                          background: "transparent",
+                          padding: "8px",
+                          width: "120px",
+                          fontSize: "11px",
+                          border: "2px solid #fff",
+                          borderRadius: "20px",
+                          color: "#fff",
+                          textAlign: "center",
+                          marginBottom: "2vh",
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </Link>
+
+                    <button
+                      className="defaultButton ml-2"
+                      style={{
+                        fontSize: "11px",
+                        width: "155px",
+                        height: "35px",
+                      }}
+                    >
+                      Send Email
                     </button>
-                  </Link>
-                  
-                  <button className="defaultButton ml-2" style={{
-                    fontSize: '11px',
-                    width: '155px',
-                    height: '35px',
-                  }}>
-                    Send Email
-                  </button>
                   </div>
-                  <Link to="/signin" className="text-blue-500">Already have an account? Sign in!</Link>
+                  <Link to="/signin" className="text-blue-500">
+                    Already have an account? Sign in!
+                  </Link>
                 </div>
               </div>
             </form>
 
-            <div className="bottom-0 w-80 h-auto right-[-2vh] p-4 fixed max-sm:w-[45%] z-0" style={{ zIndex: '-1' }}>
+            <div
+              className="bottom-0 w-80 h-auto right-[-2vh] p-4 fixed max-sm:w-[45%] z-0"
+              style={{ zIndex: "-1" }}
+            >
               <img src="src/assets/bg-triangle-ellipse@2x.png" alt="Triangle" />
             </div>
           </div>

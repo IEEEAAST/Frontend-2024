@@ -14,9 +14,11 @@ import { SignUp } from "./pages/Signup";
 import { Signin } from "./pages/Signin";
 import { Dashboard } from "./pages/Dashboard";
 import { WriteArticle } from "./pages/WriteArticle";
+import { ViewAllArticles } from "./pages/ViewAllArticles";
 import getUser from "./firebase/auth";
 import { Profile } from "./pages/Profile";
 import UserData from "./interfaces/userData";
+import { ViewAllEvents } from "./pages/ViewAllEvents";
 
 
 
@@ -37,6 +39,22 @@ export const UserContext = createContext<{
   setUserId: () => {}
 });
 
+export const AppConfigContext = createContext<{
+  appConfig: {
+    contactEmail: string | null;
+    headsCarouselSettings: any | null;
+    recruiting: boolean | null;
+    recruitingLink: string | null;
+  };
+}>({
+  appConfig: {
+    contactEmail: null,
+    headsCarouselSettings: null,
+    recruiting: null,
+    recruitingLink: null
+  }
+});
+
 function App() {
   const [nav, setNav] = useState(true);
   const [lang, setLang] = useState(() => {
@@ -48,12 +66,35 @@ function App() {
   const [userId, setUserId] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
+  const [appConfig, setAppConfig] = useState({
+    contactEmail: null as string | null,
+    headsCarouselSettings: null as any | null,
+    recruiting: null as boolean | null,
+    recruitingLink: null as string | null,
+  });
+
+  const setContactEmail = (email: string | null) => {
+    setAppConfig((prevConfig) => ({ ...prevConfig, contactEmail: email }));
+  };
+
+  const setHeadsCarouselSettings = (settings: any | null) => {
+    setAppConfig((prevConfig) => ({ ...prevConfig, headsCarouselSettings: settings }));
+  };
+
+  const setRecruiting = (recruit: boolean | null) => {
+    setAppConfig((prevConfig) => ({ ...prevConfig, recruiting: recruit }));
+  };
+
+  const setRecruitingLink = (link: string | null) => {
+    setAppConfig((prevConfig) => ({ ...prevConfig, recruitingLink: link }));
+  }
+
+
 
 
   const fetchUser = async () => {
     try {
       const user = await getUser();
-      console.log(user);
       if (user) {
         const docRef = await getDocument("users", user.uid);
         if (!docRef.error && docRef.result) {
@@ -61,25 +102,44 @@ function App() {
           setUserId(user.uid);
         }
         setLoading(false);
-        console.log(userData)
       } else { setLoading(false) }
     } catch (error) {
       console.error("Error fetching user or user data:", error);
     }
   };
 
+  const fetchAppConfig = async () => {
+    try {
+      const contactEmail = (await getDocument("adminSettings", "contactEmail"))
+      const headsCarouselSettings = await getDocument("adminSettings", "headsCarouselSettings");
+      const recruitment = await getDocument("adminSettings", "recruitment");
+      setAppConfig({
+        contactEmail: contactEmail.result?.data()?.email,
+        headsCarouselSettings: headsCarouselSettings.result?.data(),
+        recruiting: recruitment.result?.data()?.recruiting,
+        recruitingLink: recruitment.result?.data()?.formlink
+      });
+    } catch (error) {
+      console.error("Error fetching app config:", error);
+    }
+  }
+
+
+
   
   useEffect(() => {
     localStorage.setItem("lang", lang);
     fetchUser();
+    fetchAppConfig();
   }, [lang]);
 
 
 
   return loading? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex "/></div> : (
     <ChakraProvider disableGlobalStyle={true} theme={theme}>
-      <LangContext.Provider value={{ lang, setLang }}>
+      
         <UserContext.Provider value={{ userData, setUserData, userId, setUserId}}>
+        <AppConfigContext.Provider value={{appConfig}}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Dashboard />} />
@@ -92,9 +152,12 @@ function App() {
             <Route path="/Signup" element={<SignUp />} />
             <Route path="/signin" element={<Signin />} />
             <Route path="/Profile/:name" element = {<Profile />} />
+            <Route path="/articles" element = {<ViewAllArticles />} />
+            <Route path="/events" element = {<ViewAllEvents/>}></Route>
           </Routes>
+        </AppConfigContext.Provider>
         </UserContext.Provider>
-      </LangContext.Provider>
+
     </ChakraProvider>
   );
 }
