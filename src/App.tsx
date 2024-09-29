@@ -22,10 +22,7 @@ import { ViewAllEvents } from "./pages/ViewAllEvents";
 
 
 
-export const LangContext = createContext({
-  lang: "English",
-  setLang: (lang: string) => {}
-});
+
 
 export const UserContext = createContext<{
   [x: string]: any;
@@ -57,11 +54,7 @@ export const AppConfigContext = createContext<{
 });
 
 function App() {
-  const [nav, setNav] = useState(true);
-  const [lang, setLang] = useState(() => {
-    const savedLang = localStorage.getItem("lang");
-    return savedLang || "en";
-  });
+
 
   const [userData, setUserData] = useState<any>(null);
   const [userId, setUserId] = useState<any>(null);
@@ -73,24 +66,6 @@ function App() {
     recruiting: null as boolean | null,
     recruitingLink: null as string | null,
   });
-
-  const setContactEmail = (email: string | null) => {
-    setAppConfig((prevConfig) => ({ ...prevConfig, contactEmail: email }));
-  };
-
-  const setHeadsCarouselSettings = (settings: any | null) => {
-    setAppConfig((prevConfig) => ({ ...prevConfig, headsCarouselSettings: settings }));
-  };
-
-  const setRecruiting = (recruit: boolean | null) => {
-    setAppConfig((prevConfig) => ({ ...prevConfig, recruiting: recruit }));
-  };
-
-  const setRecruitingLink = (link: string | null) => {
-    setAppConfig((prevConfig) => ({ ...prevConfig, recruitingLink: link }));
-  }
-
-
 
 
   const fetchUser = async () => {
@@ -124,15 +99,6 @@ function App() {
       console.error("Error fetching app config:", error);
     }
   }
-
-
-
-  
-  useEffect(() => {
-    localStorage.setItem("lang", lang);
-    fetchUser();
-    fetchAppConfig();
-  }, [lang]);
 
 
 
