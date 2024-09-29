@@ -12,6 +12,7 @@ export const toggleLike = async (
     setUserData: Function,
 ) => {
     const collectionName = type === "article" ? "articles" : "events";
+    if(!item.likedBy) throw new Error("LikedBy field not found in item! Please add it in firebase.");
     const liked = item.likedBy?.includes(userId);
 
     // Determine the updated likes for the user based on like status
@@ -45,7 +46,7 @@ export const toggleLike = async (
 
         return true;
     } catch (e) {
-        console.log(e);
+        console.error(e);
         return null;
     }
 }
