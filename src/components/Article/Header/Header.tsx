@@ -24,7 +24,6 @@ export const Header: React.FC<searchProps> = ({onSearch}) => {
 
   return (
     <div className="header">
-        <NavBar/>
       <div className="search">
         <input
             type="text"

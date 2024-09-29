@@ -1,17 +1,71 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import Logo from "../../assets/IEEEAAST.ico";
+import searchIcon from "../../assets/search-magnifier-white@2x.png";
 import { LangSelector } from "./langSelector";
-import { Link, useLocation } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { Link as ScrollLink, animateScroll, scroller } from 'react-scroll';
 import { UserContext } from "../../App"
 import SignOut from "../../firebase/signout"
 import ProfileMenu from "./profileMenu";
+import getCollection from "../../firebase/getCollection.js";
+import getDocument from "../../firebase/getData.js";
+import "../common/styles/Navbar.css";
 
-export const NavBar = () => {
+interface searchProps {
+  onSearch: (value: string) => void;
+}
+
+interface ArticleData {
+  article: string;
+  author: string;
+  caption: string;
+  description: string;
+  image: string;
+  likes : number;
+  publishdate: string;
+  title: string;
+}
+interface EventData {
+  coverPhoto : string;
+  description: string;
+  enddtime: any;
+  formLink: string;
+  gallary: string[];
+  speakers: string[];
+  sponsors: string[];
+  starttime: any;
+  title: string;
+  type: string;
+}
+
+export const NavBar : React.FC<searchProps> = ({onSearch}) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const location = useLocation(); // Get the current location
   const { userData } = useContext(UserContext);
+  const [searched, setSearched] = useState(''); //search
+  const [article, setArticle] = useState<ArticleData[]>([]);
+  const [events, setEvents] = useState<EventData[]>([]);
+
+  const navigate = useNavigate(); 
+
+  useEffect(()=>{
+    getCollection("articles").then((res) => {
+      if (res.result){
+        const article = res.result as ArticleData[];
+        setArticle(article);
+      }
+    })
+  },[]);
+
+  useEffect(()=>{
+    getCollection("events").then((res) => {
+      if (res.result){
+        const events = res.result as EventData[];
+        setEvents(events);
+      }
+    })
+  },[]);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -20,6 +74,41 @@ export const NavBar = () => {
   const handleClickOutside = (event: MouseEvent) => {
     if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
       setMenuOpen(false);
+    }
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearched(e.target.value);
+    onSearch(e.target.value);
+    console.log("in handle", article)
+  };
+  console.log("searched:  ", searched)
+
+  const titles = article.map(articleTitles => articleTitles.title)
+  console.log("title", titles)
+
+  const filterArticles = searched ? titles.filter((t) =>
+    t.toLowerCase().includes(searched.toLowerCase())
+  ):null;
+
+  console.log("filtered article", filterArticles)
+
+  const EventTitle = events.map(e => e.title)
+  console.log("event title", EventTitle)
+
+    const filterEvents = searched ? EventTitle.filter((t) =>
+    t.toLowerCase().includes(searched.toLowerCase())
+  ) : null;
+
+  console.log("filtered event", filterEvents)
+
+  const handleClick = (handled: string) => {
+    if (filterArticles?.includes(handled)) {
+      navigate(`/article/${handled}`);
+    } else if (filterEvents?.includes(handled)) {
+      navigate(`/event/${handled}`);
+    }else{
+      console.log("no nav found")
     }
   };
 
@@ -51,9 +140,9 @@ export const NavBar = () => {
 
   return (
     <>
-      <div className="absolute flex items-start sm:items-center justify-between py-2 w-full z-50">
-        {/* left */}
-        
+      <div className="wrapper absolute flex items-start sm:items-center justify-between py-2 w-full z-50">
+      
+        {/* left */}        
           <div className="ml-[40vw] sm:ml-auto">
           <Link to="/">
             <img src={Logo} alt="IEEE branch logo" height={90} width={90} />
@@ -61,15 +150,44 @@ export const NavBar = () => {
           </div>
         
         {/* mid */}
-        <div className="flex-1 justify-center hidden sm:flex">
-          <div className="flex justify-center text-3xl gap-8">
+        <div className="flex-1 justify-start hidden sm:flex">
+          <div className="flex justify-center gap-3 ml-5">
             <button>
-              <Link to="/" className="text-2xl md:text-3xl">Home</Link>
+              <Link to="/" >
+                {/* <img src={} alt="home icon" height={90} width={45}/> */}
+                home
+              </Link>
             </button>
             <button>
-              <Link to="/home" className="text-2xl md:text-3xl">Browse</Link>
+              <Link to="/home" >
+                {/* <img src={} alt="browsing icon" height={90} width={40}/> */}
+                browse
+              </Link>
             </button>
-            <button>
+
+            {/*search bar*/}
+            <div className="nav-search">
+              <div className="search-bar">
+                <img src={searchIcon} alt="search icon"/>
+                <input      
+                  type="text"
+                  placeholder="Search articles, events..."
+                  value={searched}
+                  onChange={handleSearch}
+                />
+                </div>
+                <div className="search-results">
+                  {filterArticles?.map((a)=>(
+                    <div className="result" onClick={() => handleClick(a)}>{a}</div>
+                  ))}
+                  {filterEvents?.map((e)=>(
+                    <div className="result" onClick={() => handleClick(e)}>{e}</div>
+                  ))}
+                </div>
+            </div>
+
+            {/* removed buttons: about, contact */}
+            {/* <button>
               <ScrollLink to="aboutSection" smooth={true} duration={0}>
                 <button className="cursor-pointer text-2xl md:text-3xl" onClick={() => {
                   if (window.location.pathname !== "/") {
@@ -90,7 +208,7 @@ export const NavBar = () => {
                   Contact
                 </button>
               </ScrollLink>
-            </button>
+            </button> */}
           </div>
         </div>
         {/* end */}
