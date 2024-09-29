@@ -114,7 +114,6 @@ export const EventDetails = () => {
     </div>
   ) : (
     <>
-      <NavBar />
       <div className="h-28" style={{ borderColor: "#00091A", borderWidth: "4px" }}></div>
       <div id="eventPage">
         <div

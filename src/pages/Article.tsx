@@ -17,8 +17,6 @@ export const Article = () => {
 
   return (
     <>
-      <NavBar onSearch={handleSearch}/>
-      {/* <Header onSearch={handleSearch}/> */}
       <MainContent searchQuery={searchQuery} articleName={name}/>
       <Footer />
     </>

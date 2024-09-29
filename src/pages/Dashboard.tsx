@@ -108,7 +108,6 @@ export const Dashboard = () => {
   if (!articles || articles.length===0){
   
     return <>
-    <NavBar/>
     <div className="flex items-center justify-center w-full h-[99vh]"><Spinner size="xl" /></div>
     </>
   }
@@ -117,7 +116,6 @@ export const Dashboard = () => {
 
     <div className="flex flex-col items-center bg-[#000B21] text-white header">
       <div className="h-[120px] w-full">
-        <NavBar/>
       </div>
       <div className="w-full lg:min-h-screen flex justify-center items-center px-4 md:px-20 body">
         <div className="relative w-full lg:w-[1733px] lg:h-[810px]  h-[400px] md:h-[520px] rounded-[38px] overflow-hidden">

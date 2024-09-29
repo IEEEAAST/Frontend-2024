@@ -108,7 +108,6 @@ export const WriteArticle = () => {
 
     return (
         <>
-            <NavBar />
             {submitting ? (
                 <div className="flex justify-center items-center h-screen">
                     <Spinner size="xl" />

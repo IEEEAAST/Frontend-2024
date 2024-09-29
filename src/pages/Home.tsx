@@ -13,7 +13,6 @@ import { NavBar } from "../components/common/navbar.tsx";
 export const Home = () => {
   return (
     <>
-      <NavBar/>
       <HomeComp  />
       <Sponsor />
       <About/>
@@ -23,7 +22,6 @@ export const Home = () => {
       <AboutUs />
       <Joinus />
       <Footer />
-
     </>
   );
 };

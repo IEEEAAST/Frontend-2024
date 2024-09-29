@@ -100,7 +100,6 @@ export const ViewAllArticles = () => {
     if (!articles || articles.length === 0) {
         return (
             <>
-                <NavBar />
                 <div className="flex items-center justify-center w-full h-[99vh]"><Spinner size="xl" /></div>
             </>
         );
@@ -109,7 +108,6 @@ export const ViewAllArticles = () => {
     return (
         <div className="flex flex-col items-center bg-[#000B21] text-white header mb-6">
             <div className="h-[150px] w-full">
-                <NavBar />
             </div>
 
             <div className="w-full px-4 lg:px-[89px]">

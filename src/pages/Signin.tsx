@@ -55,7 +55,6 @@ export const Signin = () => {
       <div className="h-screen w-[1vh] absolute left-0" style={{
         backgroundImage: "linear-gradient(to bottom, #1F396E, #1D0021)"
       }}></div>
-      <NavBar />
     <div className="form-container">
       <div className="p-20 h-screen">
         <div className="max-w-[600px] mt-40 max-sm:mt-10" style={{ }}>

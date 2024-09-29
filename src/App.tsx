@@ -19,10 +19,7 @@ import getUser from "./firebase/auth";
 import { Profile } from "./pages/Profile";
 import UserData from "./interfaces/userData";
 import { ViewAllEvents } from "./pages/ViewAllEvents";
-
-
-
-
+import { NavBar } from "./components/common/navbar";
 
 export const UserContext = createContext<{
   [x: string]: any;
@@ -55,7 +52,6 @@ export const AppConfigContext = createContext<{
 
 function App() {
 
-
   const [userData, setUserData] = useState<any>(null);
   const [userId, setUserId] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -66,6 +62,8 @@ function App() {
     recruiting: null as boolean | null,
     recruitingLink: null as string | null,
   });
+
+
 
 
   const fetchUser = async () => {
@@ -102,11 +100,20 @@ function App() {
 
 
 
+  
+  useEffect(() => {
+    fetchUser();
+    fetchAppConfig();
+  }, []);
+
+
+
   return loading? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex "/></div> : (
     <ChakraProvider disableGlobalStyle={true} theme={theme}>
       
         <UserContext.Provider value={{ userData, setUserData, userId, setUserId}}>
         <AppConfigContext.Provider value={{appConfig}}>
+          <NavBar/>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/browse" element={<Dashboard />} />
