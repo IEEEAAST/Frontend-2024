@@ -1,14 +1,12 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import Logo from "../../assets/IEEEAAST.ico";
 import searchIcon from "../../assets/search-magnifier-white@2x.png";
-import { LangSelector } from "./langSelector";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { Link as ScrollLink, animateScroll, scroller } from 'react-scroll';
 import { UserContext } from "../../App"
 import SignOut from "../../firebase/signout"
 import ProfileMenu from "./profileMenu";
 import getCollection from "../../firebase/getCollection.js";
-import getDocument from "../../firebase/getData.js";
 import "../common/styles/Navbar.css";
 import Home from "../../assets/home.png";
 import Browse from "../../assets/browse.png";
@@ -155,7 +153,7 @@ export const NavBar : React.FC = () => {
               </Link>
             </button>
             <button>
-              <Link to="/home" >
+              <Link to="/browse" >
               <div className="border-2 rounded-full border-white w-[40px] p-1">
                 <img src={Browse} alt="Browse" height={90} width={45}  />
               </div>
@@ -241,7 +239,7 @@ export const NavBar : React.FC = () => {
               style={{ borderColor: "#00050f" }}
               onClick={() => {
                 setMenuOpen(false);
-                window.open("/home", "_self");
+                window.open("/browse", "_self");
               }}
             >
               Browse

@@ -143,7 +143,7 @@ function App() {
         <AppConfigContext.Provider value={{appConfig}}>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Dashboard />} />
+            <Route path="/browse" element={<Dashboard />} />
             <Route path="/event/:name" element={<EventDetails />} />
             <Route path="/article/:name" element={<Article />} />
             <Route path="/write" element={<WriteArticle />} />
