@@ -120,31 +120,36 @@ export const Dashboard = () => {
     })
   },[]);
 
-  const filterArticles = searched ? articles.filter((a) =>
-    a.title.toLowerCase().includes(searched.toLowerCase())
-  ):articles.slice(0, 3);
+  // const filterArticles = searched ? articles.filter((a) =>
+  //   a.title.toLowerCase().includes(searched.toLowerCase())
+  // ):articles.slice(0, 3);
 
-  const filterEvents = searched ? events.filter((e) =>
-    e.title.toLowerCase().includes(searched.toLowerCase())
-  ) : events;
+  const filterArticles =   articles.slice(0, 3);
+  // console.log("filered articles", filterArticles)
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearched(e.target.value);
+  const filterEvents =  events.slice(0, 3);
+
+  // const filterEvents = searched ? events.filter((e) =>
+  //   e.title.toLowerCase().includes(searched.toLowerCase())
+  // ) : events;
+
+  const handleSearch = (query: string) => {
+    setSearched(query);
   };
+  console.log("search" , searched)
+  // const handleFocus = () => {
+  //   document.querySelector(".body")?.classList.add("blur-background");
+  // };
 
-  const handleFocus = () => {
-    document.querySelector(".body")?.classList.add("blur-background");
-  };
+  // const handleBlur = () => {
+  //   document.querySelector(".body")?.classList.remove("blur-background");
+  // };
 
-  const handleBlur = () => {
-    document.querySelector(".body")?.classList.remove("blur-background");
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleBlur();
-    }
-  };
+  // const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (e.key === "Enter") {
+  //     handleBlur();
+  //   }
+  // };
 
   const handleArticleClick = (article: ArticleData) => {
     navigate(`/article/${article.title}`);
@@ -153,7 +158,7 @@ export const Dashboard = () => {
   if (!articles || articles.length===0){
   
     return <>
-    <NavBar />
+    <NavBar onSearch={handleSearch}/>
     <div className="flex items-center justify-center w-full h-[99vh]"><Spinner size="xl" /></div>
     </>
   }
@@ -162,8 +167,8 @@ export const Dashboard = () => {
 
     <div className="flex flex-col items-center bg-[#000B21] text-white header">
       <div className="h-[150px] w-full">
-        <NavBar />
-        <div className="search">
+        <NavBar onSearch={handleSearch}/>
+        {/* <div className="search">
           <input      
             type="text"
             placeholder="Search articles, events..."
@@ -173,7 +178,7 @@ export const Dashboard = () => {
             onBlur={handleBlur}
             onKeyDown={handleKeyDown}
           />
-        </div>
+        </div> */}
       </div>
       {userData?.roles?.includes("admin") || userData?.roles?.includes("author") ? <Link to="/write"><button className="defaultButton mb-12 lg:mb-0">Create Article</button></Link>:null}
       <div className="w-full lg:min-h-screen flex justify-center items-center px-4 md:px-20 body">
