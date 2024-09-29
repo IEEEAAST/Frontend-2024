@@ -11,9 +11,7 @@ import getCollection from "../../firebase/getCollection.js";
 import getDocument from "../../firebase/getData.js";
 import "../common/styles/Navbar.css";
 
-interface searchProps {
-  onSearch: (value: string) => void;
-}
+
 
 interface ArticleData {
   article: string;
@@ -38,7 +36,7 @@ interface EventData {
   type: string;
 }
 
-export const NavBar : React.FC<searchProps> = ({onSearch}) => {
+export const NavBar : React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const location = useLocation(); // Get the current location
@@ -79,28 +77,20 @@ export const NavBar : React.FC<searchProps> = ({onSearch}) => {
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearched(e.target.value);
-    onSearch(e.target.value);
-    console.log("in handle", article)
   };
-  console.log("searched:  ", searched)
 
   const titles = article.map(articleTitles => articleTitles.title)
-  console.log("title", titles)
-
   const filterArticles = searched ? titles.filter((t) =>
     t.toLowerCase().includes(searched.toLowerCase())
   ):null;
 
-  console.log("filtered article", filterArticles)
 
   const EventTitle = events.map(e => e.title)
-  console.log("event title", EventTitle)
 
     const filterEvents = searched ? EventTitle.filter((t) =>
     t.toLowerCase().includes(searched.toLowerCase())
   ) : null;
 
-  console.log("filtered event", filterEvents)
 
   const handleClick = (handled: string) => {
     if (filterArticles?.includes(handled)) {

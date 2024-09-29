@@ -1,5 +1,6 @@
 import { db } from "./config";
 import { collection, getDocs, where, query } from "firebase/firestore";
+
 export default async function getDocumentsByField(
   collectionName,
   whereField,
@@ -13,14 +14,13 @@ export default async function getDocumentsByField(
   );
 
   let dataRes = [];
-
   let result = null;
   let error = null;
 
   try {
     querySnapshot.forEach((doc) => {
-      // console.log(`${doc.id} => ${doc.data()}`);
-      dataRes.push(JSON.parse(JSON.stringify(doc.data())));
+      // Directly push the data, preserving the Firestore types
+      dataRes.push({ id: doc.id, ...doc.data() });
     });
     result = dataRes;
   } catch (e) {

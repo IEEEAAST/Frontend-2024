@@ -28,6 +28,7 @@ export const LangContext = createContext({
 });
 
 export const UserContext = createContext<{
+  [x: string]: any;
   userData: UserData | null;
   setUserData: React.Dispatch<React.SetStateAction<UserData | null>>;
   userId: string | null;

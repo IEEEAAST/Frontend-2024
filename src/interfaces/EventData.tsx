@@ -2,9 +2,10 @@ import firebase from "firebase/compat/app";
 import { socialLinks } from "../components/EventDetails/Types";
 
 export interface EventData {
+    id: string;
     title: string;
     description: string;
-    likes: number | undefined;
+    likedBy: string[];
     starttime: firebase.firestore.Timestamp;
     endtime: firebase.firestore.Timestamp;
     coverPhoto: string;

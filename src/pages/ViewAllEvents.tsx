@@ -16,8 +16,8 @@ const formatEventDate = (date: Date, format: string) => {
       month: '2-digit',
       year: 'numeric'
     };
-    const formattedDate = date.toLocaleDateString('en-US', options);
-    const time = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    const formattedDate = date.toLocaleDateString('en-GB', options); // Use 'en-GB' locale for day before month
+    const time = date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit', hour12: true });
     return `${formattedDate} at ${time}`;
   } else if (format === "short") {
     const options: Intl.DateTimeFormatOptions = {
