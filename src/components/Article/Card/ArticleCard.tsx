@@ -12,7 +12,7 @@ import { toggleLike } from "../../../utils";
 
 interface ArticleCardProps {
   article: ArticleData;
-  author: UserData | undefined;
+  author?: UserData | undefined;
 }
 
 const ArticleCard = ({ article, author}: ArticleCardProps) => {
@@ -44,10 +44,10 @@ const ArticleCard = ({ article, author}: ArticleCardProps) => {
         </div>
         <div className="flex flex-col justify-between w-full mt-4 lg:mt-0">
           <div className="text-[12px] lg:text-[15px] mb-[20px] lg:mb-[33px] text-[#F4F4F4]">
-            <Link className="flex items-center gap-2" to={`/profile/${article.author}`}>
+            {author &&<Link className="flex items-center gap-2" to={`/profile/${article.author}`}>
               <Avatar src={author?.imgurl}></Avatar>
               <h5>{author?.firstname || "unknown author"} {author?.lastname || "author"}</h5>
-            </Link>
+            </Link>}
           </div>
           <div className="text-[20px] lg:text-[27px] font-serif">
             <h1>{article.title}</h1>

@@ -22,7 +22,7 @@ import getDataByField from "../firebase/getDataByField";
 import { EventData } from "../interfaces/EventData";
 import { Ivideo, Inote, IsponsorsIds, scheduleItem, IspksIds } from "../interfaces/EventData";
 import { UserContext } from "../App";
-import { UserData } from "../interfaces/userData";
+import UserData from "../interfaces/userData";
 
 export const EventDetails = () => {
   const { name: eventName } = useParams<{ name: string }>();
@@ -119,7 +119,10 @@ export const EventDetails = () => {
         ></div>
         <div id="eventDetailsFlex">
           <div id="eventNameWrapper">
+            <div className="flex items-center gap-4">
             <span id="eventName">{eventData?.title ?? "Error"}</span>
+            <button className="w-[50px] h-[50px] p-[2px]"><img src={event.likedBy.includesLike}></img></button>
+            </div>
             <span id="eventDesc">{eventData?.description ?? "Event not found."}</span>
           </div>
           <div id="eventDetailsWrapper">
@@ -155,7 +158,7 @@ export const EventDetails = () => {
             </div>
             <div className="iconButtonsWrapper">
               <button className="iconButton" style={{ backgroundImage: `url(${Bell})` }}></button>
-              <button className="w-[30px] h-[30px] border-[2px] rounded-full p-[2px]"><img src={Like}></img></button>
+              
             </div>
             <button
               className="defaultButton"

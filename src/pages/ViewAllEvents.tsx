@@ -78,10 +78,10 @@ export const ViewAllEvents = () => {
         sortedEvents.sort((a, b) => (a.type || "Event").localeCompare(b.type || "Event"));
         break;
       case "likes":
-        sortedEvents.sort((a, b) => (b.likes || 0) - (a.likes || 0));
+        sortedEvents.sort((a, b) => (b.likedBy.length || 0) - (a.likedBy.length || 0));
         break;
       case "likes-reverse":
-        sortedEvents.sort((a, b) => (a.likes || 0) - (b.likes || 0));
+        sortedEvents.sort((a, b) => (a.likedBy.length || 0) - (b.likedBy.length || 0));
         break;
     }
     setEvents(sortedEvents);

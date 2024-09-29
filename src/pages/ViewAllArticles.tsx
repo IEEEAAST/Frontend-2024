@@ -124,7 +124,25 @@ export const ViewAllArticles = () => {
                             <img src={sortdown} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "date-reverse" ? 'opacity-100' : 'opacity-0'}`} />
                             <img src={sort} className={`absolute inset-0 w-full transition-opacity duration-300 ${!(filter.includes("date")) ? 'opacity-100' : 'opacity-0'}`} />
                         </div>
-                        <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter == 'date' || filter == 'date-reverse') ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`} />
+                        <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${filter.includes("date") ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`} />
+                    </button>
+                    <button className="w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-14" onClick={() => { changeFilter("topic") }}>
+                        Topic
+                        <div className="relative w-5 my-2">
+                            <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "topic" ? 'opacity-100' : 'opacity-0'}`} />
+                            <img src={sortdown} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "topic-reverse" ? 'opacity-100' : 'opacity-0'}`} />
+                            <img src={sort} className={`absolute inset-0 w-full transition-opacity duration-300 ${!(filter.includes("topic")) ? 'opacity-100' : 'opacity-0'}`} />
+                        </div>
+                        <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter == 'topic' || filter == 'topic-reverse') ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`} />
+                    </button>
+                    <button className="w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-14" onClick={() => { changeFilter("likes") }}>
+                        Likes
+                        <div className="relative w-5 my-2">
+                            <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "likes" ? 'opacity-100' : 'opacity-0'}`} />
+                            <img src={sortdown} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "likes-reverse" ? 'opacity-100' : 'opacity-0'}`} />
+                            <img src={sort} className={`absolute inset-0 w-full transition-opacity duration-300 ${!(filter.includes("likes")) ? 'opacity-100' : 'opacity-0'}`} />
+                        </div>
+                        <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter.includes('likes')) ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`} />
                     </button>
 
                     {/* Other sorting buttons... */}
