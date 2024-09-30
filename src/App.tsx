@@ -38,14 +38,12 @@ export const AppConfigContext = createContext<{
   appConfig: {
     contactEmail: string | null;
     headsCarouselSettings: any | null;
-    recruiting: boolean | null;
     recruitingLink: string | null;
   };
 }>({
   appConfig: {
     contactEmail: null,
     headsCarouselSettings: null,
-    recruiting: null,
     recruitingLink: null
   }
 });
@@ -59,7 +57,6 @@ function App() {
   const [appConfig, setAppConfig] = useState({
     contactEmail: null as string | null,
     headsCarouselSettings: null as any | null,
-    recruiting: null as boolean | null,
     recruitingLink: null as string | null,
   });
 
@@ -90,7 +87,6 @@ function App() {
       setAppConfig({
         contactEmail: contactEmail.result?.data()?.email,
         headsCarouselSettings: headsCarouselSettings.result?.data(),
-        recruiting: recruitment.result?.data()?.recruiting,
         recruitingLink: recruitment.result?.data()?.formlink
       });
     } catch (error) {

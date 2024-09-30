@@ -20,7 +20,7 @@ export const RecruitmentCard = () => {
     const { appConfig } = useContext(AppConfigContext);
     console.log(appConfig);
     return <div className='bg-[#D3E4F5] text-black w-[calc(100%-150px)] sm:w-fit p-4 mt-4 rounded-2xl flex flex-col'>
-        {appConfig.recruiting&&<>
+        {appConfig.recruitingLink&&appConfig.recruitingLink.length>0&&<>
         <h1 className='font-black text-3xl mb-4'>Heads Up!</h1>
         <p className='text-sm font-display'>
             We're currently recruiting new volunteers right now!
