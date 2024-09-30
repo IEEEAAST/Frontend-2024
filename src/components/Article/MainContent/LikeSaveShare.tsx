@@ -21,7 +21,7 @@ export const LikeSaveShare: React.FC<LikeSaveShareProps> = ({article}) => {
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px' }}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <img
-          src={(userId&&article.likedBy?.includes(userId)) ? WhiteSparkles : OrangeSparkles}
+          src={(userId&&article.likedBy?.includes(userId)) ? OrangeSparkles : WhiteSparkles}
           alt="Sparkles"
           style={{ cursor: 'pointer', marginRight: '10px' }}
           onClick={()=>{if(userId&&userData)toggleLike(article, userData, userId, "article",setUserData)}}
