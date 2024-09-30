@@ -8,16 +8,11 @@ import { NavBar } from "../components/common/navbar.tsx"
 
 export const Article = () => {
   let { name } = useParams();
-  const [searchQuery, setSearchQuery] = useState<string>("");
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-  };
   console.log("title",name)
 
   return (
     <>
-      <MainContent searchQuery={searchQuery} articleName={name}/>
+      <MainContent  articleName={name||""}/>
       <Footer />
     </>
   );
