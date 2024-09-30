@@ -246,7 +246,7 @@ export const Profile = () => {
             Data edited and uploaded successfully!
           </Alert>
         </Slide>
-      <NavBar />
+
       <div className="pt-[100px] mx-16 flex-col justify-center">
       <div className="bg-[url('https://img.freepik.com/free-vector/abstract-orange-background_698452-2541.jpg')] bg-cover bg-center mt-11 h-[360px] rounded-3xl relative"></div>
       <div className=" w-full flex-col justify-center mb-7 ">
@@ -272,11 +272,11 @@ export const Profile = () => {
       <div className="pt-[100px] w-full flex justify-center">
       
         {showTabs ? (
-          <Tabs variant="unstyled" className="w-full ">
-            <TabList bg={'transparent'} className="rounded-full w-fit mx-auto bg-transparent border-none mb-16">
-              <Tab className="bg-transparent text-xs" style={{borderColor:'transparent'}}>Articles</Tab>
-              <Tab className="bg-transparent text-xs" style={{borderColor:'transparent'}}>Contributions</Tab>
-              <Tab className="bg-transparent text-xs" style={{borderColor:'transparent'}}>About</Tab>
+         <Tabs variant="unstyled" align="end" >
+            <TabList bg={'transparent'} className="rounded-full w-fit  bg-transparent border-none mb-16">
+              <Tab  style={{borderColor:'transparent'}}>Articles</Tab>
+              <Tab  style={{borderColor:'transparent'}}>Contributions</Tab>
+              <Tab style={{borderColor:'transparent'}}>About</Tab>
               <Tab>Settings</Tab>    
             </TabList>
 
