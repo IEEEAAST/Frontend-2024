@@ -102,7 +102,6 @@ export const ViewAllEvents = () => {
   return (
     <div className="flex flex-col items-center bg-[#000B21] text-white header">
       <div className="h-[150px] w-full">
-        <NavBar />
       </div>
       <div className="flex justify-between items-center w-full px-4 lg:px-[89px]">
         <h2 className="text-white text-[24px] lg:text-[45px] font-bold">All Events</h2>

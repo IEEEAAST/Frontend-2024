@@ -43,10 +43,10 @@ export const Joinus = () => {
             <p className="text-black text-2xl font-bold">For Volunteering</p>
             <p className="text-black text-lg text-center lg:text-left w-full lg:w-2/3">
             
-              {recruiting?.recruiting ? "For the next generation of builders, you get to contribute your ideas, collaborate, and build." : "Unfortunately, we are not currently recruiting new volunteers. Please check again later!"}
+              {(recruiting?.formlink&&recruiting?.formlink.length>0)? "For the next generation of builders, you get to contribute your ideas, collaborate, and build." : "Unfortunately, we are not currently recruiting new volunteers. Please check again later!"}
             </p>
             </div>
-            {recruiting?.recruiting && (
+            {(recruiting?.formlink&&recruiting.formlink.length>0) && (
               <a href={recruiting.formlink} target="_blank" rel="noopener noreferrer">
                 <button className="text-black font-bold text-xs border-2 border-black my-8 p-2 px-5 rounded-3xl max-w-fit " onClick={() => window.open(recruiting.formlink,"_blank")}>
                   Volunteer

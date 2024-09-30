@@ -1,6 +1,6 @@
 import "../App.css";
 import "./styles/EventDetails.css";
-import "firebase/firestore";
+// Removed unused import
 import { Timestamp } from "firebase/firestore";
 
 import { useParams } from "react-router-dom";
@@ -17,12 +17,13 @@ import PlusIcon from "../assets/plus.png";
 import { Schedule } from "../components/EventDetails/schedule";
 import { Speakers } from "../components/EventDetails/Speakers";
 import Gallery from "../components/EventDetails/Gallery";
-import getDataByField from "../firebase/getDataByField";
+import subscribeToDocumentsByField from "../firebase/subscribeToDocumentsByField";
 
 import { EventData } from "../interfaces/EventData";
 import { Ivideo, Inote, IsponsorsIds, scheduleItem, IspksIds } from "../interfaces/EventData";
 import { UserContext } from "../App";
 import UserData from "../interfaces/userData";
+import { toggleLike } from "../utils";
 
 export const EventDetails = () => {
   const { name: eventName } = useParams<{ name: string }>();
@@ -37,9 +38,17 @@ export const EventDetails = () => {
   const [speakers, setSpeakers] = useState<IspksIds>();
   const [schedule, setSchedule] = useState<scheduleItem[]>([]);
 
-  const userData = useContext(UserContext);
+  const handleLikeClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    if (eventData?.id) {
+      if (userData && userId) {
+        
+        toggleLike(eventData, userData, userId, "event", setUserData);
+        eventData.likedBy?.includes(userId) ? eventData.likedBy = eventData.likedBy.filter((id) => id !== userId) : eventData.likedBy?.push(userId);
+      }
+    }
+  };
 
-  const [liked, setLiked] = useState(false);
+  const {userData,userId,setUserData} = useContext(UserContext);
   const formatEventDate = (date: Date, format: string) => {
     if (format === "long") {
       const options: Intl.DateTimeFormatOptions = {
@@ -65,9 +74,8 @@ export const EventDetails = () => {
 
 
   const fetchData = useCallback(async () => {
-    const data = await getDataByField("events", "title", "==", eventName);
+    const unsubscribe = subscribeToDocumentsByField("events", "title", "==", eventName, (data:any) => {;
     const event = data.result?.[0] || null;
-    setLiked(userData.userData?.likes?.events?.includes(event?.id) || false);
 
     setEventData(event);
     setLoading(false);
@@ -92,6 +100,8 @@ export const EventDetails = () => {
         setSchedule(event.schedule);
       }
     }
+  });
+  return () => unsubscribe();
   }, [eventName]);
 
   useEffect(() => {
@@ -104,7 +114,6 @@ export const EventDetails = () => {
     </div>
   ) : (
     <>
-      <NavBar />
       <div className="h-28" style={{ borderColor: "#00091A", borderWidth: "4px" }}></div>
       <div id="eventPage">
         <div
@@ -120,8 +129,25 @@ export const EventDetails = () => {
         <div id="eventDetailsFlex">
           <div id="eventNameWrapper">
             <div className="flex items-center gap-4">
-            <span id="eventName">{eventData?.title ?? "Error"}</span>
-            <button className="w-[50px] h-[50px] p-[2px]"><img src={event.likedBy.includesLike}></img></button>
+            <span className="text-[50px] font-display font-bold flex flex-wrap items-center w-auto whitespace-normal">
+            <span className="flex-shrink">{/* First part of the text */}
+                {eventData?.title?.split(' ').slice(0, -1).join(' ') ?? "Error"}
+            </span>
+            <span className="flex items-center whitespace-nowrap">
+              &nbsp;{/* Space to separate */}
+              {eventData?.title?.split(' ').slice(-1)}{/* Last word */}
+              <button
+                className="w-[50px] h-[50px] p-[2px] flex gap-2 items-center text-lg font-body font-normal ml-2"
+                onClick={handleLikeClick}
+              >
+                <img
+                  src={eventData && userData && userData?.likes.events?.includes(eventData?.id) ? Liked : Like}
+                  alt="like icon"
+                />
+                {eventData?.likedBy?.length}
+              </button>
+            </span>
+            </span>    
             </div>
             <span id="eventDesc">{eventData?.description ?? "Event not found."}</span>
           </div>

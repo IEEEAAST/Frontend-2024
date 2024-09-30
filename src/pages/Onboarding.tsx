@@ -72,7 +72,6 @@ export const Onboarding = () => {
 
   return loading? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex "/></div>  : (
     <div>
-      <NavBar />
       <div className="flex flex-col justify-center p-16 h-screen">
         <div className="max-w-[600px] ">
           <h1 className="text-4xl sm:text-6xl pb-2">Hey, {userData.firstname}</h1>
