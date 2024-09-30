@@ -7,7 +7,7 @@ import optionIcon from "../../../assets/more-ellipsis-white.png";
 import UserData from "../../../interfaces/userData";
 import ArticleData from "../../../interfaces/ArticleData";
 import { UserContext } from "../../../App";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { toggleLike } from "../../../utils";
 
 interface ArticleCardProps {
@@ -17,13 +17,19 @@ interface ArticleCardProps {
 
 const ArticleCard = ({ article, author }: ArticleCardProps) => {
   const { userData, setUserData, userId } = useContext(UserContext);
-  const [localLikedBy, setLocalLikedBy] = useState(article.likedBy); // Track locally
-  const [isAnimating, setIsAnimating] = useState(false); // Track animation state
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [localLikedBy, setLocalLikedBy] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Set the initial local likedBy state
+    console.log(article);
+    setLocalLikedBy(article.likedBy);
+  }, [article.likedBy]);
 
   const handleLikeClick = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("test");
+
     const liked = userId && localLikedBy.includes(userId);
 
     if (article.id && userData && userId) {
@@ -79,21 +85,20 @@ const ArticleCard = ({ article, author }: ArticleCardProps) => {
             </div>
             <div className="flex items-center gap-[20px] lg:gap-[39px]">
               <div className="flex gap-1 items-center w-20">
-                <div className="relative">
-                  <img
-                    className="w-8 absolute top-0 left-0"
-                    src={(userId && localLikedBy && localLikedBy.includes(userId)) ? likesTrue : likes}
-                  />
-                  <img
+              <img
                     className={`w-8 transition-transform duration-100 ease-linear relative ${
                       isAnimating && "animate-ping"
                     }`}
-                    src={(userId && localLikedBy && localLikedBy.includes(userId)) ? likesTrue : likes}
+                    src={(userId && localLikedBy.includes(userId)) ? likesTrue : likes}
                     onClick={handleLikeClick}
                   />
-                </div>
-                <p className={userId&&localLikedBy.includes(userId)?'text-[#E7AE79]':'text-white'}>
-                {localLikedBy ? localLikedBy.length : 0}
+                  <img
+                    className="w-8 transition-transform duration-100 ease-linear absolute"
+                    src={(userId && localLikedBy.includes(userId)) ? likesTrue : likes}
+                    onClick={handleLikeClick}
+                  />
+                <p className={userId && localLikedBy.includes(userId) ? 'text-[#E7AE79]' : 'text-white'}>
+                  {localLikedBy.length}
                 </p>
               </div>
               <button>

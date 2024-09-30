@@ -1,10 +1,7 @@
-import arrowRightIcon from "../assets/right-arrow-svgrepo-com.svg";
-import saveicon from "../assets/bookmark-ribbon-white.png";
-import optionIcon from "../assets/more-ellipsis-white.png";
 import { NavBar } from "../components/common/navbar";
-import {Spinner, Center} from "@chakra-ui/react";
+import { Spinner, Center } from "@chakra-ui/react";
 import "./styles/Dashboard.css";
-import getCollection from "../firebase/getCollection.js";
+import subscribeToCollection from "../firebase/subscribeToCollection.js"; // Import the new function
 import getDocument from "../firebase/getData.js";
 import { useEffect, useState, useContext } from "react";
 import { useNavigate, Link } from 'react-router-dom';
@@ -12,12 +9,14 @@ import { UserContext } from '../App';
 import UserData from "../interfaces/userData.js";
 import ArticleCard from "../components/Article/Card/ArticleCard.js";
 import ArticleData from "../interfaces/ArticleData";
-import {EventData} from "../interfaces/EventData";
+import { EventData } from "../interfaces/EventData";
 import { EventCard } from "../components/common/EventCard.js";
+import getCollection from "../firebase/getCollection.js";
+import arrowRightIcon from "../assets/right-arrow-svgrepo-com.svg";
 
 interface AuthorData {
-  email : string;
-  firstname : string;
+  email: string;
+  firstname: string;
   imgurl: string;
   lastactive: any;
   lastname: string;
@@ -26,123 +25,129 @@ interface AuthorData {
 }
 
 export const Dashboard = () => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [articles, setArticles] = useState<ArticleData[]>([]);
-  const [events, setEvents] = useState<EventData[]>([])
+  const [events, setEvents] = useState<EventData[]>([]);
   const [authors, setAuthors] = useState<{ [key: string]: AuthorData }>({});
+  const { userData } = useContext(UserContext); // Make sure to access userData for likes
+
+  // Function to fetch author names
+  const fetchAuthors = (authorIds: string[]) => {
+    const uniqueAuthorIds = [...new Set(authorIds)];
+    uniqueAuthorIds.forEach(authorId => {
+      getDocument("users", authorId).then((res) => {
+        if (res.result) {
+          const authorData = res.result.data() as AuthorData;
+          setAuthors(prevAuthors => ({
+            ...prevAuthors,
+            [authorId]: authorData,
+          }));
+        }
+      });
+    });
+  };
 
   useEffect(() => {
-    getCollection("articles").then((res) => {
-      if (res.result) {
-        const articles = res.result.map((article: ArticleData, index: number) => ({
-          ...article,
-          id: res.ids ? res.ids[index] : null
-        }));
-        setArticles(articles);
+    const unsubscribe = subscribeToCollection("articles", ({ result, ids, error }: { result: any, ids: string[], error: any }) => {
+      if (error) {
+        console.error("Error fetching articles: ", error);
+        return;
+      }
 
-        const authorIds = articles.map(article => article.author);
-        const uniqueAuthorIds = [...new Set(authorIds)];
-        uniqueAuthorIds.forEach(authorId => {
-          getDocument("users", authorId).then((res) => {
-            if (res.result) {
-              const authorData = res.result.data() as AuthorData; 
-              setAuthors(prevAuthors => ({
-                ...prevAuthors,
-                [authorId]: authorData,
-              }));
-            }
-          });
-        });
+      if (result && ids) {
+        const newArticles = (result as ArticleData[]).map((article, index) => ({
+          ...article,
+          id: ids[index], // Set the id from ids
+          liked: userData?.likes?.articles?.includes(ids[index]) || false, // Check if the user liked the article
+        }));
+        setArticles(newArticles);
+        const authorIds = newArticles.map(article => article.author);
+        fetchAuthors(authorIds);
+      }
+    });
+
+    // Clean up the subscription on component unmount
+    return () => unsubscribe();
+  }, [userData]); // Ensure it runs when userData changes
+
+  useEffect(() => {
+    // Fetch events if necessary (you can keep this as it is)
+    getCollection('events').then(res => {
+      if (res.result) {
+        setEvents(res.result);
       }
     });
   }, []);
 
+  const filterArticles = articles.slice(0, 3);
+  const filterEvents = events.slice(0, 3);
 
-  useEffect(()=>{
-    getCollection('events').then(res=>{
-      if(res.result){
-        setEvents(res.result)
-      }
-    })
-  },[]);
-  const filterArticles =   articles.slice(0, 3);
-  const filterEvents =  events.slice(0, 3);
-
-
-  if (!articles || articles.length===0){
-  
-    return <>
-    <div className="flex items-center justify-center w-full h-[99vh]"><Spinner size="xl" /></div>
-    </>
+  if (!articles || articles.length === 0) {
+    return (
+      <div className="flex items-center justify-center w-full h-[99vh]"><Spinner size="xl" /></div>
+    );
   }
 
   return (
-
     <div className="flex flex-col items-center bg-[#000B21] text-white header">
-      <div className="h-[120px] w-full">
-      </div>
+      <div className="h-[120px] w-full"></div>
       <div className="w-full lg:min-h-screen flex justify-center items-center px-4 md:px-20 body">
-        <div className="relative w-full lg:w-[1733px] lg:h-[810px]  h-[400px] md:h-[520px] rounded-[38px] overflow-hidden">
+        <div className="relative w-full lg:w-[1733px] lg:h-[810px] h-[400px] md:h-[520px] rounded-[38px] overflow-hidden">
+          {/* Main Article Display */}
           <div className="absolute z-10 w-full lg:h-screen h-full bg-gradient-to-t from-[#000B21A5] via-transparent bottom-0"></div>
-
           <div className="absolute bottom-[83px] z-10 left-[35px] text-white">
-            <h2 className="text-[24px] lg:text-[50px] font-serif font-black">{filterArticles[0].title || "no title"}</h2>
-            <h3 className="text-[14px] lg:text-[24px]">Article • Design • {authors[filterArticles[0].author]?.firstname || "unknown author"}</h3>
+            <h2 className="text-[24px] lg:text-[50px] font-serif font-black">{filterArticles[0]?.title || "no title"}</h2>
+            <h3 className="text-[14px] lg:text-[24px]">Article • Design • {authors[filterArticles[0]?.author]?.firstname || "unknown author"}</h3>
             <button className="w-[100px] lg:w-[169px] h-[40px] lg:h-[59px] text-[14px] lg:text-[21px] bg-white text-black font-bold rounded-[20px] lg:rounded-[29px] mt-[20px] lg:mt-[45px]"
-              onClick={() =>navigate(`/article/${filterArticles[0].title}`)}
-              >
-                View
+              onClick={() => navigate(`/article/${filterArticles[0]?.title}`)}>
+              View
             </button>
           </div>
-
           <img
             className="object-cover w-full h-full md:h-[1000px] lg:-translate-y-[125px]"
-            src={filterArticles[0].image}
+            src={filterArticles[0]?.image}
             alt="Event"
           />
         </div>
       </div>
-      
+
       <div className="mt-[50px] lg:mt-[100px] w-full px-4 lg:px-[89px]">
         <div className="flex justify-between items-center">
           <h2 className="text-white text-[24px] lg:text-[45px] font-bold">Latest Articles</h2>
           <Link to="/articles">
-          <button className="flex items-center text-[16px] lg:text-[30px] text-white">
-            View all
-            <img className="ml-[8px]" src={arrowRightIcon} width={24} alt="arrow right" />
-          </button>
+            <button className="flex items-center text-[16px] lg:text-[30px] text-white">
+              View all
+              <img className="ml-[8px]" src={arrowRightIcon} width={24} alt="arrow right" />
+            </button>
           </Link>
         </div>
-
         <div className="mt-[30px] lg:mt-[59px] flex flex-col gap-[30px] lg:gap-[58px]">
-        {filterArticles.map((article, index)=>{
-          return <ArticleCard article={article} key={index}/>
-        })}
+          {filterArticles.map((article, index) => {
+            return <ArticleCard article={article} key={index} />;
+          })}
         </div>
       </div>
 
-    <div className="mt-[50px] lg:mt-[100px] w-full px-4 lg:px-[89px]">
+      <div className="mt-[50px] lg:mt-[100px] w-full px-4 lg:px-[89px]">
         <div className="flex justify-between items-center">
-        <h2 className="text-white text-[24px] lg:text-[45px] font-bold">Events</h2>
-        <Link to="/events">
-        <button className="flex items-center text-[16px] lg:text-[30px] text-white">
-            View all
-            <img className="ml-[8px]" src={arrowRightIcon} width={24} alt="arrow right" />
-        </button>
-        </Link>
+          <h2 className="text-white text-[24px] lg:text-[45px] font-bold">Events</h2>
+          <Link to="/events">
+            <button className="flex items-center text-[16px] lg:text-[30px] text-white">
+              View all
+              <img className="ml-[8px]" src={arrowRightIcon} width={24} alt="arrow right" />
+            </button>
+          </Link>
         </div>
         <div className="mt-[30px] lg:mt-[59px]">
           <div className="flex gap-[20px]">
-
-          <div className="flex overflow-y-visible gap-[40px] mb-16 justify-between w-full">
-            {filterEvents.map((event)=>(
-              <EventCard event={event} size={"lg"}/>
-            ))}
-          </div>
-            
+            <div className="flex overflow-y-visible gap-[40px] mb-16 justify-between w-full">
+              {filterEvents.map((event) => (
+                <EventCard event={event} size={"lg"} key={event.id} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
-      </div>
+    </div>
   );
 };
