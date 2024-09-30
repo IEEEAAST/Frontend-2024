@@ -8,6 +8,7 @@ import { Timestamp } from "@firebase/firestore";
 import ArticleData from "../../../interfaces/ArticleData.js";
 import subscribeToDocumentsByField from "../../../firebase/subscribeToDocumentsByField.js";
 import UserData from "../../../interfaces/userData.js";
+import { Link } from "react-router-dom";
 
 interface MainContentProps {
   articleName: string;
@@ -78,7 +79,7 @@ export const MainContent: React.FC<MainContentProps> = ({ articleName }) => {
     <div className="main-content">
       <span className="title">{articleData.title}</span>
       <span className="description">{articleData.description}</span>
-      <div className="profile">
+      <Link to={`/profile/${articleData.author}`} className="profile">
         <div className="pfp">
           <img
             src={author?.userData?.imgurl}
@@ -95,9 +96,9 @@ export const MainContent: React.FC<MainContentProps> = ({ articleName }) => {
               {isFollowing ? "Follow" : "Following"}
             </span>
           </span>
-          <span className="desc-time">{formatDate(articleData.publishdate)}</span>
+          <p className="desc-time w-fit">{formatDate(articleData.publishdate)}</p>
         </div>
-      </div>
+      </Link>
       <hr />
       <LikeSaveShare article={articleData} />
       <hr />
