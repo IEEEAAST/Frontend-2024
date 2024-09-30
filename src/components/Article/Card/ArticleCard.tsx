@@ -6,14 +6,32 @@ import saveicon from "../../../assets/bookmark-ribbon-white.png";
 import optionIcon from "../../../assets/more-ellipsis-white.png";
 import UserData from "../../../interfaces/userData";
 import ArticleData from "../../../interfaces/ArticleData";
+import { UserContext } from "../../../App";
+import { useContext } from "react";
+import { toggleLike } from "../../../utils";
 
 interface ArticleCardProps {
   article: ArticleData;
-  author: UserData | undefined;
-  onLikeToggle: () => void;
+  author?: UserData | undefined;
 }
 
-const ArticleCard = ({ article, author, onLikeToggle }: ArticleCardProps) => {
+const ArticleCard = ({ article, author}: ArticleCardProps) => {
+  const { userData, setUserData, userId } = useContext(UserContext);
+
+  const handleLikeClick = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (article.id) {
+        if (userData && userId) {
+            // This function should handle toggling like status in the user data and database
+            toggleLike(article, userData, userId, "article", setUserData);
+            console.log(article.likedBy);
+            article.likedBy?.includes(userId) ? article.likedBy = article.likedBy.filter((id) => id !== userId) : article.likedBy?.push(userId);
+        }
+    }
+};
+
+
   return (
     <Link to={`/article/${article.title}`} className="flex flex-col md:flex-row">
       <div className="flex flex-col md:flex-row w-full">
@@ -26,10 +44,10 @@ const ArticleCard = ({ article, author, onLikeToggle }: ArticleCardProps) => {
         </div>
         <div className="flex flex-col justify-between w-full mt-4 lg:mt-0">
           <div className="text-[12px] lg:text-[15px] mb-[20px] lg:mb-[33px] text-[#F4F4F4]">
-            <Link className="flex items-center gap-2" to={`/profile/${article.author}`}>
+            {author &&<Link className="flex items-center gap-2" to={`/profile/${article.author}`}>
               <Avatar src={author?.imgurl}></Avatar>
               <h5>{author?.firstname || "unknown author"} {author?.lastname || "author"}</h5>
-            </Link>
+            </Link>}
           </div>
           <div className="text-[20px] lg:text-[27px] font-serif">
             <h1>{article.title}</h1>
@@ -48,8 +66,8 @@ const ArticleCard = ({ article, author, onLikeToggle }: ArticleCardProps) => {
             </div>
             <div className="flex items-center gap-[20px] lg:gap-[39px]">
               <div className="flex gap-1 items-center w-20">
-                <img className="w-8" src={article.liked ? likesTrue : likes} onClick={(e) => { e.preventDefault(); e.stopPropagation(); onLikeToggle(); }} />
-                {article.likes}
+                <img className="w-8" src={(userId&&article.likedBy&&article.likedBy.includes(userId)) ? likesTrue : likes} onClick={handleLikeClick} />
+                {article.likedBy?article.likedBy.length:0}
               </div>
               <button>
                 <img src={saveicon} alt="save" />

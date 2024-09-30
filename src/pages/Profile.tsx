@@ -235,7 +235,6 @@ export const Profile = () => {
             Data edited and uploaded successfully!
           </Alert>
         </Slide>
-      <NavBar />
       <div className="pt-[100px] w-full flex justify-center">
         {showTabs ? (
           <Tabs variant="unstyled" className="w-full">

@@ -6,9 +6,8 @@ export default interface ArticleData {
     caption: string;
     description: string;
     image: string;
-    likes: number;
+    likedBy: string[];
     publishdate: Timestamp;
     title: string;
     topic: string;
-    liked: boolean; // Add liked property
   }

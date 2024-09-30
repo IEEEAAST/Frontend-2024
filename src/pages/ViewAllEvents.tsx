@@ -16,8 +16,8 @@ const formatEventDate = (date: Date, format: string) => {
       month: '2-digit',
       year: 'numeric'
     };
-    const formattedDate = date.toLocaleDateString('en-US', options);
-    const time = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    const formattedDate = date.toLocaleDateString('en-GB', options); // Use 'en-GB' locale for day before month
+    const time = date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit', hour12: true });
     return `${formattedDate} at ${time}`;
   } else if (format === "short") {
     const options: Intl.DateTimeFormatOptions = {
@@ -78,10 +78,10 @@ export const ViewAllEvents = () => {
         sortedEvents.sort((a, b) => (a.type || "Event").localeCompare(b.type || "Event"));
         break;
       case "likes":
-        sortedEvents.sort((a, b) => (b.likes || 0) - (a.likes || 0));
+        sortedEvents.sort((a, b) => (b.likedBy.length || 0) - (a.likedBy.length || 0));
         break;
       case "likes-reverse":
-        sortedEvents.sort((a, b) => (a.likes || 0) - (b.likes || 0));
+        sortedEvents.sort((a, b) => (a.likedBy.length || 0) - (b.likedBy.length || 0));
         break;
     }
     setEvents(sortedEvents);
@@ -102,7 +102,6 @@ export const ViewAllEvents = () => {
   return (
     <div className="flex flex-col items-center bg-[#000B21] text-white header">
       <div className="h-[150px] w-full">
-        <NavBar />
       </div>
       <div className="flex justify-between items-center w-full px-4 lg:px-[89px]">
         <h2 className="text-white text-[24px] lg:text-[45px] font-bold">All Events</h2>

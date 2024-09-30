@@ -10,18 +10,10 @@ import { useEffect, useState, useContext } from "react";
 import { useNavigate, Link } from 'react-router-dom';
 import { UserContext } from '../App';
 import UserData from "../interfaces/userData.js";
-
-
-interface ArticleData {
-  article: string;
-  author: string;
-  caption: string;
-  description: string;
-  image: string;
-  likes : number;
-  publishdate: string;
-  title: string;
-}
+import ArticleCard from "../components/Article/Card/ArticleCard.js";
+import ArticleData from "../interfaces/ArticleData";
+import {EventData} from "../interfaces/EventData";
+import { EventCard } from "../components/common/EventCard.js";
 
 interface AuthorData {
   email : string;
@@ -33,50 +25,12 @@ interface AuthorData {
   role: string;
 }
 
-interface Keynotes {
-  name: string;
-  thumbnail: string;
-  url: string;
-}
-
-interface Schedule {
-  duration: string;
-  speaker: string;
-  starting : string;
-  title: string;
-}
-
-interface Videos {
-  length: string;
-  name: string;
-  speaker: string;
-  thumbnail: string;
-  url: string;
-}
-
-interface EventData {
-  coverPhoto : string;
-  description: string;
-  enddtime: any;
-  formLink: string;
-  gallary: string[];
-  keynotes: Keynotes[];
-  schedule: Schedule[];
-  speakers: string[];
-  sponsors: string[];
-  starttime: any;
-  title: string;
-  type: string;
-  videos: Videos[];
-}
-
 export const Dashboard = () => {
   const navigate = useNavigate(); 
   const [articles, setArticles] = useState<ArticleData[]>([]);
   const [events, setEvents] = useState<EventData[]>([])
   const [authors, setAuthors] = useState<{ [key: string]: AuthorData }>({});
   const [searched, setSearched] = useState('');
-  const {userData,setUserData} = useContext(UserContext);
 
   useEffect(() => {
     getCollection("articles").then((res) => {
@@ -120,40 +74,40 @@ export const Dashboard = () => {
     })
   },[]);
 
-  const filterArticles = searched ? articles.filter((a) =>
-    a.title.toLowerCase().includes(searched.toLowerCase())
-  ):articles.slice(0, 3);
+  // const filterArticles = searched ? articles.filter((a) =>
+  //   a.title.toLowerCase().includes(searched.toLowerCase())
+  // ):articles.slice(0, 3);
 
-  const filterEvents = searched ? events.filter((e) =>
-    e.title.toLowerCase().includes(searched.toLowerCase())
-  ) : events;
+  const filterArticles =   articles.slice(0, 3);
+  // console.log("filered articles", filterArticles)
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearched(e.target.value);
+  const filterEvents =  events.slice(0, 3);
+
+  // const filterEvents = searched ? events.filter((e) =>
+  //   e.title.toLowerCase().includes(searched.toLowerCase())
+  // ) : events;
+
+  const handleSearch = (query: string) => {
+    setSearched(query);
   };
+  console.log("search" , searched)
+  // const handleFocus = () => {
+  //   document.querySelector(".body")?.classList.add("blur-background");
+  // };
 
-  const handleFocus = () => {
-    document.querySelector(".body")?.classList.add("blur-background");
-  };
+  // const handleBlur = () => {
+  //   document.querySelector(".body")?.classList.remove("blur-background");
+  // };
 
-  const handleBlur = () => {
-    document.querySelector(".body")?.classList.remove("blur-background");
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleBlur();
-    }
-  };
-
-  const handleArticleClick = (article: ArticleData) => {
-    navigate(`/article/${article.title}`);
-  };
+  // const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (e.key === "Enter") {
+  //     handleBlur();
+  //   }
+  // };
 
   if (!articles || articles.length===0){
   
     return <>
-    <NavBar />
     <div className="flex items-center justify-center w-full h-[99vh]"><Spinner size="xl" /></div>
     </>
   }
@@ -161,21 +115,8 @@ export const Dashboard = () => {
   return (
 
     <div className="flex flex-col items-center bg-[#000B21] text-white header">
-      <div className="h-[150px] w-full">
-        <NavBar />
-        <div className="search">
-          <input      
-            type="text"
-            placeholder="Search articles, events..."
-            value={searched}
-            onChange={handleSearch}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            onKeyDown={handleKeyDown}
-          />
-        </div>
+      <div className="h-[120px] w-full">
       </div>
-      {userData?.roles?.includes("admin") || userData?.roles?.includes("author") ? <Link to="/write"><button className="defaultButton mb-12 lg:mb-0">Create Article</button></Link>:null}
       <div className="w-full lg:min-h-screen flex justify-center items-center px-4 md:px-20 body">
         <div className="relative w-full lg:w-[1733px] lg:h-[810px]  h-[400px] md:h-[520px] rounded-[38px] overflow-hidden">
           <div className="absolute z-10 w-full lg:h-screen h-full bg-gradient-to-t from-[#000B21A5] via-transparent bottom-0"></div>
@@ -211,77 +152,33 @@ export const Dashboard = () => {
 
         <div className="mt-[30px] lg:mt-[59px] flex flex-col gap-[30px] lg:gap-[58px]">
         {filterArticles.map((article, index)=>(
-          <div className="flex flex-col md:flex-row" key={index} >
-            <div className="w-full md:w-[550px] h-[200px] md:h-[250px] md:mr-[58px]">
-              <img
-                src={article.image || "#"}
-                alt="Article"
-                className="w-full h-full object-cover rounded-[16px]"
-              />
-            </div>
-            <div className="flex flex-col justify-between w-full mt-4 lg:mt-0">
-              <div className="text-[12px] lg:text-[15px] mb-[20px] lg:mb-[33px] text-[#F4F4F4]">
-                <h5>-- {authors[article.author]?.firstname || "unknown author"} {authors[article.author]?.lastname || "author"} • {formatDate(authors[article.author]?.lastactive)} ✨ Member-only</h5>
-              </div>
-              <div className="text-[20px] lg:text-[27px] font-serif">
-                <h1>{article.title}</h1>
-              </div>
-              <div className="text-[16px] lg:text-[22px] mb-[20px] lg:mb-[32px]">
-                <h3>
-                  {article.caption} 
-                  <br/>
-                  {article.description}
-                </h3>
-              </div>
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-[10px]">
-                  <button className="text-[12px] lg:text-[15px] w-[70px] lg:w-[90px] h-[30px] lg:h-[35px] bg-[#151F33] rounded-[20px]"
-                  onClick={() => handleArticleClick(article)}>
-                    Swift
-                  </button>
-                  <p>• 5 min read</p>
-                </div>
-                <div className="flex items-center gap-[20px] lg:gap-[39px]">
-                  <button>
-                    <img src={saveicon} alt="save" />
-                  </button>
-                  <button>
-                    <img src={optionIcon} alt="options" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ArticleCard article={article} key={index}/>
         ))}
         </div>
       </div>
 
     <div className="mt-[50px] lg:mt-[100px] w-full px-4 lg:px-[89px]">
+        <div className="flex justify-between items-center">
         <h2 className="text-white text-[24px] lg:text-[45px] font-bold">Events</h2>
-        <div className="mt-[30px] lg:mt-[59px] overflow-x-scroll scrollbar-hide">
-          <div className="flex space-x-[20px]">
+        <Link to="/events">
+        <button className="flex items-center text-[16px] lg:text-[30px] text-white">
+            View all
+            <img className="ml-[8px]" src={arrowRightIcon} width={24} alt="arrow right" />
+        </button>
+        </Link>
+        </div>
+        <div className="mt-[30px] lg:mt-[59px]">
+          <div className="flex gap-[20px]">
 
-          <div className="mt-[40px] flex overflow-x-scroll space-x-[40px] scrollbar-hide">
-            {filterEvents.map((event, index)=>(
-              <div className="flex-shrink-0 w-[450px] h-[350px] lg:h-[590px] bg-purple-600 rounded-[20px] md:rounded-[9px] flex flex-col justify-center items-center text-center" key={index}
-                onClick={() => navigate(`/event/${event.title}`)}>
-                <h3 className="text-[24px] lg:text-[45px] font-bold mb-[20px]">{event.title}</h3>
-                <p className="text-[16px] lg:text-[24px]">
-                  {event.description}
-                  <br></br>
-                  {event.type}
-                </p>
-                <p className="text-16px] lg:text-[24px]">{formatDate(event.starttime)}</p>
-              </div>
+          <div className="flex overflow-y-visible gap-[40px] mb-16 justify-between w-full">
+            {filterEvents.map((event)=>(
+              <EventCard event={event} size={"lg"}/>
             ))}
           </div>
             
           </div>
         </div>
       </div>
-        <p className="text-white text-[24px] mt-[10px]">More services coming out soon... stay tuned.<br />
-        <a href="#" className="underline block text-center">Tell us what you expect</a>
-        </p>
       </div>
   );
 };

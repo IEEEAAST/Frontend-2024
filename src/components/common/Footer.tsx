@@ -5,7 +5,7 @@ import Logo from "../../assets/IEEEAAST.ico";
 import FooterSocialCard from "./FooterSocialCard";
 import "./styles/Footer.css";
 import { Element } from 'react-scroll';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react'
 import getCollection from "../../firebase/getCollection";
 import getData from "../../firebase/getData";
+import { AppConfigContext } from "../../App";
 
 interface FAQ {
   question: string;
@@ -33,7 +34,7 @@ let SocialInfo = [
   {
     title: "Contact Us",
     imgSrc: Contact,
-    link: "mailto:",
+    link: `mailto:`,
   },
   {
     title: "LinkedIn",
@@ -47,14 +48,24 @@ const Footer = () => {
   const onClose = () => setIsOpen(false);
   const onOpen = () => setIsOpen(true);
   const [faq, setFaq] = useState<FAQ[]>([]);
+  const appConfig = useContext(AppConfigContext).appConfig;
 
   useEffect(() => {
+    SocialInfo[1].link = `mailto:${appConfig.contactEmail}`;
+    const recruitingLink = appConfig.recruitingLink;
     getCollection('faq').then((data) => {
-      const sortedFaq = (data.result || []).sort((a: FAQ, b: FAQ) => a.index - b.index);
+      const recruitmentFaq = {
+        question: "How can I join you guys?",
+        answer: (recruitingLink && recruitingLink.length > 0) ?
+          `You can volunteer with us today by clicking ` :
+          "Unfortunately, we are not currently recruiting new volunteers. Check again soon!",
+        index: (data?.result?.length ?? 0) + 1
+      };
+      const sortedFaq = ([...(data.result ?? []), recruitmentFaq]).sort((a: FAQ, b: FAQ) => a.index - b.index);
+
       setFaq(sortedFaq);
     });
-    getData("adminSettings", "contactEmail").then((response) => {SocialInfo[1].link = "mailto:"+response.result?.data()?.email || ""});
-  }, []);
+  }, [appConfig]);
 
   return (
     <Element name="contactSection">
@@ -80,7 +91,8 @@ const Footer = () => {
             {faq.map((question, index) => (
               <div key={index} className="mb-4">
                 <li className="text-2xl">{question.question}</li>
-                <p className="text-lg text-gray-300">{question.answer}</p>
+                <p className="text-lg text-gray-300">{question.answer}{(index==faq.length-1&&appConfig.recruitingLink&&appConfig.recruitingLink.length>0)&& (<><a target="_blank" className="text-blue-500" href={appConfig.recruitingLink}>here</a>!</>)}</p>
+                
               </div>
             ))}
           </ModalBody>
