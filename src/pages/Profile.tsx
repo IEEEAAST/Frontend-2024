@@ -27,7 +27,9 @@ import { setNewPassword } from "../firebase/updatePassword";
 import addStorage from "../firebase/addStorage";
 import updateData from "../firebase/updateData";
 import getDocument from "../firebase/getData";
-import Triangle from "../assets/bg-triangle-ellipse@2x.png"
+import ArticleCard from "../components/Article/Card/ArticleCard.tsx"
+import subscribeToCollection from "../firebase/subscribeToCollection.js";
+import ArticleData from "../interfaces/ArticleData.tsx";
 
 interface currentUserData {
   mobile: string;
@@ -53,12 +55,13 @@ export const Profile = () => {
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(false);
   const [self, setSelf] = useState<boolean>(false);
+  const [articles, setArticles]= useState<ArticleData[]>();
   const { userData, setUserData, userId } = useContext(UserContext);
   const { name: id } = useParams<{ name: string }>();
   const mobileRegex = /^[0-9]{10}$/;
   const navigate = useNavigate();
   const location = useLocation();
-
+  
 // password regix
   const passwordRegix = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
 
@@ -97,6 +100,17 @@ export const Profile = () => {
             roles: result.data()?.roles || [],
           });
         }
+        const unsubscribe= subscribeToCollection("articles", ({ result, ids, error }: { result: any, ids: string[], error: any })=>{
+          if(error){
+            console.error('error fetching articles: ',error);
+            return;
+          }
+          if(result && ids){
+            setArticles(result.filter((article: ArticleData)=>{
+              return id==article.author;
+            }));            
+          }
+        })
     };
 
     fetchData();
@@ -224,11 +238,8 @@ export const Profile = () => {
   // Determine if Tabs should be displayed
   const showTabs = self || currentUserData.roles?.includes("author")|| currentUserData.roles?.includes("admin");
 
-  // Determine if Settings Tab should be displayed
-  const showSettingsTab = self; // ??? use self ??
-
   return (
-    <div>     
+    <div>
         <Slide direction="top" in={showSuccess} style={{ zIndex: 300 }}>
           <Alert status="success" variant="solid" zIndex={300}>
             <AlertIcon />
@@ -236,50 +247,56 @@ export const Profile = () => {
           </Alert>
         </Slide>
       <NavBar />
+      <div className="pt-[100px] mx-16 flex-col justify-center">
+      <div className="bg-[url('https://img.freepik.com/free-vector/abstract-orange-background_698452-2541.jpg')] bg-cover bg-center mt-11 h-[360px] rounded-3xl relative"></div>
+      <div className=" w-full flex-col justify-center mb-7 ">
+        <div className="ml-16 absolute -mt-20 ">
+        <img 
+  src={currentUserData.profilePicture 
+    ? typeof currentUserData.profilePicture === "string"
+      ? `${currentUserData.profilePicture}`
+      : URL.createObjectURL(currentUserData.profilePicture)
+    : "src/assets/add-profile-picture-white@2x.png"
+  } 
+  className="w-40 h-40 rounded-full object-cover mb-7" 
+  alt="Profile" 
+/>
+                  
+                  <Text fontFamily={"SF-Pro-Text-Medium "} mb={4} className="text-4xl font-extrabold "> {currentUserData.firstname} {currentUserData.lastname}</Text>
+                  <div className=" w-28 flex justify-between text-xs">
+                  <Text fontFamily={"SF-Pro-Text-Medium"} mb={4}>followers{currentUserData.followers}  </Text>
+                  <Text fontFamily={"SF-Pro-Text-Medium"} mb={2}>following {currentUserData.following} </Text>
+                  </div>
+                  </div>
+                  </div>
       <div className="pt-[100px] w-full flex justify-center">
+      
         {showTabs ? (
-          <Tabs variant="unstyled" className="w-full">
-            <TabList bg={'#151F33'} className="rounded-full w-fit mx-auto">
-              <Tab className="border-r-2" style={{borderColor:'#1c2a44'}}>Profile</Tab>
-              {(currentUserData.roles?.includes("admin") || currentUserData.roles?.includes("author")) && <Tab className={showSettingsTab?"border-r-2":""} style={{borderColor:'#1c2a44'}}>Articles</Tab>}
-              
-              {showSettingsTab && <>
-              <Tab className="border-r-2" style={{borderColor:'#1c2a44'}}>Bookmarks</Tab>
-              <Tab>Settings</Tab>
-              </>            
-              }
+          <Tabs variant="unstyled" className="w-full ">
+            <TabList bg={'transparent'} className="rounded-full w-fit mx-auto bg-transparent border-none mb-16">
+              <Tab className="bg-transparent text-xs" style={{borderColor:'transparent'}}>Articles</Tab>
+              <Tab className="bg-transparent text-xs" style={{borderColor:'transparent'}}>Contributions</Tab>
+              <Tab className="bg-transparent text-xs" style={{borderColor:'transparent'}}>About</Tab>
+              <Tab>Settings</Tab>    
             </TabList>
+
             <TabPanels>
             <TabPanel>
-            <Box className="w-full flex flex-col" m={5} ml={20}>
-            <Text fontFamily={"SF-Pro-Display-Bold"} fontSize={40} mb={4}>Profile Details:</Text>
-                  <Avatar
-                    size="lg"
-                    src={
-                      currentUserData.profilePicture
-                        ? typeof currentUserData.profilePicture === "string"
-                          ? `${currentUserData.profilePicture}`
-                          : URL.createObjectURL(currentUserData.profilePicture)
-                        : "src/assets/add-profile-picture-white@2x.png"
-                    }
-                    borderRadius="full"
-                    boxShadow="lg"
-                    mb={4}
-                  />
-                  <Text fontFamily={"SF-Pro-Text-Medium"} mb={4}>Name: {currentUserData.firstname} {currentUserData.lastname}</Text>
-                  <Text fontFamily={"SF-Pro-Text-Medium"} mb={4}>Mobile: {currentUserData.mobile}</Text>
-                  <Text fontFamily={"SF-Pro-Text-Medium"} mb={2}>Description: </Text>
-                  <Textarea value={currentUserData.desc} readOnly width={800} height={300}></Textarea>
-                </Box>
+              <div className="flex flex-col gap-8">{articles?.map((article: ArticleData, index: number)=> {
+                return <ArticleCard key={index} article={article}/>
+              })}</div>
               </TabPanel>
+
               <TabPanel>
                 <Box>
                 <p>Articles</p>
                 </Box>
               </TabPanel>
+
               <TabPanel>
-                <p>Bookmarks</p>
+              <Text fontFamily={"SF-Pro-Text-Medium"} mb={4} className="text-3xl font-bold"> description goes here:{currentUserData.desc}</Text>
               </TabPanel>
+
               <TabPanel>
               {self && (
                   <div className="form-container">
@@ -497,9 +514,7 @@ export const Profile = () => {
             <Textarea value={currentUserData.desc} readOnly width={800} height={300}></Textarea>
           </Box>
         )}
-        <div className="bottom-0 w-80 h-auto right-[-2vh] p-4 fixed max-sm:w-[45%]">
-          <img src={Triangle} alt="Triangle" />
-        </div>
+      </div>
       </div>
     </div>
   );

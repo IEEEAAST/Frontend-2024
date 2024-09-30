@@ -9,6 +9,7 @@ import ArticleData from "../../../interfaces/ArticleData";
 import { UserContext } from "../../../App";
 import { useContext } from "react";
 import { toggleLike } from "../../../utils";
+import { Events } from "react-scroll";
 
 interface ArticleCardProps {
   article: ArticleData;
@@ -66,7 +67,7 @@ const ArticleCard = ({ article, author}: ArticleCardProps) => {
             </div>
             <div className="flex items-center gap-[20px] lg:gap-[39px]">
               <div className="flex gap-1 items-center w-20">
-                <img className="w-8" src={(userId&&article.likedBy&&article.likedBy.includes(userId)) ? likesTrue : likes} onClick={handleLikeClick} />
+                <img className="w-8" src={(userId&&article.likedBy&&article.likedBy.includes(userId)) ? likesTrue : likes} onClick={(e)=>{handleLikeClick(e); console.log('test')}} />
                 {article.likedBy?article.likedBy.length:0}
               </div>
               <button>
