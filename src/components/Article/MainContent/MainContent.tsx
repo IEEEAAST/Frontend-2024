@@ -6,17 +6,7 @@ import getCollection from "../../../firebase/getCollection.js";
 import getDocument from "../../../firebase/getData.js";
 import { Timestamp } from "@firebase/firestore";
 import { TotpMultiFactorGenerator } from "firebase/auth/web-extension";
-
-interface ArticleData {
-  article: string;
-  author: string;
-  caption: string;
-  description: string;
-  image: string;
-  likes : number;
-  publishdate: string;
-  title: string;
-}
+import ArticleData from "../../../interfaces/ArticleData.js";
 
 interface AuthorData{
   email : string;
@@ -144,8 +134,8 @@ export const MainContent: React.FC<MainContentProps> = ({searchQuery, articleNam
         <hr />
         <LikeSaveShare articleID = {articleData.indexOf(displayedArticle)}/>
         <hr />
-        <div className="article-img">
-          <img src={displayedArticle.image} alt="Article" />
+        <div className="article-img" style={{ height: '400px', overflow: 'hidden' }}>
+          <img className=" h-full object-contain bg-[#000B21] w-full" src={displayedArticle.image} alt="Article" />
         </div>
         <caption>{displayedArticle.caption}</caption>
         <div className="article-desc">
