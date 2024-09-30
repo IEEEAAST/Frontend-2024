@@ -105,12 +105,17 @@ export const Profile = () => {
             console.error('error fetching articles: ',error);
             return;
           }
-          if(result && ids){
-            setArticles(result.filter((article: ArticleData)=>{
-              return id==article.author;
-            }));            
-          }
+            if (result && ids) {
+            const articlesWithIds = result.map((article: ArticleData, index: number) => ({
+              ...article,
+              id: ids[index],
+            }));
+            setArticles(articlesWithIds.filter((article: ArticleData) => {
+              return id === article.author;
+            }));
+            }
         })
+        return () => unsubscribe();
     };
 
     fetchData();

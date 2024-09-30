@@ -7,31 +7,41 @@ import optionIcon from "../../../assets/more-ellipsis-white.png";
 import UserData from "../../../interfaces/userData";
 import ArticleData from "../../../interfaces/ArticleData";
 import { UserContext } from "../../../App";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { toggleLike } from "../../../utils";
-import { Events } from "react-scroll";
 
 interface ArticleCardProps {
   article: ArticleData;
   author?: UserData | undefined;
 }
 
-const ArticleCard = ({ article, author}: ArticleCardProps) => {
+const ArticleCard = ({ article, author }: ArticleCardProps) => {
   const { userData, setUserData, userId } = useContext(UserContext);
+  const [localLikedBy, setLocalLikedBy] = useState(article.likedBy); // Track locally
+  const [isAnimating, setIsAnimating] = useState(false); // Track animation state
 
   const handleLikeClick = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
     e.preventDefault();
     e.stopPropagation();
-    if (article.id) {
-        if (userData && userId) {
-            // This function should handle toggling like status in the user data and database
-            toggleLike(article, userData, userId, "article", setUserData);
-            console.log(article.likedBy);
-            article.likedBy?.includes(userId) ? article.likedBy = article.likedBy.filter((id) => id !== userId) : article.likedBy?.push(userId);
-        }
-    }
-};
+    console.log("test");
+    const liked = userId && localLikedBy.includes(userId);
 
+    if (article.id && userData && userId) {
+      // Trigger the animation
+      setIsAnimating(true);
+      setTimeout(() => setIsAnimating(false), 500);
+
+      // Optimistically update the local likedBy state
+      const updatedLikedBy = liked
+        ? localLikedBy.filter((user) => user !== userId) // Remove user from likedBy
+        : [...localLikedBy, userId]; // Add user to likedBy
+
+      setLocalLikedBy(updatedLikedBy); // Update the UI immediately
+
+      // Now send the update to Firebase
+      toggleLike(article, userData, userId, "article", setUserData);
+    }
+  };
 
   return (
     <Link to={`/article/${article.title}`} className="flex flex-col md:flex-row">
@@ -45,10 +55,12 @@ const ArticleCard = ({ article, author}: ArticleCardProps) => {
         </div>
         <div className="flex flex-col justify-between w-full mt-4 lg:mt-0">
           <div className="text-[12px] lg:text-[15px] mb-[20px] lg:mb-[33px] text-[#F4F4F4]">
-            {author &&<Link className="flex items-center gap-2" to={`/profile/${article.author}`}>
-              <Avatar src={author?.imgurl}></Avatar>
-              <h5>{author?.firstname || "unknown author"} {author?.lastname || "author"}</h5>
-            </Link>}
+            {author && (
+              <Link className="flex items-center gap-2" to={`/profile/${article.author}`}>
+                <Avatar src={author?.imgurl}></Avatar>
+                <h5>{author?.firstname || "unknown author"} {author?.lastname || "author"}</h5>
+              </Link>
+            )}
           </div>
           <div className="text-[20px] lg:text-[27px] font-serif">
             <h1>{article.title}</h1>
@@ -67,8 +79,22 @@ const ArticleCard = ({ article, author}: ArticleCardProps) => {
             </div>
             <div className="flex items-center gap-[20px] lg:gap-[39px]">
               <div className="flex gap-1 items-center w-20">
-                <img className="w-8" src={(userId&&article.likedBy&&article.likedBy.includes(userId)) ? likesTrue : likes} onClick={(e)=>{handleLikeClick(e); console.log('test')}} />
-                {article.likedBy?article.likedBy.length:0}
+                <div className="relative">
+                  <img
+                    className="w-8 absolute top-0 left-0"
+                    src={(userId && localLikedBy && localLikedBy.includes(userId)) ? likesTrue : likes}
+                  />
+                  <img
+                    className={`w-8 transition-transform duration-100 ease-linear relative ${
+                      isAnimating && "animate-ping"
+                    }`}
+                    src={(userId && localLikedBy && localLikedBy.includes(userId)) ? likesTrue : likes}
+                    onClick={handleLikeClick}
+                  />
+                </div>
+                <p className={userId&&localLikedBy.includes(userId)?'text-[#E7AE79]':'text-white'}>
+                {localLikedBy ? localLikedBy.length : 0}
+                </p>
               </div>
               <button>
                 <img src={saveicon} alt="save" />

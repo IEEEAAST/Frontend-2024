@@ -37,11 +37,12 @@ export const EventDetails = () => {
   const [isSponsorEnabled, setSponsorEnabled] = useState(false);
   const [speakers, setSpeakers] = useState<IspksIds>();
   const [schedule, setSchedule] = useState<scheduleItem[]>([]);
-
+  const [isAnimating, setIsAnimating] = useState(false);
   const handleLikeClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     if (eventData?.id) {
       if (userData && userId) {
-        
+        setIsAnimating(true);
+        setTimeout(() => setIsAnimating(false), 500);
         toggleLike(eventData, userData, userId, "event", setUserData);
         eventData.likedBy?.includes(userId) ? eventData.likedBy = eventData.likedBy.filter((id) => id !== userId) : eventData.likedBy?.push(userId);
       }
@@ -136,16 +137,26 @@ export const EventDetails = () => {
             <span className="flex items-center whitespace-nowrap">
               &nbsp;{/* Space to separate */}
               {eventData?.title?.split(' ').slice(-1)}{/* Last word */}
-              <button
-                className="w-[50px] h-[50px] p-[2px] flex gap-2 items-center text-lg font-body font-normal ml-2"
+                <button
+                className="w-[50px] h-[50px] p-[2px] flex gap-2 items-center text-lg font-body font-normal ml-2 relative"
                 onClick={handleLikeClick}
-              >
-                <img
+                >
+                <div className="relative">
+                  <img
+                  className="absolute top-0 left-0"
                   src={eventData && userData && userData?.likes.events?.includes(eventData?.id) ? Liked : Like}
                   alt="like icon"
-                />
-                {eventData?.likedBy?.length}
-              </button>
+                  />
+                  <img
+                  className={`transition-transform duration-100 ease-linear ${isAnimating && "animate-ping"}`}
+                  src={eventData && userData && userData?.likes.events?.includes(eventData?.id) ? Liked : Like}
+                  alt="like icon"
+                  />
+                </div>
+                <p className={userData != null && eventData?.likedBy?.includes(userId as string) ? 'text-[#E7AE79]' : 'text-white'}>
+                  {eventData?.likedBy?.length}
+                </p>
+                </button>
             </span>
             </span>    
             </div>

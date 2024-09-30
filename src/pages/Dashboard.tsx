@@ -30,12 +30,14 @@ export const Dashboard = () => {
   const [articles, setArticles] = useState<ArticleData[]>([]);
   const [events, setEvents] = useState<EventData[]>([])
   const [authors, setAuthors] = useState<{ [key: string]: AuthorData }>({});
-  const [searched, setSearched] = useState('');
 
   useEffect(() => {
     getCollection("articles").then((res) => {
       if (res.result) {
-        const articles = res.result as ArticleData[];
+        const articles = res.result.map((article: ArticleData, index: number) => ({
+          ...article,
+          id: res.ids ? res.ids[index] : null
+        }));
         setArticles(articles);
 
         const authorIds = articles.map(article => article.author);
@@ -55,16 +57,6 @@ export const Dashboard = () => {
     });
   }, []);
 
-  const formatDate = (timestamp: { seconds: number; nanoseconds: number }) => {
-    if (!timestamp) return "N/A";
-    const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
-    const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    };
-    return date.toLocaleDateString(undefined, options);
-  };
 
   useEffect(()=>{
     getCollection('events').then(res=>{
@@ -73,37 +65,9 @@ export const Dashboard = () => {
       }
     })
   },[]);
-
-  // const filterArticles = searched ? articles.filter((a) =>
-  //   a.title.toLowerCase().includes(searched.toLowerCase())
-  // ):articles.slice(0, 3);
-
   const filterArticles =   articles.slice(0, 3);
-  // console.log("filered articles", filterArticles)
-
   const filterEvents =  events.slice(0, 3);
 
-  // const filterEvents = searched ? events.filter((e) =>
-  //   e.title.toLowerCase().includes(searched.toLowerCase())
-  // ) : events;
-
-  const handleSearch = (query: string) => {
-    setSearched(query);
-  };
-  console.log("search" , searched)
-  // const handleFocus = () => {
-  //   document.querySelector(".body")?.classList.add("blur-background");
-  // };
-
-  // const handleBlur = () => {
-  //   document.querySelector(".body")?.classList.remove("blur-background");
-  // };
-
-  // const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  //   if (e.key === "Enter") {
-  //     handleBlur();
-  //   }
-  // };
 
   if (!articles || articles.length===0){
   
@@ -151,9 +115,9 @@ export const Dashboard = () => {
         </div>
 
         <div className="mt-[30px] lg:mt-[59px] flex flex-col gap-[30px] lg:gap-[58px]">
-        {filterArticles.map((article, index)=>(
-          <ArticleCard article={article} key={index}/>
-        ))}
+        {filterArticles.map((article, index)=>{
+          return <ArticleCard article={article} key={index}/>
+        })}
         </div>
       </div>
 
