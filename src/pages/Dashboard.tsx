@@ -14,21 +14,11 @@ import { EventCard } from "../components/common/EventCard.js";
 import getCollection from "../firebase/getCollection.js";
 import arrowRightIcon from "../assets/right-arrow-svgrepo-com.svg";
 
-interface AuthorData {
-  email: string;
-  firstname: string;
-  imgurl: string;
-  lastactive: any;
-  lastname: string;
-  phonenumber: number;
-  role: string;
-}
-
 export const Dashboard = () => {
   const navigate = useNavigate();
   const [articles, setArticles] = useState<ArticleData[]>([]);
   const [events, setEvents] = useState<EventData[]>([]);
-  const [authors, setAuthors] = useState<{ [key: string]: AuthorData }>({});
+  const [authors, setAuthors] = useState<{ [key: string]: UserData }>({});
   const { userData } = useContext(UserContext); // Make sure to access userData for likes
 
   // Function to fetch author names
@@ -37,7 +27,7 @@ export const Dashboard = () => {
     uniqueAuthorIds.forEach(authorId => {
       getDocument("users", authorId).then((res) => {
         if (res.result) {
-          const authorData = res.result.data() as AuthorData;
+          const authorData = res.result.data() as UserData;
           setAuthors(prevAuthors => ({
             ...prevAuthors,
             [authorId]: authorData,
@@ -123,7 +113,7 @@ export const Dashboard = () => {
         </div>
         <div className="mt-[30px] lg:mt-[59px] flex flex-col gap-[30px] lg:gap-[58px]">
           {filterArticles.map((article, index) => {
-            return <ArticleCard article={article} key={index} />;
+            return <ArticleCard article={article} author={authors[article.author]} key={index} />;
           })}
         </div>
       </div>

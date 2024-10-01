@@ -43,6 +43,7 @@ interface currentUserData {
   roles?: string[];
 }
 
+
 export const Profile = () => {
   const [notMatchError, setNotMatchError] = useState<boolean>(false);
   const [oldPasswordNotEntered, setOldPasswordNotEntered] = useState<boolean>(false);
@@ -77,6 +78,10 @@ export const Profile = () => {
     oldPassword: "",
     roles: []
   });
+  useEffect(() => {
+    // Scroll to top immediately when the component mounts
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, []);
 
   // Fetch user data and check if the `id` matches the logged-in user ID
   useEffect(() => {
