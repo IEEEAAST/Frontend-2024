@@ -13,6 +13,7 @@ import Browse from "../../assets/browse.png";
 import Bookmark from "../../assets/save.png";
 import Write from "../../assets/write.png"
 import Bell from "../../assets/bell.png"
+import { LogoButton } from "./LogoButton.js";
 
 
 
@@ -136,11 +137,7 @@ export const NavBar : React.FC = () => {
       <div className="wrapper absolute flex items-start sm:items-center justify-between py-2 w-full z-50">
       
         {/* left */}        
-          <div className="ml-[40vw] sm:ml-[20px]">
-          <Link to="/">
-            <img src={Logo} alt="IEEE branch logo" height={90} width={90} />
-          </Link>
-          </div>
+        <LogoButton />
         
         {/* mid */}
         <div className="flex-1 justify-start hidden sm:flex">
