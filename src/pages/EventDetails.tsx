@@ -24,6 +24,7 @@ import { Ivideo, Inote, IsponsorsIds, scheduleItem, IspksIds } from "../interfac
 import { UserContext } from "../App";
 import UserData from "../interfaces/userData";
 import { toggleLike } from "../utils";
+import { LikeButton } from "../components/common/LikeButton";
 
 export const EventDetails = () => {
   const { name: eventName } = useParams<{ name: string }>();
@@ -137,26 +138,7 @@ export const EventDetails = () => {
             <span className="flex items-center whitespace-nowrap">
               &nbsp;{/* Space to separate */}
               {eventData?.title?.split(' ').slice(-1)}{/* Last word */}
-                <button
-                className="w-[50px] h-[50px] p-[2px] flex gap-2 items-center text-lg font-body font-normal ml-2 relative"
-                onClick={handleLikeClick}
-                >
-                <div className="relative">
-                  <img
-                  className="absolute top-0 left-0"
-                  src={eventData && userData && userData?.likes.events?.includes(eventData?.id) ? Liked : Like}
-                  alt="like icon"
-                  />
-                  <img
-                  className={`transition-transform duration-100 ease-linear ${isAnimating && "animate-ping"}`}
-                  src={eventData && userData && userData?.likes.events?.includes(eventData?.id) ? Liked : Like}
-                  alt="like icon"
-                  />
-                </div>
-                <p className={userData != null && eventData?.likedBy?.includes(userId as string) ? 'text-[#E7AE79]' : 'text-white'}>
-                  {eventData?.likedBy?.length}
-                </p>
-                </button>
+              {eventData && <LikeButton item={eventData} type="event" className="font-body font-normal text-[16px] ml-2 mt-2"/>}
             </span>
             </span>    
             </div>

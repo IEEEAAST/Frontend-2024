@@ -1,14 +1,10 @@
 import { Avatar } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import likes from "../../../assets/sparkles-white.png";
-import likesTrue from "../../../assets/sparkles-orange.png";
 import saveicon from "../../../assets/bookmark-ribbon-white.png";
 import optionIcon from "../../../assets/more-ellipsis-white.png";
 import UserData from "../../../interfaces/userData";
 import ArticleData from "../../../interfaces/ArticleData";
-import { UserContext } from "../../../App";
-import { useContext, useState, useEffect } from "react";
-import { toggleLike } from "../../../utils";
+import { LikeButton } from "../../common/LikeButton";
 
 interface ArticleCardProps {
   article: ArticleData;
@@ -16,39 +12,6 @@ interface ArticleCardProps {
 }
 
 const ArticleCard = ({ article, author }: ArticleCardProps) => {
-  const { userData, setUserData, userId } = useContext(UserContext);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [localLikedBy, setLocalLikedBy] = useState<string[]>([]);
-
-  useEffect(() => {
-    // Set the initial local likedBy state
-    console.log(article);
-    setLocalLikedBy(article.likedBy);
-  }, [article.likedBy]);
-
-  const handleLikeClick = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const liked = userId && localLikedBy.includes(userId);
-
-    if (article.id && userData && userId) {
-      // Trigger the animation
-      setIsAnimating(true);
-      setTimeout(() => setIsAnimating(false), 500);
-
-      // Optimistically update the local likedBy state
-      const updatedLikedBy = liked
-        ? localLikedBy.filter((user) => user !== userId) // Remove user from likedBy
-        : [...localLikedBy, userId]; // Add user to likedBy
-
-      setLocalLikedBy(updatedLikedBy); // Update the UI immediately
-
-      // Now send the update to Firebase
-      toggleLike(article, userData, userId, "article", setUserData);
-    }
-  };
-
   return (
     <Link to={`/article/${article.title}`} className="flex flex-col md:flex-row">
       <div className="flex flex-col md:flex-row w-full">
@@ -84,23 +47,7 @@ const ArticleCard = ({ article, author }: ArticleCardProps) => {
               </p>
             </div>
             <div className="flex items-center gap-[20px] lg:gap-[39px]">
-              <div className="flex gap-1 items-center w-20">
-              <img
-                    className={`w-8 transition-transform duration-100 ease-linear relative ${
-                      isAnimating && "animate-ping"
-                    }`}
-                    src={(userId && localLikedBy.includes(userId)) ? likesTrue : likes}
-                    onClick={handleLikeClick}
-                  />
-                  <img
-                    className="w-8 transition-transform duration-100 ease-linear absolute"
-                    src={(userId && localLikedBy.includes(userId)) ? likesTrue : likes}
-                    onClick={handleLikeClick}
-                  />
-                <p className={userId && localLikedBy.includes(userId) ? 'text-[#E7AE79]' : 'text-white'}>
-                  {localLikedBy.length}
-                </p>
-              </div>
+              <LikeButton item={article} type="article" />
               <button>
                 <img src={saveicon} alt="save" />
               </button>

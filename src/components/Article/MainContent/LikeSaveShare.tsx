@@ -8,6 +8,7 @@ import React, { useState, useEffect, useContext } from "react";
 import ArticleData from "../../../interfaces/ArticleData.js";
 import { UserContext } from "../../../App.js";
 import { toggleLike } from "../../../utils";
+import { LikeButton } from "../../common/LikeButton.js";
 
 interface LikeSaveShareProps {
   article: ArticleData;
@@ -47,21 +48,7 @@ export const LikeSaveShare: React.FC<LikeSaveShareProps> = ({ article }) => {
 
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px' }}>
-      <div className="flex gap-1 items-center w-20">
-        <img
-          className="w-8 transition-transform duration-100 ease-linear absolute"
-          src={(userId && localLikedBy.includes(userId)) ? OrangeSparkles : WhiteSparkles}
-          onClick={handleLikeClick}
-        />
-        <img
-          className={`w-8 transition-transform duration-100 ease-linear relative cursor-pointer ${isAnimating && "animate-ping"}`}
-          src={(userId && localLikedBy.includes(userId)) ? OrangeSparkles : WhiteSparkles}
-          onClick={handleLikeClick}
-        />
-        <p className={userId && localLikedBy.includes(userId) ? 'text-[#E7AE79]' : 'text-white'}>
-          {localLikedBy.length}
-        </p>
-      </div>
+      <LikeButton item={article} type="article"/>
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <img
           src={true ? Bookmark : FilledBookmark} // add condition later

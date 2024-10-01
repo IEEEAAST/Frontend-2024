@@ -142,15 +142,13 @@ export const ViewAllArticles = () => {
                         </div>
                         <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter.includes('likes')) ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`} />
                     </button>
-
-                    {/* Other sorting buttons... */}
                 </div>
 
                 <div className="w-full px-4">
                     <div className="mt-[30px] lg:mt-[59px] flex flex-col gap-[30px] lg:gap-[58px]">
                         {articles.map((article, index) => (
                             <ArticleCard
-                                key={index}
+                                key={article.id || index}
                                 article={article}
                                 author={authors[article.author]}
                             />
