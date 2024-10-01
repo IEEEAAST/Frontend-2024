@@ -67,12 +67,12 @@ export const LikeButton: React.FC<LikeButtonProps> = ({ item, type, className })
   return (
     <div className={`flex gap-1 items-center w-20 ${className}`}>
       <img
-        className="w-8 transition-transform duration-100 ease-linear absolute"
+        className={`w-8 transition-transform duration-100 ease-linear absolute hover:scale-125 ${!isAnimating && "hidden"}`}
         src={userId && localLikedBy.includes(userId) ? OrangeSparkles : WhiteSparkles}
         onClick={handleLikeClick}
       />
       <img
-        className={`w-8 transition-transform duration-100 ease-linear relative cursor-pointer ${
+        className={`w-8 transition-transform duration-100 ease-linear relative cursor-pointer hover:scale-125 ${
           isAnimating && "animate-ping"
         }`}
         src={userId && localLikedBy.includes(userId) ? OrangeSparkles : WhiteSparkles}
