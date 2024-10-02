@@ -256,11 +256,11 @@ export const Profile = () => {
           </Alert>
         </Slide>
 
-      <div className="pt-[100px] mx-16 flex-col justify-center">
-      <div className="bg-[url('https://img.freepik.com/free-vector/abstract-orange-background_698452-2541.jpg')] bg-cover bg-center mt-11 h-[360px] rounded-3xl relative"></div>
-      <div className="ml-16 -mt-20 z-0 relativem mb-44">
+      <div className="pt-[100px] mx-24 md:mx-32 flex-col justify-center">
+      <div className="bg-[url('https://img.freepik.com/free-vector/abstract-orange-background_698452-2541.jpg')] bg-cover bg-center mt-11 h-[100px] md:w-full md:h-[300px] rounded-3xl relative"></div>
+      <div className=" ml-8 md:ml-16 -mt-14 md:-mt-20 z-0 relative mb-32 md:mb-44">
         <img
-          className="absolute z-10 w-40 h-40 rounded-full object-cover mb-7"
+          className="absolute z-10 w-24 h-24 md:w-40 md:h-40 rounded-full object-cover mb-7"
           src={
             currentUserData.profilePicture
               ? typeof currentUserData.profilePicture === "string"
@@ -271,24 +271,30 @@ export const Profile = () => {
           alt="Profile"
         />
       </div>
-      <Tabs variant={'unstyled'}>
-        <div className="flex justify-between items-center">
-        <p className="text-4xl font-extrabold font-textmedium"> {currentUserData.firstname} {currentUserData.lastname}</p>
-        <TabList>
-          <Tab>Articles</Tab>
-          <Tab>Contributions</Tab>
-          <Tab>About</Tab>
-          {self && <Tab>Settings</Tab>}
-          {!self&&<button className="defaultButton my-auto">Follow</button>}
-        </TabList>
-        
-
-        </div>
-        <div className="flex gap-[10px] items-center font-extralight">
+      <Tabs size='sm' variant={'unstyled'}>
+        <div className="flex  justify-between items-center flex-wrap">
+          <div className="flex flex-col">
+        <p className="text-2xl font-extrabold font-textmedium md:ml-16"> {currentUserData.firstname} {currentUserData.lastname}</p>
+        <div className="flex gap-[10px] items-center font-extralight md:ml-16 mb-7 md:mb-0">
         <Text className="text-sm">0 Followers</Text>
         •︎
         <Text className="text-sm">0 Following</Text>
         </div>
+        </div>
+        <div className="flex justify-center flex-wrap-reverse">
+        <TabList>
+          <Tab>Articles</Tab>
+          <Tab>Contributions</Tab>
+          <Tab>About</Tab>
+          {/*self && <Tab>Settings</Tab>*/}
+          {/*!self&&<button className="defaultButton my-auto">Follow</button>*/}
+        </TabList>
+        {self && <Tab>Settings</Tab>}
+        {!self&&<button className="defaultButton my-auto">Follow</button>}
+        </div>
+
+        </div>
+
         <TabPanels>
           <TabPanel>
             <Box>
