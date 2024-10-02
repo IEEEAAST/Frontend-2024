@@ -1,19 +1,17 @@
 import { Avatar } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import likes from "../../../assets/sparkles-white.png";
-import likesTrue from "../../../assets/sparkles-orange.png";
 import saveicon from "../../../assets/bookmark-ribbon-white.png";
 import optionIcon from "../../../assets/more-ellipsis-white.png";
 import UserData from "../../../interfaces/userData";
 import ArticleData from "../../../interfaces/ArticleData";
+import { LikeButton } from "../../common/LikeButton";
 
 interface ArticleCardProps {
   article: ArticleData;
-  author: UserData | undefined;
-  onLikeToggle: () => void;
+  author?: UserData | undefined;
 }
 
-const ArticleCard = ({ article, author, onLikeToggle }: ArticleCardProps) => {
+const ArticleCard = ({ article, author }: ArticleCardProps) => {
   return (
     <Link to={`/article/${article.title}`} className="flex flex-col md:flex-row">
       <div className="flex flex-col md:flex-row w-full">
@@ -26,10 +24,12 @@ const ArticleCard = ({ article, author, onLikeToggle }: ArticleCardProps) => {
         </div>
         <div className="flex flex-col justify-between w-full mt-4 lg:mt-0">
           <div className="text-[12px] lg:text-[15px] mb-[20px] lg:mb-[33px] text-[#F4F4F4]">
-            <Link className="flex items-center gap-2" to={`/profile/${article.author}`}>
-              <Avatar src={author?.imgurl}></Avatar>
-              <h5>{author?.firstname || "unknown author"} {author?.lastname || "author"}</h5>
-            </Link>
+            {author && (
+              <Link className="flex items-center gap-2" to={`/profile/${article.author}`}>
+                <Avatar src={author?.imgurl}></Avatar>
+                <h5>{author?.firstname || "unknown author"} {author?.lastname || "author"}</h5>
+              </Link>
+            )}
           </div>
           <div className="text-[20px] lg:text-[27px] font-serif">
             <h1>{article.title}</h1>
@@ -47,10 +47,7 @@ const ArticleCard = ({ article, author, onLikeToggle }: ArticleCardProps) => {
               </p>
             </div>
             <div className="flex items-center gap-[20px] lg:gap-[39px]">
-              <div className="flex gap-1 items-center w-20">
-                <img className="w-8" src={article.liked ? likesTrue : likes} onClick={(e) => { e.preventDefault(); e.stopPropagation(); onLikeToggle(); }} />
-                {article.likes}
-              </div>
+              <LikeButton item={article} type="article" />
               <button>
                 <img src={saveicon} alt="save" />
               </button>

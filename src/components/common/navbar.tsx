@@ -1,18 +1,73 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import Logo from "../../assets/IEEEAAST.ico";
-import { LangSelector } from "./langSelector";
-import { Link, useLocation } from "react-router-dom";
-import { Link as ScrollLink, animateScroll, scroller } from "react-scroll";
-import { UserContext } from "../../App";
-import SignOut from "../../firebase/signout";
+import searchIcon from "../../assets/search-magnifier-white@2x.png";
+import { useNavigate, Link, useLocation } from "react-router-dom";
+import { Link as ScrollLink, animateScroll, scroller } from 'react-scroll';
+import { UserContext } from "../../App"
+import SignOut from "../../firebase/signout"
 import ProfileMenu from "./profileMenu";
-import { NotificationDropdown } from "./NotificationDropdown"; // Ensure this path is correct
+import getCollection from "../../firebase/getCollection.js";
+import "../common/styles/Navbar.css";
+import Home from "../../assets/home.png";
+import Browse from "../../assets/browse.png";
+import Bookmark from "../../assets/save.png";
+import Write from "../../assets/write.png"
+import Bell from "../../assets/bell.png"
+import { LogoButton } from "./LogoButton.js";
 
-export const NavBar = () => {
+
+
+interface ArticleData {
+  article: string;
+  author: string;
+  caption: string;
+  description: string;
+  image: string;
+  likes : number;
+  publishdate: string;
+  title: string;
+}
+interface EventData {
+  coverPhoto : string;
+  description: string;
+  enddtime: any;
+  formLink: string;
+  gallary: string[];
+  speakers: string[];
+  sponsors: string[];
+  starttime: any;
+  title: string;
+  type: string;
+}
+
+export const NavBar : React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const location = useLocation(); // Get the current location
   const { userData } = useContext(UserContext);
+  const [searched, setSearched] = useState(''); //search
+  const [article, setArticle] = useState<ArticleData[]>([]);
+  const [events, setEvents] = useState<EventData[]>([]);
+
+  const navigate = useNavigate(); 
+
+  useEffect(()=>{
+    getCollection("articles").then((res) => {
+      if (res.result){
+        const article = res.result as ArticleData[];
+        setArticle(article);
+      }
+    })
+  },[]);
+
+  useEffect(()=>{
+    getCollection("events").then((res) => {
+      if (res.result){
+        const events = res.result as EventData[];
+        setEvents(events);
+      }
+    })
+  },[]);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -21,6 +76,33 @@ export const NavBar = () => {
   const handleClickOutside = (event: MouseEvent) => {
     if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
       setMenuOpen(false);
+    }
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearched(e.target.value);
+  };
+
+  const titles = article.map(articleTitles => articleTitles.title)
+  const filterArticles = searched ? titles.filter((t) =>
+    t.toLowerCase().includes(searched.toLowerCase())
+  ):null;
+
+
+  const EventTitle = events.map(e => e.title)
+
+    const filterEvents = searched ? EventTitle.filter((t) =>
+    t.toLowerCase().includes(searched.toLowerCase())
+  ) : null;
+
+
+  const handleClick = (handled: string) => {
+    if (filterArticles?.includes(handled)) {
+      navigate(`/article/${handled}`);
+    } else if (filterEvents?.includes(handled)) {
+      navigate(`/event/${handled}`);
+    }else{
+      console.log("no nav found")
     }
   };
 
@@ -55,73 +137,80 @@ export const NavBar = () => {
 
   return (
     <>
-      <div className="absolute flex items-start sm:items-center justify-between py-2 w-full z-50">
-        {/* left */}
-        <div className="ml-[40vw] sm:ml-auto">
-          <Link to="/">
-            <img src={Logo} alt="IEEE branch logo" height={90} width={90} />
-          </Link>
-        </div>
-
+      <div className="wrapper absolute flex items-start sm:items-center justify-between py-2 w-full z-50">
+      
+        {/* left */}        
+        <LogoButton />
+        
         {/* mid */}
-        <div className="flex-1 justify-center hidden sm:flex">
-          <div className="flex justify-center text-3xl gap-8">
+        <div className="flex-1 justify-start hidden sm:flex">
+          <div className="flex justify-center gap-3 ml-5 w-full">
             <button>
-              <Link to="/" className="text-2xl md:text-3xl">
-                Home
+              <Link to="/" >
+              <div className="border-2 rounded-full border-white w-[40px]">
+                <img src={Home} alt="Home" height={90} width={45}  />
+              </div>
               </Link>
             </button>
             <button>
-              <Link to="/home" className="text-2xl md:text-3xl">
-                Browse
+              <Link to="/browse" >
+              <div className="border-2 rounded-full border-white w-[40px] p-1">
+                <img src={Browse} alt="Browse" height={90} width={45}  />
+              </div>
               </Link>
             </button>
+
+            {/*search bar*/}
+            <div className="nav-search">
+              <div className="search-bar">
+                <img src={searchIcon} alt="search icon"/>
+                <input      
+                  type="text"
+                  placeholder="Search articles, events..."
+                  value={searched}
+                  onChange={handleSearch}
+                  className="w-full"
+                />
+                </div>
+                <div className={`search-results ${((filterArticles?.length==0&&filterEvents?.length==0)||searched.length==0)&&'hidden'}`}>
+                  {filterArticles?.map((a)=>(
+                    <div className="result" onClick={() => handleClick(a)}>{a}</div>
+                  ))}
+                  {filterEvents?.map((e)=>(
+                    <div className="result" onClick={() => handleClick(e)}>{e}</div>
+                  ))}
+                </div>
+            </div>
+            <div className="flex gap-2 mr-4">
+            {
+              (userData?.roles?.includes("admin") || userData?.roles?.includes("author")) &&
             <button>
-              <ScrollLink to="aboutSection" smooth={true} duration={0}>
-                <button
-                  className="cursor-pointer text-2xl md:text-3xl"
-                  onClick={() => {
-                    if (window.location.pathname !== "/") {
-                      window.location.href = "/#aboutSection";
-                    }
-                  }}
-                >
-                  About
-                </button>
-              </ScrollLink>
+              <Link to="/write" >
+              <div className="border-2 rounded-full border-white w-[40px] p-1">
+                <img src={Write} alt="Write Article" height={90} width={45}  />
+              </div>
+              </Link>
+            </button>
+            }
+            <button>
+              <div className="border-2 rounded-full border-white w-[40px] p-[7px]">
+                <img src={Bookmark} alt="Bookmarks" height={90} width={45}  />
+              </div>
             </button>
             <button>
-              <ScrollLink to="contactSection" smooth={true} duration={0}>
-                <button
-                  className="cursor-pointer text-2xl md:text-3xl"
-                  onClick={() => {
-                    if (window.location.pathname !== "/") {
-                      window.location.href = "/#contactSection";
-                    }
-                  }}
-                >
-                  Contact
-                </button>
-              </ScrollLink>
+              <div className="border-2 rounded-full border-white w-[40px] p-1">
+                <img src={Bell} alt="Notifications" height={90} width={45}  />
+              </div>
             </button>
-            <NotificationDropdown />
+            </div>
+
           </div>
         </div>
-        {/* end */}
         <div className="items-center justify-end text-3xl gap-8 mr-8 text-black hidden sm:flex">
-          <LangSelector />
-          {!userData ? (
-            <button className="font-bold text-base">
-              <Link
-                to={"/signin"}
-                className="text-base bg-white px-8 py-4 rounded-full"
-              >
-                {"Sign In"}
-              </Link>
-            </button>
-          ) : (
-            <ProfileMenu />
-          )}
+          {!userData ? <button className="font-bold text-base">
+            <Link to={"/signin"} className="text-base bg-white px-8 py-4 rounded-full">{"Sign In"}</Link>
+          </button> : <ProfileMenu />
+          }
         </div>
 
         {/* Hamburger menu for small screens */}
@@ -154,7 +243,7 @@ export const NavBar = () => {
               style={{ borderColor: "#00050f" }}
               onClick={() => {
                 setMenuOpen(false);
-                window.open("/home", "_self");
+                window.open("/browse", "_self");
               }}
             >
               Browse

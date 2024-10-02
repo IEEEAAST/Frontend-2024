@@ -89,7 +89,6 @@ export const SignUp = () => {
           backgroundImage: "linear-gradient(to bottom, #1F396E, #1D0021)",
         }}
       ></div>
-      <NavBar />
       <div className="form-container relative z-10">
         <div className="p-20 h-screen">
           <div className="max-w-[600px] mt-40 max-sm:mt-10">

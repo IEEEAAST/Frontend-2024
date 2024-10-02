@@ -1,165 +1,127 @@
 import "./styles/MainContent.css";
 import { LikeSaveShare } from "./LikeSaveShare";
 import { Modal } from "../Modal/Modal";
-import { useState , useEffect} from "react";
+import { useState, useEffect, useCallback } from "react";
 import getCollection from "../../../firebase/getCollection.js";
 import getDocument from "../../../firebase/getData.js";
 import { Timestamp } from "@firebase/firestore";
-import { TotpMultiFactorGenerator } from "firebase/auth/web-extension";
-
-interface ArticleData {
-  article: string;
-  author: string;
-  caption: string;
-  description: string;
-  image: string;
-  likes : number;
-  publishdate: string;
-  title: string;
-}
-
-interface AuthorData{
-  email : string;
-  firstname : string;
-  imgurl: string;
-  lastactive: any;
-  lastname: string;
-  phonenumber: number;
-  role: string;
-}
+import ArticleData from "../../../interfaces/ArticleData.js";
+import subscribeToDocumentsByField from "../../../firebase/subscribeToDocumentsByField.js";
+import UserData from "../../../interfaces/userData.js";
+import { Link } from "react-router-dom";
 
 interface MainContentProps {
-  searchQuery : string;
-  articleName : any;
+  articleName: string;
 }
 
-export const MainContent: React.FC<MainContentProps> = ({searchQuery, articleName}) => {
+interface AuthorData {
+  userData: UserData | null;
+  id: string | null;
+}
+
+export const MainContent: React.FC<MainContentProps> = ({ articleName }) => {
   const [isFollowing, setIsFollowing] = useState(true);
   const [modal, setModal] = useState(false);
-  const [articleData, setArticleData] = useState<ArticleData[]>([])
-  const [authorData, setAuthorData] = useState<AuthorData | null>(null);
+  const [articleData, setArticleData] = useState<ArticleData | null>(null);
+  const [author, setAuthor] = useState<AuthorData | null>(null);
+  const [loading, setLoading] = useState(true);
 
+  const toggleModal = () => {
+    document.body.style.overflow = modal ? "auto" : "hidden";
+    setModal(!modal);
+  };
 
-  useEffect(() => {
-    getCollection('articles').then(res => {
-      if (res.result) {
-        setArticleData(res.result as ArticleData[]);
+  const fetchArticle = useCallback(async () => {
+    const unsubscribe = subscribeToDocumentsByField("articles", "title", "==", articleName, async (data: any) => {
+      const article = (data.result?.[0] as ArticleData) || null;
+      setArticleData(article);
+
+      if (article?.author) {
+        const authorData = await getDocument("users", article.author);
+        setAuthor(authorData.result ? { userData: authorData.result.data() as UserData, id: authorData.result.id } : null);
       }
+
+      setLoading(false);
     });
-  }, []);
 
+    return () => unsubscribe();
+  }, [articleName]);
 
   useEffect(() => {
-    const fetchAuthorData = async () => {
-      if (articleData.length > 0) {
-        let article;
-        if (articleName) {
-          article = articleData.find(article => article.title === articleName);
-        } else if (searchQuery) {
-          article = articleData.find(article => article.title.toLowerCase().includes(searchQuery.toLowerCase()));
-        }
-        if (!article) {
-          article = articleData[0];
-        }
+    fetchArticle();
+  }, [fetchArticle]);
 
-        if (article) {
-          const res = await getDocument("users", article.author);
-          if (res.result) {
-            const auth = res.result.data() as AuthorData;
-            setAuthorData(auth);
-          }
-        }
-      }
-    };
+  // Log for debugging
+  useEffect(() => {
+    console.log("Article Data:", articleData);
+    console.log("Author Data:", author);
+  }, [articleData, author]);
 
-    fetchAuthorData();
-  }, [articleName, searchQuery, articleData]);
-
-  // gets the timestamp from the database and turns it into a formatted date for the articles 
-  const formatDate = (timestamp : Timestamp) => {
-    if(!timestamp) return "N/A";
+  const formatDate = (timestamp: Timestamp) => {
+    if (!timestamp) return "N/A";
     const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
-    const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    };
-    return date.toLocaleDateString(undefined, options);
-  }
-
-  console.log("articleData", articleData)
-  console.log("search query:", searchQuery)
-  console.log("authdata", authorData)
+    return date.toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
 
   const toggleFollow = () => {
     setIsFollowing(!isFollowing);
   };
 
-  const displayedArticle = articleName != "ArticleName"
-    ? articleData.find(article => article.title === articleName)
-    : (searchQuery
-      ? articleData.find(article => article.title.toLowerCase().includes(searchQuery.toLowerCase()))
-      : articleData[0]);
-
-  console.log("articleName:", articleName);
-  console.log("displayedArticle:", displayedArticle);
-
-  if (!displayedArticle) {
-    return <div>No article found.</div>;
-  }
-
-  if (!articleData) {
+  if (loading || !articleData || !author) {
     return <div>Loading...</div>;
   }
 
-  if (!authorData){
-    return <div>loading...</div>
-  }
-
-
-  console.log(authorData)
-
   return (
     <div className="main-content">
-        <span className="title">{displayedArticle.title}</span>
-        <span className="description">{displayedArticle.description}</span>
-        <div className="profile">
-          <div className="pfp">
-            <img src={authorData?.imgurl} alt={`${authorData?.firstname} ${authorData?.lastname}`}></img>
-          </div>
-          <div className="profile-desc">
-            <span className="desc-title">
-            {`${authorData?.firstname} ${authorData?.lastname}`} •
-              <span
-                onClick={toggleFollow}
-                style={{ color: isFollowing ? "dodgerblue" : "" }}
-              >
-                {isFollowing ? "Follow" : "Following"}
-              </span>
+      <span className="title">{articleData.title}</span>
+      <span className="description">{articleData.description}</span>
+      <Link to={`/profile/${articleData.author}`} className="profile">
+        <div className="pfp">
+          <img
+            src={author?.userData?.imgurl}
+            alt={`${author?.userData?.firstname} ${author?.userData?.lastname}`}
+          />
+        </div>
+        <div className="profile-desc">
+          <span className="desc-title">
+            {`${author?.userData?.firstname} ${author?.userData?.lastname}`} •
+            <span
+              onClick={toggleFollow}
+              style={{ color: isFollowing ? "dodgerblue" : "" }}
+            >
+              {isFollowing ? "Follow" : "Following"}
             </span>
-            
-            <span className="desc-time">{formatDate(articleData[0]?.publishdate)}</span>
-          </div>
+          </span>
+          <p className="desc-time w-fit">{formatDate(articleData.publishdate)}</p>
         </div>
-        <hr />
-        <LikeSaveShare articleID = {articleData.indexOf(displayedArticle)}/>
-        <hr />
-        <div className="article-img">
-          <img src={displayedArticle.image} alt="Article" />
-        </div>
-        <caption>{displayedArticle.caption}</caption>
-        <div className="article-desc">
-          {displayedArticle.article}
-        </div>
-        <LikeSaveShare articleID = {articleData.indexOf(displayedArticle)}/>
-        <hr />
-        <a href="">More from {`${authorData?.firstname} ${authorData?.lastname}`}</a>
-        <hr />
-        <a onClick={()=>setModal(true)}><u>Report</u></a>
-        <hr />
-        <a href="">Help</a>
-
-      {modal && <Modal closeModal={setModal}/>}
+      </Link>
+      <hr />
+      <LikeSaveShare article={articleData} />
+      <hr />
+      <div className="article-img" style={{ height: "400px", overflow: "hidden" }}>
+        <img
+          className="h-full object-contain bg-[#000B21] w-full"
+          src={articleData.image}
+          alt="Article"
+        />
+      </div>
+      <caption>{articleData.caption}</caption>
+      <div className="article-desc">{articleData.article}</div>
+      <hr />
+      <a href={`/profile/${author.id}`}>
+        More from {`${author?.userData?.firstname} ${author?.userData?.lastname}`}
+      </a>
+      <hr />
+      <a onClick={toggleModal}>
+        <u>Report</u>
+      </a>
+      <hr />
+      <a href="">Help</a>
+      {modal && <Modal closeModal={setModal} />}
     </div>
   );
 };

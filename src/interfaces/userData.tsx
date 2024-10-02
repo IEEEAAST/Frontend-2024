@@ -9,6 +9,6 @@ export default interface UserData {
     likes: likes;
 }
 interface likes {
-    articles: string[];
-    events: string[];
+    articles?: string[];
+    events?: string[];
 }

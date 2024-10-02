@@ -29,7 +29,7 @@ export const Sponsor = () => {
           container.scrollLeft += scrollSpeed;
 
           if (container.scrollLeft >= container.scrollWidth / 2) {
-            setSponsors((prevSponsors) => [...prevSponsors, ...prevSponsors]); // Re-reads the images, so it looks like its infinitely scrolling
+            setSponsors((prevSponsors) => [...prevSponsors, ...prevSponsors]); // Readds the images, so it looks like its infinitely scrolling
           }
         }, scrollDelay);
       };
