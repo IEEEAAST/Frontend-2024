@@ -19,7 +19,7 @@ export const Joinus = () => {
 
   return (
     <div className="flex flex-col gap-4 w-full px-6 md:px-14 lg:px-7 container mx-auto mb-16">
-      <p className="text-[45px] font-bold my-[30px] mt-20 text-center">Take Action.&nbsp; Join Us.</p>
+      <h2 className="text-[32px] md:text-[45px] lg:text-[40px] font-bold my-[30px] mt-20 text-center">Take Action.&nbsp; Join Us.</h2>
       <div className="flex flex-col lg:flex-row w-full container mx-auto gap-4">
         <div className="bg-orange-100 rounded-3xl h-auto lg:h-[433px] p-4 lg:p-6 flex flex-col lg:flex-row items-center lg:items-start gap-4 w-full">
           {!userData && (
