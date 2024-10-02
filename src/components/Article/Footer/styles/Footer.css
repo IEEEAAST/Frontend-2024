@@ -17,7 +17,7 @@
 
 .footer-logo img{
     width: 30px;
-    margin: 30px -30px 30px 0px;
+    margin: 30px 30px 30px 0px;
 }
 
 /** The Footer Horizontal Line **/
@@ -42,7 +42,7 @@ li a {
 }
 
 .footer-links li:first-child {
-    margin-left: -30px;
+    margin-left: 30px;
 }
 
 .footer-links li:first-child:before {

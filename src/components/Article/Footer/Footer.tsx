@@ -6,8 +6,8 @@ export const Footer = () => {
     <div className="footer">
       <div className="footer-logo">
         <img src={Logo} alt="IEEE Logo" />
-          </div>
-          <div className="footer-line"></div>
+      </div>
+      <div className="footer-line"></div>
       <div className="footer-links">
         <ul>
           <li><a href="">Help</a></li>
