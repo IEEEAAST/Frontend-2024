@@ -27,7 +27,9 @@ import { setNewPassword } from "../firebase/updatePassword";
 import addStorage from "../firebase/addStorage";
 import updateData from "../firebase/updateData";
 import getDocument from "../firebase/getData";
-import Triangle from "../assets/bg-triangle-ellipse@2x.png"
+import ArticleCard from "../components/Article/Card/ArticleCard.tsx"
+import subscribeToCollection from "../firebase/subscribeToCollection.js";
+import ArticleData from "../interfaces/ArticleData.tsx";
 
 interface currentUserData {
   mobile: string;
@@ -41,6 +43,7 @@ interface currentUserData {
   roles?: string[];
 }
 
+
 export const Profile = () => {
   const [notMatchError, setNotMatchError] = useState<boolean>(false);
   const [oldPasswordNotEntered, setOldPasswordNotEntered] = useState<boolean>(false);
@@ -53,12 +56,13 @@ export const Profile = () => {
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(false);
   const [self, setSelf] = useState<boolean>(false);
+  const [articles, setArticles]= useState<ArticleData[]>();
   const { userData, setUserData, userId } = useContext(UserContext);
   const { name: id } = useParams<{ name: string }>();
   const mobileRegex = /^[0-9]{10}$/;
   const navigate = useNavigate();
   const location = useLocation();
-
+  
 // password regix
   const passwordRegix = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
 
@@ -74,6 +78,10 @@ export const Profile = () => {
     oldPassword: "",
     roles: []
   });
+  useEffect(() => {
+    // Scroll to top immediately when the component mounts
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, []);
 
   // Fetch user data and check if the `id` matches the logged-in user ID
   useEffect(() => {
@@ -97,6 +105,22 @@ export const Profile = () => {
             roles: result.data()?.roles || [],
           });
         }
+        const unsubscribe= subscribeToCollection("articles", ({ result, ids, error }: { result: any, ids: string[], error: any })=>{
+          if(error){
+            console.error('error fetching articles: ',error);
+            return;
+          }
+            if (result && ids) {
+            const articlesWithIds = result.map((article: ArticleData, index: number) => ({
+              ...article,
+              id: ids[index],
+            }));
+            setArticles(articlesWithIds.filter((article: ArticleData) => {
+              return id === article.author;
+            }));
+            }
+        })
+        return () => unsubscribe();
     };
 
     fetchData();
@@ -222,39 +246,78 @@ export const Profile = () => {
   };
 
   // Determine if Tabs should be displayed
-  const showTabs = self || currentUserData.roles?.includes("author")|| currentUserData.roles?.includes("admin");
-
-  // Determine if Settings Tab should be displayed
-  const showSettingsTab = self; // ??? use self ??
 
   return (
-    <div>     
+    <div>
         <Slide direction="top" in={showSuccess} style={{ zIndex: 300 }}>
           <Alert status="success" variant="solid" zIndex={300}>
             <AlertIcon />
             Data edited and uploaded successfully!
           </Alert>
         </Slide>
-      <NavBar />
-      <div className="pt-[100px] w-full flex justify-center">
-        {showTabs ? (
-          <Tabs variant="unstyled" className="w-full">
-            <TabList bg={'#151F33'} className="rounded-full w-fit mx-auto">
-              <Tab className="border-r-2" style={{borderColor:'#1c2a44'}}>Profile</Tab>
-              {(currentUserData.roles?.includes("admin") || currentUserData.roles?.includes("author")) && <Tab className={showSettingsTab?"border-r-2":""} style={{borderColor:'#1c2a44'}}>Articles</Tab>}
-              
-              {showSettingsTab && <>
-              <Tab className="border-r-2" style={{borderColor:'#1c2a44'}}>Bookmarks</Tab>
-              <Tab>Settings</Tab>
-              </>            
-              }
-            </TabList>
-            <TabPanels>
-            <TabPanel>
-            <Box className="w-full flex flex-col" m={5} ml={20}>
-            <Text fontFamily={"SF-Pro-Display-Bold"} fontSize={40} mb={4}>Profile Details:</Text>
+
+      <div className="pt-[100px] mx-16 flex-col justify-center">
+      <div className="bg-[url('https://img.freepik.com/free-vector/abstract-orange-background_698452-2541.jpg')] bg-cover bg-center mt-11 h-[360px] rounded-3xl relative"></div>
+      <div className="ml-16 -mt-20 z-0 relativem mb-44">
+        <img
+          className="absolute z-10 w-40 h-40 rounded-full object-cover mb-7"
+          src={
+            currentUserData.profilePicture
+              ? typeof currentUserData.profilePicture === "string"
+          ? `${currentUserData.profilePicture}`
+          : URL.createObjectURL(currentUserData.profilePicture)
+              : "src/assets/add-profile-picture-white@2x.png"
+          }
+          alt="Profile"
+        />
+      </div>
+      <Tabs variant={'unstyled'}>
+        <div className="flex justify-between items-center">
+        <p className="text-4xl font-extrabold font-textmedium"> {currentUserData.firstname} {currentUserData.lastname}</p>
+        <TabList>
+          <Tab>Articles</Tab>
+          <Tab>Contributions</Tab>
+          <Tab>About</Tab>
+          {self && <Tab>Settings</Tab>}
+          {!self&&<button className="defaultButton my-auto">Follow</button>}
+        </TabList>
+        
+
+        </div>
+        <div className="flex gap-[10px] items-center font-extralight">
+        <Text className="text-sm">0 Followers</Text>
+        •︎
+        <Text className="text-sm">0 Following</Text>
+        </div>
+        <TabPanels>
+          <TabPanel>
+            <Box>
+            <div className="flex flex-col gap-8 mt-[40px]">{articles?.map((article: ArticleData, index: number)=> {
+              return <ArticleCard key={index} article={article}/>
+            })}</div>
+            </Box>
+          </TabPanel>
+          <TabPanel>
+            <Box>
+            <p>Contributions</p>
+            </Box>
+          </TabPanel>
+          <TabPanel>
+            <Text className={"font-body"} mb={4}> description goes here:{currentUserData.desc}</Text>
+          </TabPanel>
+    {self && (
+    <TabPanel>
+    
+        <div className="form-container">
+        <div className="h-fit">
+          <div className="max-w-[600px]">
+            <Text fontFamily={"SF-Pro-Display-Bold"} fontSize={40} mb={4}>Edit Profile</Text>
+            <form onSubmit={handleSubmit}>
+              <Text fontFamily={"SF-Pro-Display-Bold"} mb={4}>Change your Profile Picture:</Text>
+              <FormControl isInvalid={showError && mobileInvalid}>
+                <label htmlFor="profile-picture">
                   <Avatar
-                    size="lg"
+                    size="xl"
                     src={
                       currentUserData.profilePicture
                         ? typeof currentUserData.profilePicture === "string"
@@ -264,243 +327,186 @@ export const Profile = () => {
                     }
                     borderRadius="full"
                     boxShadow="lg"
-                    mb={4}
+                    cursor="pointer"
+                    mb={8}
                   />
-                  <Text fontFamily={"SF-Pro-Text-Medium"} mb={4}>Name: {currentUserData.firstname} {currentUserData.lastname}</Text>
-                  <Text fontFamily={"SF-Pro-Text-Medium"} mb={4}>Mobile: {currentUserData.mobile}</Text>
-                  <Text fontFamily={"SF-Pro-Text-Medium"} mb={2}>Description: </Text>
-                  <Textarea value={currentUserData.desc} readOnly width={800} height={300}></Textarea>
-                </Box>
-              </TabPanel>
-              <TabPanel>
-                <Box>
-                <p>Articles</p>
-                </Box>
-              </TabPanel>
-              <TabPanel>
-                <p>Bookmarks</p>
-              </TabPanel>
-              <TabPanel>
-              {self && (
-                  <div className="form-container">
-                  <div className="px-20 h-screen">
-                    <div className="max-w-[600px] mt-5 max-sm:mt-10">
-                      <Text fontFamily={"SF-Pro-Display-Bold"} fontSize={40} mb={4}>Edit Profile</Text>
-                      <form onSubmit={handleSubmit}>
-                        <Text fontFamily={"SF-Pro-Display-Bold"} mb={4}>Change your Profile Picture:</Text>
-                        <FormControl isInvalid={showError && mobileInvalid}>
-                          <label htmlFor="profile-picture">
-                            <Avatar
-                              size="xl"
-                              src={
-                                currentUserData.profilePicture
-                                  ? typeof currentUserData.profilePicture === "string"
-                                    ? `${currentUserData.profilePicture}`
-                                    : URL.createObjectURL(currentUserData.profilePicture)
-                                  : "src/assets/add-profile-picture-white@2x.png"
-                              }
-                              borderRadius="full"
-                              boxShadow="lg"
-                              cursor="pointer"
-                              mb={8}
-                            />
-                            <Input
-                              type="file"
-                              id="profile-picture"
-                              name="profilePicture"
-                              accept="image/*"
-                              onChange={handleFileChange}
-                              display="none"
-                              position="absolute"
-                              opacity={0}
-                              zIndex={-1}
-                            />
-                          </label>
-                        </FormControl>
+                  <Input
+                    type="file"
+                    id="profile-picture"
+                    name="profilePicture"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    display="none"
+                    position="absolute"
+                    opacity={0}
+                    zIndex={-1}
+                  />
+                </label>
+              </FormControl>
 
-                        <Text fontFamily={"SF-Pro-Display-Bold"}>Change your mobile number:</Text>
-                        <FormControl isInvalid={showError && mobileInvalid}>
-                          <Input
-                            type="tel"
-                            id="mobile"
-                            value={currentUserData.mobile}
-                            name="phoneNumber"
-                            onChange={handleChange}
-                            placeholder="Mobile Number"
-                            mb={4}
-                            style={{
-                              width: '80%',
-                              border: 'none',
-                              borderBottom: '1px solid rgb(4, 4, 62)',
-                              outline: 'none',
-                            }}
-                          />
-                          <FormErrorMessage mb={4} fontFamily={"SF-Pro-Text-Medium"}>
-                            {errorMessage}
-                          </FormErrorMessage>
-                        </FormControl>
+              <Text fontFamily={"SF-Pro-Display-Bold"}>Change your mobile number:</Text>
+              <FormControl isInvalid={showError && mobileInvalid}>
+                <Input
+                  type="tel"
+                  id="mobile"
+                  value={currentUserData.mobile}
+                  name="phoneNumber"
+                  onChange={handleChange}
+                  placeholder="Mobile Number"
+                  mb={4}
+                  style={{
+                    width: '80%',
+                    border: 'none',
+                    borderBottom: '1px solid rgb(4, 4, 62)',
+                    outline: 'none',
+                  }}
+                />
+                <FormErrorMessage mb={4} fontFamily={"SF-Pro-Text-Medium"}>
+                  {errorMessage}
+                </FormErrorMessage>
+              </FormControl>
 
-                        <Text fontFamily={'SF-Pro-Display-Bold'} mb={2}>Description: </Text>
-                        <FormControl mb={10}>
-                          <Textarea
-                            id="desc"
-                            name="Description"
-                            value={currentUserData.desc}
-                            onChange={handleChange}
-                            placeholder="Describe yourself"
-                            width={800}
-                            height={300}
-                            boxSizing="border-box"
-                            flexWrap={"wrap"}
-                            flex={"flexbox"}
-                          />
-                        </FormControl>
+              <Text fontFamily={'SF-Pro-Display-Bold'} mb={2}>Description: </Text>
+              <FormControl mb={10}>
+                <Textarea
+                  id="desc"
+                  name="Description"
+                  value={currentUserData.desc}
+                  onChange={handleChange}
+                  placeholder="Describe yourself"
+                  width={800}
+                  height={300}
+                  boxSizing="border-box"
+                  flexWrap={"wrap"}
+                  flex={"flexbox"}
+                />
+              </FormControl>
 
-                        <Text fontFamily={'SF-Pro-Display-Bold'} mb={2}>Change your password: </Text>
-                        <FormControl isInvalid={(showError && notMatchError) || (showError && passnotRegix)}>
-                          <Input
-                            type="password"
-                            id="newPassword"
-                            name="Password"
-                            onChange={handleChange}
-                            placeholder="New Password"
-                            mb={4}
-                            style={{
-                              width: '80%',
-                              border: 'none',
-                              borderBottom: '1px solid rgb(4, 4, 62)',
-                              outline: 'none',
-                            }}
-                          />
-                          <Input
-                            type="password"
-                            id="confirmPassword"
-                            name="confirmPassword"
-                            mb={4}
-                            onChange={handleChange}
-                            placeholder="Confirm New Password"
-                            style={{
-                              width: '80%',
-                              border: 'none',
-                              borderBottom: '1px solid rgb(4, 4, 62)',
-                              outline: 'none',
-                            }}
-                          />
-                          {!passnotRegix? (
-                            <FormErrorMessage mb={4} fontFamily={"SF-Pro-Text-Medium"}>
-                              {errorMessage}
-                            </FormErrorMessage>
-                          ) : (
-                            <FormErrorMessage mb={4} fontFamily={"SF-Pro-Text-Medium"}>
-                              <List spacing={1} mt={2}>
-                                <ListItem>Invalid Password! Passwords should:</ListItem>
-                                <ListItem>
-                                  ! Be at least 8 characters long
-                                </ListItem>
-                                <ListItem>
-                                  ! Contain at least one lowercase letter
-                                </ListItem>
-                                <ListItem>
-                                  ! Contain at least one uppercase letter
-                                </ListItem>
-                                <ListItem>
-                                  ! Contain at least one digit
-                                </ListItem>
-                                <ListItem>
-                                  ! Contain at least one special character (e.g., !@#$%^&*)
-                                </ListItem>
-                              </List>
-                          </FormErrorMessage>
-                          )}
-                          
-                        </FormControl>
+              <Text fontFamily={'SF-Pro-Display-Bold'} mb={2}>Change your password: </Text>
+              <FormControl isInvalid={(showError && notMatchError) || (showError && passnotRegix)}>
+                <Input
+                  type="password"
+                  id="newPassword"
+                  name="Password"
+                  onChange={handleChange}
+                  placeholder="New Password"
+                  mb={4}
+                  style={{
+                    width: '80%',
+                    border: 'none',
+                    borderBottom: '1px solid rgb(4, 4, 62)',
+                    outline: 'none',
+                  }}
+                />
+                <Input
+                  type="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  mb={4}
+                  onChange={handleChange}
+                  placeholder="Confirm New Password"
+                  style={{
+                    width: '80%',
+                    border: 'none',
+                    borderBottom: '1px solid rgb(4, 4, 62)',
+                    outline: 'none',
+                  }}
+                />
+                {!passnotRegix? (
+                  <FormErrorMessage mb={4} fontFamily={"SF-Pro-Text-Medium"}>
+                    {errorMessage}
+                  </FormErrorMessage>
+                ) : (
+                  <FormErrorMessage mb={4} fontFamily={"SF-Pro-Text-Medium"}>
+                    <List spacing={1} mt={2}>
+                      <ListItem>Invalid Password! Passwords should:</ListItem>
+                      <ListItem>
+                        ! Be at least 8 characters long
+                      </ListItem>
+                      <ListItem>
+                        ! Contain at least one lowercase letter
+                      </ListItem>
+                      <ListItem>
+                        ! Contain at least one uppercase letter
+                      </ListItem>
+                      <ListItem>
+                        ! Contain at least one digit
+                      </ListItem>
+                      <ListItem>
+                        ! Contain at least one special character (e.g., !@#$%^&*)
+                      </ListItem>
+                    </List>
+                </FormErrorMessage>
+                )}
+                
+              </FormControl>
 
-                        <FormControl isInvalid={showError && (oldPasswordNotEntered || incorrectOldPassword)}>
-                          <Input
-                            type="password"
-                            id="oldPassword"
-                            name="oldPassword"
-                            onChange={handleChange}
-                            placeholder="Old Password"
-                            style={{
-                              width: '80%',
-                              border: 'none',
-                              borderBottom: '1px solid rgb(4, 4, 62)',
-                              outline: 'none',
-                            }}
-                          />
-                          <FormErrorMessage mb={4} fontFamily={"SF-Pro-Text-Medium"}>
-                            {errorMessage}
-                          </FormErrorMessage>
-                        </FormControl>
+              <FormControl isInvalid={showError && (oldPasswordNotEntered || incorrectOldPassword)}>
+                <Input
+                  type="password"
+                  id="oldPassword"
+                  name="oldPassword"
+                  onChange={handleChange}
+                  placeholder="Old Password"
+                  style={{
+                    width: '80%',
+                    border: 'none',
+                    borderBottom: '1px solid rgb(4, 4, 62)',
+                    outline: 'none',
+                  }}
+                />
+                <FormErrorMessage mb={4} fontFamily={"SF-Pro-Text-Medium"}>
+                  {errorMessage}
+                </FormErrorMessage>
+              </FormControl>
 
-                        <div className="flex flex-nowrap">
-                          <div className="pt-8 flex flex-nowrap items-center gap-4 flex-col">
-                            <div className="flex flex-col sm:flex-row items-center gap-2 mb-2">
-                              <button
-                                style={{
-                                  background: 'transparent',
-                                  padding: '8px',
-                                  width: '120px',
-                                  fontSize: '16px',
-                                  border: '2px solid #fff',
-                                  borderRadius: '20px',
-                                  color: '#fff',
-                                  textAlign: 'center',
-                                  fontFamily: 'SF-Pro-Display-Bold',
-                                }}
-                                onClick={goback}
-                              >
-                                Cancel
-                              </button>
-                              <button
-                                className="defaultButton ml-2"
-                                style={{
-                                  fontSize: '16px',
-                                  fontFamily: 'SF-Pro-Display-Bold',
-                                  width: '155px',
-                                  height: '35px',
-                                }}
-                              >
-                                Save
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
+              <div className="flex flex-nowrap">
+                <div className="pt-8 flex flex-nowrap items-center gap-4 flex-col">
+                  <div className="flex flex-col sm:flex-row items-center gap-2 mb-2">
+                    <button
+                      style={{
+                        background: 'transparent',
+                        padding: '8px',
+                        width: '120px',
+                        fontSize: '16px',
+                        border: '2px solid #fff',
+                        borderRadius: '20px',
+                        color: '#fff',
+                        textAlign: 'center',
+                        fontFamily: 'SF-Pro-Display-Bold',
+                      }}
+                      onClick={goback}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="defaultButton ml-2"
+                      style={{
+                        fontSize: '16px',
+                        fontFamily: 'SF-Pro-Display-Bold',
+                        width: '155px',
+                        height: '35px',
+                      }}
+                    >
+                      Save
+                    </button>
                   </div>
                 </div>
-                )}
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-        ) : (
-          <Box className="w-full flex flex-col" m={20}>
-            <Text fontFamily={"SF-Pro-Display-Bold"} fontSize={40} mb={4}>Profile Details:</Text>
-            <Avatar
-              size="lg"
-              src={
-                currentUserData.profilePicture
-                  ? typeof currentUserData.profilePicture === "string"
-                    ? `${currentUserData.profilePicture}`
-                    : URL.createObjectURL(currentUserData.profilePicture)
-                  : "src/assets/add-profile-picture-white@2x.png"
-              }
-              borderRadius="full"
-              boxShadow="lg"
-              mb={4}
-            />
-            <Text fontFamily={"SF-Pro-Text-Medium"} mb={4}>Name: {currentUserData.firstname} {currentUserData.lastname}</Text>
-            <Text fontFamily={"SF-Pro-Text-Medium"} mb={4}>Mobile: {currentUserData.mobile}</Text>
-            <Text fontFamily={"SF-Pro-Text-Medium"} mb={2}>Description: </Text>
-            <Textarea value={currentUserData.desc} readOnly width={800} height={300}></Textarea>
-          </Box>
-        )}
-        <div className="bottom-0 w-80 h-auto right-[-2vh] p-4 fixed max-sm:w-[45%]">
-          <img src={Triangle} alt="Triangle" />
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+      
+    </TabPanel>
+    )}
+        </TabPanels>
+      </Tabs>
+      
+      </div>
+
+      <div className=" w-full flex justify-center h-fit">
+      </div>
+      </div>
   );
 };

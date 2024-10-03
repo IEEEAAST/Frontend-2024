@@ -17,7 +17,7 @@ export const Modal = ({closeModal}:modalprops) => {
           <textarea placeholder='Describe whats wrong here...'></textarea>
         </div>
         <div className='modal-footer'>
-          <button className='modal-cancel' onClick={()=>closeModal(false)}>Cancel</button>
+          <button className='modal-cancel' onClick={()=>{closeModal(false);document.body.style.overflow = "auto";}}>Cancel</button>
           <button className='modal-submit'>Submit</button>
         </div>
       </div>

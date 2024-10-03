@@ -8,6 +8,9 @@
     overflow: hidden;
     background-color: #010d27;
     backdrop-filter: blur(13px);
+    display:flex;
+    justify-content: center;
+    align-items: center;
 }
 .modalBackground{
     background-color: #000B21;
@@ -15,6 +18,7 @@
     padding: 20px;
     border-bottom: 1px solid #685f5f;
     width: 80%;
+    
 } 
 
 .modal-body textarea{

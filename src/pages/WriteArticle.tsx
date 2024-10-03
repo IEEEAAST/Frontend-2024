@@ -13,7 +13,7 @@ interface Article {
     caption: string;
     description: string;
     image: string;
-    likes: number;
+    likedBy: string[];
     publishdate: firebase.firestore.Timestamp;
     title: string;
 }
@@ -97,7 +97,7 @@ export const WriteArticle = () => {
             ...formState,
             image: imageUrl,
             author: userId || 'Unknown',
-            likes: 0,
+            likedBy: [],
             publishdate: firebase.firestore.Timestamp.fromDate(new Date()),
         };
 
@@ -108,7 +108,6 @@ export const WriteArticle = () => {
 
     return (
         <>
-            <NavBar />
             {submitting ? (
                 <div className="flex justify-center items-center h-screen">
                     <Spinner size="xl" />

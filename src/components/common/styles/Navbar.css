@@ -3,8 +3,9 @@
     left: 0;
     width: 100%;
     z-index: 50;    
-    margin: 10px 0 0 30px;
+    margin: 0; /* Remove margin */
 }
+
 .nav-search {
     margin: 10px; 
     width: 100%;
@@ -13,11 +14,11 @@
 
 .nav-search input {
     border: none;
-    width: 300px;
+    width: 100%;
     padding: 10px;
     background-color: transparent; 
-
 }
+
 .nav-search input::placeholder {
     color: white;
     opacity: 0.8;
@@ -30,36 +31,41 @@
     
 .search-results {
     position: absolute; 
-    top: 40px; 
+    top: 45px; 
     left: 0;
-    width: 300px; 
-    max-height: 200px; 
-    overflow-y: scroll; 
+    width: 100%; 
+    max-height: 300px; 
+    overflow-y: auto; 
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
     z-index: 1000; 
     border-radius: 20px;
+    background-color: #000B21; /* Ensure this matches your design */
+    padding: 5px 0; /* Add padding for better spacing */
 }
 
 .result {
-    padding: 10px;
+    padding: 10px 15px; /* Increase horizontal padding */
     color: white;
     cursor: pointer;
     border-radius: 15px;
-    background-color: #000B21;
-
+    transition: background-color 0.3s; /* Add transition for smooth hover */
 }
 
 .result:hover {
     background-color: #fff;
-    color: #000B21;
+    color:  #000B21;
 }
 
-.search-bar{
-    display:flex;
-    justify-content:center;
+.search-bar {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background-color: #00091b; 
+    padding: 0; /* Remove padding */
+    border-radius: 9999px;
 }
 
-.search-bar img{
+.search-bar img {
     height: 32px;
     width: 20px;
     padding-top: 11px;
