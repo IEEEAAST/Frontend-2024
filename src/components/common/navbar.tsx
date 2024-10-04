@@ -48,6 +48,7 @@ export const NavBar : React.FC = () => {
   const [searched, setSearched] = useState(''); //search
   const [article, setArticle] = useState<ArticleData[]>([]);
   const [events, setEvents] = useState<EventData[]>([]);
+  const [showSearch, setShowSearch] = useState(true)
 
   const navigate = useNavigate(); 
 
@@ -105,6 +106,19 @@ export const NavBar : React.FC = () => {
       console.log("no nav found")
     }
   };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setShowSearch(false);
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [searched]);
+
 
   useEffect(() => {
     if (menuOpen) {
@@ -169,7 +183,7 @@ export const NavBar : React.FC = () => {
                   className="w-full"
                 />
                 </div>
-                <div className={`search-results ${((filterArticles?.length==0&&filterEvents?.length==0)||searched.length==0)&&'hidden'}`}>
+                <div className={`search-results ${(!showSearch || (filterArticles?.length==0&&filterEvents?.length==0)||searched.length==0)&&'hidden'}`}>
                   {filterArticles?.map((a)=>(
                     <div className="result" onClick={() => handleClick(a)}>{a}</div>
                   ))}

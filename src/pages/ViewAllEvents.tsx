@@ -103,10 +103,10 @@ export const ViewAllEvents = () => {
     <div className="flex flex-col items-center bg-[#000B21] text-white header">
       <div className="h-[150px] w-full">
       </div>
-      <div className="flex justify-between items-center w-full px-4 lg:px-[89px]">
-        <h2 className="text-white text-[24px] lg:text-[45px] font-bold">All Events</h2>
+      <div className="flex flex-col md:flex-row justify-between items-center w-full px-4 lg:px-[89px] gap-4">
+        <h2 className="text-white text-[24px] md:text-[32px] lg:text-[45px] font-bold">All Events</h2>
 
-        <button className="w-1/6 ml-6 border-b border-[#141E32] flex justify-between items-center relative h-14" onClick={() => { changeFilter("date") }}>
+        <button className="w-full md:w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-12 md:h-14" onClick={() => { changeFilter("date") }}>
           Date
           <div className="relative w-5 my-2">
             <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "date" ? 'opacity-100' : 'opacity-0'}`}></img>
@@ -116,7 +116,7 @@ export const ViewAllEvents = () => {
           <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter == 'date' || filter == 'date-reverse') ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`}></div>
         </button>
 
-        <button className="w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-14" onClick={() => { changeFilter('topic') }}>
+        <button className="w-full md:w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-12 md:h-14" onClick={() => { changeFilter('topic') }}>
           Topic
           <div className="relative w-5 my-2">
             <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "topic" ? 'opacity-100' : 'opacity-0'}`}></img>
@@ -126,7 +126,7 @@ export const ViewAllEvents = () => {
           <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter == 'topic' || filter == 'topic-reverse') ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`}></div>
         </button>
 
-        <button className="w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-14" onClick={() => { changeFilter("likes") }}>
+        <button className="w-full md:w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-12 md:h-14" onClick={() => { changeFilter("likes") }}>
           Likes
           <div className="relative w-5 my-2">
             <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "likes" ? 'opacity-100' : 'opacity-0'}`}></img>
@@ -136,13 +136,13 @@ export const ViewAllEvents = () => {
           <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter == 'likes' || filter == 'likes-reverse') ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`}></div>
         </button>
       </div>
-      <div className="w-full px-10">
-        <div className="grid grid-cols-[auto_auto_1fr] mt-4 gap-y-8 mb-10">
+      <div className="w-full px-10 lg:px-10">
+        <div className="grid grid-cols-1 md:grid-cols-[auto_auto_1fr] mt-4 gap-y-8 mb-10">
           {events.map((event, index) => (
             <>
                 <p className={`mt-2 text-right mr-6 ${events.slice(0, index).some(e => e.starttime.toDate().getMonth() === event.starttime.toDate().getMonth()) && 'opacity-0'} ${!filter.includes("date") ? 'opacity-0 mr-0 w-0' : 'mr-6'}`}>{formatEventDate(event.starttime.toDate(), "short")}</p>
               <div className={`flex justify-center bg-[#151F33] h-[calc(100%+32px)] overflow-visible  ${!filter.includes("date") ? 'opacity-0 mx-0 w-0' : 'mx-4 w-2'}`}><div className={`${events.some(e => e.starttime.toDate().getMonth() === event.starttime.toDate().getMonth() && e.starttime.toDate().getFullYear() === event.starttime.toDate().getFullYear() && isEventOngoing(e)) ? 'bg-[#57ff57] shadow-[0_0_10px_2px_#57ff57]' : 'bg-[#151F33]'} rounded-full w-10 h-10 flex ${index > 0 && event.starttime.toDate().getMonth() == events[index - 1].starttime.toDate().getMonth() && 'opacity-0'} items-center justify-center absolute`}><div className="bg-white rounded-full w-4 h-4"></div></div></div>
-              <Link to={`/event/${event.title}`} className="flex gap-4 w-full ml-6">
+              <Link to={`/event/${event.title}`} className="flex flex-col md:flex-row  gap-4 w-full ml-0 md:ml-6">
                 <EventCard event={event} size="sm" />
                 <div className="flex flex-col w-[700px]">
                   <h1 className="font-extrabold text-[42px]">{event.title}</h1>

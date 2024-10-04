@@ -106,16 +106,16 @@ export const ViewAllArticles = () => {
     }
 
     return (
-        <div className="flex flex-col items-center bg-[#000B21] text-white header mb-6">
-            <div className="h-[150px] w-full">
+        <div className="flex flex-col items-center bg-[#000B21] text-white header mb-6 pt-4 md:pt-12 lg:pt-16">
+            <div className="h-[150px] md:h-[150px] w-full">
             </div>
 
             <div className="w-full px-4 lg:px-[89px]">
                 <div className="flex justify-between items-center">
-                    <h2 className="text-white text-[24px] lg:text-[45px] font-bold">All Articles</h2>
+                    <h2 className="text-white md:text-[32px] lg:text-[45px] font-bold">All Articles</h2>
 
                     {/* Sorting buttons */}
-                    <button className="w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-14" onClick={() => { changeFilter("date") }}>
+                    <button className="w-1/3 md:w-1/4 lg:w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-12 md:h-14" onClick={() => { changeFilter("date") }}>
                         Date
                         <div className="relative w-5 my-2">
                             <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "date" ? 'opacity-100' : 'opacity-0'}`} />
@@ -124,7 +124,7 @@ export const ViewAllArticles = () => {
                         </div>
                         <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${filter.includes("date") ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`} />
                     </button>
-                    <button className="w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-14" onClick={() => { changeFilter("topic") }}>
+                    <button className="w-1/3 md:w-1/4 lg:w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-12 md:h-14" onClick={() => { changeFilter("topic") }}>
                         Topic
                         <div className="relative w-5 my-2">
                             <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "topic" ? 'opacity-100' : 'opacity-0'}`} />
@@ -133,7 +133,7 @@ export const ViewAllArticles = () => {
                         </div>
                         <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter == 'topic' || filter == 'topic-reverse') ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`} />
                     </button>
-                    <button className="w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-14" onClick={() => { changeFilter("likes") }}>
+                    <button className="w-1/3 md:w-1/4 lg:w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-12 md:h-14" onClick={() => { changeFilter("likes") }}>
                         Likes
                         <div className="relative w-5 my-2">
                             <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "likes" ? 'opacity-100' : 'opacity-0'}`} />
@@ -145,7 +145,7 @@ export const ViewAllArticles = () => {
                 </div>
 
                 <div className="w-full px-4">
-                    <div className="mt-[30px] lg:mt-[59px] flex flex-col gap-[30px] lg:gap-[58px]">
+                    <div className="mt-[20px]  md:mt-[30px]  lg:mt-[59px] flex flex-col gap-[30px] md:gap-[30px] lg:gap-[58px]">
                         {articles.map((article, index) => (
                             <ArticleCard
                                 key={article.id || index}
