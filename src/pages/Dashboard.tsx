@@ -74,16 +74,16 @@ export const Dashboard = () => {
 
   if (!articles || articles.length === 0) {
     return (
-      <div className="flex items-center justify-center w-full h-[99vh]"><Spinner size="xl" /></div>
+      <div className="flex items-center justify-center w-full h-[99vh]"></div>
     );
   }
 
   return (
     <div className="flex flex-col items-center bg-[#000B21] text-white header">
-      <div className="h-[120px] w-full"></div>
+      <div className="mb-40 lg:size-[8px]">
+      </div>
       <div className="w-full lg:min-h-screen flex justify-center items-center px-4 md:px-20 body">
-        <div className="relative w-full lg:w-[1733px] lg:h-[810px] h-[400px] md:h-[520px] rounded-[38px] overflow-hidden">
-          {/* Main Article Display */}
+        <div className="relative w-full lg:w-[73rem] lg:h-[45rem]  h-[400px] md:h-[520px] rounded-[38px] overflow-hidden">
           <div className="absolute z-10 w-full lg:h-screen h-full bg-gradient-to-t from-[#000B21A5] via-transparent bottom-0"></div>
           <div className="absolute bottom-[83px] z-10 left-[35px] text-white">
             <h2 className="text-[24px] lg:text-[50px] font-serif font-black">{filterArticles[0]?.title || "no title"}</h2>
@@ -94,8 +94,8 @@ export const Dashboard = () => {
             </button>
           </div>
           <img
-            className="object-cover w-full h-full md:h-[1000px] lg:-translate-y-[125px]"
-            src={filterArticles[0]?.image}
+            className="object-cover w-full h-full"
+            src={filterArticles[0].image}
             alt="Event"
           />
         </div>

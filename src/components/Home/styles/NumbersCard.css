@@ -45,6 +45,7 @@
   .box img {
     width: 80px;
     margin-right: 10px;
+    
   }
 
   .box .content {
@@ -60,11 +61,14 @@
 
 @media (max-width: 767px) {
   .box-container {
-    margin: 0 20px 50px; /* Adjusted margin for better mobile responsiveness */
+    margin:1.5rem;
+     /* Adjusted margin for better mobile responsiveness */
   }
 
   .box {
-    padding: 20px; /* Adjusted padding for better mobile responsiveness */
+    
+    padding: 10px;
+    width: 320px; /* Adjusted padding for better mobile responsiveness */
   }
 
   .box-title {
