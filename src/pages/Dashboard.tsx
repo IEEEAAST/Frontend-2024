@@ -131,7 +131,7 @@ export const Dashboard = () => {
         </div>
         <div className="mt-[30px] lg:mt-[59px]">
           <div className="flex gap-[20px]">
-            <div className="flex gap-[1vw] px-2 py-10 mb-16 justify-between w-full">
+            <div className="flex gap-[1vw] px-2 py-[2vw] mb-16 justify-between w-full">
               {filterEvents.map((event) => (
                 <EventCard event={event} size={"lg"} key={event.id} className="w-full" />
               ))}
