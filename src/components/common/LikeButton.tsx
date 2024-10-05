@@ -5,6 +5,7 @@ import { UserContext } from "../../App.js";
 import { toggleLike } from "../../utils";
 import ArticleData from "../../interfaces/ArticleData";
 import { EventData } from "../../interfaces/EventData";
+import { Tooltip } from '@chakra-ui/react'
 
 interface LikeButtonProps {
   item: ArticleData | EventData;
@@ -28,6 +29,8 @@ export const LikeButton: React.FC<LikeButtonProps> = ({ item, type, className })
   const handleLikeClick = async (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if(!userId) window.location.href="/signin";
 
     const liked = userId && localLikedBy.includes(userId);
 
@@ -64,15 +67,15 @@ export const LikeButton: React.FC<LikeButtonProps> = ({ item, type, className })
     }
   };
 
-  return (
+  const likeButtonContent = (
     <div className={`flex gap-1 items-center w-20 ${className}`}>
       <img
-        className={`w-8 transition-transform duration-100 ease-linear absolute hover:scale-125 ${!isAnimating && "hidden"}`}
+        className={`w-8 transition-transform duration-100 ease-linear absolute ${!isAnimating && "hidden"} ${userId? 'hover:scale-125 cursor-pointer':'cursor-not-allowed'}`}
         src={userId && localLikedBy.includes(userId) ? OrangeSparkles : WhiteSparkles}
         onClick={handleLikeClick}
       />
       <img
-        className={`w-8 transition-transform duration-100 ease-linear relative cursor-pointer hover:scale-125 ${
+        className={`w-8 transition-transform duration-100 ease-linear relative ${userId? 'hover:scale-125 cursor-pointer':'cursor-not-allowed'} ${
           isAnimating && "animate-ping"
         }`}
         src={userId && localLikedBy.includes(userId) ? OrangeSparkles : WhiteSparkles}
@@ -82,5 +85,11 @@ export const LikeButton: React.FC<LikeButtonProps> = ({ item, type, className })
         {localLikedBy.length}
       </p>
     </div>
+  );
+
+  return userId ? likeButtonContent : (
+    <Tooltip label="Sign in to like posts!">
+      {likeButtonContent}
+    </Tooltip>
   );
 };
