@@ -27,7 +27,7 @@ export const LogoButton = () => {
       <div
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="relative"
+        className="relative ml-[40vw] sm:ml-[20px]"
       >
         <img
           src={Logo}
