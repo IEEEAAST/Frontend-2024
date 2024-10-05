@@ -7,10 +7,10 @@ interface CardAboutUsProps {
 
 export const CardAboutUs = ({ quote }: CardAboutUsProps) => {
   return (
-    <div className='bg-orange-50 rounded-3xl p-4 sm:p-5 md:p-6 lg:p-8 xl:p-8 min-h-[350px] sm:min-h-[400px] md:min-h-[450px] lg:min-h-[433px] xl:min-h-[400px]'>
+    <div className='bg-orange-50 rounded-3xl p-4 mx-auto sm:w-[33rem] md:w-[34rem] lg:w-[70rem]'>
       <div className='flex flex-col xl:flex-row xl:gap-5 space-y-4 xl:space-y-0 h-full'>
         <img
-          className="rounded-3xl h-48 sm:h-56 md:h-64 lg:h-72 xl:w-[30%] xl:h-[430px] object-cover"
+          className="rounded-3xl object-cover lg:size-[30rem] md:size-[30rem] mx-auto"
           src={quote.img}
           alt={`${quote.by}'s photo`}
         />

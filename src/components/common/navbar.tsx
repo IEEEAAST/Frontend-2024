@@ -13,6 +13,7 @@ import Browse from "../../assets/browse.png";
 import Bookmark from "../../assets/save.png";
 import Write from "../../assets/write.png"
 import Bell from "../../assets/bell.png"
+import { LogoButton } from "./LogoButton.js";
 
 
 
@@ -47,6 +48,7 @@ export const NavBar : React.FC = () => {
   const [searched, setSearched] = useState(''); //search
   const [article, setArticle] = useState<ArticleData[]>([]);
   const [events, setEvents] = useState<EventData[]>([]);
+  const [showSearch, setShowSearch] = useState(true)
 
   const navigate = useNavigate(); 
 
@@ -106,6 +108,19 @@ export const NavBar : React.FC = () => {
   };
 
   useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setShowSearch(false);
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [searched]);
+
+
+  useEffect(() => {
     if (menuOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
@@ -136,11 +151,7 @@ export const NavBar : React.FC = () => {
       <div className="wrapper absolute flex items-start sm:items-center justify-between py-2 w-full z-50">
       
         {/* left */}        
-          <div className="ml-[40vw] sm:ml-[20px]">
-          <Link to="/">
-            <img src={Logo} alt="IEEE branch logo" height={90} width={90} />
-          </Link>
-          </div>
+        <LogoButton />
         
         {/* mid */}
         <div className="flex-1 justify-start hidden sm:flex">
@@ -172,7 +183,7 @@ export const NavBar : React.FC = () => {
                   className="w-full"
                 />
                 </div>
-                <div className={`search-results ${((filterArticles?.length==0&&filterEvents?.length==0)||searched.length==0)&&'hidden'}`}>
+                <div className={`search-results ${(!showSearch || (filterArticles?.length==0&&filterEvents?.length==0)||searched.length==0)&&'hidden'}`}>
                   {filterArticles?.map((a)=>(
                     <div className="result" onClick={() => handleClick(a)}>{a}</div>
                   ))}

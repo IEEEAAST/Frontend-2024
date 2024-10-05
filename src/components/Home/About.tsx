@@ -79,8 +79,8 @@ const About = () => {
   return (
     <>
     <Element name="aboutSection">
-      <div className="card-container" id="aboutSection">
-        <h2 className="card-heading font-bold text-4xl mt-20 ml-9">IEEE Values. &nbsp;Our Core.</h2>
+      <div className="card-container p-4" id="aboutSection">
+        <h2 className="card-heading font-bold text-[2rem] md:text-[3rem] lg:text-[3rem] text-center pb-5">IEEE Values. &nbsp;Our Core.</h2>
         {cardsData.map((card, index) => (
           <Card key={index} {...card} />
         ))}

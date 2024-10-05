@@ -2,9 +2,9 @@ import { SwipeCarousel } from "./Carousel"
 
 export const AchievementCarousel = () => {
   return (
-    <div className="w-[calc(100%-32px)] flex items-center justify-center mx-8">
-    <div className="flex flex-col items-start w-full container" >
-        <p className="font-bold text-[45px]">Branch Achievements</p>
+    <div className="flex items-center justify-center mx-8">
+    <div className="flex flex-col items-center w-full container" >
+        <h2 className="font-bold text-[2rem] md:text-[3rem] lg:text-[3rem] text-center pb-14">Branch Achievements</h2>
         <div className="w-full rounded-2xl pb-4" style={{ backgroundColor: "hsl(220, 100%, 5%)" }}>
           <SwipeCarousel/>
         </div>
