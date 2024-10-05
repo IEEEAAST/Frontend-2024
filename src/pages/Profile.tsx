@@ -256,7 +256,7 @@ export const Profile = () => {
           </Alert>
         </Slide>
 
-      <div className="pt-[100px] mx-24 md:mx-32 flex-col justify-center">
+      <div className="pt-[100px] mx-24 md:mx-32 flex flex-col justify-center">
       <div className="bg-[url('https://img.freepik.com/free-vector/abstract-orange-background_698452-2541.jpg')] bg-cover bg-center mt-11 h-[100px] md:w-full md:h-[300px] rounded-3xl relative"></div>
       <div className=" ml-8 md:ml-16 -mt-14 md:-mt-20 z-0 relative mb-32 md:mb-44">
         <img
@@ -281,7 +281,7 @@ export const Profile = () => {
         <Text className="text-sm">0 Following</Text>
         </div>
         </div>
-        <div className="flex justify-center flex-wrap-reverse">
+        <div className="flex justify-center flex-wrap-reverse  w-full lg:justify-end ">
         <TabList>
           <Tab>Articles</Tab>
           <Tab>Contributions</Tab>
@@ -312,12 +312,13 @@ export const Profile = () => {
             <Text className={"font-body"} mb={4}> description goes here:{currentUserData.desc}</Text>
           </TabPanel>
     {self && (
-    <TabPanel>
+      
+    <TabPanel >
     
         <div className="form-container">
         <div className="h-fit">
           <div className="max-w-[600px]">
-            <Text fontFamily={"SF-Pro-Display-Bold"} fontSize={40} mb={4}>Edit Profile</Text>
+            <Text fontFamily={"SF-Pro-Display-Bold"} fontSize={23} mb={4}>Edit Profile</Text>
             <form onSubmit={handleSubmit}>
               <Text fontFamily={"SF-Pro-Display-Bold"} mb={4}>Change your Profile Picture:</Text>
               <FormControl isInvalid={showError && mobileInvalid}>
@@ -375,13 +376,12 @@ export const Profile = () => {
               <Text fontFamily={'SF-Pro-Display-Bold'} mb={2}>Description: </Text>
               <FormControl mb={10}>
                 <Textarea
+                className="w-full sm:w-3/4 md:w-2/3 lg:w-1/2 h-[200px] md:h-[300px] box-border resize-y"
                   id="desc"
                   name="Description"
                   value={currentUserData.desc}
                   onChange={handleChange}
                   placeholder="Describe yourself"
-                  width={800}
-                  height={300}
                   boxSizing="border-box"
                   flexWrap={"wrap"}
                   flex={"flexbox"}
