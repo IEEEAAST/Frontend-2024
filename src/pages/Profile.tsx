@@ -262,7 +262,7 @@ export const Profile = () => {
           </Alert>
         </Slide>
 
-      <div className="pt-[100px] mx-24 md:mx-32 flex flex-col justify-center">
+      <div className="pt-[100px] mx-8 md:mx-32 flex flex-col justify-center">
       <div className="bg-[url('https://img.freepik.com/free-vector/abstract-orange-background_698452-2541.jpg')] bg-cover bg-center mt-11 h-[100px] md:w-full md:h-[300px] rounded-3xl relative"></div>
       <div className=" ml-8 md:ml-16 -mt-14 md:-mt-20 z-0 relative mb-32 md:mb-44">
         <img
