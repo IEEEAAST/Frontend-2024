@@ -56,9 +56,12 @@ export const SignUp = () => {
       const storedFormData = {
         firstname: formData.firstName,
         lastname: formData.lastName,
+        desc:"",
         email: formData.email,
-        likes: [],
-        follows: [],
+        likes: {events:[],articles:[]},
+        followers: [],
+        roles:[],
+        following:{events:[],users:[]}
       };
       const res = await register(formData.email, formData.password);
       await setData("users", storedFormData, res.result?.user.uid);
