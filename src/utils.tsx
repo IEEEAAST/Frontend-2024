@@ -3,6 +3,8 @@ import updateData from './firebase/updateData';
 import ArticleData from './interfaces/ArticleData';
 import { EventData } from './interfaces/EventData';
 import userData from './interfaces/userData';
+import { Events } from 'react-scroll';
+
 
 export const toggleLike = async (
     item: EventData | ArticleData,
@@ -49,4 +51,23 @@ export const toggleLike = async (
         console.error(e);
         return null;
     }
+}
+
+export const toggleFollow = async (
+    followed: userData,
+    follower: userData,
+    followedId: string,
+    followerId: string,
+    setFollowedData: Function,
+    setFollowerData: Function,
+)=>{
+    const isfollowing = followed.followers?.includes(followerId);
+    console.log(isfollowing)
+    
+
+        setFollowedData({...followed, followers:isfollowing? followed.followers.filter((user)=>{return user!= followerId}):[...followed.followers, followerId]})
+        setFollowerData({...follower, following:{...follower.following, users:isfollowing?follower.following.users.filter((user)=>{return user!= followedId}): [...follower.following.users , followedId]}})
+        await updateData("users", followedId, { followers:isfollowing?arrayRemove(followerId):arrayUnion(followerId)});
+        await updateData("users", followerId, {following:{events:follower.following.events, users: isfollowing?arrayRemove(followedId):arrayUnion(followedId)}});
+
 }

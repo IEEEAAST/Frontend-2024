@@ -1,4 +1,3 @@
-import { NavBar } from "../components/common/navbar";
 import { useState, ChangeEvent, FormEvent, useContext, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
@@ -30,6 +29,9 @@ import getDocument from "../firebase/getData";
 import ArticleCard from "../components/Article/Card/ArticleCard.tsx"
 import subscribeToCollection from "../firebase/subscribeToCollection.js";
 import ArticleData from "../interfaces/ArticleData.tsx";
+import { toggleFollow } from "../utils.tsx";
+import { userInfo } from "os";
+import UserData from "../interfaces/userData.tsx";
 
 interface currentUserData {
   mobile: string;
@@ -52,6 +54,7 @@ export const Profile = () => {
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [ passnotRegix, setPassNotRegix ] = useState<boolean>(true);
+  const [selectedUserData, setSelectedUserData]= useState<UserData>();
 
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(false);
@@ -93,6 +96,9 @@ export const Profile = () => {
           if (id === userId) {
             setSelf(true);
           }
+
+          setSelectedUserData(result.data() as UserData)
+          
           setCurrentUserData({
             mobile: result.data()?.mobile || "",
             firstname: result.data()?.firstname || "",
@@ -290,7 +296,7 @@ export const Profile = () => {
           {/*!self&&<button className="defaultButton my-auto">Follow</button>*/}
         </TabList>
         {self && <Tab>Settings</Tab>}
-        {!self&&<button className="defaultButton my-auto">Follow</button>}
+        {!self&&<button className="defaultButton my-auto" onClick={()=>{if (userData && selectedUserData && id && userId) toggleFollow(selectedUserData, userData, id, userId, setSelectedUserData, setUserData)}}>{userId&&selectedUserData?.followers.includes(userId)?"Unfollow":"Follow"}</button>}
         </div>
 
         </div>

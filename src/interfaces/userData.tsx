@@ -7,8 +7,14 @@ export default interface UserData {
     roles?: string[];
     desc: string;
     likes: likes;
+    followers: string[];
+    following: following;
 }
 interface likes {
     articles?: string[];
     events?: string[];
+}
+interface following{
+    events: string[];
+    users: string[];
 }
