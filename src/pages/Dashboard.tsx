@@ -1,3 +1,4 @@
+
 import { NavBar } from "../components/common/navbar";
 import { Spinner, Center } from "@chakra-ui/react";
 import "./styles/Dashboard.css";
@@ -130,9 +131,9 @@ export const Dashboard = () => {
         </div>
         <div className="mt-[30px] lg:mt-[59px]">
           <div className="flex gap-[20px]">
-            <div className="flex overflow-y-visible gap-[40px] mb-16 justify-between w-full">
+            <div className="flex gap-[1vw] px-2 py-[2vw] mb-16 justify-between w-full">
               {filterEvents.map((event) => (
-                <EventCard event={event} size={"lg"} key={event.id} />
+                <EventCard event={event} size={"lg"} key={event.id} className="w-full" />
               ))}
             </div>
           </div>

@@ -15,7 +15,7 @@ useEffect(() => {
 
 return (
   <div className='flex flex-col gap-4 w-full px-6 md:px-14 lg:px-7 container mx-auto'>
-    <p className="font-bold text-[45px] mt-20 my-5">What People Say About Us</p>
+    <p className="font-bold text-[2rem] md:text-[3rem] lg:text-[3rem] p-8 text-center">What People Say About Us</p>
     {
       branchQuotes.map((quote, index) => (
         <CardAboutUs key={index} quote={quote} />

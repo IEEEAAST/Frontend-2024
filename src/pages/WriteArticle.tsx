@@ -97,7 +97,7 @@ export const WriteArticle = () => {
             ...formState,
             image: imageUrl,
             author: userId || 'Unknown',
-            likedBy: [],
+            likedBy: [userId ?? 'Unknown'],
             publishdate: firebase.firestore.Timestamp.fromDate(new Date()),
         };
 
