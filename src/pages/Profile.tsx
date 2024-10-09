@@ -17,7 +17,9 @@ import {
   Tab,
   TabPanel,
   ListItem,
-  List
+  List,
+  Spinner,
+  Center
 } from "@chakra-ui/react";
 import { UserContext } from "../App";
 import getUser from "../firebase/auth";
@@ -252,6 +254,7 @@ export const Profile = () => {
   };
 
   // Determine if Tabs should be displayed
+  if(!currentUserData||!selectedUserData) return <Center h={'100vh'}><Spinner size='xl'/></Center>
 
   return (
     <div>

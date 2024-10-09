@@ -63,11 +63,10 @@ export const toggleFollow = async (
 )=>{
     const isfollowing = followed.followers?.includes(followerId);
     console.log(isfollowing)
-    
-
         setFollowedData({...followed, followers:isfollowing? followed.followers.filter((user)=>{return user!= followerId}):[...followed.followers, followerId]})
         setFollowerData({...follower, following:{...follower.following, users:isfollowing?follower.following.users.filter((user)=>{return user!= followedId}): [...follower.following.users , followedId]}})
-        await updateData("users", followedId, { followers:isfollowing?arrayRemove(followerId):arrayUnion(followerId)});
+        const result = await updateData("users", followedId, { followers:isfollowing?arrayRemove(followerId):arrayUnion(followerId)});
+        console.log(result);
         await updateData("users", followerId, {following:{events:follower.following.events, users: isfollowing?arrayRemove(followedId):arrayUnion(followedId)}});
 
 }

@@ -56,7 +56,7 @@ export const EventCard = ({ event, size, color, className }: EventCardProps) => 
     };
 
     return (
-        <Link to={`/event/${event.title}`} className={className}>
+        <Link to={`/event/${event.title}`} className={className+"flex items-center justify-center"}>
             <div
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
@@ -70,27 +70,29 @@ export const EventCard = ({ event, size, color, className }: EventCardProps) => 
                         backgroundPosition: 'center', 
                         backgroundColor: colors[color as keyof typeof colors] || colors[autoColorByTopic(event.type) as keyof typeof colors],
                         transformStyle: 'preserve-3d',
-                        transition: 'transform 0.1s'
+                        transition: 'transform 0.1s',
+                        width: isLarge ? '25vw' : '250px',
+                        height: isLarge ? 'calc(25vw * 1.25)' : '310px' // Maintain aspect ratio of 1.25
                     }}
-                    className={`${isLarge ? 'w-[400px] h-[500px]' : 'w-[250px] h-[310px]'} rounded-[20px] md:rounded-[9px] flex flex-col items-center text-center justify-between relative`}
+                    className={`${isLarge ? '' : 'w-[250px] h-[310px]'} rounded-[9px] flex flex-col items-center text-center justify-between relative`}
                     animate={controls}
                 >
                     <motion.div
-                        className={`absolute w-full h-full backface-hidden px-[50px] ${isLarge?'pt-[270px]':'pt-[160px]'} flex flex-col justify-between`}
+                        className={`absolute w-full h-full backface-hidden px-[4vw] ${isLarge?'pt-[calc(23vw*0.675)]':'pt-[160px]'} flex flex-col justify-between`}
                         style={{ backfaceVisibility: 'hidden' }}
                     >
-                        <h3 className={`font-bold w-full ${isLarge ? 'text-[40px]' : 'text-[24px]'}`}>{event.title}</h3>
+                        <h3 className={`font-bold w-full ${isLarge ? 'text-[3vw] lg:text-[3vw]' : 'text-[24px]'}`}>{event.title}</h3>
                         <div className='flex flex-col py-1'>
-                            <p className={`${isLarge ? 'text-[24px]' : 'text-[14px]'}`}>
+                            <p className={`${isLarge ? 'text-[1.5vw]' : 'text-[14px]'}`}>
                                 {event.type}
                             </p>
-                            <p className={`${isLarge ? 'text-[20px]' : 'text-[12px]'} opacity-50`}>
+                            <p className={`${isLarge ? 'text-[1.2vw]' : 'text-[12px]'} opacity-50`}>
                                 {new Date(event.starttime.toDate()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                             </p>
                         </div>
                     </motion.div>
                     <motion.div
-                        className="absolute w-full h-full backface-hidden rounded-[20px] md:rounded-[9px]"
+                        className="absolute w-full h-full backface-hidden rounded-[9px]"
                         style={{ 
                             backfaceVisibility: 'hidden', 
                             transform: 'rotateY(180deg)', 
@@ -100,7 +102,7 @@ export const EventCard = ({ event, size, color, className }: EventCardProps) => 
                             backgroundPosition: 'center' 
                         }}
                     />
-                    <div className='bg-[rgba(0,0,0,0.8)] w-full' style={{backfaceVisibility: 'hidden',transform: 'rotateY(180deg)'}}><p className={`font-bold ${isLarge?'text-2xl':'text-lg'}`}>{event.title}</p></div>
+                    <div className='bg-[rgba(0,0,0,0.8)] w-full' style={{backfaceVisibility: 'hidden',transform: 'rotateY(180deg)'}}><p className={`font-bold ${isLarge?'text-[2vw]':'text-lg'}`}>{event.title}</p></div>
                 </motion.div>
             </div>
         </Link>
