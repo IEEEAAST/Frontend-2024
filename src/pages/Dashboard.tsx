@@ -14,7 +14,6 @@ import { EventData } from "../interfaces/EventData";
 import { EventCard } from "../components/common/EventCard.js";
 import getCollection from "../firebase/getCollection.js";
 import arrowRightIcon from "../assets/right-arrow-svgrepo-com.svg";
-
 export const Dashboard = () => {
   const navigate = useNavigate();
   const [articles, setArticles] = useState<ArticleData[]>([]);
