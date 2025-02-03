@@ -1,0 +1,11 @@
+.swirly-background {
+  background: lightpurple;
+  background-image: url("../../../assets/carousel-background.jpg");
+  background-size: cover;
+}
+
+.swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
