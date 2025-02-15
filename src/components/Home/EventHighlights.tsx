@@ -34,31 +34,29 @@ const EventHighlights = () => {
 
   return (
     <>
-      <div className="flex flex-col items-start w-full container mx-auto">
-        <p className="font-bold text-[2rem] md:text-[3rem] lg:text-[3rem] mb-5 w-full mt-20 text-center">Event Highlights</p>
-        <div className="">
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 lg:size-[70rem] gap-4 p-10">
-            <div onClick={()=>{onOpen(images[0])}} className="cursor-pointer">
-              <img src={images[1]} alt="Image 1" className="object-cover border rounded-xl"/>
+      <div className="flex flex-col items-start w-full h-full max-sm:h-[20rem] mt-[4rem] mx-auto">
+        <p className="font-bold text-[2rem] md:text-[3rem] lg:text-[3rem] mx-auto">Event Highlights</p>
+          <div className="grid grid-cols-3 max-sm:grid-cols-2 gap-3 max-sm:gap-3 p-10 max-sm:p-5 mx-auto h-full">
+            <div onClick={()=>{onOpen(images[2])}} className="cursor-pointer max-sm:h-[5.4rem] md:h-[8rem] lg:h-[17rem]">
+              <img src={images[2]} alt="Image 1" className="object-cover border rounded-xl"/>
             </div>
-            <div onClick={()=>{onOpen(images[1])}} className="cursor-pointer">
-              <img src={images[1]} alt="Image 2" className="object-cover w-full border rounded-xl"/>
+            <div onClick={()=>{onOpen(images[2])}} className="cursor-pointer max-sm:h-[5.4rem] md:md:h-[8rem] lg:h-[17rem]">
+              <img src={images[2]} alt="Image 2" className="object-cover w-full border rounded-xl"/>
             </div>
-            <div onClick={()=>{onOpen(images[2])}} className="cursor-pointer">
-              <img src={images[1]} alt="Image 3" className="object-cover w-full border rounded-xl"/>
+            <div onClick={()=>{onOpen(images[2])}} className="cursor-pointer max-sm:h-[5.4rem] md:h-[8rem] lg:h-[17rem]">
+              <img src={images[2]} alt="Image 3" className="object-cover w-full border rounded-xl"/>
             </div>
-            <div onClick={()=>{onOpen(images[3])}} className="cursor-pointer">
+            <div onClick={()=>{onOpen(images[0])}} className="cursor-pointer max-sm:h-[5.4rem] md:h-[8rem] lg:h-[17rem]">
               <img src={images[0]} alt="Image 4" className="object-cover w-full border rounded-xl"/>
             </div>
-            <div onClick={()=>{onOpen(images[4])}} className="cursor-pointer">
-              <img src={images[3]} alt="Image 5" className="object-cover w-full border rounded-xl"/>
+            <div onClick={()=>{onOpen(images[5])}} className="cursor-pointer max-sm:h-[5.4rem] md:h-[8rem] lg:h-[17rem]">
+              <img src={images[5]} alt="Image 5" className="object-cover w-full border rounded-xl"/>
             </div>
-            <div onClick={()=>{onOpen(images[5])}} className="cursor-pointer">
-              <img src={images[5]} alt="Image 6" className="object-cover w-full border rounded-xl"/>
+            <div onClick={()=>{onOpen(images[3])}} className="cursor-pointer max-sm:h-[5.4rem] md:h-[8rem] lg:h-[17rem]">
+              <img src={images[3]} alt="Image 6" className="object-cover w-full border rounded-xl"/>
             </div>
             </div>
           </div>
-        </div>
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />
         <ModalContent>
