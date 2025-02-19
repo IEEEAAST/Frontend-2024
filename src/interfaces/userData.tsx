@@ -7,6 +7,7 @@ export default interface UserData {
     roles?: string[];
     desc: string;
     likes: likes;
+    bookmarks:bookmark
     followers: string[];
     following: following;
 }
@@ -17,4 +18,7 @@ interface likes {
 interface following{
     events: string[];
     users: string[];
+}
+interface bookmark{
+    articles: string[];
 }
