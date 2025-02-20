@@ -265,7 +265,7 @@ export const Profile = () => {
           </Alert>
         </Slide>
 
-      <div className="pt-[100px] mx-24 md:mx-32 flex flex-col justify-center">
+      <div className="pt-[100px] mx-8 md:mx-32 flex flex-col justify-center">
       <div className="bg-[url('https://img.freepik.com/free-vector/abstract-orange-background_698452-2541.jpg')] bg-cover bg-center mt-11 h-[100px] md:w-full md:h-[300px] rounded-3xl relative"></div>
       <div className=" ml-8 md:ml-16 -mt-14 md:-mt-20 z-0 relative mb-32 md:mb-44">
         <img
@@ -285,9 +285,9 @@ export const Profile = () => {
           <div className="flex flex-col">
         <p className="text-2xl font-extrabold font-textmedium md:ml-16"> {currentUserData.firstname} {currentUserData.lastname}</p>
         <div className="flex gap-[10px] items-center font-extralight md:ml-16 mb-7 md:mb-0">
-        <Text className="text-sm">0 Followers</Text>
+        <Text className="text-sm">{selectedUserData?.followers?.length || 0} Followers</Text>
         •︎
-        <Text className="text-sm">0 Following</Text>
+        <Text className="text-sm">{selectedUserData?.following?.users?.length || 0} Following</Text>
         </div>
         </div>
         <div className="flex justify-center flex-wrap-reverse  w-full lg:justify-end ">
@@ -322,7 +322,7 @@ export const Profile = () => {
           </TabPanel>
     {self && (
       
-    <TabPanel >
+    <TabPanel>
     
         <div className="form-container">
         <div className="h-fit">
@@ -477,7 +477,7 @@ export const Profile = () => {
 
               <div className="flex flex-nowrap">
                 <div className="pt-8 flex flex-nowrap items-center gap-4 flex-col">
-                  <div className="flex flex-col sm:flex-row items-center gap-2 mb-2">
+                  <div className="flex items-center gap-2 mb-2">
                     <button
                       style={{
                         background: 'transparent',
