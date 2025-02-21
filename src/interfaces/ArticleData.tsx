@@ -1,7 +1,7 @@
 import { Timestamp } from "firebase/firestore";
 
 export default interface ArticleData {
-  id?:string|null;
+  id?: string | null;
   article: string;
   author: string;
   caption: string;

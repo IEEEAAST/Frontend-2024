@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { EventData } from "../interfaces/EventData";
 import getCollection from "../firebase/getCollection";
-import { NavBar } from "../components/common/navbar";
 import sort from "../assets/sort.png";
 import sortup from "../assets/sortup.png";
 import sortdown from "../assets/sortdown.png";
@@ -33,9 +32,15 @@ const formatEventDate = (date: Date, format: string) => {
 
 const isEventOngoing = (event: EventData) => {
   const today = new Date();
-  if(event.endtime && (event.starttime.toDate()<today) && (event.endtime.toDate() > today) && event.formLink &&event.formLink.length>0) return "This event is currently ongoing! Register now!";
-  if((event.starttime.toDate() > today) && event.formLink &&event.formLink.length>0) return "This event is happening soon! Register now!"
-  if((event.starttime.toDate() > today)) return "This event is happening soon!";
+  if(event.endtime && (event.starttime.toDate()<today) && (event.endtime.toDate() > today) && event.formLink &&event.formLink.length>0) {
+    return "This event is currently ongoing! Register now!";
+  }
+  if((event.starttime.toDate() > today) && event.formLink &&event.formLink.length>0) {
+    return "This event is happening soon! Register now!"
+  }
+  if((event.starttime.toDate() > today)) {
+    return "This event is happening soon!";
+  }
   return null;
 };
 
@@ -101,8 +106,7 @@ export const ViewAllEvents = () => {
 
   return (
     <div className="flex flex-col items-center bg-[#000B21] text-white header">
-      <div className="h-[150px] w-full">
-      </div>
+      <div className="h-[150px] w-full"></div>
       <div className="flex flex-col md:flex-row justify-between items-center w-full px-4 lg:px-[89px] gap-4">
         <h2 className="text-white text-[24px] md:text-[32px] lg:text-[45px] font-bold">All Events</h2>
 
@@ -140,8 +144,29 @@ export const ViewAllEvents = () => {
         <div className="grid grid-cols-1 md:grid-cols-[auto_auto_1fr] mt-4 gap-y-8 mb-10">
           {events.map((event, index) => (
             <>
-                <p className={`mt-2 text-right mr-6 ${events.slice(0, index).some(e => e.starttime.toDate().getMonth() === event.starttime.toDate().getMonth()) && 'opacity-0'} ${!filter.includes("date") ? 'opacity-0 mr-0 w-0' : 'mr-6'}`}>{formatEventDate(event.starttime.toDate(), "short")}</p>
-              <div className={`flex justify-center bg-[#151F33] h-[calc(100%+32px)] overflow-visible  ${!filter.includes("date") ? 'opacity-0 mx-0 w-0' : 'mx-4 w-2'}`}><div className={`${events.some(e => e.starttime.toDate().getMonth() === event.starttime.toDate().getMonth() && e.starttime.toDate().getFullYear() === event.starttime.toDate().getFullYear() && isEventOngoing(e)) ? 'bg-[#57ff57] shadow-[0_0_10px_2px_#57ff57]' : 'bg-[#151F33]'} rounded-full w-10 h-10 flex ${index > 0 && event.starttime.toDate().getMonth() == events[index - 1].starttime.toDate().getMonth() && 'opacity-0'} items-center justify-center absolute`}><div className="bg-white rounded-full w-4 h-4"></div></div></div>
+              <p className={`mt-2 text-right mr-6 
+                ${events.slice(0, index).some(e => e.starttime.toDate().getMonth() === event.starttime.toDate().getMonth()) && 'opacity-0'} 
+                ${!filter.includes("date") ? 'opacity-0 mr-0 w-0' : 'mr-6'}`}
+              >
+                {formatEventDate(event.starttime.toDate(), "short")}
+              </p>
+              <div className={`flex justify-center bg-[#151F33] h-[calc(100%+32px)] overflow-visible  
+                ${!filter.includes("date") ? 'opacity-0 mx-0 w-0' : 'mx-4 w-2'}`}
+              >
+                <div className={`
+                  ${events.some(e => 
+                    e.starttime.toDate().getMonth() === event.starttime.toDate().getMonth() 
+                    && e.starttime.toDate().getFullYear() === event.starttime.toDate().getFullYear() 
+                    && isEventOngoing(e)) 
+                      ? 'bg-[#57ff57] shadow-[0_0_10px_2px_#57ff57]' 
+                      : 'bg-[#151F33]'} rounded-full w-10 h-10 flex 
+                        ${index > 0 
+                          && event.starttime.toDate().getMonth() == events[index - 1].starttime.toDate().getMonth() 
+                          && 'opacity-0'} items-center justify-center absolute
+                `}>
+                  <div className="bg-white rounded-full w-4 h-4"></div>
+                </div>
+              </div>
               <Link to={`/event/${event.title}`} className="flex flex-col md:flex-row  gap-4 w-full ml-0 md:ml-6">
                 <EventCard event={event} size="sm" />
                 <div className="flex flex-col w-[700px]">
@@ -151,7 +176,10 @@ export const ViewAllEvents = () => {
                     <p className="font-extralight mb-4 h-24">{event.description}</p>
                   </div>
                   <div className="w-full h-0 border border-[#151F33] my-4"></div>
-                  <p className="mt-2 text-sm">Time: from <strong>{formatEventDate(event.starttime.toDate(), "long")}</strong> to <strong>{formatEventDate(event.starttime.toDate(), "long")}</strong></p>
+                  <p className="mt-2 text-sm">
+                    Time: from <strong>{formatEventDate(event.starttime.toDate(), "long")}</strong> to 
+                    <strong>{formatEventDate(event.starttime.toDate(), "long")}</strong>
+                  </p>
                   <p className="mt-2">Type: <strong>{event.type}</strong></p>
                 </div>
               </Link>
@@ -160,5 +188,5 @@ export const ViewAllEvents = () => {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,4 +1,3 @@
-import { NavBar } from "../components/common/navbar";
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Input, FormControl, FormErrorMessage, List, ListItem } from "@chakra-ui/react";
@@ -13,12 +12,6 @@ interface FormData {
 }
 
 export const SignUp = () => {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [error, setError] = useState<string>("");
-  const onOpen = (errorString: string) => {
-    setModalIsOpen(true);
-    setError(errorString);
-  };
   const location = useLocation();
   const [formData, setFormData] = useState<FormData>({
     firstName: "",

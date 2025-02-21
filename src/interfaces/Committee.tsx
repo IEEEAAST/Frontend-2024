@@ -1,4 +1,4 @@
 export default interface Committee {
-    index: number;
-    name: string;
-  }
+  index: number;
+  name: string;
+}

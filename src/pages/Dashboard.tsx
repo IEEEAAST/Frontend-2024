@@ -1,6 +1,4 @@
-
-import { NavBar } from "../components/common/navbar";
-import { Spinner, Center } from "@chakra-ui/react";
+import { Spinner } from "@chakra-ui/react";
 import "./styles/Dashboard.css";
 import subscribeToCollection from "../firebase/subscribeToCollection.js"; // Import the new function
 import getDocument from "../firebase/getData.js";
@@ -14,6 +12,8 @@ import { EventData } from "../interfaces/EventData";
 import { EventCard } from "../components/common/EventCard.js";
 import getCollection from "../firebase/getCollection.js";
 import arrowRightIcon from "../assets/right-arrow-svgrepo-com.svg";
+
+
 export const Dashboard = () => {
   const navigate = useNavigate();
   const [articles, setArticles] = useState<ArticleData[]>([]);
