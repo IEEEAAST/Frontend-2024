@@ -1,5 +1,7 @@
 import { arrayRemove, arrayUnion } from '@firebase/firestore';
 import updateData from './firebase/updateData'; 
+import getDocument from './firebase/getData';
+import { ensureFieldExist, ensureUserFieldExist } from './firebase/addBookMarksMissingFields';
 import ArticleData from './interfaces/ArticleData';
 import { EventData } from './interfaces/EventData';
 import userData from './interfaces/userData';
@@ -7,7 +9,7 @@ import { Events } from 'react-scroll';
 
 
 export const toggleLike = async (
-    item: EventData | ArticleData,
+    item: EventData | ArticleData ,
     userData: userData,
     userId: string,
     type: string,
@@ -45,6 +47,52 @@ export const toggleLike = async (
             // Update item likes in Firebase
             await updateData(collectionName, item.id, { likedBy: liked ? arrayRemove(userId) : arrayUnion(userId) });
         }
+
+        return true;
+    } catch (e) {
+        console.error(e);
+        return null;
+    }
+}
+
+export const toggleBookMark = async (
+    item: ArticleData,
+    userData: userData,
+    userId: string,
+    setUserData: Function,
+) => {
+    
+    let bookMarked = false;
+
+    // Ensure userData has a bookmarks object
+    if (!userData.bookmarks)
+    {
+        await ensureUserFieldExist(userId);
+        await getDocument('users', userId);
+        console.log("creating bookmarks")
+    }
+    
+
+    if(item.id)
+        bookMarked = userData.bookmarks.articles?.includes(item.id);
+
+    // Determine the updated likes for the user based on like status
+    const updatedBookMarks = bookMarked
+        ? (userData?.bookmarks.articles.filter((bookmark) => bookmark !== item.id))
+        : [...(userData?.bookmarks.articles || []), item.id]
+
+    try {
+        // Update the user data locally
+        const updatedUserBookMarks = {
+            ...userData.bookmarks,
+            articles: updatedBookMarks,
+        };
+
+        // Update the state with the new user likes
+        setUserData({ ...userData, bookmarks: updatedUserBookMarks });
+
+        // Update user data in Firebase
+        await updateData('users', userId, { bookmarks: updatedUserBookMarks });
 
         return true;
     } catch (e) {
