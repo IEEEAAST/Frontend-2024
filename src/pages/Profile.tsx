@@ -90,44 +90,44 @@ export const Profile = () => {
   // Fetch user data and check if the `id` matches the logged-in user ID
   useEffect(() => {
     const fetchData = async () => {
-        const { result } = await getDocument("users", id);
-        if (result) {
-          console.log(id);
-          console.log(userId);
-          if (id === userId) {
-            setSelf(true);
-          }
-
-          setSelectedUserData(result.data() as UserData)
-          
-          setCurrentUserData({
-            mobile: result.data()?.mobile || "",
-            firstname: result.data()?.firstname || "",
-            lastname: result.data()?.lastname || "",
-            desc: result.data()?.desc || "",
-            profilePicture: result.data()?.imgurl || null,
-            newPassword: "",
-            confirmPassword: "",
-            oldPassword: "",
-            roles: result.data()?.roles || [],
-          });
+      const { result } = await getDocument("users", id);
+      if (result) {
+        console.log(id);
+        console.log(userId);
+        if (id === userId) {
+          setSelf(true);
         }
-        const unsubscribe = subscribeToCollection("articles", ({ result, ids, error }: { result: any, ids: string[], error: any }) => {
-          if(error){
-            console.error('error fetching articles: ',error);
-            return;
-          }
-          if (result && ids) {
-            const articlesWithIds = result.map((article: ArticleData, index: number) => ({
-              ...article,
-              id: ids[index],
-            }));
-            setArticles(articlesWithIds.filter((article: ArticleData) => {
-              return id === article.author;
-            }));
-          }
-        })
-        return () => unsubscribe();
+
+        setSelectedUserData(result.data() as UserData)
+        
+        setCurrentUserData({
+          mobile: result.data()?.mobile || "",
+          firstname: result.data()?.firstname || "",
+          lastname: result.data()?.lastname || "",
+          desc: result.data()?.desc || "",
+          profilePicture: result.data()?.imgurl || null,
+          newPassword: "",
+          confirmPassword: "",
+          oldPassword: "",
+          roles: result.data()?.roles || [],
+        });
+      }
+      const unsubscribe = subscribeToCollection("articles", ({ result, ids, error }: { result: any, ids: string[], error: any }) => {
+        if(error){
+          console.error('error fetching articles: ',error);
+          return;
+        }
+        if (result && ids) {
+          const articlesWithIds = result.map((article: ArticleData, index: number) => ({
+            ...article,
+            id: ids[index],
+          }));
+          setArticles(articlesWithIds.filter((article: ArticleData) => {
+            return id === article.author;
+          }));
+        }
+      })
+      return () => unsubscribe();
     };
 
     fetchData();
