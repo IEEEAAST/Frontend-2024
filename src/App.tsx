@@ -98,7 +98,6 @@ function App() {
   }, []);
 
   return loading? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex "/></div> : (
-    <ChakraProvider disableGlobalStyle={true} theme={theme}>
       <UserContext.Provider value={{ userData, setUserData, userId, setUserId}}>
         <AppConfigContext.Provider value={{appConfig}}>
           <NavBar/>
@@ -120,7 +119,6 @@ function App() {
           </Routes>
         </AppConfigContext.Provider>
       </UserContext.Provider>
-    </ChakraProvider>
   );
 }
 
