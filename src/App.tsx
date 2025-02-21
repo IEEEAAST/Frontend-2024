@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { EventDetails } from "./pages/EventDetails";
 import { Home } from "./pages/Home";
@@ -61,9 +61,6 @@ function App() {
     recruitingLink: null as string | null,
   });
 
-
-
-
   const fetchUser = async () => {
     try {
       const user = await getUser();
@@ -94,21 +91,15 @@ function App() {
       console.error("Error fetching app config:", error);
     }
   }
-
-
-
   
   useEffect(() => {
     fetchUser();
     fetchAppConfig();
   }, []);
 
-
-
   return loading? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex "/></div> : (
     <ChakraProvider disableGlobalStyle={true} theme={theme}>
-      
-        <UserContext.Provider value={{ userData, setUserData, userId, setUserId}}>
+      <UserContext.Provider value={{ userData, setUserData, userId, setUserId}}>
         <AppConfigContext.Provider value={{appConfig}}>
           <NavBar/>
           <Routes>
@@ -128,8 +119,7 @@ function App() {
             <Route path="/admin" element = {<Admin/>}></Route>
           </Routes>
         </AppConfigContext.Provider>
-        </UserContext.Provider>
-
+      </UserContext.Provider>
     </ChakraProvider>
   );
 }

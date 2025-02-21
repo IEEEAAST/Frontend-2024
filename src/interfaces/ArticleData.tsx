@@ -1,4 +1,5 @@
 import { Timestamp } from "firebase/firestore";
+
 export default interface ArticleData {
   id?:string|null;
   article: string;
@@ -7,8 +8,7 @@ export default interface ArticleData {
   description: string;
   image: string;
   likedBy: string[];
-  bookMarkedBy: string[];
   publishdate: Timestamp;
   title: string;
   topic: string;
-  }
+}
