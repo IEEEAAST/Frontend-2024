@@ -1,11 +1,10 @@
 import { arrayRemove, arrayUnion } from '@firebase/firestore';
 import updateData from './firebase/updateData'; 
 import getDocument from './firebase/getData';
-import { ensureFieldExist, ensureUserFieldExist } from './firebase/addBookMarksMissingFields';
+import { ensureUserFieldExist } from './firebase/addBookMarksMissingFields';
 import ArticleData from './interfaces/ArticleData';
 import { EventData } from './interfaces/EventData';
 import userData from './interfaces/userData';
-import { Events } from 'react-scroll';
 
 
 export const toggleLike = async (
@@ -16,7 +15,9 @@ export const toggleLike = async (
     setUserData: Function,
 ) => {
     const collectionName = type === "article" ? "articles" : "events";
-    if(!item.likedBy) throw new Error("LikedBy field not found in item! Please add it in firebase.");
+    if(!item.likedBy) {
+      throw new Error("LikedBy field not found in item! Please add it in firebase.");
+    }
     const liked = item.likedBy?.includes(userId);
 
     // Determine the updated likes for the user based on like status
@@ -65,16 +66,15 @@ export const toggleBookMark = async (
     let bookMarked = false;
 
     // Ensure userData has a bookmarks object
-    if (!userData.bookmarks)
-    {
+    if (!userData.bookmarks) {
         await ensureUserFieldExist(userId);
         await getDocument('users', userId);
         console.log("creating bookmarks")
     }
     
-
-    if(item.id)
+    if(item.id) {
         bookMarked = userData.bookmarks.articles?.includes(item.id);
+    }
 
     // Determine the updated likes for the user based on like status
     const updatedBookMarks = bookMarked
@@ -110,10 +110,48 @@ export const toggleFollow = async (
     setFollowerData: Function,
 )=>{
     const isfollowing = followed.followers?.includes(followerId);
-    console.log(isfollowing)
-        setFollowedData({...followed, followers:isfollowing? followed.followers.filter((user)=>{return user!= followerId}):[...followed.followers, followerId]})
-        setFollowerData({...follower, following:{...follower.following, users:isfollowing?follower.following.users.filter((user)=>{return user!= followedId}): [...follower.following.users , followedId]}})
-        const result = await updateData("users", followedId, { followers:isfollowing? followed.followers.filter((user)=>{return user!= followerId}):[...followed.followers, followerId]});
-        await updateData("users", followerId, {following:{events:follower.following.events, users: isfollowing?follower.following.users.filter((user)=>{return user!= followedId}): [...follower.following.users , followedId]}});
+    console.log(isfollowing);
+
+    setFollowedData({
+      ...followed, 
+      followers: isfollowing
+        ? followed.followers.filter((user)=>{return user != followerId})
+        : [...followed.followers, followerId]
+    });
+
+    setFollowerData({
+      ...follower, 
+      following:{
+        ...follower.following, 
+        users: isfollowing
+          ? follower.following.users.filter((user)=>{return user != followedId})
+          : [...follower.following.users , followedId]
+      }
+    })
+
+    const result = await updateData(
+      "users", 
+      followedId, 
+      { 
+        followers: isfollowing
+          ? followed.followers.filter((user)=>{return user != followerId})
+          : [...followed.followers, followerId]
+      }
+    );
+
+    console.log(result);
+
+    await updateData(
+      "users", 
+      followerId, 
+      {
+        following: {
+            events: follower.following.events, 
+            users: isfollowing
+              ? follower.following.users.filter((user)=>{return user != followedId})
+              : [...follower.following.users , followedId]
+        }
+      }
+    );
 
 }

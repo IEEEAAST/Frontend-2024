@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import { BrowserRouter } from "react-router-dom";
 import { ColorModeScript } from "@chakra-ui/react";
-import { ChakraProvider } from "@chakra-ui/react";
 import theme from "./theme";
 import Footer from "./components/common/Footer.tsx";
 
