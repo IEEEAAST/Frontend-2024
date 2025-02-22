@@ -3,11 +3,11 @@ import React from "react";
 import ArticleData from "../../../interfaces/ArticleData.js";
 import { LikeButton } from "../../common/LikeButton.js";
 import {BookMarkButton} from "../../common/bookMarkButton.tsx"
+import "./styles/MainContent.css";
 
 interface LikeSaveShareProps {
   article: ArticleData;
-}import "./styles/MainContent.css";
-
+}
 
 export const LikeSaveShare: React.FC<LikeSaveShareProps> = ({ article }) => {
   return (

@@ -2,7 +2,6 @@ import "./styles/MainContent.css";
 import { LikeSaveShare } from "./LikeSaveShare";
 import { Modal } from "../Modal/Modal";
 import { useState, useEffect, useCallback } from "react";
-import getCollection from "../../../firebase/getCollection.js";
 import getDocument from "../../../firebase/getData.js";
 import { Timestamp } from "@firebase/firestore";
 import ArticleData from "../../../interfaces/ArticleData.js";
