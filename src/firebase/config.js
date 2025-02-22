@@ -2,10 +2,6 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
-// const env = await import.meta.env;
-
-
-
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_REACT_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_REACT_FIREBASE_AUTH_DOMAIN,
@@ -23,6 +19,3 @@ export const db = getFirestore(app);
 export const storage = getStorage(app);
 
 // console.log(__APP)
-
-
-

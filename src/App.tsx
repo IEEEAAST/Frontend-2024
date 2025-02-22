@@ -4,8 +4,7 @@ import { EventDetails } from "./pages/EventDetails";
 import { Home } from "./pages/Home";
 import { Article } from "./pages/Article";
 import "./App.css"; // Import CSS file
-import { ChakraProvider, Spinner } from '@chakra-ui/react'
-import theme from './theme'
+import { Spinner } from '@chakra-ui/react'
 import getDocument from "./firebase/getData"
 import { MailDesign } from "./pages/MailDesign";
 import { Onboarding } from "./pages/Onboarding";
