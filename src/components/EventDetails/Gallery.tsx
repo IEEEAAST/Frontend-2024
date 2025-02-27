@@ -14,6 +14,7 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
     setSelectedImage(img);
     onOpen();
   };
+
   const handleClickOutside = (event: MouseEvent) => {
     if (imgRef.current && !imgRef.current.contains(event.target as Node)) {
       onClose()
