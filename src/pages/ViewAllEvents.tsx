@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { EventData } from "../interfaces/EventData";
 import getCollection from "../firebase/getCollection";
-import sort from "../assets/sort.png";
-import sortup from "../assets/sortup.png";
-import sortdown from "../assets/sortdown.png";
 import { EventCard } from "../components/common/EventCard";
 import { Link } from "react-router-dom";
+import { SortButton } from "../components/common/SortButton";
+
+const topics = ["AI", "Database", "Game", "Media", "Mobile", "Other", "Python", "Security", "Technical", "Web"];
 
 const formatEventDate = (date: Date, format: string) => {
   if (format === "long") {
@@ -15,7 +15,7 @@ const formatEventDate = (date: Date, format: string) => {
       month: '2-digit',
       year: 'numeric'
     };
-    const formattedDate = date.toLocaleDateString('en-GB', options); // Use 'en-GB' locale for day before month
+    const formattedDate = date.toLocaleDateString('en-GB', options);
     const time = date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit', hour12: true });
     return `${formattedDate} at ${time}`;
   } else if (format === "short") {
@@ -27,18 +27,18 @@ const formatEventDate = (date: Date, format: string) => {
     const parts = formattedDate.split(' ');
     return `${parts[0]}, ${parts[1]}`;
   }
-  return date.toString(); // Fallback if format is not recognized
+  return date.toString(); 
 };
 
 const isEventOngoing = (event: EventData) => {
   const today = new Date();
-  if(event.endtime && (event.starttime.toDate()<today) && (event.endtime.toDate() > today) && event.formLink &&event.formLink.length>0) {
+  if (event.endtime && (event.starttime.toDate() < today) && (event.endtime.toDate() > today) && event.formLink && event.formLink.length > 0) {
     return "This event is currently ongoing! Register now!";
   }
-  if((event.starttime.toDate() > today) && event.formLink &&event.formLink.length>0) {
+  if ((event.starttime.toDate() > today) && event.formLink && event.formLink.length > 0) {
     return "This event is happening soon! Register now!"
   }
-  if((event.starttime.toDate() > today)) {
+  if ((event.starttime.toDate() > today)) {
     return "This event is happening soon!";
   }
   return null;
@@ -46,6 +46,7 @@ const isEventOngoing = (event: EventData) => {
 
 export const ViewAllEvents = () => {
   const [events, setEvents] = useState<EventData[]>([]);
+  const [filteredEvents, setFilteredEvents] = useState<EventData[]>([]); //seperate state for topic filtered events to avoid deleting the original events
   const [filter, setFilter] = useState("date");
 
   const changeFilter = (newfilter: string) => {
@@ -59,15 +60,14 @@ export const ViewAllEvents = () => {
       }
     }
 
-    // Set the filter state with the final filter
     setFilter(finalFilter);
 
-    // Use the final filter to sort articles immediately
+
     filterEvents(finalFilter);
   };
 
   const filterEvents = (filter: string) => {
-    const sortedEvents = [...events]; // Create a new array to avoid mutating state directly
+    let sortedEvents = [...events];
 
     switch (filter) {
       case "date":
@@ -76,12 +76,7 @@ export const ViewAllEvents = () => {
       case "date-reverse":
         sortedEvents.sort((a, b) => a.starttime.seconds - b.starttime.seconds);
         break;
-      case "topic":
-        sortedEvents.sort((a, b) => (b.type || "Event").localeCompare(a.type || "Event"));
-        break;
-      case "topic-reverse":
-        sortedEvents.sort((a, b) => (a.type || "Event").localeCompare(b.type || "Event"));
-        break;
+
       case "likes":
         sortedEvents.sort((a, b) => (b.likedBy.length ?? 0) - (a.likedBy.length ?? 0));
         break;
@@ -89,7 +84,13 @@ export const ViewAllEvents = () => {
         sortedEvents.sort((a, b) => (a.likedBy.length ?? 0) - (b.likedBy.length ?? 0));
         break;
     }
-    setEvents(sortedEvents);
+
+    const selectedTopic = document.querySelector('select')?.value || "All";
+    if (selectedTopic !== "All") {
+      sortedEvents = sortedEvents.filter(event => event.type === selectedTopic);
+    }
+
+    setFilteredEvents(sortedEvents);
   };
 
   useEffect(() => {
@@ -97,9 +98,10 @@ export const ViewAllEvents = () => {
       if (res.result && res.ids) {
         const newevents = (res.result as EventData[]).map((event, index) => ({
           ...event,
-          id: res.ids ? res.ids[index] : null, // Set the id from res.ids if not null
+          id: res.ids ? res.ids[index] : null, 
         }));
         setEvents(newevents.sort((a, b) => b.starttime.seconds - a.starttime.seconds));
+        setFilteredEvents(newevents.sort((a, b) => b.starttime.seconds - a.starttime.seconds));
       }
     });
   }, []);
@@ -108,44 +110,33 @@ export const ViewAllEvents = () => {
     <div className="flex flex-col items-center bg-[#000B21] text-white header">
       <div className="h-[150px] w-full"></div>
       <div className="flex flex-col md:flex-row justify-between items-center w-full px-4 lg:px-[89px] gap-4">
-        <h2 className="text-white text-[24px] md:text-[32px] lg:text-[45px] font-bold">All Events</h2>
+        <h2 className="text-white text-[24px] m</div>d:text-[32px] lg:text-[45px] font-bold">All Events</h2>
 
-        <button className="w-full md:w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-12 md:h-14" onClick={() => { changeFilter("date") }}>
-          Date
-          <div className="relative w-5 my-2">
-            <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "date" ? 'opacity-100' : 'opacity-0'}`}></img>
-            <img src={sortdown} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "date-reverse" ? 'opacity-100' : 'opacity-0'}`}></img>
-            <img src={sort} className={`absolute inset-0 w-full transition-opacity duration-300 ${!(filter.includes("date")) ? 'opacity-100' : 'opacity-0'}`}></img>
-          </div>
-          <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter == 'date' || filter == 'date-reverse') ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`}></div>
-        </button>
-
-        <button className="w-full md:w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-12 md:h-14" onClick={() => { changeFilter('topic') }}>
-          Topic
-          <div className="relative w-5 my-2">
-            <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "topic" ? 'opacity-100' : 'opacity-0'}`}></img>
-            <img src={sortdown} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "topic-reverse" ? 'opacity-100' : 'opacity-0'}`}></img>
-            <img src={sort} className={`absolute inset-0 w-full transition-opacity duration-300 ${!(filter.includes("topic")) ? 'opacity-100' : 'opacity-0'}`}></img>
-          </div>
-          <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter == 'topic' || filter == 'topic-reverse') ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`}></div>
-        </button>
-
-        <button className="w-full md:w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-12 md:h-14" onClick={() => { changeFilter("likes") }}>
-          Likes
-          <div className="relative w-5 my-2">
-            <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "likes" ? 'opacity-100' : 'opacity-0'}`}></img>
-            <img src={sortdown} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "likes-reverse" ? 'opacity-100' : 'opacity-0'}`}></img>
-            <img src={sort} className={`absolute inset-0 w-full transition-opacity duration-300 ${!(filter.includes("likes")) ? 'opacity-100' : 'opacity-0'}`}></img>
-          </div>
-          <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter == 'likes' || filter == 'likes-reverse') ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`}></div>
-        </button>
+        <SortButton label="Date" filterKey="date" currentFilter={filter} changeFilter={changeFilter} />
+        <SortButton label="Likes" filterKey="likes" currentFilter={filter} changeFilter={changeFilter} />
+        <select
+          className="bg-[#151F33] text-white p-2 rounded h-12 w-full md:w-1/6"
+          onChange={(e) => {
+            const selectedTopic = e.target.value;
+            const filtered = selectedTopic === "All" ? events : events.filter(event => event.type === selectedTopic);
+            setFilteredEvents(filtered);
+          }}
+        >
+          <option value="All">All</option>
+          {topics.map((topic) => (
+            <option key={topic} value={topic}>
+              {topic}
+            </option>
+          ))}
+        </select>
       </div>
       <div className="w-full px-10 lg:px-10">
+        {filteredEvents.length === 0 && <p className="text-white text-[24px] font-bold text-center mt-40 mb-40">No events found... Check back soon!</p>}
         <div className="grid grid-cols-1 md:grid-cols-[auto_auto_1fr] mt-4 gap-y-8 mb-10">
-          {events.map((event, index) => (
+          {filteredEvents.map((event, index) => (
             <>
               <p className={`mt-2 text-right mr-6 
-                ${events.slice(0, index).some(e => e.starttime.toDate().getMonth() === event.starttime.toDate().getMonth()) && 'opacity-0'} 
+                ${filteredEvents.slice(0, index).some(e => e.starttime.toDate().getMonth() === event.starttime.toDate().getMonth()) && 'opacity-0'} 
                 ${!filter.includes("date") ? 'opacity-0 mr-0 w-0' : 'mr-6'}`}
               >
                 {formatEventDate(event.starttime.toDate(), "short")}
@@ -154,14 +145,14 @@ export const ViewAllEvents = () => {
                 ${!filter.includes("date") ? 'opacity-0 mx-0 w-0' : 'mx-4 w-2'}`}
               >
                 <div className={`
-                  ${events.some(e => 
+                  ${filteredEvents.some(e => 
                     e.starttime.toDate().getMonth() === event.starttime.toDate().getMonth() 
                     && e.starttime.toDate().getFullYear() === event.starttime.toDate().getFullYear() 
                     && isEventOngoing(e)) 
                       ? 'bg-[#57ff57] shadow-[0_0_10px_2px_#57ff57]' 
                       : 'bg-[#151F33]'} rounded-full w-10 h-10 flex 
                         ${index > 0 
-                          && event.starttime.toDate().getMonth() == events[index - 1].starttime.toDate().getMonth() 
+                          && event.starttime.toDate().getMonth() == filteredEvents[index - 1].starttime.toDate().getMonth() 
                           && 'opacity-0'} items-center justify-center absolute
                 `}>
                   <div className="bg-white rounded-full w-4 h-4"></div>
