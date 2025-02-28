@@ -165,9 +165,10 @@ export const ViewAllEvents = () => {
                 <div className="w-full flex flex-col max-h-[350px]">
                 <p className="font-extrabold text-xl sm:text-3xl">{event.title}</p>
                 {isEventOngoing(event) && <p className="italic text-yellow-600 mb-2">{isEventOngoing(event)}</p>}
-                <p className="font-extralight mb-2 whitespace-normal overflow-hidden text-ellipsis line-clamp-[7]">{event.description}</p>
+                <p className="font-extralight mb-2 whitespace-normal overflow-hidden text-ellipsis line-clamp-6">{event.description}</p>
                 <hr className="w-full mt-auto border-[#151F33] border-2 mb-2"></hr>
-                <p><span className="font-bold">Starts: </span><span>{formatEventDate(event.starttime.toDate(), "long")}</span></p>
+                <p><span className="font-bold">Type: </span><span>{event.type}</span></p>
+                <p><span className="font-bold">Starts: </span><span>{formatEventDate(event.starttime.toDate(), "long")}</span></p>   
                 <p className="mb-8"><span className="font-bold">Ends: </span><span>{formatEventDate(event.endtime.toDate(), "long")}</span></p>
                 </div>
                 </div>
