@@ -54,57 +54,65 @@ export const EventCard = ({ event, size, color, className }: EventCardProps) => 
         setIsFlipped(false);
         controls.start({ rotateY: 0 });
     };
+    const content=
+    <div
+    onMouseEnter={handleMouseEnter}
+    onMouseLeave={handleMouseLeave}
+    style={{ perspective: 1000 }}
+>
+    <motion.div
+        style={{ 
+            backgroundImage: `url(${Card})`, 
+            backgroundSize: 'cover', 
+            backgroundRepeat: 'no-repeat', 
+            backgroundPosition: 'center', 
+            backgroundColor: colors[color as keyof typeof colors] || colors[autoColorByTopic(event.type) as keyof typeof colors],
+            transformStyle: 'preserve-3d',
+            transition: 'transform 0.1s',
+            width: isLarge ? '25vw' : '250px',
+            height: isLarge ? 'calc(25vw * 1.25)' : '310px', // Maintain aspect ratio of 1.25
+            marginBottom: isLarge ? '0px' : '2.5rem'
+        }}
+        className={`${isLarge ? '' : 'w-[250px] h-[310px]'} rounded-[9px] flex flex-col items-center text-center justify-between relative`}
+        animate={controls}
+    >
+        <motion.div
+            className={`absolute w-full h-full backface-hidden px-[4vw] ${isLarge?'pt-[calc(23vw*0.675)]':'pt-[160px]'} flex flex-col justify-between`}
+            style={{ backfaceVisibility: 'hidden' }}
+        >
+            <h3 className={`font-bold w-full ${isLarge ? 'text-[3vw] lg:text-[3vw]' : 'text-[24px]'}`}>{event.title}</h3>
+            <div className='flex flex-col py-1'>
+                <p className={`${isLarge ? 'text-[1.5vw]' : 'text-[14px]'}`}>
+                    {event.type}
+                </p>
+                <p className={`${isLarge ? 'text-[1.2vw]' : 'text-[12px]'} opacity-50`}>
+                    {new Date(event.starttime.toDate()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                </p>
+            </div>
+        </motion.div>
+        <motion.div
+            className="absolute w-full h-full backface-hidden rounded-[9px]"
+            style={{ 
+                backfaceVisibility: 'hidden', 
+                transform: 'rotateY(180deg)', 
+                backgroundImage: `url(${event.coverPhoto})`, 
+                backgroundSize: 'cover', 
+                backgroundRepeat: 'no-repeat', 
+                backgroundPosition: 'center' 
+            }}
+        />
+        <div className='bg-[rgba(0,0,0,0.8)] w-full' style={{backfaceVisibility: 'hidden',transform: 'rotateY(180deg)'}}><p className={`font-bold ${isLarge?'text-[2vw]':'text-lg'}`}>{event.title}</p></div>
+    </motion.div>
+</div>
 
     return (
-        <Link to={`/event/${event.title}`} className={className+"flex items-center justify-center"}>
-            <div
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-                style={{ perspective: 1000 }}
-            >
-                <motion.div
-                    style={{ 
-                        backgroundImage: `url(${Card})`, 
-                        backgroundSize: 'cover', 
-                        backgroundRepeat: 'no-repeat', 
-                        backgroundPosition: 'center', 
-                        backgroundColor: colors[color as keyof typeof colors] || colors[autoColorByTopic(event.type) as keyof typeof colors],
-                        transformStyle: 'preserve-3d',
-                        transition: 'transform 0.1s',
-                        width: isLarge ? '25vw' : '250px',
-                        height: isLarge ? 'calc(25vw * 1.25)' : '310px' // Maintain aspect ratio of 1.25
-                    }}
-                    className={`${isLarge ? '' : 'w-[250px] h-[310px]'} rounded-[9px] flex flex-col items-center text-center justify-between relative`}
-                    animate={controls}
-                >
-                    <motion.div
-                        className={`absolute w-full h-full backface-hidden px-[4vw] ${isLarge?'pt-[calc(23vw*0.675)]':'pt-[160px]'} flex flex-col justify-between`}
-                        style={{ backfaceVisibility: 'hidden' }}
-                    >
-                        <h3 className={`font-bold w-full ${isLarge ? 'text-[3vw] lg:text-[3vw]' : 'text-[24px]'}`}>{event.title}</h3>
-                        <div className='flex flex-col py-1'>
-                            <p className={`${isLarge ? 'text-[1.5vw]' : 'text-[14px]'}`}>
-                                {event.type}
-                            </p>
-                            <p className={`${isLarge ? 'text-[1.2vw]' : 'text-[12px]'} opacity-50`}>
-                                {new Date(event.starttime.toDate()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                            </p>
-                        </div>
-                    </motion.div>
-                    <motion.div
-                        className="absolute w-full h-full backface-hidden rounded-[9px]"
-                        style={{ 
-                            backfaceVisibility: 'hidden', 
-                            transform: 'rotateY(180deg)', 
-                            backgroundImage: `url(${event.coverPhoto})`, 
-                            backgroundSize: 'cover', 
-                            backgroundRepeat: 'no-repeat', 
-                            backgroundPosition: 'center' 
-                        }}
-                    />
-                    <div className='bg-[rgba(0,0,0,0.8)] w-full' style={{backfaceVisibility: 'hidden',transform: 'rotateY(180deg)'}}><p className={`font-bold ${isLarge?'text-[2vw]':'text-lg'}`}>{event.title}</p></div>
-                </motion.div>
-            </div>
+        isLarge ?
+        <Link to={`/event/${event.title}`} className={`${className||""} ${isLarge ? "flex items-center justify-center" : ""}`}>
+            {content}
         </Link>
+        :
+        <div className={`${className||""} ${isLarge ? "flex items-center justify-center" : ""}`}>
+            {content}
+        </div>
     );
 };

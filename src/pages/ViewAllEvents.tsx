@@ -4,20 +4,20 @@ import getCollection from "../firebase/getCollection";
 import { EventCard } from "../components/common/EventCard";
 import { Link } from "react-router-dom";
 import { SortButton } from "../components/common/SortButton";
+import { ClassNames } from "@emotion/react";
 
 const topics = ["AI", "Database", "Game", "Media", "Mobile", "Other", "Python", "Security", "Technical", "Web"];
 
 const formatEventDate = (date: Date, format: string) => {
   if (format === "long") {
     const options: Intl.DateTimeFormatOptions = {
-      weekday: 'short',
       day: '2-digit',
       month: '2-digit',
       year: 'numeric'
     };
     const formattedDate = date.toLocaleDateString('en-GB', options);
     const time = date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit', hour12: true });
-    return `${formattedDate} at ${time}`;
+    return `${formattedDate}, ${time}`;
   } else if (format === "short") {
     const options: Intl.DateTimeFormatOptions = {
       month: 'short',
@@ -33,13 +33,13 @@ const formatEventDate = (date: Date, format: string) => {
 const isEventOngoing = (event: EventData) => {
   const today = new Date();
   if (event.endtime && (event.starttime.toDate() < today) && (event.endtime.toDate() > today) && event.formLink && event.formLink.length > 0) {
-    return "This event is currently ongoing! Register now!";
+    return "Ongoing! Register now!";
   }
   if ((event.starttime.toDate() > today) && event.formLink && event.formLink.length > 0) {
-    return "This event is happening soon! Register now!"
+    return "Coming soon! Register now!"
   }
   if ((event.starttime.toDate() > today)) {
-    return "This event is happening soon!";
+    return "Coming soon!";
   }
   return null;
 };
@@ -130,54 +130,69 @@ export const ViewAllEvents = () => {
           ))}
         </select>
       </div>
+
+
       <div className="w-full px-10 lg:px-10">
         {filteredEvents.length === 0 && <p className="text-white text-[24px] font-bold text-center mt-40 mb-40">No events found... Check back soon!</p>}
-        <div className="grid grid-cols-1 md:grid-cols-[auto_auto_1fr] mt-4 gap-y-8 mb-10">
-          {filteredEvents.map((event, index) => (
-            <>
-              <p className={`mt-2 text-right mr-6 
-                ${filteredEvents.slice(0, index).some(e => e.starttime.toDate().getMonth() === event.starttime.toDate().getMonth()) && 'opacity-0'} 
-                ${!filter.includes("date") ? 'opacity-0 mr-0 w-0' : 'mr-6'}`}
-              >
-                {formatEventDate(event.starttime.toDate(), "short")}
-              </p>
-              <div className={`flex justify-center bg-[#151F33] h-[calc(100%+32px)] overflow-visible  
-                ${!filter.includes("date") ? 'opacity-0 mx-0 w-0' : 'mx-4 w-2'}`}
-              >
-                <div className={`
-                  ${filteredEvents.some(e => 
-                    e.starttime.toDate().getMonth() === event.starttime.toDate().getMonth() 
-                    && e.starttime.toDate().getFullYear() === event.starttime.toDate().getFullYear() 
-                    && isEventOngoing(e)) 
-                      ? 'bg-[#57ff57] shadow-[0_0_10px_2px_#57ff57]' 
-                      : 'bg-[#151F33]'} rounded-full w-10 h-10 flex 
-                        ${index > 0 
-                          && event.starttime.toDate().getMonth() == filteredEvents[index - 1].starttime.toDate().getMonth() 
-                          && 'opacity-0'} items-center justify-center absolute
-                `}>
-                  <div className="bg-white rounded-full w-4 h-4"></div>
+        {filter.includes("date") && (
+          <div className="relative">
+            <div className="absolute left-0 top-0 bottom-0 w-2 bg-[#151F33]"></div>
+            <div className="flex flex-col mt-4 ml-4">
+              {filteredEvents.reduce((acc, event, index, array) => {
+          const eventDate = new Date(event.starttime.seconds * 1000);
+            const eventMonth = eventDate.toLocaleString('default', { month: 'short' }) + ', ' + eventDate.getFullYear();
+
+          if (index === 0 || eventMonth !== acc[acc.length - 1].month) {
+            acc.push({ month: eventMonth, events: [event] });
+          } else {
+            acc[acc.length - 1].events.push(event);
+          }
+
+          return acc;
+              }, [] as { month: string, events: EventData[] }[]).map((group, groupIndex) => (
+          <div key={groupIndex} className="relative">
+            <div className={`absolute -left-[33px] top-0 w-10 h-10 ${group.events.some(isEventOngoing) ? 'bg-green-500 shadow-[0_0_10px_rgba(0,255,0,0.8)]' : 'bg-[#151F33]'} rounded-full flex`}>
+              <div className="m-auto bg-white w-3 h-3 rounded-full"></div>
+            </div>
+            <div className="text-white font-bold mb-2 ml-4 mt-2">{group.month}</div>
+            {group.events.map((event) => (
+                <Link key={event.id} to={`/event/${event.title}`}>
+                  <div className="ml-4 flex gap-2">
+                <EventCard
+                  event={event}
+                  size="sm"
+                />
+                <div className="w-full flex flex-col max-h-[350px]">
+                <p className="font-extrabold text-xl sm:text-3xl">{event.title}</p>
+                {isEventOngoing(event) && <p className="italic text-yellow-600 mb-2">{isEventOngoing(event)}</p>}
+                <p className="font-extralight mb-2 whitespace-normal overflow-hidden text-ellipsis line-clamp-[7]">{event.description}</p>
+                <hr className="w-full mt-auto border-[#151F33] border-2 mb-2"></hr>
+                <p><span className="font-bold">Starts: </span><span>{formatEventDate(event.starttime.toDate(), "long")}</span></p>
+                <p className="mb-8"><span className="font-bold">Ends: </span><span>{formatEventDate(event.endtime.toDate(), "long")}</span></p>
                 </div>
-              </div>
-              <Link to={`/event/${event.title}`} className="flex flex-col md:flex-row  gap-4 w-full ml-0 md:ml-6">
-                <EventCard event={event} size="sm" />
-                <div className="flex flex-col w-[700px]">
-                  <h1 className="font-extrabold text-[42px]">{event.title}</h1>
-                  <div>
-                    {isEventOngoing(event) && <p className="italic text-yellow-600">{isEventOngoing(event)}</p>}
-                    <p className="font-extralight mb-4 h-24">{event.description}</p>
-                  </div>
-                  <div className="w-full h-0 border border-[#151F33] my-4"></div>
-                  <p className="mt-2 text-sm">
-                    Time: from <strong>{formatEventDate(event.starttime.toDate(), "long")}</strong> to 
-                    <strong>{formatEventDate(event.starttime.toDate(), "long")}</strong>
-                  </p>
-                  <p className="mt-2">Type: <strong>{event.type}</strong></p>
                 </div>
+                </Link>
+            ))}
+          </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {!filter.includes("date") && (
+          <div className="flex flex-col gap-6 mt-4">
+            {filteredEvents.map((event) => (
+              <Link key={event.id} to={`/event/${event.title}`}>
+          <EventCard
+            event={event}
+            size="sm"
+          />
               </Link>
-            </>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
 }
+

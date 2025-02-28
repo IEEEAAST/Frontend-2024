@@ -9,7 +9,6 @@ export default {
       'sansramy': ['SF-Pro-Display-Regular', 'Arial', 'sans-serif'],
       'seriframy': ['SF-Pro-Display-Bold', 'Georgia', 'serif'],
       'SFproramy': ['SF-Pro', 'Georgia', 'serif'],
-      // Add other font families as needed
     },
     extend: {
       backgroundImage: {
@@ -24,6 +23,7 @@ export default {
     },
   },
   plugins: [
+    require('@tailwindcss/line-clamp'),
     function({ addUtilities }) {
       addUtilities({
         '.scrollbar-hide': {
