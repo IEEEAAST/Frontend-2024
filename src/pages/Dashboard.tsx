@@ -170,9 +170,9 @@ export const Dashboard = () => {
         <div className="mt-[30px] lg:mt-[59px]">
           <div className="flex gap-[20px]">
 
-          <div className="flex overflow-y-visible gap-[40px] mb-16 justify-between w-full">
+          <div className="flex flex-col sm:flex sm:flex-row overflow-y-visible gap-[5px] md:gap-[10px] mb-16 justify-around w-full">
             {filterEvents.map((event)=>(
-              <EventCard event={event} size={"lg"}/>
+              <EventCard event={event} size={"sm"}/>
             ))}
           </div>
             

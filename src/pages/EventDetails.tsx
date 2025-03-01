@@ -117,7 +117,7 @@ export const EventDetails = () => {
       <div className="h-28" style={{ borderColor: "#00091A", borderWidth: "4px" }}></div>
       <div id="eventPage">
         <div
-          className="flex items-center justify-center mt-4 w-full h-[400px] rounded-3xl border-8"
+          className="flex items-center justify-center w-full h-[400px] rounded-3xl border-8"
           style={{
             backgroundImage: `url(${eventData?.coverPhoto})`,
             backgroundColor: "white",
@@ -126,18 +126,18 @@ export const EventDetails = () => {
             borderColor: "#00091A",
           }}
         ></div>
-        <div id="eventDetailsFlex">
-          <div id="eventNameWrapper">
-            <div className="flex items-center gap-4">
-            <span className="text-[50px] font-display font-bold flex flex-wrap items-center w-auto whitespace-normal">
-            <span className="flex-shrink">{/* First part of the text */}
-                {eventData?.title?.split(' ').slice(0, -1).join(' ') ?? "Error"}
+        <div className="flex flex-col  mt-5 items-center xl:flex-row xl:justify-between xl:gap-20 xl:p-5">
+          <div className="flex-shrink">
+            <div className="flex-col xl:flex xl:flex-row items-center gap-2">
+            <span className="text-[38px] md:text-[45px] font-display font-bold flex-col xl:flex-row xl:flex-wrap items-center w-auto whitespace-normal"> 
+            
+                {eventData?.title ?? "Error"}
             </span>
-            <span className="flex items-center whitespace-nowrap">
-              &nbsp;{/* Space to separate */}
-              {eventData?.title?.split(' ').slice(-1)}{/* Last word */}
+            <span className="flex justify-center whitespace-nowrap">
+              {/* Space to separate */}
+              
               <button
-                className="w-[50px] h-[50px] p-[2px] flex gap-2 items-center text-lg font-body font-normal ml-2"
+                className="w-[50px] h-[50px] p-[2px] mb-5 flex gap-2 xl:mb-0 items-center text-lg font-body font-normal"
                 onClick={handleLikeClick}
               >
                 <img
@@ -147,15 +147,19 @@ export const EventDetails = () => {
                 {eventData?.likedBy?.length}
               </button>
             </span>
-            </span>    
+               
             </div>
             <span id="eventDesc">{eventData?.description ?? "Event not found."}</span>
           </div>
-          <div id="eventDetailsWrapper">
-            <span>Time: from
+          <br></br>
+          <div className="flex-col p-2 text-[15px]">
+            <span className="font-bold text-[17px]">Time :</span> from
+            <span className="">
             <strong> {formatEventDate(eventData?.starttime?.toDate()||new Date(),"long")}</strong> to
-            <strong> {formatEventDate(eventData?.endtime?.toDate()||new Date(),"long")}</strong></span>
-            <span>Type: <strong>{eventData?.type}</strong></span>
+            <strong> {formatEventDate(eventData?.endtime?.toDate()||new Date(),"long")}</strong>
+            </span>
+            <br></br>
+            <span className="font-bold text-[17px]">Type : </span><strong>{eventData?.type}</strong>
           </div>
         </div>
         <Tabs variant="unstyled" style={{ margin: "60px 0px" }}>
