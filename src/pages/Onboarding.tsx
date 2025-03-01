@@ -37,7 +37,7 @@ export const Onboarding = () => {
       imgurl : ""
     }
     const user = await getUser();
-    await addStorage(formData.profilePicture, user.uid).then(res => {
+    await addStorage(formData.profilePicture, `profilepics/${user.uid}`).then(res => {
       storedFormData.imgurl = res.link;
     });
     await updateData("users", user.uid, storedFormData);

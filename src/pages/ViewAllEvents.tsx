@@ -4,7 +4,6 @@ import getCollection from "../firebase/getCollection";
 import { EventCard } from "../components/common/EventCard";
 import { Link } from "react-router-dom";
 import { SortButton } from "../components/common/SortButton";
-import { ClassNames } from "@emotion/react";
 
 const topics = ["AI", "Database", "Game", "Media", "Mobile", "Other", "Python", "Security", "Technical", "Web"];
 
@@ -136,9 +135,9 @@ export const ViewAllEvents = () => {
         {filteredEvents.length === 0 && <p className="text-white text-[24px] font-bold text-center mt-40 mb-40">No events found... Check back soon!</p>}
         {filter.includes("date") && (
           <div className="relative">
-            <div className="absolute left-0 top-0 bottom-0 w-2 bg-[#151F33]"></div>
+            <div className="absolute left-0 top-0 bottom-0 w-2 bg-[#151F33] rounded-full"></div>
             <div className="flex flex-col mt-4 ml-4">
-              {filteredEvents.reduce((acc, event, index, array) => {
+              {filteredEvents.reduce((acc, event, index) => {
           const eventDate = new Date(event.starttime.seconds * 1000);
             const eventMonth = eventDate.toLocaleString('default', { month: 'short' }) + ', ' + eventDate.getFullYear();
 
