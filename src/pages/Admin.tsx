@@ -16,7 +16,12 @@ export interface IdUserData extends UserData {
 export const Admin = () => {
   const {userData} = useContext(UserContext);
   if (!userData || !userData?.roles?.includes('admin')) {
-      return null;
+      return (
+        <div className='pt-[120px] px-6 flex flex-col w-full items-center justify-center h-[60vh]'>
+          <p className='font-display text-3xl font-bold'>Unauthorized</p>
+          <p className='text-xl'>You are not authorized to view this page</p>
+        </div>
+      );
   }
   const [users, setUsers] = useState<IdUserData[]>([]);
   const [events, setEvents] = useState<EventData[]>([]);
