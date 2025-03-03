@@ -1,23 +1,23 @@
 import { useEffect, useState } from "react";
 import { EventData } from "../interfaces/EventData";
 import getCollection from "../firebase/getCollection";
-import sort from "../assets/sort.png";
-import sortup from "../assets/sortup.png";
-import sortdown from "../assets/sortdown.png";
 import { EventCard } from "../components/common/EventCard";
 import { Link } from "react-router-dom";
+import { SortButton } from "../components/common/SortButton";
+import { LikeButton } from "../components/common/LikeButton";
+
+const topics = ["AI", "Database", "Game", "Media", "Mobile", "Other", "Python", "Security", "Technical", "Web"];
 
 const formatEventDate = (date: Date, format: string) => {
   if (format === "long") {
     const options: Intl.DateTimeFormatOptions = {
-      weekday: 'short',
       day: '2-digit',
       month: '2-digit',
       year: 'numeric'
     };
-    const formattedDate = date.toLocaleDateString('en-GB', options); // Use 'en-GB' locale for day before month
+    const formattedDate = date.toLocaleDateString('en-GB', options);
     const time = date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit', hour12: true });
-    return `${formattedDate} at ${time}`;
+    return `${formattedDate}, ${time}`;
   } else if (format === "short") {
     const options: Intl.DateTimeFormatOptions = {
       month: 'short',
@@ -27,25 +27,26 @@ const formatEventDate = (date: Date, format: string) => {
     const parts = formattedDate.split(' ');
     return `${parts[0]}, ${parts[1]}`;
   }
-  return date.toString(); // Fallback if format is not recognized
+  return date.toString(); 
 };
 
 const isEventOngoing = (event: EventData) => {
   const today = new Date();
-  if(event.endtime && (event.starttime.toDate()<today) && (event.endtime.toDate() > today) && event.formLink &&event.formLink.length>0) {
-    return "This event is currently ongoing! Register now!";
+  if (event.endtime && (event.starttime.toDate() < today) && (event.endtime.toDate() > today) && event.formLink && event.formLink.length > 0) {
+    return "Ongoing! Register now!";
   }
-  if((event.starttime.toDate() > today) && event.formLink &&event.formLink.length>0) {
-    return "This event is happening soon! Register now!"
+  if ((event.starttime.toDate() > today) && event.formLink && event.formLink.length > 0) {
+    return "Coming soon! Register now!"
   }
-  if((event.starttime.toDate() > today)) {
-    return "This event is happening soon!";
+  if ((event.starttime.toDate() > today)) {
+    return "Coming soon!";
   }
   return null;
 };
 
 export const ViewAllEvents = () => {
   const [events, setEvents] = useState<EventData[]>([]);
+  const [filteredEvents, setFilteredEvents] = useState<EventData[]>([]); //seperate state for topic filtered events to avoid deleting the original events
   const [filter, setFilter] = useState("date");
 
   const changeFilter = (newfilter: string) => {
@@ -59,15 +60,14 @@ export const ViewAllEvents = () => {
       }
     }
 
-    // Set the filter state with the final filter
     setFilter(finalFilter);
 
-    // Use the final filter to sort articles immediately
+
     filterEvents(finalFilter);
   };
 
   const filterEvents = (filter: string) => {
-    const sortedEvents = [...events]; // Create a new array to avoid mutating state directly
+    let sortedEvents = [...events];
 
     switch (filter) {
       case "date":
@@ -76,12 +76,7 @@ export const ViewAllEvents = () => {
       case "date-reverse":
         sortedEvents.sort((a, b) => a.starttime.seconds - b.starttime.seconds);
         break;
-      case "topic":
-        sortedEvents.sort((a, b) => (b.type || "Event").localeCompare(a.type || "Event"));
-        break;
-      case "topic-reverse":
-        sortedEvents.sort((a, b) => (a.type || "Event").localeCompare(b.type || "Event"));
-        break;
+
       case "likes":
         sortedEvents.sort((a, b) => (b.likedBy.length ?? 0) - (a.likedBy.length ?? 0));
         break;
@@ -89,17 +84,44 @@ export const ViewAllEvents = () => {
         sortedEvents.sort((a, b) => (a.likedBy.length ?? 0) - (b.likedBy.length ?? 0));
         break;
     }
-    setEvents(sortedEvents);
+
+    const selectedTopic = document.querySelector('select')?.value || "All";
+    if (selectedTopic !== "All") {
+      sortedEvents = sortedEvents.filter(event => event.type === selectedTopic);
+    }
+
+    setFilteredEvents(sortedEvents);
   };
 
+  const mapEvents = (events: EventData[]) => {
+    return events.map((event) => (
+      <Link key={event.id} to={`/event/${event.title}`}>
+        <div className="ml-4 flex flex-col sm:flex-row gap-2">
+      <EventCard
+        event={event}
+      />
+      <div className="w-full flex flex-col max-h-[350px]">
+      <div className="font-extrabold text-xl sm:text-3xl flex gap-3">{event.title} <LikeButton item={event} type="event" className="font-normal text-lg"/></div>
+      {isEventOngoing(event) && <p className="italic text-yellow-600 mb-2">{isEventOngoing(event)}</p>}
+      <p className="font-extralight mb-2 whitespace-normal overflow-hidden text-ellipsis line-clamp-6">{event.description}</p>
+      <hr className="w-full mt-auto border-[#151F33] border-2 mb-2"></hr>
+      <p><span className="font-bold">Type: </span><span>{event.type}</span></p>
+      <p><span className="font-bold">Starts: </span><span>{formatEventDate(event.starttime.toDate(), "long")}</span></p>   
+      <p className="mb-8"><span className="font-bold">Ends: </span><span>{formatEventDate(event.endtime.toDate(), "long")}</span></p>
+      </div>
+      </div>
+      </Link>
+  ));
+  }
   useEffect(() => {
     getCollection("events").then((res) => {
       if (res.result && res.ids) {
         const newevents = (res.result as EventData[]).map((event, index) => ({
           ...event,
-          id: res.ids ? res.ids[index] : null, // Set the id from res.ids if not null
+          id: res.ids ? res.ids[index] : null, 
         }));
         setEvents(newevents.sort((a, b) => b.starttime.seconds - a.starttime.seconds));
+        setFilteredEvents(newevents.sort((a, b) => b.starttime.seconds - a.starttime.seconds));
       }
     });
   }, []);
@@ -108,85 +130,68 @@ export const ViewAllEvents = () => {
     <div className="flex flex-col items-center bg-[#000B21] text-white header">
       <div className="h-[150px] w-full"></div>
       <div className="flex flex-col md:flex-row justify-between items-center w-full px-4 lg:px-[89px] gap-4">
-        <h2 className="text-white text-[24px] md:text-[32px] lg:text-[45px] font-bold">All Events</h2>
+        <h2 className="text-white text-[24px] m</div>d:text-[32px] lg:text-[45px] font-bold">All Events</h2>
 
-        <button className="w-full md:w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-12 md:h-14" onClick={() => { changeFilter("date") }}>
-          Date
-          <div className="relative w-5 my-2">
-            <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "date" ? 'opacity-100' : 'opacity-0'}`}></img>
-            <img src={sortdown} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "date-reverse" ? 'opacity-100' : 'opacity-0'}`}></img>
-            <img src={sort} className={`absolute inset-0 w-full transition-opacity duration-300 ${!(filter.includes("date")) ? 'opacity-100' : 'opacity-0'}`}></img>
-          </div>
-          <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter == 'date' || filter == 'date-reverse') ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`}></div>
-        </button>
-
-        <button className="w-full md:w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-12 md:h-14" onClick={() => { changeFilter('topic') }}>
-          Topic
-          <div className="relative w-5 my-2">
-            <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "topic" ? 'opacity-100' : 'opacity-0'}`}></img>
-            <img src={sortdown} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "topic-reverse" ? 'opacity-100' : 'opacity-0'}`}></img>
-            <img src={sort} className={`absolute inset-0 w-full transition-opacity duration-300 ${!(filter.includes("topic")) ? 'opacity-100' : 'opacity-0'}`}></img>
-          </div>
-          <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter == 'topic' || filter == 'topic-reverse') ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`}></div>
-        </button>
-
-        <button className="w-full md:w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-12 md:h-14" onClick={() => { changeFilter("likes") }}>
-          Likes
-          <div className="relative w-5 my-2">
-            <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "likes" ? 'opacity-100' : 'opacity-0'}`}></img>
-            <img src={sortdown} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "likes-reverse" ? 'opacity-100' : 'opacity-0'}`}></img>
-            <img src={sort} className={`absolute inset-0 w-full transition-opacity duration-300 ${!(filter.includes("likes")) ? 'opacity-100' : 'opacity-0'}`}></img>
-          </div>
-          <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter == 'likes' || filter == 'likes-reverse') ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`}></div>
-        </button>
-      </div>
-      <div className="w-full px-10 lg:px-10">
-        <div className="grid grid-cols-1 md:grid-cols-[auto_auto_1fr] mt-4 gap-y-8 mb-10">
-          {events.map((event, index) => (
-            <>
-              <p className={`mt-2 text-right mr-6 
-                ${events.slice(0, index).some(e => e.starttime.toDate().getMonth() === event.starttime.toDate().getMonth()) && 'opacity-0'} 
-                ${!filter.includes("date") ? 'opacity-0 mr-0 w-0' : 'mr-6'}`}
-              >
-                {formatEventDate(event.starttime.toDate(), "short")}
-              </p>
-              <div className={`flex justify-center bg-[#151F33] h-[calc(100%+32px)] overflow-visible  
-                ${!filter.includes("date") ? 'opacity-0 mx-0 w-0' : 'mx-4 w-2'}`}
-              >
-                <div className={`
-                  ${events.some(e => 
-                    e.starttime.toDate().getMonth() === event.starttime.toDate().getMonth() 
-                    && e.starttime.toDate().getFullYear() === event.starttime.toDate().getFullYear() 
-                    && isEventOngoing(e)) 
-                      ? 'bg-[#57ff57] shadow-[0_0_10px_2px_#57ff57]' 
-                      : 'bg-[#151F33]'} rounded-full w-10 h-10 flex 
-                        ${index > 0 
-                          && event.starttime.toDate().getMonth() == events[index - 1].starttime.toDate().getMonth() 
-                          && 'opacity-0'} items-center justify-center absolute
-                `}>
-                  <div className="bg-white rounded-full w-4 h-4"></div>
-                </div>
-              </div>
-              <Link to={`/event/${event.title}`} className="flex flex-col md:flex-row  gap-4 w-full ml-0 md:ml-6">
-                <EventCard event={event} size="sm" />
-                <div className="flex flex-col w-[700px]">
-                  <h1 className="font-extrabold text-[42px]">{event.title}</h1>
-                  <div>
-                    {isEventOngoing(event) && <p className="italic text-yellow-600">{isEventOngoing(event)}</p>}
-                    <p className="font-extralight mb-4 h-24">{event.description}</p>
-                  </div>
-                  <div className="w-full h-0 border border-[#151F33] my-4"></div>
-                  <p className="mt-2 text-sm">
-                    Time: from <strong>{formatEventDate(event.starttime.toDate(), "long")}</strong> to 
-                    <strong>{formatEventDate(event.starttime.toDate(), "long")}</strong>
-                  </p>
-                  <p className="mt-2">Type: <strong>{event.type}</strong></p>
-                </div>
-              </Link>
-            </>
+        <SortButton label="Date" filterKey="date" currentFilter={filter} changeFilter={changeFilter} />
+        <SortButton label="Likes" filterKey="likes" currentFilter={filter} changeFilter={changeFilter} />
+        {/*topic filter*/}
+        <select
+          className="bg-[#151F33] text-white p-2 rounded h-12 w-full md:w-1/6"
+          onChange={(e) => {
+            const selectedTopic = e.target.value;
+            const filtered = selectedTopic === "All" ? events : events.filter(event => event.type === selectedTopic);
+            setFilteredEvents(filtered);
+          }}
+        >
+          <option value="All">All</option>
+          {topics.map((topic) => (
+            <option key={topic} value={topic}>
+              {topic}
+            </option>
           ))}
-        </div>
+        </select>
+      </div>
+
+
+      <div className="w-full px-10 lg:px-10">
+        {filteredEvents.length === 0 && <p className="text-white text-[24px] font-bold text-center mt-40 mb-40">No events found... Check back soon!</p>}
+        {filter.includes("date") ? (
+          <div className="relative">
+            <div className="absolute left-0 top-0 bottom-0 w-2 bg-[#151F33] rounded-full"></div>
+            <div className="flex flex-col mt-4 ml-4">
+              {filteredEvents.reduce((acc, event, index) => {
+          const eventDate = new Date(event.starttime.seconds * 1000);
+            const eventMonth = eventDate.toLocaleString('default', { month: 'short' }) + ', ' + eventDate.getFullYear();
+
+          if (index === 0 || eventMonth !== acc[acc.length - 1].month) {
+            acc.push({ month: eventMonth, events: [event] });
+          } else {
+            acc[acc.length - 1].events.push(event);
+          }
+
+          return acc;
+              }, [] as { month: string, events: EventData[] }[]).map((group, groupIndex) => (
+          <div key={groupIndex} className="relative">
+            <div className={`absolute -left-[33px] top-0 w-10 h-10 ${group.events.some(isEventOngoing) ? 'bg-green-500 shadow-[0_0_10px_rgba(0,255,0,0.8)]' : 'bg-[#151F33]'} rounded-full flex`}>
+              <div className="m-auto bg-white w-3 h-3 rounded-full"></div>
+            </div>
+            <div className="text-white font-bold mb-2 ml-4 mt-2">{group.month}</div>
+            <div className="flex flex-col gap-4">
+            {mapEvents(group.events)}
+            </div>
+          </div>
+              ))}
+            </div>
+          </div>
+        ): (
+          <div className="flex flex-col gap-4 mt-10">
+            {mapEvents(filteredEvents)}
+          </div>
+        )
+      
+      }
       </div>
     </div>
   );
 }
+

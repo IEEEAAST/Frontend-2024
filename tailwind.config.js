@@ -9,12 +9,14 @@ export default {
       'sansramy': ['SF-Pro-Display-Regular', 'Arial', 'sans-serif'],
       'seriframy': ['SF-Pro-Display-Bold', 'Georgia', 'serif'],
       'SFproramy': ['SF-Pro', 'Georgia', 'serif'],
-      // Add other font families as needed
     },
     extend: {
       backgroundImage: {
         homeImage: "url('/src/assets/home/ieeeHome.jpg')",
+        cardLarge: "url('/src/assets/card.png')",
+        cardSmall: "url('/src/assets/circularp.png')",
       },
+
       fontFamily: {
         display: ["SF Pro Display", "sans-serif"],
         body: ["SF Pro", "sans-serif"],
@@ -24,6 +26,7 @@ export default {
     },
   },
   plugins: [
+    require('@tailwindcss/line-clamp'),
     function({ addUtilities }) {
       addUtilities({
         '.scrollbar-hide': {
