@@ -99,6 +99,7 @@ export const ViewAllEvents = () => {
         <div className="ml-4 flex flex-col sm:flex-row gap-2">
       <EventCard
         event={event}
+        className="xl:scale-90"
       />
       <div className="w-full flex flex-col max-h-[350px]">
       <div className="font-extrabold text-xl sm:text-3xl flex gap-3">{event.title} <LikeButton item={event} type="event" className="font-normal text-lg"/></div>
@@ -176,7 +177,7 @@ export const ViewAllEvents = () => {
               <div className="m-auto bg-white w-3 h-3 rounded-full"></div>
             </div>
             <div className="text-white font-bold mb-2 ml-4 mt-2">{group.month}</div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 mb-10">
             {mapEvents(group.events)}
             </div>
           </div>
@@ -184,7 +185,7 @@ export const ViewAllEvents = () => {
             </div>
           </div>
         ): (
-          <div className="flex flex-col gap-4 mt-10">
+          <div className="flex flex-col gap-4 mt-10 mb-10">
             {mapEvents(filteredEvents)}
           </div>
         )

@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom';
 import { EventData } from '../../interfaces/EventData';
-import Card from '../../assets/card.png';
 import { motion, useAnimation } from "framer-motion";
-import { useState } from 'react';
 import firebase from 'firebase/compat/app';
 
 interface EventCardProps {
@@ -74,19 +72,19 @@ export const EventCard = ({ event, color, className }: EventCardProps) => {
               transformStyle: 'preserve-3d',
               transition: 'transform 0.1s'
           }}
-          className={`${'w-full h-[65px] bg-cardSmall bg-contain lg:w-[255px] lg:h-[330px] xl:h-[360px] xl:w-[290px] md:w-[218px] md:h-[275px] sm:h-[260px] sm:w-[200px] sm:bg-cardLarge sm:bg-cover'} rounded-[10px] md:rounded-[9px]`}
+          className={`${'w-full h-[65px] bg-cardSmall bg-contain lg:w-[255px] lg:h-[330px] xl:h-[24.5vw] xl:w-[20vw] md:w-[218px] md:h-[275px] sm:h-[260px] sm:w-[200px] sm:bg-cardLarge sm:bg-cover'} rounded-[10px] md:rounded-[9px]`}
           animate={controls}
       >
           <motion.div
-              className={`absolute w-full h-full backface-hidden px-[15px] ${'pt-[4px] sm:pt-[150px] md:pt-[160px] lg:pt-[190px] xl:pt-[213px]'} flex flex-col sm:justify-between`}
+              className={`absolute w-full h-full backface-hidden px-[15px] ${'pt-[4px] sm:pt-[150px] md:pt-[160px] lg:pt-[190px] xl:pt-[13vw] xl:px-10'} flex flex-col sm:justify-between`}
               style={{ backfaceVisibility: 'hidden' }}
           >
-              <h3 className={`font-bold w-full ${'text-[23px] sm:text-[18px] md:text-[20px] lg:text-[23px] xl:text-[26px] sm:flex sm:justify-center'}`}>{event.title}</h3>
+              <h3 className={`font-bold w-full text-center ${'text-[23px] sm:text-[18px] md:text-[20px] lg:text-[23px] xl:text-[2vw] sm:flex sm:justify-center'}`}>{event.title}</h3>
               <div className='flex gap-1 sm:self-center sm:flex-col sm:py-1'>
                   <p className={`${'font-thin text-[14px] sm:text-[13px] md:text-[14px] lg:text-[16px] xl:text-[17px] sm:flex sm:justify-center'}`}>
                       {event.type}<span className='sm:hidden'> •</span>
                   </p>
-                  <p className={`${' font-thin text-[14px] sm:text-[13px]  xl:text-[16px]'} opacity-80`}>
+                  <p className={`${' font-thin text-[14px] sm:text-[13px]  xl:text-[1vw]'} opacity-80`}>
                       {formatDate(event.starttime)} - {formatDate(event.endtime)}
                   </p>
               </div>
