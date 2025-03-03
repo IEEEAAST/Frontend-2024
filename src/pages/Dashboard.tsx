@@ -70,7 +70,7 @@ export const Dashboard = () => {
   }, []);
 
   const filterArticles = articles.slice(0, 3);
-  const filterEvents = events.slice(0, 3);
+  const filterEvents = events.slice(0, 4);
 
   if (!articles || articles.length === 0) {
     return (
@@ -133,7 +133,7 @@ export const Dashboard = () => {
 
           <div className="flex flex-col sm:flex sm:flex-row overflow-y-visible gap-[5px] md:gap-[10px] mb-16 justify-around w-full">
             {filterEvents.map((event)=>(
-              <EventCard event={event} size={"sm"}/>
+              <EventCard event={event}/>
             ))}
           </div>
             

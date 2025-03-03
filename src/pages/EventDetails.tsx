@@ -101,6 +101,10 @@ export const EventDetails = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+  useEffect(() => {
+    // Scroll to the top when the component mounts
+    window.scrollTo(0, 0);
+  }, []);
 
   return (loading 
     ? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex"/></div>
