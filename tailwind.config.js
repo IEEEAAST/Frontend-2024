@@ -13,7 +13,10 @@ export default {
     extend: {
       backgroundImage: {
         homeImage: "url('/src/assets/home/ieeeHome.jpg')",
+        cardLarge: "url('/src/assets/card.png')",
+        cardSmall: "url('/src/assets/circularp.png')",
       },
+
       fontFamily: {
         display: ["SF Pro Display", "sans-serif"],
         body: ["SF Pro", "sans-serif"],
