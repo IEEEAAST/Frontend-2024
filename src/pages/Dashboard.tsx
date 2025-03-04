@@ -70,7 +70,7 @@ export const Dashboard = () => {
   }, []);
 
   const filterArticles = articles.slice(0, 3);
-  const filterEvents = events.slice(0, 4);
+  const filterEvents = events.slice(0, 3);
 
   if (!articles || articles.length === 0) {
     return (

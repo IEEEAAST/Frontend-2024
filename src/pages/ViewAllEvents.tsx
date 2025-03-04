@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { EventData } from "../interfaces/EventData";
-import getCollection from "../firebase/getCollection";
+import subscribeToCollection from "../firebase/subscribeToCollection";
 import { EventCard } from "../components/common/EventCard";
 import { Link } from "react-router-dom";
 import { SortButton } from "../components/common/SortButton";
@@ -44,6 +44,7 @@ const isEventOngoing = (event: EventData) => {
   return null;
 };
 
+
 export const ViewAllEvents = () => {
   const [events, setEvents] = useState<EventData[]>([]);
   const [filteredEvents, setFilteredEvents] = useState<EventData[]>([]); //seperate state for topic filtered events to avoid deleting the original events
@@ -61,10 +62,10 @@ export const ViewAllEvents = () => {
     }
 
     setFilter(finalFilter);
-
-
-    filterEvents(finalFilter);
   };
+  useEffect(() => {
+    filterEvents(filter);
+  }, [events, filter]);
 
   const filterEvents = (filter: string) => {
     let sortedEvents = [...events];
@@ -99,6 +100,7 @@ export const ViewAllEvents = () => {
         <div className="ml-4 flex flex-col sm:flex-row gap-2">
       <EventCard
         event={event}
+        className="xl:scale-90"
       />
       <div className="w-full flex flex-col max-h-[350px]">
       <div className="font-extrabold text-xl sm:text-3xl flex gap-3">{event.title} <LikeButton item={event} type="event" className="font-normal text-lg"/></div>
@@ -114,16 +116,18 @@ export const ViewAllEvents = () => {
   ));
   }
   useEffect(() => {
-    getCollection("events").then((res) => {
+    const unsubscribe = subscribeToCollection("events", (res: { result: EventData[]; ids: any[]; }) => {
       if (res.result && res.ids) {
         const newevents = (res.result as EventData[]).map((event, index) => ({
           ...event,
-          id: res.ids ? res.ids[index] : null, 
+          id: res.ids ? res.ids[index] : null,
         }));
         setEvents(newevents.sort((a, b) => b.starttime.seconds - a.starttime.seconds));
         setFilteredEvents(newevents.sort((a, b) => b.starttime.seconds - a.starttime.seconds));
       }
     });
+
+    return () => unsubscribe();
   }, []);
 
   return (
@@ -176,7 +180,7 @@ export const ViewAllEvents = () => {
               <div className="m-auto bg-white w-3 h-3 rounded-full"></div>
             </div>
             <div className="text-white font-bold mb-2 ml-4 mt-2">{group.month}</div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 mb-10">
             {mapEvents(group.events)}
             </div>
           </div>
@@ -184,7 +188,7 @@ export const ViewAllEvents = () => {
             </div>
           </div>
         ): (
-          <div className="flex flex-col gap-4 mt-10">
+          <div className="flex flex-col gap-4 mt-10 mb-10">
             {mapEvents(filteredEvents)}
           </div>
         )
