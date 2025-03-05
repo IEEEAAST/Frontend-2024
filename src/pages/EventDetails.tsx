@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect, useCallback, useContext } from "react";
 import { Sponsors } from "../components/EventDetails/Sponsors";
 import { Resources } from "../components/EventDetails/Resources";
-import { Tabs, TabList, TabPanels, Tab, TabPanel, Spinner } from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Spinner, Tooltip } from "@chakra-ui/react";
 import Bell from "../assets/notification-bell-white@2x.png";
 import PlusIcon from "../assets/plus.png";
 import { Schedule } from "../components/EventDetails/schedule";
@@ -16,6 +16,8 @@ import { Ivideo, Inote, IsponsorsIds, scheduleItem, IspksIds } from "../interfac
 import { UserContext } from "../App";
 import { toggleLike } from "../utils";
 import { LikeButton } from "../components/common/LikeButton";
+import getDocumentsByField from "../firebase/getDataByField";
+import getDocument from "../firebase/getData";
 
 export const EventDetails = () => {
   const { name: eventName } = useParams<{ name: string }>();
@@ -90,7 +92,19 @@ export const EventDetails = () => {
           setSpeakers(event.speakers);
         }
         if (event.schedule) {
-          setSchedule(event.schedule);
+            const fetchSpeakers = async () => {
+              for (const item of event.schedule) {
+                if (item.speaker) {
+                  const speaker = await getDocument("speakers", item.speaker);
+                  if (speaker.result) {
+                    console.log(speaker.result?.data()?.name);
+                    item.speaker = speaker.result?.data()?.name;
+                  }
+                }
+              }
+              setSchedule(event.schedule);
+            };
+            fetchSpeakers();
         }
       }
     });
@@ -105,6 +119,17 @@ export const EventDetails = () => {
     // Scroll to the top when the component mounts
     window.scrollTo(0, 0);
   }, []);
+
+  const attendButton = 
+             <button
+    className="defaultButton"
+    style={{ alignSelf: "center" }}
+    disabled={!eventData?.formLink}
+    onClick={() => eventData?.formLink && window.open(eventData.formLink, "_blank")}
+  >
+    <span className="buttonText">Attend</span>
+    <span className="plusButton"><img src={PlusIcon} alt="plus" /></span>
+  </button>
 
   return (loading 
     ? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex"/></div>
@@ -162,24 +187,22 @@ export const EventDetails = () => {
                   event.currentTarget.scrollLeft += delta * 30;
                 }}
               >
-                <Tab><span className="tabLabel">Schedule</span></Tab>
-                <Tab><span className="tabLabel">Speakers</span></Tab>
-                <Tab isDisabled={!isSponsorEnabled}><span className="tabLabel">Sponsors</span></Tab>
-                <Tab isDisabled={!isResourcesEnabled}><span className="tabLabel">Resources</span></Tab>
-                <Tab className="mr-1"><span className="tabLabel">Gallery</span></Tab>
+                <Tab isDisabled={(schedule.length === 0)}><span className="tabLabel">Schedule</span></Tab>
+                <Tab isDisabled={(speakers?.speakersIds?.length ?? 0) <= 0}><span className="tabLabel">Speakers</span></Tab>
+                <Tab isDisabled={(sponsorIds?.sponsorIds?.length ?? 0) <= 0}><span className="tabLabel">Sponsors</span></Tab>
+                <Tab isDisabled={(videos.length === 0 && notes.length === 0)}><span className="tabLabel">Resources</span></Tab>
+                <Tab isDisabled={(eventData?.gallery?.length ?? 0) <= 0} className="mr-1"><span className="tabLabel">Gallery</span></Tab>
               </div>
               <div className="iconButtonsWrapper">
-                <button className="iconButton" style={{ backgroundImage: `url(${Bell})` }}></button>
+                {/*<button className="iconButton" style={{ backgroundImage: `url(${Bell})` }}></button>
+                  Notification button disabled until we get it working!!!
+                */ }
               </div>
-              <button
-                className="defaultButton"
-                style={{ alignSelf: "center" }}
-                disabled={!eventData?.formLink}
-                onClick={() => eventData?.formLink && window.open(eventData.formLink, "_blank")}
-              >
-                <span className="buttonText">Attend</span>
-                <span className="plusButton"><img src={PlusIcon} alt="plus" /></span>
-              </button>
+              {eventData?.formLink ?
+              attendButton:
+                  <Tooltip label="Event registration link not available yet.">
+                    {attendButton}
+                  </Tooltip>}
             </TabList>
             <TabPanels>
               <TabPanel>
