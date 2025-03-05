@@ -82,9 +82,9 @@ const Footer = () => {
           </a>
         </div>
       </footer>
-      <Modal isOpen={isOpen} onClose={onClose} size={"xl"}>
+      <Modal isOpen={isOpen} onClose={onClose} size={"xl"} >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent backgroundColor={"#151F33"}>
           <ModalHeader><p className="text-[28pt]">Frequently Asked Questions</p></ModalHeader>
           <ModalCloseButton />
           <ModalBody>
