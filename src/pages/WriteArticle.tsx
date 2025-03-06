@@ -18,6 +18,7 @@ interface Article {
 }
 
 export const WriteArticle = () => {
+
   const [formState, setFormState] = useState({
     article: '',
     caption: '',
@@ -27,18 +28,17 @@ export const WriteArticle = () => {
     topic: 'Other',
   });
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
-  const [userCanWrite, setUserCanWrite] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const { userData, userId } = useContext(UserContext);
-
-  useEffect(() => {
-    console.log(userId);
-    setUserCanWrite(userData?.roles?.includes("writer") || userData?.roles?.includes("admin") || false);
-    if (!userData) {
-      window.location.href = "/signin";
-    }
-  }, [userData]);
+  if(!userData?.roles?.includes("writer") && !userData?.roles?.includes("admin")){
+    return (
+      <div className='pt-[120px] px-6 flex flex-col w-full items-center justify-center h-[60vh]'>
+        <p className='font-display text-3xl font-bold'>Unauthorized</p>
+        <p className='text-xl'>You are not authorized to view this page</p>
+      </div>
+    );
+  }
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -111,8 +111,7 @@ export const WriteArticle = () => {
         ? <div className="flex justify-center items-center h-screen">
               <Spinner size="xl" />
           </div>
-        : userCanWrite 
-          ? <div className="pt-[100px]">
+              :<div className="pt-[100px]">
               <div className="flex flex-col items-center px-20 py-10 h-fit gap-4">
                 <p className="self-start text-2xl sm:text-[40px] ">Let's write an article!</p>
                 <input
@@ -217,7 +216,6 @@ export const WriteArticle = () => {
                 </div>
             </div>
           </div>
-       : null
       }
     </>
   );
