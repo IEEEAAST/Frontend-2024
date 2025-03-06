@@ -5,17 +5,19 @@ import UserData from '../interfaces/userData';
 import { EventData } from '../interfaces/EventData';
 import ArticleData from '../interfaces/ArticleData';
 import getCollection from '../firebase/getCollection';
-import getDocument from '../firebase/getData';
+import deleteDocument from '../firebase/deleteDocument';
 import { useEffect } from 'react';
 import { AdminUser } from '../components/Admin/AdminUser';
 import AdminEvent from '../components/Admin/AdminEvent';
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button } from '@chakra-ui/react';
+import deleteStorageDir from '../firebase/deleteStorageDir';
 
 export interface IdUserData extends UserData {
   id: string | null;
 }
 
 export const Admin = () => {
-  const {userData} = useContext(UserContext);
+  const {userData, userId} = useContext(UserContext);
   if (!userData || !userData?.roles?.includes('admin')) {
       return (
         <div className='pt-[120px] px-6 flex flex-col w-full items-center justify-center h-[60vh]'>
@@ -27,12 +29,47 @@ export const Admin = () => {
   const [users, setUsers] = useState<IdUserData[]>([]);
   const [events, setEvents] = useState<EventData[]>([]);
   const [articles, setArticles] = useState<ArticleData[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalItem, setModalItem] = useState<UserData|EventData|ArticleData|null>(null);
 
   const [selectedUser, setSelectedUser] = useState<IdUserData | null>(null);
   const [selectedEvent, setSelectedEvent] = useState<EventData | null>(null);
   const [selectedArticle, setSelectedArticle] = useState<ArticleData | null>(null);
-  const [loading, setLoading] = useState(false);
-  const availableRoles = ['admin', 'writer'];
+  function openModal(item:UserData|EventData|ArticleData){
+    setModalItem(item);
+    setIsModalOpen(true);
+  }
+
+  async function cleanItemStorage(item:IdUserData|EventData|ArticleData){
+    if ('registrationOpen' in item)
+    {
+      await deleteStorageDir(`events/${item.title}`);
+    }
+    else if ('firstname' in item)
+    {
+      await deleteStorageDir(`profilepics/${item.id}`);
+    }
+    else
+    {
+      await deleteStorageDir(`articles/${item.title}`);
+    }
+  }
+
+  async function handleDeleteItem(item:IdUserData|EventData|ArticleData){
+  if ('firstname' in item) {
+    // It's a user
+    await deleteDocument('users', item.id);
+  } else if ('registrationOpen' in item) {
+    // It's an event
+    await deleteDocument('events', item.id);
+  } else {
+    // It's an article
+    await deleteDocument('articles', item.id);
+  }
+  await cleanItemStorage(item);
+  window.location.reload();
+  setIsModalOpen(false);
+  }
 
   const fetchUsers = async () => {
     if (users.length === 0) {
@@ -104,6 +141,9 @@ export const Admin = () => {
                   <div key={user.id} className={`flex items-center p-2 gap-2 ${selectedUser===user?"bg-[#516182]":"bg-[#0b162a]"} rounded-full cursor-pointer`} onClick={() => setSelectedUser(user)}>
                   <Avatar name={`${user.firstname} ${user.lastname}`} src={user.imgurl} />
                   <p>{user.firstname} {user.lastname}</p>
+                    {user.id !== userId && (
+                    <button className='ml-auto rounded-full bg-red-600 w-6 h-6' onClick={()=>{openModal(user)}}>X</button>
+                    )}
                   </div>
                 ))}
                 </div>
@@ -121,6 +161,7 @@ export const Admin = () => {
                   {events.map(event => (
                   <div key={event.id} className={`flex items-center p-2 gap-2 ${selectedEvent === event ? "bg-[#516182]" : "bg-[#0b162a]"} rounded-full cursor-pointer w-full`} onClick={() => setSelectedEvent(event)}>
                     <p>{event.title}</p>
+                    <button className='ml-auto rounded-full bg-red-600 w-6 h-6' onClick={()=>{openModal(event)}}>X</button>
                   </div>
                   ))}
                     <button 
@@ -163,7 +204,26 @@ export const Admin = () => {
             <TabPanel></TabPanel>
           </TabPanels>
         </Tabs>
+
       </div>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} isCentered>
+              <ModalOverlay />
+              <ModalContent bg={"#151F33"}>
+                <ModalHeader>Confirm Deletion</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                  Are you sure you want to delete {modalItem && 'title' in modalItem ? modalItem.title : `${modalItem?.firstname} ${modalItem?.lastname}`}?
+                </ModalBody>
+                <ModalFooter>
+                  <Button colorScheme="red" mr={3} onClick={() => handleDeleteItem(modalItem as IdUserData | EventData | ArticleData)}>
+                    Delete
+                  </Button>
+                  <Button colorScheme="blue" mr={3} onClick={() => setIsModalOpen(false)}>
+                    Cancel
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
     </div>
   );
 }

@@ -6,16 +6,16 @@ export interface EventData {
   title: string;
   description: string;
   likedBy: string[];
-  starttime: firebase.firestore.Timestamp|null;
-  endtime: firebase.firestore.Timestamp|null;
+  starttime?: firebase.firestore.Timestamp|null;
+  endtime?: firebase.firestore.Timestamp|null;
   coverPhoto: string;
-  gallery: string[];
-  keynotes: Inote[];
-  schedule: Schedule[];
-  speakers: string[];
-  sponsors: string[];
+  gallery?: string[];
+  keynotes?: Inote[];
+  schedule?: Schedule[];
+  speakers?: string[];
+  sponsors?: string[];
   type: string;
-  videos: Ivideo[];
+  videos?: Ivideo[];
   formLink?: string;
   registrationOpen?: boolean;
 }

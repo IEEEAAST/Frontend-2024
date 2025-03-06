@@ -61,10 +61,15 @@ export const Dashboard = () => {
   }, [userData]); // Ensure it runs when userData changes
 
   useEffect(() => {
-    // Fetch events if necessary (you can keep this as it is)
+    // Fetch events and sort by start time
     getCollection('events').then(res => {
       if (res.result) {
-        setEvents(res.result);
+        const sortedEvents = res.result.sort((a: EventData, b: EventData) => {
+          if (!a.starttime) return -1;
+          if (!b.starttime) return 1;
+          return a.starttime.toDate().getTime() - b.starttime.toDate().getTime();
+        });
+        setEvents(sortedEvents);
       }
     });
   }, []);

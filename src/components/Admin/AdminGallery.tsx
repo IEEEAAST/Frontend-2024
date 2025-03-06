@@ -1,4 +1,3 @@
-import {useState} from 'react'
 import addStorageMultiple from '../../firebase/addStorageMultiple';
 import deleteStorage from '../../firebase/deleteStorage';
 import { EventData } from '../../interfaces/EventData';
@@ -23,7 +22,7 @@ export const AdminGallery: React.FC<AdminGalleryProps> = ({ event, setEvent, set
             }
         }
 
-        const fileName = extractFileName(event.gallery[index]);
+        const fileName = extractFileName(event.gallery?.[index] || '');
         if (!fileName) {
             console.error("Failed to extract file name from URL");
             return;
@@ -31,7 +30,7 @@ export const AdminGallery: React.FC<AdminGalleryProps> = ({ event, setEvent, set
 
         try {
             await deleteStorage(`events/${event.title}/gallery/${fileName}`);
-            const updatedGallery = event.gallery.filter((_, i) => i !== index);
+            const updatedGallery = event.gallery?.filter((_, i) => i !== index) || [];
             setEvent({ ...event, gallery: updatedGallery });
             setUploading(false);
         } catch (error) {
@@ -41,7 +40,7 @@ export const AdminGallery: React.FC<AdminGalleryProps> = ({ event, setEvent, set
   return (
     <>
     <div className="grid gap-4 p-4 w-full h-full" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))' }}>
-        {event.gallery.map((image, index) => (
+        {event.gallery?.map((image, index) => (
             <div key={index} className="gallery-item overflow-hidden rounded-lg shadow-lg w-24 h-24 relative">
                 <button 
                 onClick={() => deleteImage(index)}
@@ -61,7 +60,7 @@ export const AdminGallery: React.FC<AdminGalleryProps> = ({ event, setEvent, set
           const files = Array.from(e.target.files);
           const urls = await addStorageMultiple(files, `events/${event.title}/gallery`);
           const newLinks = urls.map(url => url.link);
-          setEvent({ ...event, gallery: [...event.gallery, ...newLinks] });
+          setEvent({ ...event, gallery: [...(event.gallery || []), ...newLinks] });
           setUploading(false);
         }
       }}

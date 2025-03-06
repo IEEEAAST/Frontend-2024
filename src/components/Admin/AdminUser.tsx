@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { IdUserData } from '../../pages/Admin'
 import addStorage from '../../firebase/addStorage';

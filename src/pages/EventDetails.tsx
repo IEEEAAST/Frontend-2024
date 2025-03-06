@@ -1,6 +1,6 @@
 import "../App.css";
 import "./styles/EventDetails.css";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useState, useEffect, useCallback, useContext } from "react";
 import { Sponsors } from "../components/EventDetails/Sponsors";
 import { Resources } from "../components/EventDetails/Resources";
@@ -124,8 +124,7 @@ export const EventDetails = () => {
              <button
     className="defaultButton"
     style={{ alignSelf: "center" }}
-    disabled={!eventData?.formLink}
-    onClick={() => eventData?.formLink && window.open(eventData.formLink, "_blank")}
+    disabled={!eventData?.registrationOpen}
   >
     <span className="buttonText">Attend</span>
     <span className="plusButton"><img src={PlusIcon} alt="plus" /></span>
@@ -163,9 +162,17 @@ export const EventDetails = () => {
               <span id="eventDesc">{eventData?.description ?? "Event not found."}</span>
             </div>
             <div id="eventDetailsWrapper">
-              <span>Time: from
-              <strong> {formatEventDate(eventData?.starttime?.toDate()||new Date(),"long")}</strong> to
-              <strong> {formatEventDate(eventData?.endtime?.toDate()||new Date(),"long")}</strong></span>
+                
+                {eventData?.starttime ? (
+                <span>
+                  Time: from <strong>{formatEventDate(eventData.starttime.toDate(), "long")}</strong>
+                  {eventData.endtime && (
+                  <> to <strong>{formatEventDate(eventData.endtime.toDate(), "long")}</strong></>
+                  )}
+                </span>
+                ):
+                "Time: TBA"
+                }
               <span>Type: <strong>{eventData?.type}</strong></span>
             </div>
           </div>
@@ -198,8 +205,8 @@ export const EventDetails = () => {
                   Notification button disabled until we get it working!!!
                 */ }
               </div>
-              {eventData?.formLink ?
-              attendButton:
+              {(eventData?.registrationOpen&&eventData.formLink) ?
+              <Link to={eventData.formLink}>{attendButton}</Link>:
                   <Tooltip label="Event registration link not available yet.">
                     {attendButton}
                   </Tooltip>}

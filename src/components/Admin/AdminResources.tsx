@@ -1,4 +1,3 @@
-import React, { useEffect, useState, useContext } from 'react'
 import { EventData, Inote } from '../../interfaces/EventData'
 import { Ivideo } from '../../interfaces/EventData'
 import addStorage from '../../firebase/addStorage';
@@ -12,21 +11,23 @@ interface AdminResourcesProps {
 export const AdminResources = ({ event, setEvent, setUploading }: AdminResourcesProps) => {
 
     const handleAddVideo = () => {
-        const updatedVideos = [...event.videos, { name: '', length: '', speaker: '', thumbnail: '', url: '' }];
+        const updatedVideos = [...(event.videos || []), { name: '', length: '', speaker: '', thumbnail: '', url: '' }];
         setEvent({ ...event, videos: updatedVideos });
     }
 
     const handleAddKeynote = () => {
-        const updatedKeynotes = [...event.keynotes, { name: '', thumbnail: '', url: '' }];
+        const updatedKeynotes = [...(event.keynotes || []),  { name: '', thumbnail: '', url: '' }];
         setEvent({ ...event, keynotes: updatedKeynotes });
     }
 
     const handleDeleteKeynote = (index: number) => {
+        if(!event.keynotes ||event.keynotes.length<=0) return;
         const updatedKeynotes = event.keynotes.filter((_, i) => i !== index);
         setEvent({ ...event, keynotes: updatedKeynotes });
     }
 
     const handleDeleteVideo = (index: number) => {
+        if(!event.videos ||event.videos.length<=0) return;
         const updatedVideos = event.videos.filter((_, i) => i !== index);
         setEvent({ ...event, videos: updatedVideos });
     }
@@ -43,13 +44,13 @@ export const AdminResources = ({ event, setEvent, setUploading }: AdminResources
     return (
         <form>
             <h1 className='font-extrabold text-2xl mb-6'>Keynotes</h1>
-            {event.keynotes.map((keynote, index) => (
+            {event.keynotes && event.keynotes.map((keynote, index) => (
                 <div key={index}>
                     <label className='flex flex-col'>
                         <span className='mb-2 font-semibold'>Name</span>
                         <input type="text" className='p-2 rounded bg-gray-800' value={keynote.name}
                         onChange={(e) => {
-                            const updatedKeynotes = [...event.keynotes];
+                            const updatedKeynotes = [...(event.keynotes || [])];
                             updatedKeynotes[index].name = e.target.value;
                             setEvent({ ...event, keynotes: updatedKeynotes });
                         }} />
@@ -74,7 +75,7 @@ export const AdminResources = ({ event, setEvent, setUploading }: AdminResources
                             className='p-2 rounded bg-gray-800' 
                             value={keynote.url} 
                             onChange={(e) => {
-                                const updatedKeynotes = [...event.keynotes];
+                                const updatedKeynotes = [...(event.keynotes)||[]];
                                 updatedKeynotes[index].url = e.target.value;
                                 setEvent({ ...event, keynotes: updatedKeynotes });
                             }}
@@ -98,13 +99,13 @@ export const AdminResources = ({ event, setEvent, setUploading }: AdminResources
             </button>
             <hr className='mt-6'></hr>
             <h1 className='font-extrabold text-2xl my-6'>Videos</h1>
-            {event.videos.map((video, index) => (
+            {event.videos && event.videos.map((video, index) => (
                 <div key={index}>
                     <label className='flex flex-col'>
                         <span className='mb-2 font-semibold'>Title</span>
                         <input type="text" className='p-2 rounded bg-gray-800' value={video.name}
                         onChange={(e) => {
-                            const updatedVideos = [...event.videos];
+                            const updatedVideos = [...(event.videos)||[]];
                             updatedVideos[index].name = e.target.value;
                             setEvent({ ...event, videos: updatedVideos });
                         }}
@@ -114,7 +115,7 @@ export const AdminResources = ({ event, setEvent, setUploading }: AdminResources
                         <span className='mb-2 font-semibold'>Length</span>
                         <input type="text" className='p-2 rounded bg-gray-800' value={video.length}
                         onChange={(e) => {
-                            const updatedVideos = [...event.videos];
+                            const updatedVideos = [...(event.videos)||[]];
                             updatedVideos[index].length = e.target.value;
                             setEvent({ ...event, videos: updatedVideos });
                         }}
@@ -124,7 +125,7 @@ export const AdminResources = ({ event, setEvent, setUploading }: AdminResources
                         <span className='mb-2 font-semibold'>Speaker</span>
                         <input type="text" className='p-2 rounded bg-gray-800' value={video.speaker}
                         onChange={(e) => {
-                            const updatedVideos = [...event.videos];
+                            const updatedVideos = [...(event.videos)||[]];
                             updatedVideos[index].speaker = e.target.value;
                             setEvent({ ...event, videos: updatedVideos });
                         }}
@@ -147,7 +148,7 @@ export const AdminResources = ({ event, setEvent, setUploading }: AdminResources
                         <span className='mb-2 font-semibold'>URL</span>
                         <input type="text" className='p-2 rounded bg-gray-800' value={video.url}
                         onChange={(e) => {
-                            const updatedVideos = [...event.videos];
+                            const updatedVideos = [...(event.videos)||[]];
                             updatedVideos[index].url = e.target.value;
                             setEvent({ ...event, videos: updatedVideos });
                         }}

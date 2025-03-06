@@ -35,7 +35,7 @@ const AdminSchedule: React.FC<AdminScheduleProps> = ({ event, setEvent }) => {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, index?: number) => {
         const { name, value } = e.target;
         if (index !== undefined) {
-            const updatedScheduleList = [...event.schedule];
+            const updatedScheduleList = [...(event.schedule || [])];
             updatedScheduleList[index] = { ...updatedScheduleList[index], [name]: value };
             setEvent({ ...event, schedule: updatedScheduleList });
         } else {
@@ -44,18 +44,18 @@ const AdminSchedule: React.FC<AdminScheduleProps> = ({ event, setEvent }) => {
     };
 
     const handleAddScheduleItem = () => {
-        setEvent({ ...event, schedule: [...event.schedule, newScheduleItem] });
+        setEvent({ ...event, schedule: [...(event.schedule || []), newScheduleItem] });
         setNewScheduleItem({ title: '', speaker: '', starting: '', duration: '' });
     };
 
     const handleRemoveScheduleItem = (index: number) => {
-        const updatedScheduleList = event.schedule.filter((_, i) => i !== index);
+        const updatedScheduleList = event.schedule ? event.schedule.filter((_, i) => i !== index) : [];
         setEvent({ ...event, schedule: updatedScheduleList });
     };
 
     return (
         <div>
-            {event.schedule.length === 0 ? (
+            {(event.schedule?.length === 0||!event.schedule) ? (
                 <p>Schedule is currently empty.</p>
             ) : (
                 <table className="min-w-full border-collapse">

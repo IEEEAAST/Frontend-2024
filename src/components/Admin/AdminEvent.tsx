@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect} from 'react';
 import firebase from "firebase/compat/app";
 import { EventData } from '../../interfaces/EventData';
 import addStorage from '../../firebase/addStorage';
@@ -7,18 +7,14 @@ import AdminSchedule from './AdminSchedule';
 import { AdminSponsors } from './AdminSponsors';
 import { AdminResources } from './AdminResources';
 import { AdminGallery } from './AdminGallery';
-import { createContext } from 'react';
 import updateData from '../../firebase/updateData';
+import addDocument from '../../firebase/addData';
 import {useNavigate} from 'react-router-dom';
 
 interface AdminEventProps {
     event: EventData;
 }
 const eventTypes =[ "AI", "Database", "Game", "Media", "Mobile", "Other", "Python", "Security", "Technical", "Web"];
-interface EventDataContextProps {
-    eventData: EventData;
-    setEventData: React.Dispatch<React.SetStateAction<EventData>>;
-}
 
 const convertDate = (date:firebase.firestore.Timestamp|null) => {
     return date?.toDate().toISOString().slice(0, 16)||null;
@@ -53,9 +49,13 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-
+            const starttimeInput = document.querySelector('input[name="starttime"]') as HTMLInputElement;
+            if (starttimeInput) {
+            console.log('Start Time:', starttimeInput.value);
+            }
         // Handle datetime-local input for starttime and endtime
         if (name === 'starttime' || name === 'endtime') {
+            if(value==='') return undefined;
             const dateValue = value ? firebase.firestore.Timestamp.fromDate(new Date(value)) : null;
             setEventData({ ...eventData, [name]: dateValue });
         } else {
@@ -65,12 +65,26 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
 
     const handleSubmit = async (e: React.FormEvent): Promise<void> => {
         e.preventDefault();
-        const {result,error} = await updateData('events', eventData.id, eventData);
-        if (error) {
-            console.error(error);
+        const { id, ...eventDataWithoutId } = eventData;
+        console.log(eventDataWithoutId);
+
+
+        if (id) {
+            const { error } = await updateData('events', id, eventDataWithoutId);
+            if (error) {
+                console.error(error);
+            } else {
+                window.alert('Event updated successfully');
+                navigate(`/event/${eventData.title}`);
+            }
         } else {
-            window.alert('Event updated successfully');
-            navigate(`/event/${eventData.title}`);
+            const { error } = await addDocument('events', eventDataWithoutId);
+            if (error) {
+                console.error(error);
+            } else {
+                window.alert('Event added successfully');
+                navigate(`/event/${eventData.title}`);
+            }
         }
     };
 
@@ -92,6 +106,7 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
                     onChange={handleChange} 
                     value={eventData.title || ''} 
                     className='p-2 rounded bg-gray-800'
+                    required
                 />
             </label>
             <div className='flex gap-4'>
@@ -102,6 +117,7 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
                     onChange={handleChange}
                     value={eventData.formLink || ''}
                     className='p-2 rounded bg-gray-800'
+                    required={eventData.registrationOpen}
                 />
             </label>
             <label className='flex h-fit gap-2 mb-auto mt-10'>
@@ -118,9 +134,10 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
                 <span className='mb-2 font-semibold'>Description</span>
                 <textarea 
                     name="description" 
-                    value={eventData.description || ''} 
+                    value={eventData.description} 
                     onChange={handleChange} 
                     className='p-2 rounded bg-gray-800 h-40 resize-none'
+                    required
                 />
             </label>
             <div>
@@ -134,6 +151,7 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
                         }
                     }}
                     className='mt-1 block w-full text-white'
+                    required={eventData.coverPhoto === ''||eventData.coverPhoto === undefined||eventData.coverPhoto === null}
                 />
                 {eventData.coverPhoto && (
                     <img src={eventData.coverPhoto} alt='Profile' className='mt-2 w-20 h-20 rounded-md' />
@@ -143,10 +161,12 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
                 <span className='mb-2 font-semibold'>Type</span>
                 <select 
                     name="type" 
-                    value={eventData.type} 
+                    value={eventData.type || ''} 
                     onChange={handleChange} 
                     className='p-2 rounded bg-gray-800'
+                    required
                 >
+                    <option value="" disabled>Select a type</option>
                     {eventTypes.map((type) => (
                         <option key={type} value={type}>
                             {type}
@@ -159,7 +179,7 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
                 <input 
                     type="datetime-local" 
                     name="starttime" 
-                    value={convertDate(eventData.starttime) || ''}
+                    value={convertDate(eventData.starttime ?? null) || ''}
                     onChange={handleChange} 
                     className='p-2 rounded bg-gray-800'
                 />
@@ -169,7 +189,7 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
                 <input 
                     type="datetime-local" 
                     name="endtime" 
-                    value={convertDate(eventData.endtime) || ''}
+                    value={convertDate(eventData.endtime ?? null) || ''}
                     onChange={handleChange} 
                     className='p-2 rounded bg-gray-800'
                 />

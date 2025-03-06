@@ -12,7 +12,8 @@ interface AdminSponsorsProps {
     setEvent: (event: EventData) => void;
 }
 
-export const AdminSponsors = ({ event, setEvent }: AdminSponsorsProps) => {
+export const AdminSponsors = ({ event: { sponsors = [], ...restEvent }, setEvent }: AdminSponsorsProps) => {
+    const event = { sponsors, ...restEvent };
     const [availableSponsors, setAvailableSponsors] = useState<Sponsor[]>([]);
 
     useEffect(() => {

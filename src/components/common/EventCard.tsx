@@ -59,6 +59,17 @@ export const EventCard = ({ event, color, className }: EventCardProps) => {
       
         return `${day}/${month}/${year}`;
       };
+
+      const getDateString = (event: EventData): string => {
+        if (event.starttime && event.endtime) {
+            const starttime = formatDate(event.starttime);
+            const endDate = formatDate(event.endtime);
+            return `${starttime} - ${endDate}`;
+        } else if (event.starttime) {
+            return formatDate(event.starttime);
+        } else {
+            return "Date TBA";
+        }}
       const content =             <div
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -85,7 +96,7 @@ export const EventCard = ({ event, color, className }: EventCardProps) => {
                       {event.type}<span className='sm:hidden'> •</span>
                   </p>
                   <p className={`${' font-thin text-[14px] sm:text-[13px]  xl:text-[1vw]'} opacity-80`}>
-                      {formatDate(event.starttime)} - {formatDate(event.endtime)}
+                      {getDateString(event)}
                   </p>
               </div>
           </motion.div>

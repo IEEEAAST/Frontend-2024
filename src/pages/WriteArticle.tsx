@@ -83,7 +83,7 @@ export const WriteArticle = () => {
     
     let imageUrl = '';
     if (file) {
-      const { link, error } = await addStorage(file, formState.title);
+      const { link, error } = await addStorage(file, `articles/${formState.title}`);
       if (error) {
         console.error("Error uploading image:", error);
         setSubmitting(false);
