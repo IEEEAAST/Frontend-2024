@@ -9,7 +9,7 @@ import { AdminResources } from './AdminResources';
 import { AdminGallery } from './AdminGallery';
 import { createContext } from 'react';
 import updateData from '../../firebase/updateData';
-import getDocument from '../../firebase/getData';
+import {useNavigate} from 'react-router-dom';
 
 interface AdminEventProps {
     event: EventData;
@@ -25,6 +25,7 @@ const convertDate = (date:firebase.firestore.Timestamp|null) => {
 }
 
 const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
+    const navigate = useNavigate();
     const [eventData, setEventData] = useState<EventData>({
         ...event,
         title: event.title || '',
@@ -69,10 +70,7 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
             console.error(error);
         } else {
             window.alert('Event updated successfully');
-            const updatedEvent = await getDocument('events', eventData.id);
-            if (updatedEvent.result) {
-                setEventData(updatedEvent.result.data() as EventData);
-            }
+            navigate(`/event/${eventData.title}`);
         }
     };
 
