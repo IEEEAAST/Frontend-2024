@@ -188,7 +188,7 @@ export const EventDetails = () => {
                 }}
               >
                 <Tab isDisabled={(schedule.length === 0)}><span className="tabLabel">Schedule</span></Tab>
-                <Tab isDisabled={(speakers?.speakersIds?.length ?? 0) <= 0}><span className="tabLabel">Speakers</span></Tab>
+                {/*<Tab isDisabled={(speakers?.speakersIds?.length ?? 0) <= 0}><span className="tabLabel">Speakers</span></Tab> Disabled temporarily for redundancy*/}
                 <Tab isDisabled={(sponsorIds?.sponsorIds?.length ?? 0) <= 0}><span className="tabLabel">Sponsors</span></Tab>
                 <Tab isDisabled={(videos.length === 0 && notes.length === 0)}><span className="tabLabel">Resources</span></Tab>
                 <Tab isDisabled={(eventData?.gallery?.length ?? 0) <= 0} className="mr-1"><span className="tabLabel">Gallery</span></Tab>
@@ -208,9 +208,9 @@ export const EventDetails = () => {
               <TabPanel>
                 <Schedule schedules={schedule} />
               </TabPanel>
-              <TabPanel>
+              {/*<TabPanel>
                 <Speakers speakersIds={speakers?.speakersIds || []} />
-              </TabPanel>
+              </TabPanel>*/}
               {isSponsorEnabled && (
                 <TabPanel>
                   <Sponsors sponsorIds={sponsorIds?.sponsorIds || []} />
