@@ -126,7 +126,7 @@ const AdminSchedule: React.FC<AdminScheduleProps> = ({ event, setEvent }) => {
                 </table>
             )}
             <div className="mt-4">
-                <button onClick={handleAddScheduleItem} className="bg-[#516182] rounded-full h-12 w-12 text-2xl font-extrabold">
+                <button type="button" onClick={handleAddScheduleItem} className="bg-[#516182] rounded-full h-12 w-12 text-2xl font-extrabold">
                     +
                 </button>
             </div>
