@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { EventData } from '../../interfaces/EventData';
 import { motion, useAnimation } from "framer-motion";
 import firebase from 'firebase/compat/app';
+import { autoColorByTopic } from '../../utils';
 
 interface EventCardProps {
     event: EventData;
@@ -10,34 +11,6 @@ interface EventCardProps {
 }
 
 export const EventCard = ({ event, color, className }: EventCardProps) => {
-    const colors = {
-        red:"#b83232",
-        blue:"#588CD3",
-        green:"#81AA34",
-        magenta:"#C058D3",
-        yellow:"#e8d36b",
-        brown:"#4f3b29",
-        turquoise:"#58D3C0",
-        orange:"#eb9131",
-        pink:"#ffa1f2",
-        grey:"#A3A3A3"
-    }
-
-    const autoColorByTopic = (topic: string) => {
-        const topicColors: { [key: string]: string } = {
-            Other: "brown",
-            Technical: "grey",
-            AI: "magenta",
-            Python: "yellow",
-            Web: "turquoise",
-            Mobile: "orange",
-            Database: "pink",
-            Security: "green",
-            Media: "blue",
-            Game: "red"
-        };
-        return topicColors[topic] || "#000000"; // Default to black if topic not found
-    };
 
     const controls = useAnimation();
     const handleMouseEnter = () => {
@@ -61,8 +34,12 @@ export const EventCard = ({ event, color, className }: EventCardProps) => {
       };
 
       const getDateString = (event: EventData): string => {
-        if (event.starttime && event.endtime) {
-            const starttime = formatDate(event.starttime);
+        if(event.starttime && !event.endtime || event.starttime?.toDate().getDate() === event.endtime?.toDate().getDate()) {
+            return event.starttime ? formatDate(event.starttime) : "Date TBA";
+        }
+        else if (event.starttime && event.endtime) {
+
+            const starttime = event.starttime ? formatDate(event.starttime) : "Date TBA";
             const endDate = formatDate(event.endtime);
             return `${starttime} - ${endDate}`;
         } else if (event.starttime) {
@@ -79,7 +56,7 @@ export const EventCard = ({ event, color, className }: EventCardProps) => {
           style={{ 
               backgroundRepeat: 'no-repeat', 
               backgroundPosition: 'right', 
-              backgroundColor: colors[color as keyof typeof colors] || colors[autoColorByTopic(event.type) as keyof typeof colors],
+              backgroundColor: color || autoColorByTopic(event.type),
               transformStyle: 'preserve-3d',
               transition: 'transform 0.1s'
           }}
@@ -87,10 +64,15 @@ export const EventCard = ({ event, color, className }: EventCardProps) => {
           animate={controls}
       >
           <motion.div
-              className={`absolute w-full h-full backface-hidden px-[15px] ${'pt-[4px] sm:pt-[150px] md:pt-[160px] lg:pt-[190px] xl:pt-[13vw] xl:px-10'} flex flex-col sm:justify-between`}
+              className={`absolute w-full h-full backface-hidden px-[15px] ${'pt-[4px] sm:pt-[150px] md:pt-[160px] lg:pt-[190px] xl:pt-[13vw] xl:px-10'} text-center flex flex-col sm:justify-between`}
               style={{ backfaceVisibility: 'hidden' }}
           >
-              <h3 className={`font-bold w-full sm:text-center ${'text-[23px] sm:text-[18px] md:text-[20px] lg:text-[23px] xl:text-[2vw] sm:flex sm:justify-center'}`}>{event.title}</h3>
+            <h3 
+                className={`font-bold w-full text-left sm:text-center text-[23px] sm:text-[18px] md:text-[20px] lg:text-[23px] ${event.title.length>20?"xl:text-[1.5vw]":"xl:text-[2vw]"} sm:flex sm:justify-center sm:max-h-[20%`} 
+           
+            >
+                {event.title}
+            </h3>
               <div className='flex gap-1 sm:self-center sm:flex-col sm:py-1'>
                   <p className={`${'font-thin text-[14px] sm:text-[13px] md:text-[14px] lg:text-[16px] xl:text-[17px] sm:flex sm:justify-center'}`}>
                       {event.type}<span className='sm:hidden'> •</span>

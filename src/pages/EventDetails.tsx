@@ -8,16 +8,13 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel, Spinner, Tooltip } from "@chak
 import Bell from "../assets/notification-bell-white@2x.png";
 import PlusIcon from "../assets/plus.png";
 import { Schedule } from "../components/EventDetails/schedule";
-import { Speakers } from "../components/EventDetails/Speakers";
 import Gallery from "../components/EventDetails/Gallery";
 import subscribeToDocumentsByField from "../firebase/subscribeToDocumentsByField";
 import { EventData } from "../interfaces/EventData";
 import { Ivideo, Inote, IsponsorsIds, scheduleItem, IspksIds } from "../interfaces/EventData";
-import { UserContext } from "../App";
-import { toggleLike } from "../utils";
 import { LikeButton } from "../components/common/LikeButton";
-import getDocumentsByField from "../firebase/getDataByField";
 import getDocument from "../firebase/getData";
+import DOMPurify from "dompurify";
 
 export const EventDetails = () => {
   const { name: eventName } = useParams<{ name: string }>();
@@ -31,19 +28,9 @@ export const EventDetails = () => {
   const [speakers, setSpeakers] = useState<IspksIds>();
   const [schedule, setSchedule] = useState<scheduleItem[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
-  const {userData,userId,setUserData} = useContext(UserContext);
 
 
-  const handleLikeClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    if (eventData?.id) {
-      if (userData && userId) {
-        setIsAnimating(true);
-        setTimeout(() => setIsAnimating(false), 500);
-        toggleLike(eventData, userData, userId, "event", setUserData);
-        eventData.likedBy?.includes(userId) ? eventData.likedBy = eventData.likedBy.filter((id) => id !== userId) : eventData.likedBy?.push(userId);
-      }
-    }
-  };
+
 
   const formatEventDate = (date: Date, format: string) => {
     if (format === "long") {
@@ -97,7 +84,6 @@ export const EventDetails = () => {
                 if (item.speaker) {
                   const speaker = await getDocument("speakers", item.speaker);
                   if (speaker.result) {
-                    console.log(speaker.result?.data()?.name);
                     item.speaker = speaker.result?.data()?.name;
                   }
                 }
@@ -113,6 +99,7 @@ export const EventDetails = () => {
   }, [eventName]);
 
   useEffect(() => {
+    console.log(eventName);
     fetchData();
   }, [fetchData]);
   useEffect(() => {
@@ -159,10 +146,15 @@ export const EventDetails = () => {
               </span>
               </span>    
               </div>
-              <span id="eventDesc">{eventData?.description ?? "Event not found."}</span>
+              <span id="eventDesc" className="whitespace-pre-wrap"  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(eventData?.description ?? "Event not found.") }}></span>
             </div>
             <div id="eventDetailsWrapper">
-                
+                {eventData?.location && (
+                  <span>
+                    Location: <strong>{eventData.location}</strong>
+                  </span>
+                )
+                    }
                 {eventData?.starttime ? (
                 <span>
                   Time: from <strong>{formatEventDate(eventData.starttime.toDate(), "long")}</strong>

@@ -66,8 +66,12 @@ export const Admin = () => {
     // It's an article
     await deleteDocument('articles', item.id);
   }
+  try{
   await cleanItemStorage(item);
-  window.location.reload();
+  }
+  catch(e){
+    window.alert(e);
+  }
   setIsModalOpen(false);
   }
 

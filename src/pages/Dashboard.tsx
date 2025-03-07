@@ -75,7 +75,13 @@ export const Dashboard = () => {
   }, []);
 
   const filterArticles = articles.slice(0, 3);
-  const filterEvents = events.slice(0, 3);
+  const filterEvents = events
+    .sort((a, b) => {
+      if (!a.starttime) return -1; // Place events without starttime at the beginning (New event with no date announced)
+      if (!b.starttime) return 1;
+      return b.starttime.toDate().getTime() - a.starttime.toDate().getTime(); // Sort by starttime descending
+    })
+    .slice(0, 3); // Take the 3 most recent events
 
   if (!articles || articles.length === 0) {
     return (

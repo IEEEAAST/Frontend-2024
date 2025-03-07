@@ -6,6 +6,7 @@ export interface EventData {
   title: string;
   description: string;
   likedBy: string[];
+  location?: string;
   starttime?: firebase.firestore.Timestamp|null;
   endtime?: firebase.firestore.Timestamp|null;
   coverPhoto: string;

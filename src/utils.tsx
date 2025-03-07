@@ -6,6 +6,26 @@ import ArticleData from './interfaces/ArticleData';
 import { EventData } from './interfaces/EventData';
 import userData from './interfaces/userData';
 
+export const eventTypesWithColors = [
+    { type: "AI", color: "#C058D3" },
+    { type: "Conference", color: "#005F73" },
+    {type: "Competition", color: "#FF4500"},
+    { type: "Database", color: "#ffa1f2" },
+    { type: "Game", color: "#b83232" },
+    { type: "Media", color: "#588CD3" },
+    { type: "Mobile", color: "#eb9131" },
+    { type: "Other", color: "#4f3b29" },
+    { type: "Python", color: "#e8d36b" },
+    { type: "Security", color: "#81AA34" },
+    { type: "Technical", color: "#A3A3A3" },
+    { type: "Web", color: "#58D3C0" }
+];
+
+export const autoColorByTopic = (topic: string): string => {
+    const event = eventTypesWithColors.find(event => event.type === topic);
+    return event ? event.color : "#A3A3A3";
+};
+
 
 export const toggleLike = async (
     item: EventData | ArticleData ,

@@ -5,6 +5,7 @@ import { EventCard } from "../components/common/EventCard";
 import { Link } from "react-router-dom";
 import { SortButton } from "../components/common/SortButton";
 import { LikeButton } from "../components/common/LikeButton";
+import DOMPurify from "dompurify";
 
 const topics = ["AI", "Database", "Game", "Media", "Mobile", "Other", "Python", "Security", "Technical", "Web"];
 
@@ -109,7 +110,7 @@ export const ViewAllEvents = () => {
       <div className="w-full flex flex-col max-h-[350px]">
       <div className="font-extrabold text-xl sm:text-3xl flex gap-3">{event.title} <LikeButton item={event} type="event" className="font-normal text-lg"/></div>
       {isEventOngoing(event) && <p className="italic text-yellow-600 mb-2">{isEventOngoing(event)}</p>}
-      <p className="font-extralight mb-2 whitespace-normal overflow-hidden text-ellipsis line-clamp-6">{event.description}</p>
+      <p className="font-extralight mb-2 whitespace-normal overflow-hidden text-ellipsis line-clamp-6"  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(event.description) }}></p>
       <hr className="w-full mt-auto border-[#151F33] border-2 mb-2"></hr>
       <p><span className="font-bold">Type: </span><span>{event.type}</span></p>
       {

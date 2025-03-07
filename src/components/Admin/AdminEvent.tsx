@@ -10,11 +10,11 @@ import { AdminGallery } from './AdminGallery';
 import updateData from '../../firebase/updateData';
 import addDocument from '../../firebase/addData';
 import {useNavigate} from 'react-router-dom';
+import { eventTypesWithColors } from '../../utils';
 
 interface AdminEventProps {
     event: EventData;
 }
-const eventTypes =[ "AI", "Database", "Game", "Media", "Mobile", "Other", "Python", "Security", "Technical", "Web"];
 
 const convertDate = (date:firebase.firestore.Timestamp|null) => {
     return date?.toDate().toISOString().slice(0, 16)||null;
@@ -27,7 +27,7 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
         title: event.title || '',
         formLink: event.formLink || '',
         description: event.description || '',
-        type: event.type || eventTypes[0],
+        type: event.type || eventTypesWithColors[0].type,
         starttime: event.starttime || null,
         endtime: event.endtime || null,
         coverPhoto: event.coverPhoto || '',
@@ -129,7 +129,17 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
                     className='p-2 rounded bg-gray-800 w-6'
                 />
             </label>
+
             </div>
+            <label className='flex flex-col'>
+                <span className='mb-2 font-semibold'>Location</span>
+                <input type="text"
+                    name="location"
+                    onChange={handleChange}
+                    value={eventData.location || undefined}
+                    className='p-2 rounded bg-gray-800'
+                />
+            </label>
             <label className='flex flex-col'>
                 <span className='mb-2 font-semibold'>Description</span>
                 <textarea 
@@ -138,6 +148,7 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
                     onChange={handleChange} 
                     className='p-2 rounded bg-gray-800 h-40 resize-none'
                     required
+                    placeholder='You can use markdown/rich text here by inserting tags! please don&apos;t XSS the site :( '
                 />
             </label>
             <div>
@@ -167,9 +178,9 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
                     required
                 >
                     <option value="" disabled>Select a type</option>
-                    {eventTypes.map((type) => (
-                        <option key={type} value={type}>
-                            {type}
+                    {eventTypesWithColors.map((type) => (
+                        <option key={type.type} value={type.type}>
+                            {type.type}
                         </option>
                     ))}
                 </select>
