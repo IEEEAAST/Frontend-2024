@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { IdUserData } from '../../pages/Admin'
 import addStorage from '../../firebase/addStorage';
 import updateData from '../../firebase/updateData';
-import { Spinner } from '@chakra-ui/react';
+import { Button, LightMode } from '@chakra-ui/react';
+import GrayProfile from '../../assets/profile-person-white@2x.png';
 
 const availableRoles = ['admin', 'writer'];
 interface AdminUserProps {
@@ -69,32 +70,31 @@ export const AdminUser: React.FC<AdminUserProps> = ({ selectedUser, setSelectedU
                             ))}
                         </select>
                         
-                        <button
-                            type='button'
+                        <LightMode><Button
                             onClick={() => {
                                 const newRoles = selectedUser.roles?.filter((_, i) => i !== index);
                                 setSelectedUser({...selectedUser, roles: newRoles});
                             }}
-                            disabled={role==='admin'}
-                            className={`bg-red-600 text-white py-1 px-2 rounded-md ${role==='admin'?'cursor-not-allowed opacity-25':''}`}
+                            isDisabled={role==='admin'}
+                            colorScheme='red'
                         >
                             -
-                        </button>
+                        </Button></LightMode>
                         
                     </div>
                     
                 ))}
                 {(selectedUser.roles?.length || 0 < availableRoles.length) &&
-                <button
-                    type='button'
+                <LightMode><Button
                     onClick={() => {
                         const newRoles = [...(selectedUser.roles || []), ''];
                         setSelectedUser({...selectedUser, roles: newRoles});
                     }}
-                    className='mt-2 bg-green-600 text-white py-1 px-2 rounded-md'
+                    className='mt-2'
+                    colorScheme='green'
                 >
                     +
-                </button>
+                </Button></LightMode>
                 
                 }
                 <p className='text-red-700 font-extrabold mt-4'>WARNING: Adding admin role can only be undone directly from Firebase! You can refresh the page or switch selected user without saving to undo any changes.</p>
@@ -111,9 +111,8 @@ export const AdminUser: React.FC<AdminUserProps> = ({ selectedUser, setSelectedU
                     }}
                     className='mt-1 block w-full text-white'
                 />
-                {selectedUser.imgurl && selectedUser.imgurl && (
-                    <img src={selectedUser.imgurl} alt='Profile' className='mt-2 w-20 h-20 rounded-full' />
-                )}
+
+                <img src={selectedUser.imgurl? selectedUser.imgurl : GrayProfile} alt='Profile' className='mt-2 w-20 h-20 rounded-full' />
                 
             </div>
             <div>
@@ -126,18 +125,17 @@ export const AdminUser: React.FC<AdminUserProps> = ({ selectedUser, setSelectedU
                 />
             </div>
             <div className='flex items-center gap-2'>
-            <button
-                type='button'
+            <Button
                 onClick={async() => {
                     const cleanedRoles = selectedUser.roles?.filter(role => role !== '');
                     await updateData('users', selectedUser.id, { ...selectedUser, roles: cleanedRoles }).then(() => {window.location.reload();});
                 }}
-                className={`mt-4 bg-blue-600 text-white py-2 px-4 rounded-md ${uploading?'cursor-not-allowed opacity-25':''}`}
-                disabled={uploading}
+                className='mt-4' 
+                variant={'outline'}
+                isLoading={uploading}
             >
                 Save
-            </button>
-            {uploading && <Spinner size={"md"} className='mt-2'/>}
+            </Button>
             </div>
         </form>
 

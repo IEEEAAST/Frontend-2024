@@ -1,6 +1,6 @@
 import {useContext, useState} from 'react'
 import {UserContext} from '../App'
-import {Tab, Tabs, TabList, TabPanels, TabPanel, Avatar} from '@chakra-ui/react'
+import {Tab, Tabs, TabList, TabPanels, TabPanel, Avatar, LightMode} from '@chakra-ui/react'
 import UserData from '../interfaces/userData';
 import { EventData } from '../interfaces/EventData';
 import ArticleData from '../interfaces/ArticleData';
@@ -139,14 +139,14 @@ export const Admin = () => {
           <TabPanels>
             <TabPanel className='!p-0 w-full'>
               <p className='text-center font-extrabold text-2xl my-2'>Users</p>
-                <div className='flex'>
-                <div className='w-1/5 text-ellipsis flex flex-col bg-[#000b21] overflow-y-auto max-h-[63vh] overflow-x-hidden customScrollbar gap-1 border-4 border-[#000b21]'>
+              <div className='flex'>
+                <div className='w-1/5 text-ellipsis flex flex-col min-w-48 bg-[#000b21] overflow-y-auto max-h-[63vh] overflow-x-hidden customScrollbar gap-1 border-4 border-[#000b21]'>
                 {users.map(user => (
-                  <div key={user.id} className={`flex items-center p-2 gap-2 ${selectedUser===user?"bg-[#516182]":"bg-[#0b162a]"} rounded-full cursor-pointer`} onClick={() => setSelectedUser(user)}>
+                  <div key={user.id} className={`flex items-center min-w-48 p-2 gap-2 ${selectedUser===user?"bg-[#516182]":"bg-[#0b162a]"} rounded-md cursor-pointer mr-2`} onClick={() => setSelectedUser(user)}>
                   <Avatar name={`${user.firstname} ${user.lastname}`} src={user.imgurl} />
                   <p>{user.firstname} {user.lastname}</p>
                     {user.id !== userId && (
-                    <button className='ml-auto rounded-full bg-red-600 w-6 h-6' onClick={()=>{openModal(user)}}>X</button>
+                    <LightMode><Button className='ml-auto' size='sm' colorScheme='red' borderRadius='2xl' onClick={()=>{openModal(user)}}>X</Button></LightMode>
                     )}
                   </div>
                 ))}
@@ -158,7 +158,7 @@ export const Admin = () => {
                 </div>
                 </div>
             </TabPanel>
-            <TabPanel>
+            <TabPanel className='!p-0 w-full'>
               <p className='text-center font-extrabold text-2xl my-2'>Events</p>
                 <div className='flex'>
                 <div className='w-1/5 text-ellipsis flex flex-col items-center bg-[#000b21] overflow-y-auto max-h-[63vh] overflow-x-hidden customScrollbar gap-1 border-4 border-[#000b21]'>
