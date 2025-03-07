@@ -19,6 +19,7 @@ export interface EventData {
   videos?: Ivideo[];
   formLink?: string;
   registrationOpen?: boolean;
+  cardColor?: string;
 }
 
 export interface Schedule {

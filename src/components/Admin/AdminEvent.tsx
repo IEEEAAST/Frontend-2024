@@ -10,7 +10,8 @@ import { AdminGallery } from './AdminGallery';
 import updateData from '../../firebase/updateData';
 import addDocument from '../../firebase/addData';
 import {useNavigate} from 'react-router-dom';
-import { eventTypesWithColors } from '../../utils';
+import { eventTypesWithColors,autoColorByTopic } from '../../utils';
+import { useRef } from 'react';
 
 interface AdminEventProps {
     event: EventData;
@@ -36,6 +37,7 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
         gallery: event.gallery || [],
     });
     const [uploading, setUploading] = useState(false);
+    const [enableColor, setEnableColor] = useState(false);
     useEffect(() => {
         const fileInput = document.querySelector('input[type="file"]');
         if (fileInput) {
@@ -205,6 +207,27 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
                     className='p-2 rounded bg-gray-800'
                 />
             </label>
+            <label className='flex items-center gap-4'>
+                <span className='font-semibold'>Enable Custom Card Color</span>
+                <input 
+                    type="checkbox" 
+                    name="enableCustomColor" 
+                    className='p-2 rounded bg-gray-800'
+                    onChange={(e) => setEnableColor(e.target.checked)}
+                />
+            </label>
+            <label className='flex items-center gap-4'>
+                <span className='font-semibold'>Card Color</span>
+                <input 
+                    type="color" 
+                    name="cardColor" 
+                    value={enableColor?eventData.cardColor:autoColorByTopic(eventData.type)} 
+                    onChange={handleChange}
+                    className={`p-2 rounded bg-gray-800 h-12 ${!enableColor && 'opacity-25 cursor-not-allowed'}`}
+                    disabled={!enableColor}
+                />
+            </label>
+
             <Accordion allowMultiple>
                 <AccordionItem>
                     <AccordionButton>

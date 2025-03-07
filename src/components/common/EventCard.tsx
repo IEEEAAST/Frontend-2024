@@ -10,7 +10,7 @@ interface EventCardProps {
     className?: string;
 }
 
-export const EventCard = ({ event, color, className }: EventCardProps) => {
+export const EventCard = ({ event, className }: EventCardProps) => {
 
     const controls = useAnimation();
     const handleMouseEnter = () => {
@@ -56,7 +56,7 @@ export const EventCard = ({ event, color, className }: EventCardProps) => {
           style={{ 
               backgroundRepeat: 'no-repeat', 
               backgroundPosition: 'right', 
-              backgroundColor: color || autoColorByTopic(event.type),
+              backgroundColor: event.cardColor || autoColorByTopic(event.type),
               transformStyle: 'preserve-3d',
               transition: 'transform 0.1s'
           }}
