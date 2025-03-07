@@ -3,15 +3,16 @@ import firebase from "firebase/compat/app";
 import { EventData } from '../../interfaces/EventData';
 import addStorage from '../../firebase/addStorage';
 import { Accordion, AccordionItem, AccordionButton, Spinner, AccordionIcon, AccordionPanel } from '@chakra-ui/react';
+import {Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button} from '@chakra-ui/react';
 import AdminSchedule from './AdminSchedule';
 import { AdminSponsors } from './AdminSponsors';
 import { AdminResources } from './AdminResources';
 import { AdminGallery } from './AdminGallery';
 import updateData from '../../firebase/updateData';
 import addDocument from '../../firebase/addData';
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import { eventTypesWithColors,autoColorByTopic } from '../../utils';
-import { useRef } from 'react';
+import { EventCard } from '../common/EventCard';
 
 interface AdminEventProps {
     event: EventData;
@@ -23,6 +24,7 @@ const convertDate = (date:firebase.firestore.Timestamp|null) => {
 
 const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
     const navigate = useNavigate();
+    const originalEventTitle=event.title;
     const [eventData, setEventData] = useState<EventData>({
         ...event,
         title: event.title || '',
@@ -36,8 +38,11 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
         schedule: event.schedule || [],
         gallery: event.gallery || [],
     });
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const onClose = () => setIsModalOpen(false);
     const [uploading, setUploading] = useState(false);
     const [enableColor, setEnableColor] = useState(false);
+    const [colorPicker, setColorPicker] = useState<string | undefined>(undefined); //This only exists to save the selected color the put it back if you disable then re-enable the color picker
     useEffect(() => {
         const fileInput = document.querySelector('input[type="file"]');
         if (fileInput) {
@@ -46,6 +51,7 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
     }, [event]);
 
     useEffect(() => {
+        setEnableColor(event.cardColor !== undefined);
         setEventData(event);
     }, [event]);
 
@@ -63,21 +69,26 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
         } else {
             setEventData({ ...eventData, [name]: value });
         }
+        if (name === 'type') {
+            const { type, ...rest } = eventData;
+            setEventData({ ...rest, type: value, cardColor: autoColorByTopic(value) });
+
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent): Promise<void> => {
         e.preventDefault();
         const { id, ...eventDataWithoutId } = eventData;
-        console.log(eventDataWithoutId);
 
 
         if (id) {
-            const { error } = await updateData('events', id, eventDataWithoutId);
+            const { error } = await updateData('events', id, eventDataWithoutId, enableColor ? [] : ["cardColor"]);
             if (error) {
                 console.error(error);
             } else {
                 window.alert('Event updated successfully');
                 navigate(`/event/${eventData.title}`);
+
             }
         } else {
             const { error } = await addDocument('events', eventDataWithoutId);
@@ -99,7 +110,8 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className='flex flex-col gap-4 p-4  rounded shadow-md'>
+        <div className='flex justify-between'>
+        <form onSubmit={handleSubmit} className='flex flex-col gap-4 p-4  rounded shadow-md w-full'>
             <label className='flex flex-col'>
                 <span className='mb-2 font-semibold'>Title</span>
                 <input 
@@ -148,7 +160,7 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
                     name="description" 
                     value={eventData.description} 
                     onChange={handleChange} 
-                    className='p-2 rounded bg-gray-800 h-40 resize-none'
+                    className='p-2 rounded bg-gray-800 h-40 resize-none customScrollbar'
                     required
                     placeholder='You can use markdown/rich text here by inserting tags! please don&apos;t XSS the site :( '
                 />
@@ -213,7 +225,17 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
                     type="checkbox" 
                     name="enableCustomColor" 
                     className='p-2 rounded bg-gray-800'
-                    onChange={(e) => setEnableColor(e.target.checked)}
+                    checked={enableColor}
+                    onChange={(e) => {
+                        if(!e.target.checked){
+                            setColorPicker(eventData.cardColor);
+                            setEventData({...eventData,cardColor:undefined});
+                        }
+                        else{
+                            setEventData({...eventData,cardColor:colorPicker});
+                        }
+                        setEnableColor(e.target.checked);
+                    }}
                 />
             </label>
             <label className='flex items-center gap-4'>
@@ -273,6 +295,33 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
             <Spinner size='lg' hidden={!uploading} className='mt-4'/>
             </div>
         </form>
+        <div className='sticky top-4 self-start cursor-pointer' onClick={() => setIsModalOpen(true)}>
+            <EventCard event={eventData} disabled/>
+        </div>
+        <Modal isOpen={isModalOpen} onClose={onClose} isCentered size={'xl'}>
+            <ModalOverlay />
+            <ModalContent bg={"#151F33"}>
+            <ModalHeader>Save Changes?</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody >
+                    <p>You are about to leave to go to the event page of <strong>{eventData.title}</strong>. Do you want to save your changes?</p>
+            </ModalBody>
+            <ModalFooter>
+                <Button colorScheme="green" mr={3} onClick={handleSubmit}>
+                Save Changes
+                </Button>
+                <Link to={`/event/${originalEventTitle}`} className='text-white'>
+                    <Button colorScheme="red" mr={3}>
+                        Go Without Saving
+                    </Button>
+                </Link>
+                <Button colorScheme="blue" mr={3} onClick={onClose}>
+                Close
+                </Button>
+            </ModalFooter>
+            </ModalContent>
+        </Modal>
+        </div>
     );
 };
 

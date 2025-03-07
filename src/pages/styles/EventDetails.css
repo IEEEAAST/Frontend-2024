@@ -14,13 +14,13 @@
 #eventDetailsFlex {
     display:flex;
     justify-content: space-between;
-    align-items: center;
     min-width:calc(100% - 40px);
 }
 
 #eventNameWrapper {
     display:flex;
     flex-direction: column  ;
+    justify-content: flex-start;
     width: 55%;
 }
 
@@ -29,8 +29,8 @@
     flex-direction: column;
     gap:20px;
     width:25%;
-    height:80%;
-
+    height:100%;
+    margin: 10px 0;
 }
 
 .iconButton {

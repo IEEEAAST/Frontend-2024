@@ -8,9 +8,10 @@ interface EventCardProps {
     event: EventData;
     color?: string | undefined;
     className?: string;
+    disabled?: boolean;
 }
 
-export const EventCard = ({ event, className }: EventCardProps) => {
+export const EventCard = ({ event, className, disabled }: EventCardProps) => {
 
     const controls = useAnimation();
     const handleMouseEnter = () => {
@@ -96,7 +97,7 @@ export const EventCard = ({ event, className }: EventCardProps) => {
           <div className='bg-[rgba(0,0,0,0.8)] w-full' style={{backfaceVisibility: 'hidden',transform: 'rotateY(180deg)'}}><p className={`font-bold ${'text-lg flex justify-center'}`}>{event.title}</p></div>
       </motion.div>
   </div>
-
+    if(disabled) return <div className={className}>{content}</div>;
     return (
         <Link to={`/event/${event.title}`} className={className}>
             {content}
