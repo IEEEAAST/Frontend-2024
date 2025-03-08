@@ -208,9 +208,11 @@ export const NavBar : React.FC = () => {
               </div>
             </button>
             <button>
+              {/* Removed temporarily until we figure out how to implement this
               <div className="border-2 rounded-full border-white w-[40px] p-1">
                 <img src={Bell} alt="Notifications" height={90} width={45}  />
               </div>
+              */}
             </button>
             </div>
 

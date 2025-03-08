@@ -5,14 +5,14 @@ import getDocument from "../firebase/getData.js";
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from '../App';
 import UserData from "../interfaces/userData.js";
-import sort from "../assets/sort.png";
-import sortup from "../assets/sortup.png";
-import sortdown from "../assets/sortdown.png";
 import ArticleCard from "../components/Article/Card/ArticleCard.tsx";
 import ArticleData from "../interfaces/ArticleData.tsx";
+import { SortButton } from "../components/common/SortButton";
+import { articleTopics } from "../utils";
 
 export const ViewAllArticles = () => {
   const [articles, setArticles] = useState<ArticleData[]>([]);
+  const [filteredArticles, setFilteredArticles] = useState<ArticleData[]>([]); //seperate state for topic filtered events to avoid deleting the original events
   const [authors, setAuthors] = useState<{ [key: string]: UserData }>({});
   const [filter, setFilter] = useState("date");
   const { userData } = useContext(UserContext);
@@ -47,7 +47,7 @@ export const ViewAllArticles = () => {
   };
 
   const filterArticles = (filter: string) => {
-    const sortedArticles = [...articles]; // Create a new array to avoid mutating state directly
+    let sortedArticles = [...articles]; // Create a new array to avoid mutating state directly
 
     // Sorting logic based on the filter
     switch (filter) {
@@ -70,7 +70,12 @@ export const ViewAllArticles = () => {
         sortedArticles.sort((a, b) => (a.likedBy || []).length - (b.likedBy || []).length);
         break;
     }
-    setArticles(sortedArticles); // Update state with the sorted articles
+    const selectedTopic = document.querySelector('select')?.value || "All";
+    if (selectedTopic !== "All") {
+      sortedArticles = sortedArticles.filter(article => article.topic === selectedTopic);
+    }
+
+    setFilteredArticles(sortedArticles);
   };
 
   useEffect(() => {
@@ -86,7 +91,9 @@ export const ViewAllArticles = () => {
           id: ids ? ids[index] : null, // Set the id from ids if not null
           liked: userData?.likes?.articles?.includes(ids ? ids[index] : "") || false, // Set liked property based on user data
         }));
-        setArticles(newarticles.sort((a, b) => b.publishdate.seconds - a.publishdate.seconds));
+        const sortedArticles = newarticles.sort((a, b) => b.publishdate.seconds - a.publishdate.seconds);
+        setArticles(sortedArticles);
+        setFilteredArticles(sortedArticles);
         const authorIds = newarticles.map((article) => article.author);
         getAuthorNamesFromSet(new Set(authorIds));
       }
@@ -112,44 +119,42 @@ export const ViewAllArticles = () => {
           <h2 className="text-white md:text-[32px] lg:text-[45px] font-bold">All Articles</h2>
 
           {/* Sorting buttons */}
-          <button className="w-1/3 md:w-1/4 lg:w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-12 md:h-14" onClick={() => { changeFilter("date") }}>
-            Date
-            <div className="relative w-5 my-2">
-              <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "date" ? 'opacity-100' : 'opacity-0'}`} />
-              <img src={sortdown} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "date-reverse" ? 'opacity-100' : 'opacity-0'}`} />
-              <img src={sort} className={`absolute inset-0 w-full transition-opacity duration-300 ${!(filter.includes("date")) ? 'opacity-100' : 'opacity-0'}`} />
-            </div>
-            <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${filter.includes("date") ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`} />
-          </button>
-          <button className="w-1/3 md:w-1/4 lg:w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-12 md:h-14" onClick={() => { changeFilter("topic") }}>
-            Topic
-            <div className="relative w-5 my-2">
-              <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "topic" ? 'opacity-100' : 'opacity-0'}`} />
-              <img src={sortdown} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "topic-reverse" ? 'opacity-100' : 'opacity-0'}`} />
-              <img src={sort} className={`absolute inset-0 w-full transition-opacity duration-300 ${!(filter.includes("topic")) ? 'opacity-100' : 'opacity-0'}`} />
-            </div>
-            <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter == 'topic' || filter == 'topic-reverse') ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`} />
-          </button>
-          <button className="w-1/3 md:w-1/4 lg:w-1/6 border-b border-[#141E32] flex justify-between items-center relative h-12 md:h-14" onClick={() => { changeFilter("likes") }}>
-            Likes
-            <div className="relative w-5 my-2">
-              <img src={sortup} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "likes" ? 'opacity-100' : 'opacity-0'}`} />
-              <img src={sortdown} className={`absolute inset-0 w-full transition-opacity duration-300 ${filter === "likes-reverse" ? 'opacity-100' : 'opacity-0'}`} />
-              <img src={sort} className={`absolute inset-0 w-full transition-opacity duration-300 ${!(filter.includes("likes")) ? 'opacity-100' : 'opacity-0'}`} />
-            </div>
-            <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${(filter.includes('likes')) ? 'w-full' : 'w-0'} h-[1px] bg-white transition-all`} />
-          </button>
+          <SortButton label="Date" filterKey="date" currentFilter={filter} changeFilter={changeFilter} />
+        <SortButton label="Likes" filterKey="likes" currentFilter={filter} changeFilter={changeFilter} />
+        {/*topic filter*/}
+        <select
+          className="bg-[#151F33] text-white p-2 rounded h-12 w-full md:w-1/6"
+          onChange={(e) => {
+            const selectedTopic = e.target.value;
+            const filtered = selectedTopic === "All" ? articles : articles.filter(article => article.topic === selectedTopic);
+            setFilteredArticles(filtered);
+          }}
+        >
+          <option value="All">All</option>
+          {articleTopics.map((topic) => (
+            <option key={topic} value={topic}>
+              {topic}
+            </option>
+          ))}
+        </select>
         </div>
 
         <div className="w-full px-4">
           <div className="mt-[20px]  md:mt-[30px]  lg:mt-[59px] flex flex-col gap-[30px] md:gap-[30px] lg:gap-[58px]">
-            {articles.map((article, index) => (
-              <ArticleCard
-                key={article.id || index}
-                article={article}
-                author={authors[article.author]}
-              />
-            ))}
+            {filteredArticles.length === 0 ? (
+              <>
+              <div className="text-center text-white font-extrabold text-2xl">No articles found with that topic.</div>
+              <div className="text-center text-white">Check again soon!</div>
+              </>
+            ) : (
+              filteredArticles.map((article, index) => (
+                <ArticleCard
+                  key={article.id || index}
+                  article={article}
+                  author={authors[article.author]}
+                />
+              ))
+            )}
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { UserContext } from "../App";
 import addData from "../firebase/addData";
 import addStorage from "../firebase/addStorage.js";
 import firebase from "firebase/compat/app";
+import { articleTopics } from "../utils.js";
 import 'firebase/compat/firestore';
 
 interface Article {
@@ -16,6 +17,7 @@ interface Article {
   publishdate: firebase.firestore.Timestamp;
   title: string;
 }
+
 
 export const WriteArticle = () => {
 
@@ -136,17 +138,9 @@ export const WriteArticle = () => {
               className="bg-gray-700 rounded-full px-4 py-4 w-[40%] min-w-[215px] self-center sm:self-start"
               onChange={handleInputChange}
             >
-              <option value="Other">Other</option>
-              <option value="Technical">Technical</option>
-              <option value="AI">AI</option>
-              <option value="Swift">Swift</option>
-              <option value="Python">Python</option>
-              <option value="Web">Web</option>
-              <option value="Mobile">Mobile</option>
-              <option value="Database">Database</option>
-              <option value="Security">Security</option>
-              <option value="Media">Media</option>
-              <option value="Game">Game</option>
+              {articleTopics.map((topic, index) => (
+                <option key={index} value={topic}>{topic}</option>
+              ))}
             </select>
 
             <div className="w-full flex flex-col sm:flex-row items-center gap-4 self-start">
