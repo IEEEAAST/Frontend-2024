@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect, useContext } from "react";
-import Logo from "../../assets/IEEEAAST.ico";
 import searchIcon from "../../assets/search-magnifier-white@2x.png";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { Link as ScrollLink, animateScroll, scroller } from 'react-scroll';

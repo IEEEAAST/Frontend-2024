@@ -31,7 +31,7 @@ import getDocument from "../firebase/getData";
 import ArticleCard from "../components/Article/Card/ArticleCard.tsx"
 import subscribeToCollection from "../firebase/subscribeToCollection.js";
 import ArticleData from "../interfaces/ArticleData.tsx";
-import { toggleFollow } from "../utils.tsx";
+import { toggleFollow } from "../utils.ts";
 import UserData from "../interfaces/userData.tsx";
 
 interface currentUserData {

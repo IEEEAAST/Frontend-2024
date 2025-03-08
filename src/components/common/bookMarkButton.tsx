@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import Bookmark from "../../assets/bookmark-ribbon-white.png";
 import FilledBookmark from "../../assets/bookmark-ribbon-filled-white.png";
 import { UserContext } from "../../App.js";
-import { toggleBookMark } from "../../utils";
+import { toggleBookMark } from "../../utils.js";
 import ArticleData from "../../interfaces/ArticleData";
 import UserData from "../../interfaces/userData.js";
 import { Tooltip } from '@chakra-ui/react'

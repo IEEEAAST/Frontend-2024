@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import WhiteSparkles from "../../assets/sparkles-white.png";
 import OrangeSparkles from "../../assets/sparkles-orange.png";
 import { UserContext } from "../../App.js";
-import { toggleLike } from "../../utils";
+import { toggleLike } from "../../utils.js";
 import ArticleData from "../../interfaces/ArticleData";
 import { EventData } from "../../interfaces/EventData";
 import { Tooltip } from '@chakra-ui/react'

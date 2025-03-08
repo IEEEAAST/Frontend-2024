@@ -91,8 +91,8 @@ export const Dashboard = () => {
 
   return (
     <div className="flex flex-col items-center bg-[#000B21] text-white header">
-      <div className="h-[120px] w-full"></div>
-      <div className="w-full lg:min-h-screen flex justify-center items-center px-4 md:px-20 body">
+      {/* <div className="h-[120px] w-full"></div> */}
+      <div className="w-full lg:min-h-screen flex justify-center items-center px-4 mt-32 lg:mt-0 md:px-20 body">
         <div className="relative w-full lg:w-[1733px] lg:h-[810px] h-[400px] md:h-[520px] rounded-[38px] overflow-hidden">
           {/* Main Article Display */}
           <div className="absolute z-10 w-full lg:h-screen h-full bg-gradient-to-t from-[#000B21A5] via-transparent bottom-0"></div>
