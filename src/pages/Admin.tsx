@@ -13,6 +13,7 @@ import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, Modal
 import deleteStorageDir from '../firebase/deleteStorageDir';
 import { MdDeleteForever } from "react-icons/md";
 import { TiUserDelete } from "react-icons/ti";
+import { IoMdAdd } from 'react-icons/io';
 
 
 export interface IdUserData extends UserData {
@@ -192,7 +193,7 @@ export const Admin = () => {
             <TabPanel className='!p-0 w-full'>
               <p className='text-center font-extrabold text-2xl my-2'>Events</p>
               <div className='flex'>
-                <div className='w-1/5 text-ellipsis flex flex-col min-w-48 items-center bg-[#000b21] overflow-y-auto max-h-[63vh] overflow-x-hidden customScrollbar gap-1 border-4 border-[#000b21]'>
+                <div className='w-1/5 text-ellipsis flex flex-col min-w-48 bg-[#000b21] overflow-y-auto max-h-[63vh] overflow-x-hidden customScrollbar gap-1 border-4 border-[#000b21]'>
                   {events.map(event => (
                     <div key={event.id} className={`flex items-center min-w-48 p-2 gap-2 ${selectedEvent === event ? "bg-[#516182]" : "bg-[#0b162a]"} rounded-md cursor-pointer w-full mr-2`} onClick={() => setSelectedEvent(event)}>
                       <p>{event.title}</p>
@@ -209,8 +210,11 @@ export const Admin = () => {
                         /></LightMode>
                     </div>
                   ))}
-                  <Button
-                    className='bg-[#516182] rounded-full h-12 w-12 text-2xl font-extrabold'
+                  <IconButton
+                    aria-label='Add Event'
+                    icon={<IoMdAdd />}
+                    // colorScheme=''
+                    size='sm'
                     onClick={() => {
                       const emptyEventData: EventData = {
                         id: null,
@@ -232,9 +236,7 @@ export const Admin = () => {
                       };
                       setSelectedEvent(emptyEventData);
                     }}
-                  >
-                    +
-                  </Button>
+                  />
                 </div>
                 <div className='w-full min-h-[63vh] overflow-y-auto max-h-[63vh] overflow-x-hidden customScrollbar'>
                   {selectedEvent && (
