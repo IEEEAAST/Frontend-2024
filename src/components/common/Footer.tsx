@@ -16,7 +16,6 @@ import {
   ModalCloseButton,
 } from '@chakra-ui/react'
 import getCollection from "../../firebase/getCollection";
-import getData from "../../firebase/getData";
 import { AppConfigContext } from "../../App";
 
 interface FAQ {
