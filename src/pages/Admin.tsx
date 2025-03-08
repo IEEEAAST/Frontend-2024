@@ -195,7 +195,7 @@ export const Admin = () => {
               <div className='flex'>
                 <div className='w-1/5 text-ellipsis flex flex-col min-w-48 bg-[#000b21] overflow-y-auto max-h-[63vh] overflow-x-hidden customScrollbar gap-1 border-4 border-[#000b21]'>
                   {events.map(event => (
-                    <div key={event.id} className={`flex items-center min-w-48 p-2 gap-2 ${selectedEvent === event ? "bg-[#516182]" : "bg-[#0b162a]"} rounded-md cursor-pointer w-full mr-2`} onClick={() => setSelectedEvent(event)}>
+                    <div key={event.id} className={`flex items-center min-w-48 p-2 gap-2 ${selectedEvent === event ? "bg-[#516182]" : "bg-[#0b162a]"} rounded-md cursor-pointer mr-2`} onClick={() => setSelectedEvent(event)}>
                       <p>{event.title}</p>
                       <LightMode><IconButton 
                         aria-label='Delete Event'
@@ -213,7 +213,7 @@ export const Admin = () => {
                   <IconButton
                     aria-label='Add Event'
                     icon={<IoMdAdd />}
-                    // colorScheme=''
+                    className='mr-2'
                     size='sm'
                     onClick={() => {
                       const emptyEventData: EventData = {
