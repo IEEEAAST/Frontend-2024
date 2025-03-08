@@ -126,7 +126,7 @@ export const AdminUser: React.FC<AdminUserProps> = ({ selectedUser, setSelectedU
             className='mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white px-2 h-10'
           />
         </div>
-        <div className='flex items-center gap-2'>
+        <div className='flex items-center gap-2 w-full sticky bottom-0 p-4 bg-[#0B162A]'>
           <LightMode>
             <Button
               onClick={async () => {
