@@ -132,16 +132,19 @@ export const NavBar : React.FC = () => {
   }, [menuOpen]);
 
   useEffect(() => {
-    // If the pathname changes, scroll to the section if it's specified in the URL hash
     const hash = location.hash;
     if (hash === "#contactSection") {
       setTimeout(() => {
-        animateScroll.scrollToBottom({ duration: 0, smooth: 'easeInOutQuart' });
-        window.history.replaceState(null, '', location.pathname);
+        animateScroll.scrollToBottom({ duration: 0, smooth: "easeInOutQuart" });
+        window.history.replaceState(null, "", location.pathname);
       }, 700);
     } else if (hash) {
-      scroller.scrollTo(hash.substring(1), { duration: 0, smooth: 'easeInOutQuart', offset: 100 });
-      window.history.replaceState(null, '', location.pathname);
+      scroller.scrollTo(hash.substring(1), {
+        duration: 0,
+        smooth: "easeInOutQuart",
+        offset: 100,
+      });
+      window.history.replaceState(null, "", location.pathname);
     }
   }, [location]);
 
@@ -208,9 +211,11 @@ export const NavBar : React.FC = () => {
               </div>
             </button>
             <button>
+              {/* Removed temporarily until we figure out how to implement this
               <div className="border-2 rounded-full border-white w-[40px] p-1">
                 <img src={Bell} alt="Notifications" height={90} width={45}  />
               </div>
+              */}
             </button>
             </div>
 
@@ -223,15 +228,17 @@ export const NavBar : React.FC = () => {
           }
         </div>
 
-        {/*Hamburger menu for small screens*/}
+        {/* Hamburger menu for small screens */}
         <div className="sm:hidden flex items-center ml-4 z-50">
           <div
             ref={menuRef}
-            className={`${menuOpen ? "translate-x-0" : "-translate-x-full"} fixed inset-y-0 left-0 w-3/4 transition-transform duration-300 ease-in-out z-40 flex flex-col sm:hidden`}
+            className={`${
+              menuOpen ? "translate-x-0" : "-translate-x-full"
+            } fixed inset-y-0 left-0 w-3/4 transition-transform duration-300 ease-in-out z-40 flex flex-col sm:hidden`}
             style={{
               background: "linear-gradient(0deg, #1f396e 0%, #000b21 100%)",
               boxShadow: menuOpen ? "4px 0px 4px rgba(0, 0, 0, 0.5)" : "none",
-              opacity: 0.98
+              opacity: 0.98,
             }}
           >
             <button
@@ -239,7 +246,9 @@ export const NavBar : React.FC = () => {
               style={{ borderColor: "#00050f" }}
               onClick={() => {
                 setMenuOpen(false);
-                window.location.pathname === "/" ? animateScroll.scrollToTop({ duration: 0 }) : window.open("/", "_self");
+                window.location.pathname === "/"
+                  ? animateScroll.scrollToTop({ duration: 0 })
+                  : window.open("/", "_self");
               }}
             >
               Home
@@ -254,7 +263,12 @@ export const NavBar : React.FC = () => {
             >
               Browse
             </button>
-            <ScrollLink to="aboutSection" className="cursor-pointer text-2xl" smooth={true} duration={0}>
+            <ScrollLink
+              to="aboutSection"
+              className="cursor-pointer text-2xl"
+              smooth={true}
+              duration={0}
+            >
               <button
                 className="w-full h-12 border-solid border-b my-2 flex justify-center items-center"
                 style={{ borderColor: "#00050f" }}
@@ -263,11 +277,17 @@ export const NavBar : React.FC = () => {
                   if (window.location.pathname !== "/") {
                     window.location.href = "/#aboutSection";
                   }
-                }}>
+                }}
+              >
                 About
               </button>
             </ScrollLink>
-            <ScrollLink to="contactSection" className="cursor-pointer text-2xl" smooth={true} duration={0}>
+            <ScrollLink
+              to="contactSection"
+              className="cursor-pointer text-2xl"
+              smooth={true}
+              duration={0}
+            >
               <button
                 className="w-full h-12 border-solid border-b my-2 flex justify-center items-center"
                 style={{ borderColor: "#00050f" }}
@@ -276,7 +296,8 @@ export const NavBar : React.FC = () => {
                   if (window.location.pathname !== "/") {
                     window.location.href = "/#contactSection";
                   }
-                }}>
+                }}
+              >
                 Contact
               </button>
             </ScrollLink>
@@ -286,7 +307,10 @@ export const NavBar : React.FC = () => {
                 style={{ borderColor: "#00050f" }}
                 onClick={() => {
                   setMenuOpen(false);
-                  if (userData) { SignOut(); window.location.reload() }
+                  if (userData) {
+                    SignOut();
+                    window.location.reload();
+                  }
                 }}
               >
                 {userData ? "Sign Out" : "Sign In"}
@@ -294,7 +318,15 @@ export const NavBar : React.FC = () => {
             </Link>
           </div>
 
-          <button onClick={toggleMenu} className="text-black top-2 left-2 p-1 rounded-lg fixed" style={{ backgroundColor: "#000b21", boxShadow: "0px 0px 4px rgba(255, 255, 255, 1.0)", opacity: "0.8" }}>
+          <button
+            onClick={toggleMenu}
+            className="text-black top-2 left-2 p-1 rounded-lg fixed"
+            style={{
+              backgroundColor: "#000b21",
+              boxShadow: "0px 0px 4px rgba(255, 255, 255, 1.0)",
+              opacity: "0.8",
+            }}
+          >
             <svg
               className="w-12 h-12"
               fill="none"
@@ -310,7 +342,12 @@ export const NavBar : React.FC = () => {
               />
             </svg>
           </button>
-          <div className="fixed top-2 right-2 w-fit rounded-full" style={{ boxShadow: '0 0 5px 3px #000B21' }}><ProfileMenu></ProfileMenu></div>
+          <div
+            className="fixed top-2 right-2 w-fit rounded-full"
+            style={{ boxShadow: "0 0 5px 3px #000B21" }}
+          >
+            <ProfileMenu />
+          </div>
         </div>
       </div>
     </>

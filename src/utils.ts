@@ -21,6 +21,20 @@ export const eventTypesWithColors = [
   { type: "Web", color: "#58D3C0" }
 ];
 
+export const articleTopics = [
+  "Other",
+  "Technical",
+  "AI",
+  "Swift",
+  "Python",
+  "Web",
+  "Mobile",
+  "Database",
+  "Security",
+  "Media",
+  "Game"
+];
+
 export const autoColorByTopic = (topic: string): string => {
   const event = eventTypesWithColors.find(event => event.type === topic);
   return event ? event.color : "#A3A3A3";

@@ -23,7 +23,9 @@ interface AdminEventProps {
 }
 
 const convertDate = (date: firebase.firestore.Timestamp | null) => {
-  return date?.toDate().toISOString().slice(0, 16) || null;
+  if (!date) return null;
+  const localDate = new Date(date.toDate().getTime() - date.toDate().getTimezoneOffset() * 60000);
+  return localDate.toISOString().slice(0, 16);
 }
 
 const AdminEvent: React.FC<AdminEventProps> = ({ event, events, setEvents, setSelectedEvent }) => {
@@ -59,6 +61,7 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event, events, setEvents, setSe
     setEnableColor(event.cardColor !== undefined);
     setEventData(event);
   }, [event]);
+  
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
