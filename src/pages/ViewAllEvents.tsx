@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { SortButton } from "../components/common/SortButton";
 import { LikeButton } from "../components/common/LikeButton";
 import DOMPurify from "dompurify";
+import {Spinner} from "@chakra-ui/react";
 
 const topics = ["AI", "Database", "Game", "Media", "Mobile", "Other", "Python", "Security", "Technical", "Web"];
 
@@ -54,6 +55,7 @@ export const ViewAllEvents = () => {
   const [events, setEvents] = useState<EventData[]>([]);
   const [filteredEvents, setFilteredEvents] = useState<EventData[]>([]); //seperate state for topic filtered events to avoid deleting the original events
   const [filter, setFilter] = useState("date");
+  const [loading, setLoading] = useState(true);
 
   const changeFilter = (newfilter: string) => {
     let finalFilter = newfilter;
@@ -135,17 +137,23 @@ export const ViewAllEvents = () => {
         }));
         setEvents(newevents.sort((a, b) => (b.starttime?.seconds ?? 0) - (a.starttime?.seconds ?? 0)));
         setFilteredEvents(newevents.sort((a, b) => (b.starttime?.seconds ?? 0) - (a.starttime?.seconds ?? 0)));
+        setLoading(false);
       }
     });
 
     return () => unsubscribe();
   }, []);
-
+  if(loading) 
   return (
+    <div className="w-full h-[60vh] flex items-center justify-center"><Spinner size="xl" /></div>
+  )
+  return(
     <div className="flex flex-col items-center bg-[#000B21] text-white header">
       <div className="h-[150px] w-full"></div>
       <div className="flex flex-col md:flex-row justify-between items-center w-full px-4 lg:px-[89px] gap-4">
+
         <h2 className="text-white text-[24px] m</div>d:text-[32px] lg:text-[45px] font-bold">All Events</h2>
+
 
         <SortButton label="Date" filterKey="date" currentFilter={filter} changeFilter={changeFilter} />
         <SortButton label="Likes" filterKey="likes" currentFilter={filter} changeFilter={changeFilter} />
