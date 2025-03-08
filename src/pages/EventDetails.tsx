@@ -1,21 +1,19 @@
 import "../App.css";
 import "./styles/EventDetails.css";
-import { useParams } from "react-router-dom";
-import { useState, useEffect, useCallback, useContext } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
 import { Sponsors } from "../components/EventDetails/Sponsors";
 import { Resources } from "../components/EventDetails/Resources";
-import { Tabs, TabList, TabPanels, Tab, TabPanel, Spinner } from "@chakra-ui/react";
-import Bell from "../assets/notification-bell-white@2x.png";
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Spinner, Tooltip } from "@chakra-ui/react";
 import PlusIcon from "../assets/plus.png";
 import { Schedule } from "../components/EventDetails/schedule";
-import { Speakers } from "../components/EventDetails/Speakers";
 import Gallery from "../components/EventDetails/Gallery";
 import subscribeToDocumentsByField from "../firebase/subscribeToDocumentsByField";
 import { EventData } from "../interfaces/EventData";
 import { Ivideo, Inote, IsponsorsIds, scheduleItem, IspksIds } from "../interfaces/EventData";
-import { UserContext } from "../App";
-import { toggleLike } from "../utils";
 import { LikeButton } from "../components/common/LikeButton";
+import getDocument from "../firebase/getData";
+import DOMPurify from "dompurify";
 
 export const EventDetails = () => {
   const { name: eventName } = useParams<{ name: string }>();
@@ -26,22 +24,9 @@ export const EventDetails = () => {
   const [sponsorIds, setSponsorIDs] = useState<IsponsorsIds>();
   const [isResourcesEnabled, setIsResourcesEnabled] = useState(false);
   const [isSponsorEnabled, setSponsorEnabled] = useState(false);
-  const [speakers, setSpeakers] = useState<IspksIds>();
+  const [_speakers, setSpeakers] = useState<IspksIds>();
   const [schedule, setSchedule] = useState<scheduleItem[]>([]);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const {userData,userId,setUserData} = useContext(UserContext);
 
-
-  const handleLikeClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    if (eventData?.id) {
-      if (userData && userId) {
-        setIsAnimating(true);
-        setTimeout(() => setIsAnimating(false), 500);
-        toggleLike(eventData, userData, userId, "event", setUserData);
-        eventData.likedBy?.includes(userId) ? eventData.likedBy = eventData.likedBy.filter((id) => id !== userId) : eventData.likedBy?.push(userId);
-      }
-    }
-  };
 
   const formatEventDate = (date: Date, format: string) => {
     if (format === "long") {
@@ -90,7 +75,18 @@ export const EventDetails = () => {
           setSpeakers(event.speakers);
         }
         if (event.schedule) {
-          setSchedule(event.schedule);
+            const fetchSpeakers = async () => {
+              for (const item of event.schedule) {
+                if (item.speaker) {
+                  const speaker = await getDocument("speakers", item.speaker);
+                  if (speaker.result) {
+                    item.speaker = speaker.result?.data()?.name;
+                  }
+                }
+              }
+              setSchedule(event.schedule);
+            };
+            fetchSpeakers();
         }
       }
     });
@@ -99,12 +95,23 @@ export const EventDetails = () => {
   }, [eventName]);
 
   useEffect(() => {
+    console.log(eventName);
     fetchData();
   }, [fetchData]);
   useEffect(() => {
     // Scroll to the top when the component mounts
     window.scrollTo(0, 0);
   }, []);
+
+  const attendButton = 
+             <button
+    className="defaultButton"
+    style={{ alignSelf: "center" }}
+    disabled={!eventData?.registrationOpen}
+  >
+    <span className="buttonText">Attend</span>
+    <span className="plusButton"><img src={PlusIcon} alt="plus" /></span>
+  </button>
 
   return (loading 
     ? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex"/></div>
@@ -135,12 +142,25 @@ export const EventDetails = () => {
               </span>
               </span>    
               </div>
-              <span id="eventDesc">{eventData?.description ?? "Event not found."}</span>
+              <span id="eventDesc" className="whitespace-pre-wrap"  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(eventData?.description ?? "Event not found.") }}></span>
             </div>
             <div id="eventDetailsWrapper">
-              <span>Time: from
-              <strong> {formatEventDate(eventData?.starttime?.toDate()||new Date(),"long")}</strong> to
-              <strong> {formatEventDate(eventData?.endtime?.toDate()||new Date(),"long")}</strong></span>
+                {eventData?.location && (
+                  <span>
+                    Location: <strong>{eventData.location}</strong>
+                  </span>
+                )
+                    }
+                {eventData?.starttime ? (
+                <span>
+                  Time: from <strong>{formatEventDate(eventData.starttime.toDate(), "long")}</strong>
+                  {eventData.endtime && (
+                  <> to <strong>{formatEventDate(eventData.endtime.toDate(), "long")}</strong></>
+                  )}
+                </span>
+                ):
+                "Time: TBA"
+                }
               <span>Type: <strong>{eventData?.type}</strong></span>
             </div>
           </div>
@@ -162,32 +182,30 @@ export const EventDetails = () => {
                   event.currentTarget.scrollLeft += delta * 30;
                 }}
               >
-                <Tab><span className="tabLabel">Schedule</span></Tab>
-                <Tab><span className="tabLabel">Speakers</span></Tab>
-                <Tab isDisabled={!isSponsorEnabled}><span className="tabLabel">Sponsors</span></Tab>
-                <Tab isDisabled={!isResourcesEnabled}><span className="tabLabel">Resources</span></Tab>
-                <Tab className="mr-1"><span className="tabLabel">Gallery</span></Tab>
+                <Tab isDisabled={(schedule.length === 0)}><span className="tabLabel">Schedule</span></Tab>
+                {/*<Tab isDisabled={(speakers?.speakersIds?.length ?? 0) <= 0}><span className="tabLabel">Speakers</span></Tab> Disabled temporarily for redundancy*/}
+                <Tab isDisabled={(sponsorIds?.sponsorIds?.length ?? 0) <= 0}><span className="tabLabel">Sponsors</span></Tab>
+                <Tab isDisabled={(videos.length === 0 && notes.length === 0)}><span className="tabLabel">Resources</span></Tab>
+                <Tab isDisabled={(eventData?.gallery?.length ?? 0) <= 0} className="mr-1"><span className="tabLabel">Gallery</span></Tab>
               </div>
               <div className="iconButtonsWrapper">
-                <button className="iconButton" style={{ backgroundImage: `url(${Bell})` }}></button>
+                {/*<button className="iconButton" style={{ backgroundImage: `url(${Bell})` }}></button>
+                  Notification button disabled until we get it working!!!
+                */ }
               </div>
-              <button
-                className="defaultButton"
-                style={{ alignSelf: "center" }}
-                disabled={!eventData?.formLink}
-                onClick={() => eventData?.formLink && window.open(eventData.formLink, "_blank")}
-              >
-                <span className="buttonText">Attend</span>
-                <span className="plusButton"><img src={PlusIcon} alt="plus" /></span>
-              </button>
+              {(eventData?.registrationOpen&&eventData.formLink) ?
+              <Link to={eventData.formLink}>{attendButton}</Link>:
+                  <Tooltip label="Event registration link not available yet.">
+                    {attendButton}
+                  </Tooltip>}
             </TabList>
             <TabPanels>
               <TabPanel>
                 <Schedule schedules={schedule} />
               </TabPanel>
-              <TabPanel>
+              {/*<TabPanel>
                 <Speakers speakersIds={speakers?.speakersIds || []} />
-              </TabPanel>
+              </TabPanel>*/}
               {isSponsorEnabled && (
                 <TabPanel>
                   <Sponsors sponsorIds={sponsorIds?.sponsorIds || []} />

@@ -1,10 +1,10 @@
-import { useState, useContext, useEffect, ChangeEvent } from "react";
+import { useState, useContext, ChangeEvent } from "react";
 import { Spinner } from "@chakra-ui/react";
 import { UserContext } from "../App";
 import addData from "../firebase/addData";
 import addStorage from "../firebase/addStorage.js";
 import firebase from "firebase/compat/app";
-import 'firebase/compat/firestore'; 
+import 'firebase/compat/firestore';
 
 interface Article {
   article: string;
@@ -18,6 +18,7 @@ interface Article {
 }
 
 export const WriteArticle = () => {
+
   const [formState, setFormState] = useState({
     article: '',
     caption: '',
@@ -27,18 +28,17 @@ export const WriteArticle = () => {
     topic: 'Other',
   });
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
-  const [userCanWrite, setUserCanWrite] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const { userData, userId } = useContext(UserContext);
-
-  useEffect(() => {
-    console.log(userId);
-    setUserCanWrite(userData?.roles?.includes("writer") || userData?.roles?.includes("admin") || false);
-    if (!userData) {
-      window.location.href = "/signin";
-    }
-  }, [userData]);
+  if (!userData?.roles?.includes("writer") && !userData?.roles?.includes("admin")) {
+    return (
+      <div className='pt-[120px] px-6 flex flex-col w-full items-center justify-center h-[60vh]'>
+        <p className='font-display text-3xl font-bold'>Unauthorized</p>
+        <p className='text-xl'>You are not authorized to view this page</p>
+      </div>
+    );
+  }
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -80,10 +80,10 @@ export const WriteArticle = () => {
 
   const submitArticle = async () => {
     setSubmitting(true);
-    
+
     let imageUrl = '';
     if (file) {
-      const { link, error } = await addStorage(file, formState.title);
+      const { link, error } = await addStorage(file, `articles/${formState.title}`);
       if (error) {
         console.error("Error uploading image:", error);
         setSubmitting(false);
@@ -109,115 +109,113 @@ export const WriteArticle = () => {
     <>
       {submitting
         ? <div className="flex justify-center items-center h-screen">
-              <Spinner size="xl" />
-          </div>
-        : userCanWrite 
-          ? <div className="pt-[100px]">
-              <div className="flex flex-col items-center px-20 py-10 h-fit gap-4">
-                <p className="self-start text-2xl sm:text-[40px] ">Let's write an article!</p>
-                <input
-                  type="text"
-                  name="title"
-                  value={formState.title}
-                  placeholder="Title..."
-                  className="bg-gray-700 rounded-full px-4 py-4 w-[40%] min-w-[215px] self-center sm:self-start"
-                  onChange={handleInputChange}
-                />
-                <input
-                  type="text"
-                  name="description"
-                  value={formState.description}
-                  placeholder="Description..."
-                  className="bg-gray-700 rounded-full px-4 py-4 w-[40%] min-w-[215px] self-center sm:self-start"
-                  onChange={handleInputChange}
-                />
-                <select
-                  name="topic"
-                  value={formState.topic}
-                  className="bg-gray-700 rounded-full px-4 py-4 w-[40%] min-w-[215px] self-center sm:self-start"
-                  onChange={handleInputChange}
+          <Spinner size="xl" />
+        </div>
+        : <div className="pt-[100px]">
+          <div className="flex flex-col items-center px-20 py-10 h-fit gap-4">
+            <p className="self-start text-2xl sm:text-[40px] ">Let's write an article!</p>
+            <input
+              type="text"
+              name="title"
+              value={formState.title}
+              placeholder="Title..."
+              className="bg-gray-700 rounded-full px-4 py-4 w-[40%] min-w-[215px] self-center sm:self-start"
+              onChange={handleInputChange}
+            />
+            <input
+              type="text"
+              name="description"
+              value={formState.description}
+              placeholder="Description..."
+              className="bg-gray-700 rounded-full px-4 py-4 w-[40%] min-w-[215px] self-center sm:self-start"
+              onChange={handleInputChange}
+            />
+            <select
+              name="topic"
+              value={formState.topic}
+              className="bg-gray-700 rounded-full px-4 py-4 w-[40%] min-w-[215px] self-center sm:self-start"
+              onChange={handleInputChange}
+            >
+              <option value="Other">Other</option>
+              <option value="Technical">Technical</option>
+              <option value="AI">AI</option>
+              <option value="Swift">Swift</option>
+              <option value="Python">Python</option>
+              <option value="Web">Web</option>
+              <option value="Mobile">Mobile</option>
+              <option value="Database">Database</option>
+              <option value="Security">Security</option>
+              <option value="Media">Media</option>
+              <option value="Game">Game</option>
+            </select>
+
+            <div className="w-full flex flex-col sm:flex-row items-center gap-4 self-start">
+              <input
+                type="file"
+                id="cover"
+                name="cover"
+                accept="image/png, image/jpeg"
+                className="hidden"
+                onChange={handleFileChange}
+              />
+              <label htmlFor="cover" className="bg-gray-700 rounded-full p-2 cursor-pointer text-nowrap">
+                Upload Cover Image
+              </label>
+              {imageSrc &&
+                <button
+                  onClick={handleRemoveImage}
+                  className="bg-red-600 text-white rounded-full p-2 hover:bg-red-700 transition"
                 >
-                  <option value="Other">Other</option>
-                  <option value="Technical">Technical</option>
-                  <option value="AI">AI</option>
-                  <option value="Swift">Swift</option>
-                  <option value="Python">Python</option>
-                  <option value="Web">Web</option>
-                  <option value="Mobile">Mobile</option>
-                  <option value="Database">Database</option>
-                  <option value="Security">Security</option>
-                  <option value="Media">Media</option>
-                  <option value="Game">Game</option>
-                </select>
-                
-                <div className="w-full flex flex-col sm:flex-row items-center gap-4 self-start">
-                  <input
-                    type="file"
-                    id="cover"
-                    name="cover"
-                    accept="image/png, image/jpeg"
-                    className="hidden"
-                    onChange={handleFileChange}
-                  />
-                  <label htmlFor="cover" className="bg-gray-700 rounded-full p-2 cursor-pointer text-nowrap">
-                      Upload Cover Image
-                  </label>
-                  {imageSrc && 
-                    <button
-                      onClick={handleRemoveImage}
-                      className="bg-red-600 text-white rounded-full p-2 hover:bg-red-700 transition"
-                    >
-                      Remove
-                    </button>
-                  }
-                </div>
-                {imageSrc 
-                  ? <div className="w-full rounded-xl bg-white overflow-hidden">
-                      <img
-                        src={imageSrc as string}
-                        alt="Cover Photo"
-                        className="w-full h-[400px] object-cover"
-                      />
-                    </div>
-                  : <div className="w-full h-[400px] bg-gray-300 flex items-center justify-center rounded-xl">
-                      <p className="text-gray-600">Cover Image Goes Here</p>
-                    </div>
-                }
-                <input
-                  type="text"
-                  name="caption"
-                  value={formState.caption}
-                  placeholder="Caption..."
-                  className="bg-gray-700 rounded-full px-4 py-4 w-[40%] min-w-[215px] self-center"
-                  onChange={handleInputChange}
+                  Remove
+                </button>
+              }
+            </div>
+            {imageSrc
+              ? <div className="w-full rounded-xl bg-white overflow-hidden">
+                <img
+                  src={imageSrc as string}
+                  alt="Cover Photo"
+                  className="w-full h-[400px] object-cover"
                 />
-                <textarea
-                  name="article"
-                  value={formState.article}
-                  placeholder="Write your article here..."
-                  className="bg-gray-700 rounded-xl w-full h-[300px] p-2 customScrollbar resize-none"
-                  onChange={handleInputChange}
-                />
-                <div className="flex gap-4 w-full justify-end">
-                  <button 
-                    className="bg-white rounded-full text-black font-semibold font-textmedium px-2 sm:px-12 h-10 w-20 sm:w-fit"
-                    onClick={() => setFormState({
-                      article: '',
-                      caption: '',
-                      description: '',
-                      title: '',
-                      image: '',
-                      topic: 'Other'
-                    })}
-                  >Clear</button>
-                  <button 
-                    className="bg-white rounded-full text-black font-semibold font-textmedium px-2 sm:px-12 h-10 w-20 sm:w-fit" 
-                    onClick={submitArticle}
-                  >Submit</button>
-                </div>
+              </div>
+              : <div className="w-full h-[400px] bg-gray-300 flex items-center justify-center rounded-xl">
+                <p className="text-gray-600">Cover Image Goes Here</p>
+              </div>
+            }
+            <input
+              type="text"
+              name="caption"
+              value={formState.caption}
+              placeholder="Caption..."
+              className="bg-gray-700 rounded-full px-4 py-4 w-[40%] min-w-[215px] self-center"
+              onChange={handleInputChange}
+            />
+            <textarea
+              name="article"
+              value={formState.article}
+              placeholder="Write your article here..."
+              className="bg-gray-700 rounded-xl w-full h-[300px] p-2 customScrollbar resize-none"
+              onChange={handleInputChange}
+            />
+            <div className="flex gap-4 w-full justify-end">
+              <button
+                className="bg-white rounded-full text-black font-semibold font-textmedium px-2 sm:px-12 h-10 w-20 sm:w-fit"
+                onClick={() => setFormState({
+                  article: '',
+                  caption: '',
+                  description: '',
+                  title: '',
+                  image: '',
+                  topic: 'Other'
+                })}
+              >Clear</button>
+              <button
+                className="bg-white rounded-full text-black font-semibold font-textmedium px-2 sm:px-12 h-10 w-20 sm:w-fit"
+                onClick={submitArticle}
+              >Submit</button>
             </div>
           </div>
-       : null
+        </div>
       }
     </>
   );

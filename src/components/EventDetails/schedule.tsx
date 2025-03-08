@@ -8,6 +8,7 @@ import {
 } from '@chakra-ui/react'
 import { ScheduleItem } from './ScheduleItem';
 import { scheduleItems} from '../../interfaces/EventData'
+import getDocument from '../../firebase/getData';
 
 
 export const Schedule = ({schedules}:scheduleItems) => {
@@ -28,6 +29,7 @@ export const Schedule = ({schedules}:scheduleItems) => {
   //useEffect(() => {
   //    fetchData();
   //}, []);
+
 
   return (
     <>

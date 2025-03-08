@@ -11,7 +11,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <ChakraProvider disableGlobalStyle={true} theme={theme}>
         <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-        <App />{" "}
+        <App />
         <Footer />
       </ChakraProvider>
     </BrowserRouter>

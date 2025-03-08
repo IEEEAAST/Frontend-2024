@@ -143,13 +143,13 @@ export const ViewAllArticles = () => {
 
         <div className="w-full px-4">
           <div className="mt-[20px]  md:mt-[30px]  lg:mt-[59px] flex flex-col gap-[30px] md:gap-[30px] lg:gap-[58px]">
-              {articles.map((article, index) => (
-                  <ArticleCard
-                      key={article.id || index}
-                      article={article}
-                      author={authors[article.author]}
-                  />
-              ))}
+            {articles.map((article, index) => (
+              <ArticleCard
+                key={article.id || index}
+                article={article}
+                author={authors[article.author]}
+              />
+            ))}
           </div>
         </div>
       </div>

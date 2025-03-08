@@ -2,21 +2,24 @@ import firebase from "firebase/compat/app";
 import { socialLinks } from "../components/EventDetails/Types";
 
 export interface EventData {
-  id: string;
+  id: string|null;
   title: string;
   description: string;
   likedBy: string[];
-  starttime: firebase.firestore.Timestamp;
-  endtime: firebase.firestore.Timestamp;
+  location?: string;
+  starttime?: firebase.firestore.Timestamp|null;
+  endtime?: firebase.firestore.Timestamp|null;
   coverPhoto: string;
-  gallery: string[];
-  keynotes: Inote[];
-  schedule: Schedule;
-  speakers: string[];
-  sponsors: string[];
+  gallery?: string[];
+  keynotes?: Inote[];
+  schedule?: Schedule[];
+  speakers?: string[];
+  sponsors?: string[];
   type: string;
-  videos: Ivideo[];
+  videos?: Ivideo[];
   formLink?: string;
+  registrationOpen?: boolean;
+  cardColor?: string;
 }
 
 export interface Schedule {

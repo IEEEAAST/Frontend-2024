@@ -5,6 +5,7 @@ import { EventCard } from "../components/common/EventCard";
 import { Link } from "react-router-dom";
 import { SortButton } from "../components/common/SortButton";
 import { LikeButton } from "../components/common/LikeButton";
+import DOMPurify from "dompurify";
 
 const topics = ["AI", "Database", "Game", "Media", "Mobile", "Other", "Python", "Security", "Technical", "Web"];
 
@@ -27,20 +28,24 @@ const formatEventDate = (date: Date, format: string) => {
     const parts = formattedDate.split(' ');
     return `${parts[0]}, ${parts[1]}`;
   }
-  return date.toString(); 
+  return date.toString();
 };
 
 const isEventOngoing = (event: EventData) => {
   const today = new Date();
-  if (event.endtime && (event.starttime.toDate() < today) && (event.endtime.toDate() > today) && event.formLink && event.formLink.length > 0) {
+  if (event.endtime && event.starttime && (event.starttime.toDate() < today) && (event.endtime.toDate() > today) && event.registrationOpen && event.formLink && event.formLink.length > 0) {
     return "Ongoing! Register now!";
   }
-  if ((event.starttime.toDate() > today) && event.formLink && event.formLink.length > 0) {
-    return "Coming soon! Register now!"
+  if (event.starttime && (event.starttime.toDate() > today) && event.registrationOpen && event.formLink && event.formLink.length > 0) {
+    return "Coming soon! Register now!";
   }
-  if ((event.starttime.toDate() > today)) {
+  if (event.starttime && (event.starttime.toDate() > today)) {
     return "Coming soon!";
   }
+  if (!event.starttime && !event.endtime && event.registrationOpen && event.formLink && event.formLink.length > 0) {
+    return "Registration open!";
+  }
+
   return null;
 };
 
@@ -72,10 +77,10 @@ export const ViewAllEvents = () => {
 
     switch (filter) {
       case "date":
-        sortedEvents.sort((a, b) => b.starttime.seconds - a.starttime.seconds);
+        sortedEvents.sort((a, b) => (b.starttime?.seconds ?? 0) - (a.starttime?.seconds ?? 0));
         break;
       case "date-reverse":
-        sortedEvents.sort((a, b) => a.starttime.seconds - b.starttime.seconds);
+        sortedEvents.sort((a, b) => (a.starttime?.seconds ?? 0) - (b.starttime?.seconds ?? 0));
         break;
 
       case "likes":
@@ -98,22 +103,28 @@ export const ViewAllEvents = () => {
     return events.map((event) => (
       <Link key={event.id} to={`/event/${event.title}`}>
         <div className="ml-4 flex flex-col sm:flex-row gap-2">
-      <EventCard
-        event={event}
-        className="xl:scale-90"
-      />
-      <div className="w-full flex flex-col max-h-[350px]">
-      <div className="font-extrabold text-xl sm:text-3xl flex gap-3">{event.title} <LikeButton item={event} type="event" className="font-normal text-lg"/></div>
-      {isEventOngoing(event) && <p className="italic text-yellow-600 mb-2">{isEventOngoing(event)}</p>}
-      <p className="font-extralight mb-2 whitespace-normal overflow-hidden text-ellipsis line-clamp-6">{event.description}</p>
-      <hr className="w-full mt-auto border-[#151F33] border-2 mb-2"></hr>
-      <p><span className="font-bold">Type: </span><span>{event.type}</span></p>
-      <p><span className="font-bold">Starts: </span><span>{formatEventDate(event.starttime.toDate(), "long")}</span></p>   
-      <p className="mb-8"><span className="font-bold">Ends: </span><span>{formatEventDate(event.endtime.toDate(), "long")}</span></p>
-      </div>
-      </div>
+          <EventCard
+            event={event}
+            className="xl:scale-90"
+          />
+          <div className="w-full flex flex-col max-h-[350px]">
+            <div className="font-extrabold text-xl sm:text-3xl flex gap-3">{event.title} <LikeButton item={event} type="event" className="font-normal text-lg" /></div>
+            {isEventOngoing(event) && <p className="italic text-yellow-600 mb-2">{isEventOngoing(event)}</p>}
+            <p className="font-extralight mb-2 whitespace-normal overflow-hidden text-ellipsis line-clamp-6" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(event.description) }}></p>
+            <hr className="w-full mt-auto border-[#151F33] border-2 mb-2"></hr>
+            <p><span className="font-bold">Type: </span><span>{event.type}</span></p>
+            {
+              event.starttime &&
+              <p><span className="font-bold">Starts: </span><span>{formatEventDate(event.starttime.toDate(), "long")}</span></p>
+            }
+            {
+              event.endtime &&
+              <p className="mb-8"><span className="font-bold">Ends: </span><span>{formatEventDate(event.endtime.toDate(), "long")}</span></p>
+            }
+          </div>
+        </div>
       </Link>
-  ));
+    ));
   }
   useEffect(() => {
     const unsubscribe = subscribeToCollection("events", (res: { result: EventData[]; ids: any[]; }) => {
@@ -122,8 +133,8 @@ export const ViewAllEvents = () => {
           ...event,
           id: res.ids ? res.ids[index] : null,
         }));
-        setEvents(newevents.sort((a, b) => b.starttime.seconds - a.starttime.seconds));
-        setFilteredEvents(newevents.sort((a, b) => b.starttime.seconds - a.starttime.seconds));
+        setEvents(newevents.sort((a, b) => (b.starttime?.seconds ?? 0) - (a.starttime?.seconds ?? 0)));
+        setFilteredEvents(newevents.sort((a, b) => (b.starttime?.seconds ?? 0) - (a.starttime?.seconds ?? 0)));
       }
     });
 
@@ -164,36 +175,36 @@ export const ViewAllEvents = () => {
             <div className="absolute left-0 top-0 bottom-0 w-2 bg-[#151F33] rounded-full"></div>
             <div className="flex flex-col mt-4 ml-4">
               {filteredEvents.reduce((acc, event, index) => {
-          const eventDate = new Date(event.starttime.seconds * 1000);
-            const eventMonth = eventDate.toLocaleString('default', { month: 'short' }) + ', ' + eventDate.getFullYear();
+                const eventDate = event.starttime ? new Date(event.starttime.seconds * 1000) : null;
+                const eventMonth = eventDate ? eventDate.toLocaleString('default', { month: 'short' }) + ', ' + eventDate.getFullYear() : 'TBA';
 
-          if (index === 0 || eventMonth !== acc[acc.length - 1].month) {
-            acc.push({ month: eventMonth, events: [event] });
-          } else {
-            acc[acc.length - 1].events.push(event);
-          }
+                if (index === 0 || eventMonth !== acc[acc.length - 1].month) {
+                  acc.push({ month: eventMonth, events: [event] });
+                } else {
+                  acc[acc.length - 1].events.push(event);
+                }
 
-          return acc;
-              }, [] as { month: string, events: EventData[] }[]).map((group, groupIndex) => (
-          <div key={groupIndex} className="relative">
-            <div className={`absolute -left-[33px] top-0 w-10 h-10 ${group.events.some(isEventOngoing) ? 'bg-green-500 shadow-[0_0_10px_rgba(0,255,0,0.8)]' : 'bg-[#151F33]'} rounded-full flex`}>
-              <div className="m-auto bg-white w-3 h-3 rounded-full"></div>
-            </div>
-            <div className="text-white font-bold mb-2 ml-4 mt-2">{group.month}</div>
-            <div className="flex flex-col gap-4 mb-10">
-            {mapEvents(group.events)}
-            </div>
-          </div>
+                return acc;
+              }, [] as { month: string, events: EventData[] }[]).sort((a, b) => a.month === 'TBA' ? -1 : b.month === 'TBA' ? 1 : 0).map((group, groupIndex) => (
+                <div key={groupIndex} className="relative">
+                  <div className={`absolute -left-[33px] top-0 w-10 h-10 ${group.events.some(isEventOngoing) ? 'bg-green-500 shadow-[0_0_10px_rgba(0,255,0,0.8)]' : 'bg-[#151F33]'} rounded-full flex`}>
+                    <div className="m-auto bg-white w-3 h-3 rounded-full"></div>
+                  </div>
+                  <div className="text-white font-bold mb-2 ml-4 mt-2">{group.month}</div>
+                  <div className="flex flex-col gap-4 mb-10">
+                    {mapEvents(group.events)}
+                  </div>
+                </div>
               ))}
             </div>
           </div>
-        ): (
+        ) : (
           <div className="flex flex-col gap-4 mt-10 mb-10">
             {mapEvents(filteredEvents)}
           </div>
         )
-      
-      }
+
+        }
       </div>
     </div>
   );

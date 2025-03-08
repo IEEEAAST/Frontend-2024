@@ -61,16 +61,27 @@ export const Dashboard = () => {
   }, [userData]); // Ensure it runs when userData changes
 
   useEffect(() => {
-    // Fetch events if necessary (you can keep this as it is)
+    // Fetch events and sort by start time
     getCollection('events').then(res => {
       if (res.result) {
-        setEvents(res.result);
+        const sortedEvents = res.result.sort((a: EventData, b: EventData) => {
+          if (!a.starttime) return -1;
+          if (!b.starttime) return 1;
+          return a.starttime.toDate().getTime() - b.starttime.toDate().getTime();
+        });
+        setEvents(sortedEvents);
       }
     });
   }, []);
 
   const filterArticles = articles.slice(0, 3);
-  const filterEvents = events.slice(0, 3);
+  const filterEvents = events
+    .sort((a, b) => {
+      if (!a.starttime) return -1; // Place events without starttime at the beginning (New event with no date announced)
+      if (!b.starttime) return 1;
+      return b.starttime.toDate().getTime() - a.starttime.toDate().getTime(); // Sort by starttime descending
+    })
+    .slice(0, 3); // Take the 3 most recent events
 
   if (!articles || articles.length === 0) {
     return (
@@ -80,8 +91,8 @@ export const Dashboard = () => {
 
   return (
     <div className="flex flex-col items-center bg-[#000B21] text-white header">
-      <div className="h-[120px] w-full"></div>
-      <div className="w-full lg:min-h-screen flex justify-center items-center px-4 md:px-20 body">
+      {/* <div className="h-[120px] w-full"></div> */}
+      <div className="w-full lg:min-h-screen flex justify-center items-center px-4 mt-32 lg:mt-0 md:px-20 body">
         <div className="relative w-full lg:w-[1733px] lg:h-[810px] h-[400px] md:h-[520px] rounded-[38px] overflow-hidden">
           {/* Main Article Display */}
           <div className="absolute z-10 w-full lg:h-screen h-full bg-gradient-to-t from-[#000B21A5] via-transparent bottom-0"></div>
