@@ -42,8 +42,8 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event, events, setEvents, setSe
     schedule: event.schedule || [],
     gallery: event.gallery || [],
   });
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const onClose = () => setIsModalOpen(false);
+  const [modalVer, setModalVer] = useState<string|null>(null);
+  const onClose = () => setModalVer(null);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [enableColor, setEnableColor] = useState(false);
@@ -334,7 +334,7 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event, events, setEvents, setSe
               colorScheme='red'
               className='p-2 mt-4'
               fontSize='16px'
-              onClick={() => setEventData(event)}
+              onClick={() => setModalVer("revert")}
               isDisabled={eventData === event}
             >
               Revert Changes
@@ -344,17 +344,19 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event, events, setEvents, setSe
       </form>
       <div className='sticky top-4 self-start cursor-pointer' onClick={() => {
         eventData === event ? navigate(`/event/${eventData.title}`) :
-        setIsModalOpen(true)
+        setModalVer("save")
         }}>
         <EventCard className='max-w-fit' event={eventData} disabled />
       </div>
-      <Modal isOpen={isModalOpen} onClose={onClose} isCentered size={'xl'}>
+      <Modal isOpen={modalVer!=null} onClose={onClose} isCentered size={'xl'}>
         <ModalOverlay />
+        {
+          modalVer === "save" &&
         <ModalContent bg={"#151F33"}>
           <ModalHeader>Save Changes?</ModalHeader>
           <ModalCloseButton />
           <ModalBody >
-            <p>You are about to leave to go to the event page of <strong>{eventData.title}</strong>. Do you want to save your changes?</p>
+            <p>You are about to leave to go to the event page of <strong>{originalEventTitle}</strong>. Do you want to save your changes?</p>
           </ModalBody>
           <ModalFooter>
             <Button colorScheme="green" mr={3} onClick={handleSubmit}>
@@ -370,6 +372,26 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event, events, setEvents, setSe
             </Button>
           </ModalFooter>
         </ModalContent>
+        }
+                {
+          modalVer === "revert" &&
+        <ModalContent bg={"#151F33"}>
+          <ModalHeader>Revert Changes?</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody >
+            <p>Are you sure you want to revert your changes to <strong>{originalEventTitle}</strong>?</p>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="red" mr={3} onClick={()=>{setEventData(event);onClose()}}>
+              Revert
+            </Button>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+        }
+        
       </Modal>
     </div>
   );
