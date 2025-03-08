@@ -60,20 +60,23 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event, events, setEvents, setSe
     setEventData(event);
   }, [event]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-
-    // Handle datetime-local input for starttime and endtime
-    if (name === 'starttime' || name === 'endtime') {
-      if (value === '') return undefined;
-      const dateValue = value ? firebase.firestore.Timestamp.fromDate(new Date(value)) : null;
-      setEventData({ ...eventData, [name]: dateValue });
-    } else {
-      setEventData({ ...eventData, [name]: value });
-    }
-    if (name === 'type') {
-      const { type, ...rest } = eventData;
-      setEventData({ ...rest, type: value, cardColor: autoColorByTopic(value) });
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+            const starttimeInput = document.querySelector('input[name="starttime"]') as HTMLInputElement;
+            if (starttimeInput) {
+            console.log('Start Time:', starttimeInput.value);
+            }
+        // Handle datetime-local input for starttime and endtime
+        if (name === 'starttime' || name === 'endtime') {
+            if(value==='') return undefined;
+            const dateValue = value ? firebase.firestore.Timestamp.fromDate(new Date(value)) : null;
+            setEventData({ ...eventData, [name]: dateValue });
+        } else {
+            setEventData({ ...eventData, [name]: value });
+        }
+        if (name === 'type') {
+            const { type, cardColor, ...rest } = eventData;
+            setEventData({ ...rest, type: value, cardColor: enableColor?cardColor:autoColorByTopic(value) });
 
     }
   };
@@ -169,111 +172,111 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event, events, setEvents, setSe
             />
           </label>
 
-        </div>
-        <label className='flex flex-col'>
-          <span className='mb-2 font-semibold'>Location</span>
-          <input type="text"
-            name="location"
-            onChange={handleChange}
-            value={eventData.location || ''}
-            className='p-2 rounded bg-gray-800'
-          />
-        </label>
-        <label className='flex flex-col'>
-          <span className='mb-2 font-semibold'>Description</span>
-          <textarea
-            name="description"
-            value={eventData.description}
-            onChange={handleChange}
-            className='p-2 rounded bg-gray-800 h-40 resize-none customScrollbar'
-            required
-            placeholder='You can use markdown/rich text here by inserting tags! please don&apos;t XSS the site :( '
-          />
-        </label>
-        <div>
-          <label className='font semibold'>Cover Photo</label>
-          <input
-            type='file'
-            accept='image/*'
-            onChange={async (e) => {
-              if (e.target.files && e.target.files[0]) {
-                await uploadCover(e.target.files[0]);
-              }
-            }}
-            className='mt-1 block w-full text-white'
-            required={eventData.coverPhoto === '' || eventData.coverPhoto === undefined || eventData.coverPhoto === null}
-          />
-          {eventData.coverPhoto && (
-            <img src={eventData.coverPhoto} alt='Profile' className='mt-2 w-20 h-20 rounded-md' />
-          )}
-        </div>
-        <label className='flex flex-col'>
-          <span className='mb-2 font-semibold'>Type</span>
-          <select
-            name="type"
-            value={eventData.type || ''}
-            onChange={handleChange}
-            className='p-2 rounded bg-gray-800'
-            required
-          >
-            <option value="" disabled>Select a type</option>
-            {eventTypesWithColors.map((type) => (
-              <option key={type.type} value={type.type}>
-                {type.type}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className='flex flex-col'>
-          <span className='mb-2 font-semibold'>Start Time</span>
-          <input
-            type="datetime-local"
-            name="starttime"
-            value={convertDate(eventData.starttime ?? null) || ''}
-            onChange={handleChange}
-            className='p-2 rounded bg-gray-800'
-          />
-        </label>
-        <label className='flex flex-col'>
-          <span className='mb-2 font-semibold'>End Time</span>
-          <input
-            type="datetime-local"
-            name="endtime"
-            value={convertDate(eventData.endtime ?? null) || ''}
-            onChange={handleChange}
-            className='p-2 rounded bg-gray-800'
-          />
-        </label>
-        <label className='flex items-center gap-4'>
-          <span className='font-semibold'>Enable Custom Card Color</span>
-          <input
-            type="checkbox"
-            name="enableCustomColor"
-            className='p-2 rounded bg-gray-800'
-            checked={enableColor}
-            onChange={(e) => {
-              if (!e.target.checked) {
-                setColorPicker(eventData.cardColor);
-                setEventData({ ...eventData, cardColor: undefined });
-              }
-              else {
-                setEventData({ ...eventData, cardColor: colorPicker });
-              }
-              setEnableColor(e.target.checked);
-            }}
-          />
-        </label>
-        <label className='flex items-center gap-4'>
-          <span className='font-semibold'>Card Color</span>
-          <input
-            type="color"
-            name="cardColor"
-            value={enableColor ? eventData.cardColor : autoColorByTopic(eventData.type)}
-            onChange={handleChange}
-            className={`p-2 rounded bg-gray-800 h-12 ${!enableColor && 'opacity-25 cursor-not-allowed'}`}
-            disabled={!enableColor}
-          />
-        </label>
+            </div>
+            <label className='flex flex-col'>
+                <span className='mb-2 font-semibold'>Location</span>
+                <input type="text"
+                    name="location"
+                    onChange={handleChange}
+                    value={eventData.location}
+                    className='p-2 rounded bg-gray-800'
+                />
+            </label>
+            <label className='flex flex-col'>
+                <span className='mb-2 font-semibold'>Description</span>
+                <textarea 
+                    name="description" 
+                    value={eventData.description} 
+                    onChange={handleChange} 
+                    className='p-2 rounded bg-gray-800 h-40 resize-none customScrollbar'
+                    required
+                    placeholder='You can use markdown/rich text here by inserting tags! please don&apos;t XSS the site :( '
+                />
+            </label>
+            <div>
+                <label className='font semibold'>Cover Photo</label>
+                <input
+                    type='file'
+                    accept='image/*'
+                    onChange={async (e) => {
+                        if (e.target.files && e.target.files[0]) {
+                            await uploadCover(e.target.files[0]);
+                        }
+                    }}
+                    className='mt-1 block w-full text-white'
+                    required={eventData.coverPhoto === ''||eventData.coverPhoto === undefined||eventData.coverPhoto === null}
+                />
+                {eventData.coverPhoto && (
+                    <img src={eventData.coverPhoto} alt='Profile' className='mt-2 w-20 h-20 rounded-md' />
+                )}
+            </div>
+            <label className='flex flex-col'>
+                <span className='mb-2 font-semibold'>Type</span>
+                <select 
+                    name="type" 
+                    value={eventData.type || ''} 
+                    onChange={handleChange} 
+                    className='p-2 rounded bg-gray-800'
+                    required
+                >
+                    <option value="" disabled>Select a type</option>
+                    {eventTypesWithColors.map((type) => (
+                        <option key={type.type} value={type.type}>
+                            {type.type}
+                        </option>
+                    ))}
+                </select>
+            </label>
+            <label className='flex flex-col'>
+                <span className='mb-2 font-semibold'>Start Time</span>
+                <input 
+                    type="datetime-local" 
+                    name="starttime" 
+                    value={convertDate(eventData.starttime ?? null) || ''}
+                    onChange={handleChange} 
+                    className='p-2 rounded bg-gray-800'
+                />
+            </label>
+            <label className='flex flex-col'>
+                <span className='mb-2 font-semibold'>End Time</span>
+                <input 
+                    type="datetime-local" 
+                    name="endtime" 
+                    value={convertDate(eventData.endtime ?? null) || ''}
+                    onChange={handleChange} 
+                    className='p-2 rounded bg-gray-800'
+                />
+            </label>
+            <label className='flex items-center gap-4'>
+                <span className='font-semibold'>Enable Custom Card Color</span>
+                <input 
+                    type="checkbox" 
+                    name="enableCustomColor" 
+                    className='p-2 rounded bg-gray-800'
+                    checked={enableColor}
+                    onChange={(e) => {
+                        if(!e.target.checked){
+                            setColorPicker(eventData.cardColor);
+                            setEventData({...eventData,cardColor:undefined});
+                        }
+                        else{
+                            setEventData({...eventData,cardColor:colorPicker});
+                        }
+                        setEnableColor(e.target.checked);
+                    }}
+                />
+            </label>
+            <label className='flex items-center gap-4'>
+                <span className='font-semibold'>Card Color</span>
+                <input 
+                    type="color" 
+                    name="cardColor" 
+                    value={enableColor?eventData.cardColor:autoColorByTopic(eventData.type)} 
+                    onChange={handleChange}
+                    className={`p-2 rounded bg-gray-800 h-12 ${!enableColor && 'opacity-25 cursor-not-allowed'}`}
+                    disabled={!enableColor}
+                />
+            </label>
 
         <Accordion allowMultiple>
           <AccordionItem>

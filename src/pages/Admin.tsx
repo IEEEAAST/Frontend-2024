@@ -110,8 +110,13 @@ export const Admin = () => {
         ...event,
         id: eventsCollection.ids ? eventsCollection.ids[index] : null,
       }));
-      // console.log(eventsWithIds);
-      setEvents(eventsWithIds || []);
+      const sortedEvents = eventsWithIds?.sort((a, b) => {
+        if (!a.starttime) return -1;
+        if (!b.starttime) return 1;
+        return (b.starttime || 0) - (a.starttime || 0);
+      });
+      console.log(sortedEvents);
+      setEvents(sortedEvents || []);
     }
   };
 

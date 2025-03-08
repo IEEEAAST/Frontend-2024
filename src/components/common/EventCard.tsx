@@ -67,11 +67,11 @@ export const EventCard = ({ event, className, disabled }: EventCardProps) => {
       animate={controls}
     >
       <motion.div
-        className={`absolute w-full h-full backface-hidden px-[15px] ${'pt-[4px] sm:pt-[150px] md:pt-[160px] lg:pt-[190px] xl:pt-[13vw] xl:px-10'} text-center flex flex-col sm:justify-between`}
+        className={`pr-10 sm:pr-0 absolute w-full h-full backface-hidden px-[15px] ${'pt-[4px] sm:pt-[150px] md:pt-[160px] lg:pt-[190px] xl:pt-[13vw] xl:px-10'} text-center flex flex-col sm:justify-between`}
         style={{ backfaceVisibility: 'hidden' }}
       >
         <h3
-          className={`font-bold w-full text-left sm:text-center text-[23px] sm:text-[18px] md:text-[20px] lg:text-[23px] ${event.title.length > 20 ? "xl:text-[1.5vw]" : "xl:text-[2vw]"} sm:flex sm:justify-center sm:max-h-[20%`}
+          className={`overflow-hidden text-ellipsis whitespace-nowrap sm:whitespace-normal sm:overflow-visible font-bold w-full text-left sm:text-center text-[23px] sm:text-[18px] md:text-[20px] lg:text-[23px] ${event.title.length > 20 ? "xl:text-[1.5vw]" : "xl:text-[2vw]"} sm:flex sm:justify-center sm:max-h-[20%]`} 
 
         >
           {event.title}
