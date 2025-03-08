@@ -316,7 +316,7 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event, events, setEvents, setSe
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
-        <div className='flex gap-4 w-full items-center'>
+        <div className='flex gap-4 w-full items-center sticky bottom-0 bg-[#0B162A] p-4'>
           <LightMode>
             <Button 
               type="submit" 
@@ -329,6 +329,15 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event, events, setEvents, setSe
               isDisabled={uploading || saving || eventData === event}
               >
               Save
+            </Button>
+            <Button 
+              colorScheme='red'
+              className='p-2 mt-4'
+              fontSize='16px'
+              onClick={() => setEventData(event)}
+              isDisabled={eventData === event}
+            >
+              Revert Changes
             </Button>
           </LightMode>
         </div>
