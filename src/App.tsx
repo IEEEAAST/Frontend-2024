@@ -20,6 +20,7 @@ import { Profile } from "./pages/Profile";
 import UserData from "./interfaces/userData";
 import { ViewAllEvents } from "./pages/ViewAllEvents";
 import { NavBar } from "./components/common/navbar";
+import Footer from "./components/common/Footer";
 
 export const UserContext = createContext<{
   [x: string]: any;
@@ -116,6 +117,7 @@ function App() {
           <Route path="/events" element={<ViewAllEvents />}></Route>
           <Route path="/admin" element={<Admin />}></Route>
         </Routes>
+        <Footer />
       </AppConfigContext.Provider>
     </UserContext.Provider>
   );
