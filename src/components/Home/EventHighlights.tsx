@@ -81,8 +81,8 @@ const EventHighlights = () => {
       </div>
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Event</ModalHeader>
+        <ModalContent backgroundColor={"#151F33"}>
+          <ModalHeader>Event Highlight</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <img src={selectedImage} alt="Selected Image" className="object-cover w-full h-full border rounded-xl" />

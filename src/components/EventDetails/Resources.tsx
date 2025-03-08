@@ -1,27 +1,20 @@
 import { ResourceVideo } from './ResourcesVideo'
 import { ResourceNote } from './ResourcesNote'
-import {  IResources } from '../../interfaces/EventData'
+import { IResources } from '../../interfaces/EventData'
 import {
-    Table,
-    Thead,
-    Tr,
-    Th,
-    Flex,
-    TableContainer,
+  Table,
+  Thead,
+  Tr,
+  Th,
+  Flex,
+  TableContainer,
+} from '@chakra-ui/react'
 
-  } from '@chakra-ui/react'
-
-// interface Videos {
-//   videos: Ivideo[];
-// }
-
-  export const Resources : React.FC<IResources> = ({ videos, notes })  => {
-
-    return (
-
-        <Flex direction={"column"}>
-        <TableContainer marginBottom={"56px"} className='customScrollbar'>
-         {/* table for videos */}
+export const Resources : React.FC<IResources> = ({ videos, notes })  => {
+  return (
+    <Flex direction={"column"}>
+      <TableContainer marginBottom={"56px"} className='customScrollbar'>
+       {/* table for videos */}
         <Table variant='sm'>
           <Thead>
             <Tr>
@@ -29,16 +22,17 @@ import {
             </Tr>
           </Thead>
           <Tr>
-          <Flex>
-            {videos && videos.map((video) => (
-              <ResourceVideo thumbnail={video.thumbnail} name={video.name} length={video.length} speaker={video.speaker} url={video.url} />
-            ))}
-          </Flex>
+            <Flex>
+              {videos && videos.map((video) => (
+                <ResourceVideo thumbnail={video.thumbnail} name={video.name} length={video.length} speaker={video.speaker} url={video.url} />
+              ))}
+            </Flex>
           </Tr>
-        </Table></TableContainer>
+        </Table>
+      </TableContainer>
 
-        {/* table for notes */}
-        <TableContainer className='customScrollbar'>
+      {/* table for notes */}
+      <TableContainer className='customScrollbar'>
         <Table variant='sm'>
           <Thead>
             <Tr>
@@ -47,13 +41,13 @@ import {
           </Thead>
           <Tr>
            <Flex>
-           {notes && notes.map((note) => (
-              <ResourceNote thumbnail={note.thumbnail} name={note.name} url={note.url} />
-            ))}
+             {notes && notes.map((note) => (
+                <ResourceNote thumbnail={note.thumbnail} name={note.name} url={note.url} />
+              ))}
            </Flex>
           </Tr>
         </Table>
-        </TableContainer>
-        </Flex>
-    )
+      </TableContainer>
+    </Flex>
+  );
 }

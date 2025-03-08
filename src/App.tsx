@@ -1,11 +1,10 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { EventDetails } from "./pages/EventDetails";
 import { Home } from "./pages/Home";
 import { Article } from "./pages/Article";
 import "./App.css"; // Import CSS file
-import { ChakraProvider, Spinner } from '@chakra-ui/react'
-import theme from './theme'
+import { Spinner } from '@chakra-ui/react'
 import getDocument from "./firebase/getData"
 import { MailDesign } from "./pages/MailDesign";
 import { Onboarding } from "./pages/Onboarding";
@@ -21,6 +20,7 @@ import { Profile } from "./pages/Profile";
 import UserData from "./interfaces/userData";
 import { ViewAllEvents } from "./pages/ViewAllEvents";
 import { NavBar } from "./components/common/navbar";
+import Footer from "./components/common/Footer";
 
 export const UserContext = createContext<{
   [x: string]: any;
@@ -30,9 +30,9 @@ export const UserContext = createContext<{
   setUserId: React.Dispatch<React.SetStateAction<string | null>>;
 }>({
   userData: null,
-  setUserData: () => {},
+  setUserData: () => { },
   userId: null,
-  setUserId: () => {}
+  setUserId: () => { }
 });
 
 export const AppConfigContext = createContext<{
@@ -60,9 +60,6 @@ function App() {
     headsCarouselSettings: null as any | null,
     recruitingLink: null as string | null,
   });
-
-
-
 
   const fetchUser = async () => {
     try {
@@ -95,42 +92,34 @@ function App() {
     }
   }
 
-
-
-  
   useEffect(() => {
     fetchUser();
     fetchAppConfig();
   }, []);
 
-
-
-  return loading? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex "/></div> : (
-    <ChakraProvider disableGlobalStyle={true} theme={theme}>
-      
-        <UserContext.Provider value={{ userData, setUserData, userId, setUserId}}>
-        <AppConfigContext.Provider value={{appConfig}}>
-          <NavBar/>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/browse" element={<Dashboard />} />
-            <Route path="/event/:name" element={<EventDetails />} />
-            <Route path="/article/:name" element={<Article />} />
-            <Route path="/write" element={<WriteArticle />} />
-            <Route path="/mailconfirm" element={<MailDesign />} />
-            <Route path="/onboard" element={<Onboarding />} />
-            <Route path="/verify" element={<Verifying />} />
-            <Route path="/Signup" element={<SignUp />} />
-            <Route path="/signin" element={<Signin />} />
-            <Route path="/Profile/:name" element = {<Profile />} />
-            <Route path="/articles" element = {<ViewAllArticles />} />
-            <Route path="/events" element = {<ViewAllEvents/>}></Route>
-            <Route path="/admin" element = {<Admin/>}></Route>
-          </Routes>
-        </AppConfigContext.Provider>
-        </UserContext.Provider>
-
-    </ChakraProvider>
+  return loading ? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex " /></div> : (
+    <UserContext.Provider value={{ userData, setUserData, userId, setUserId }}>
+      <AppConfigContext.Provider value={{ appConfig }}>
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/browse" element={<Dashboard />} />
+          <Route path="/event/:name" element={<EventDetails />} />
+          <Route path="/article/:name" element={<Article />} />
+          <Route path="/write" element={<WriteArticle />} />
+          <Route path="/mailconfirm" element={<MailDesign />} />
+          <Route path="/onboard" element={<Onboarding />} />
+          <Route path="/verify" element={<Verifying />} />
+          <Route path="/Signup" element={<SignUp />} />
+          <Route path="/signin" element={<Signin />} />
+          <Route path="/Profile/:name" element={<Profile />} />
+          <Route path="/articles" element={<ViewAllArticles />} />
+          <Route path="/events" element={<ViewAllEvents />}></Route>
+          <Route path="/admin" element={<Admin />}></Route>
+        </Routes>
+        <Footer />
+      </AppConfigContext.Provider>
+    </UserContext.Provider>
   );
 }
 

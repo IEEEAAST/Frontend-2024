@@ -1,7 +1,4 @@
-import { getAuth } from "firebase/auth";
-import { app } from "./config";
-
-const auth = getAuth(app);
+import { app, auth } from "./config";
 
 const getUser = () => {
   return new Promise((resolve, reject) => {

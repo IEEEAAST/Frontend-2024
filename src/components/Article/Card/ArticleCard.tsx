@@ -1,10 +1,10 @@
 import { Avatar } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import saveicon from "../../../assets/bookmark-ribbon-white.png";
 import optionIcon from "../../../assets/more-ellipsis-white.png";
 import UserData from "../../../interfaces/userData";
 import ArticleData from "../../../interfaces/ArticleData";
 import { LikeButton } from "../../common/LikeButton";
+import { BookMarkButton } from "../../common/bookMarkButton";
 
 interface ArticleCardProps {
   article: ArticleData;
@@ -49,7 +49,7 @@ const ArticleCard = ({ article, author }: ArticleCardProps) => {
             <div className="flex items-center gap-[20px] lg:gap-[39px]">
               <LikeButton item={article} type="article" />
               <button>
-                <img src={saveicon} alt="save" />
+                <BookMarkButton item={article} />
               </button>
               <button>
                 <img src={optionIcon} alt="options" />

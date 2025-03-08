@@ -1,4 +1,4 @@
-.modalContainer{
+.modalContainer {
     position: fixed;
     z-index: 1;
     left: 0;
@@ -12,7 +12,8 @@
     justify-content: center;
     align-items: center;
 }
-.modalBackground{
+
+.modalBackground {
     background-color: #000B21;
     margin: 25px auto;
     padding: 20px;
@@ -21,7 +22,7 @@
     
 } 
 
-.modal-body textarea{
+.modal-body textarea {
     width: 90%;
     height: 350px;
     background-color: #000B21;
@@ -29,26 +30,25 @@
     color: white;
 }
 
-.modal-footer button{
+.modal-footer button {
     height: 45px;
     border-radius: 21px;
     margin: 10px;
 }
 
-.modal-cancel{
+.modal-cancel {
     width: 120px;
     border: 2px solid white;
     background-color: #000B21;
     color: white;
 }
 
-.modal-submit{
+.modal-submit {
     width: 155px;
     font-weight: bold;
 }
 
-
-.modal-footer button:hover{
+.modal-footer button:hover {
     cursor: pointer;
     padding-bottom: 5px;
 }

@@ -1,35 +1,41 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @font-face {
   font-family: "SF-Pro";
   src: url("./assets/fonts/SF-Pro.ttf");
 }
+
 @font-face {
   font-family: "SF-Pro-Text-Medium";
   src: url("./assets/fonts/SF-Pro-Text-Medium.otf");
 }
+
 @font-face {
   font-family: "SF-Pro-Display-Bold";
   src: url("./assets/fonts/SF-Pro-Display-Bold.otf");
 }
+
 @font-face {
   font-family: "SF-Pro-Text-Light";
   src: url("./assets/fonts/SF-Pro-Text-Light.otf");
 }
+
 @font-face {
   font-family: "SF-Pro-Display-Regular";
   src: url("./assets/fonts/SF-Pro-Display-Regular.otf");
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    background-color: #000B21;
-    color:white;
-    font-family: 'SF-Pro';
-  }
-.defaultButton{
+  margin: 0;
+  padding: 0;
+  background-color: #000B21;
+  color: white;
+  font-family: 'SF-Pro';
+}
+
+.defaultButton {
   background-color: white;
   color: black;
   font-size: 12pt;
@@ -42,7 +48,8 @@ body {
   height: 40px;
   border-radius: 40px;
 }
-.defaultButton:disabled{
+
+.defaultButton:disabled {
   background-color: #c2c2c2;
   color: #4c4c4c;
   cursor: not-allowed;
@@ -76,6 +83,7 @@ body {
 .customScrollbar::-webkit-scrollbar-thumb:hover {
   background: hsl(222, 52%, 12%);
 }
+
 html {
   scroll-behavior: smooth;
 }

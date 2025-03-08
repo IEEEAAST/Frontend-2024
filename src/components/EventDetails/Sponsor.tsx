@@ -16,17 +16,17 @@ interface SponsorProps {
   linksSocial: socialLinks;
 }
 
-  export const Sponsor = ({ sponsorImg, name, totalEventSponsored, linksSocial }: SponsorProps) => {
-        return (
-      <Tr>
+export const Sponsor = ({ sponsorImg, name, totalEventSponsored, linksSocial }: SponsorProps) => {
+  return (
+    <Tr>
       <Td><Box boxSize='sm' width={"50px"} height={"50px"}><Image src={sponsorImg} alt='test' width={"50px"} height={"50px;"}/></Box></Td>
       <Td fontFamily={'SF-Pro-Display-Regular'}>{name}</Td>
       <Td fontFamily={'SF-Pro-Display-Regular'}>{totalEventSponsored} Events</Td>
       <Td>
-      <Flex className="!space-x-5">
-      <Social links={linksSocial} />
+        <Flex className="!space-x-5">
+          <Social links={linksSocial} />
         </Flex>
-        </Td>
-      </Tr>
-  )
+      </Td>
+    </Tr>
+  );
 }

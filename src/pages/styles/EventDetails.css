@@ -1,66 +1,77 @@
-#eventPage{
+strong{
+    font-family: 'SF-Pro-Display-Bold';
+}
+#eventPage {
     width:100%;
     padding: 0px 20px 20px 20px;
     font-weight:300;
-    height:calc(100vh - 80px);
+    /*height:calc(100vh - 80px);*/
 }
 
-#eventName{
+#eventName {
     font-size: calc(24px + 3.5vw);
     font-family: 'SF-Pro-Display-Bold';
 
 }
-#eventDetailsFlex{
+
+#eventDetailsFlex {
     display:flex;
     justify-content: space-between;
-    align-items: center;
     min-width:calc(100% - 40px);
 }
-#eventNameWrapper{
+
+#eventNameWrapper {
     display:flex;
     flex-direction: column  ;
+    justify-content: flex-start;
     width: 55%;
 }
 
-#eventDetailsWrapper{
+#eventDetailsWrapper {
     display:flex;
     flex-direction: column;
     gap:20px;
     width:25%;
-    height:80%;
-
+    height:100%;
+    margin: 10px 0;
 }
-.iconButton{
+
+.iconButton {
     min-width: 35px;
     min-height: 35px;
     border-radius: 100%;
     outline:none;
     background-size: contain;
 }
-.chakra-tabs__tab{
+
+.chakra-tabs__tab {
     font-weight:300;
     font-family:'SF-Pro';
     width:110px;
     height:60px;
 }
-.chakra-tabs__tab[aria-selected="true"]{
+
+.chakra-tabs__tab[aria-selected="true"] {
     font-family:'SF-Pro-Display-Bold';
     font-size:14pt;
 }
-.tabsContainer{
+
+.tabsContainer {
     display:flex;
     overflow-x:auto;
 }
-@media (max-width:849px){
-.tabsContainer{
-    margin-top:8px;
-}
+
+@media (max-width:849px) {
+  .tabsContainer {
+      margin-top:8px;
+  }
 }
 
-.tabLabel{
+.tabLabel {
     display:block;
 }
-.iconButtonsWrapper{
+
+.iconButtonsWrapper {
     width:fit-content;
     padding:0px 15px;
     min-width:fit-content;
@@ -72,7 +83,8 @@
     height:75%;
     border-radius: 999px;
 }
-.plusButton{
+
+.plusButton {
     display:none;
     width:35px;
     background-size: contain;
@@ -81,22 +93,21 @@
     transform: translateX(-50%); 
 }
 
-@media (max-width: 672px){
-    .plusButton{
+@media (max-width: 672px) {
+    .plusButton {
         display:block;
         width:30px;
-
     }
-    .chakra-tabs__tablist .defaultButton{
+
+    .chakra-tabs__tablist .defaultButton {
         min-width:0px;
         height: fit-content;
         width: fit-content;
         background-color: transparent;
         margin-left:5px;
     }
-    .buttonText{
+
+    .buttonText {
         display: none;
     }
- 
-    
 }

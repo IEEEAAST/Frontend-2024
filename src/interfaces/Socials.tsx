@@ -1,5 +1,5 @@
 export default interface Socials {
-    instagram: string;
-    linkedin: string;
-    twitter: string;
+  instagram: string;
+  linkedin: string;
+  twitter: string;
 }
