@@ -94,8 +94,13 @@ export const Admin = () => {
         ...event,
         id: eventsCollection.ids ? eventsCollection.ids[index] : null,
       }));
-      console.log(eventsWithIds);
-      setEvents(eventsWithIds || []);
+      const sortedEvents = eventsWithIds?.sort((a, b) => {
+        if (!a.starttime) return -1;
+        if (!b.starttime) return 1;
+        return (b.starttime || 0) - (a.starttime || 0);
+      });
+      console.log(sortedEvents);
+      setEvents(sortedEvents || []);
     }
   };
 
@@ -146,7 +151,7 @@ export const Admin = () => {
                   <Avatar name={`${user.firstname} ${user.lastname}`} src={user.imgurl} />
                   <p>{user.firstname} {user.lastname}</p>
                     {user.id !== userId && (
-                    <button className='ml-auto rounded-full bg-red-600 w-6 h-6' onClick={()=>{openModal(user)}}>X</button>
+                    <button className='ml-auto rounded-full bg-red-600 w-6 h-6 min-w-6 min-h-6' onClick={()=>{openModal(user)}}>X</button>
                     )}
                   </div>
                 ))}
@@ -165,7 +170,7 @@ export const Admin = () => {
                   {events.map(event => (
                   <div key={event.id} className={`flex items-center p-2 gap-2 ${selectedEvent === event ? "bg-[#516182]" : "bg-[#0b162a]"} rounded-full cursor-pointer w-full`} onClick={() => setSelectedEvent(event)}>
                     <p>{event.title}</p>
-                    <button className='ml-auto rounded-full bg-red-600 w-6 h-6' onClick={()=>{openModal(event)}}>X</button>
+                    <button className='ml-auto rounded-full bg-red-600 w-6 h-6 min-w-6 min-h-6' onClick={()=>{openModal(event)}}>X</button>
                   </div>
                   ))}
                     <button 

@@ -70,8 +70,8 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
             setEventData({ ...eventData, [name]: value });
         }
         if (name === 'type') {
-            const { type, ...rest } = eventData;
-            setEventData({ ...rest, type: value, cardColor: autoColorByTopic(value) });
+            const { type, cardColor, ...rest } = eventData;
+            setEventData({ ...rest, type: value, cardColor: enableColor?cardColor:autoColorByTopic(value) });
 
         }
     };
@@ -150,7 +150,7 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
                 <input type="text"
                     name="location"
                     onChange={handleChange}
-                    value={eventData.location || undefined}
+                    value={eventData.location}
                     className='p-2 rounded bg-gray-800'
                 />
             </label>

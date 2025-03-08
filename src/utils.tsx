@@ -14,7 +14,7 @@ export const eventTypesWithColors = [
     { type: "Game", color: "#b83232" },
     { type: "Media", color: "#588CD3" },
     { type: "Mobile", color: "#eb9131" },
-    { type: "Other", color: "#4f3b29" },
+    { type: "Other", color: " " },
     { type: "Python", color: "#e8d36b" },
     { type: "Security", color: "#81AA34" },
     { type: "Technical", color: "#A3A3A3" },
