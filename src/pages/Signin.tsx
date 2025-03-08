@@ -1,5 +1,5 @@
 import { useState, ChangeEvent, FormEvent } from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Input, FormControl, FormErrorMessage } from "@chakra-ui/react";
 import signIn from "../firebase/signin";
 
@@ -32,20 +32,20 @@ export const Signin = () => {
   const goback = () => {
     window.open("/", "_self")
   }
-  
-  const handleSubmit = async(event: FormEvent<HTMLFormElement>) => {
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-      setShowError(false);
-      await signIn(formData.email, formData.password).then (res => {
-          if (!res.error)
-                goback();
-          else {
-            setShowError(true);
-            setErrorMessage(res.error);
-          }   
-        }
-      )
-    };
+    setShowError(false);
+    await signIn(formData.email, formData.password).then(res => {
+      if (!res.error)
+        goback();
+      else {
+        setShowError(true);
+        setErrorMessage(res.error);
+      }
+    }
+    )
+  };
 
   return (
     <div>
@@ -54,12 +54,12 @@ export const Signin = () => {
       }}></div>
       <div className="form-container">
         <div className="p-20 h-screen">
-          <div className="max-w-[600px] mt-40 max-sm:mt-10" style={{ }}>
+          <div className="max-w-[600px] mt-40 max-sm:mt-10" style={{}}>
             <h1 className="text-4xl sm:text-4xl mb-8" style={{ fontWeight: 'bold' }}>
               Let's Sign you in!
             </h1>
             <form className="" onSubmit={handleSubmit}>
-              <FormControl mb={10} isInvalid={ showError }>
+              <FormControl mb={10} isInvalid={showError}>
                 <Input
                   type="email"
                   id="email"
@@ -74,10 +74,10 @@ export const Signin = () => {
                     border: 'none',
                     borderBottom: '1px solid rgb(4, 4, 62)',
                     outline: 'none',
-                    
+
                   }}
                 />
-              
+
                 <Input
                   type="password"
                   id="password"
@@ -95,7 +95,7 @@ export const Signin = () => {
                   }}
                 />
 
-                { showError && (
+                {showError && (
                   <FormErrorMessage>
                     {errorMessage}
                   </FormErrorMessage>
@@ -103,26 +103,27 @@ export const Signin = () => {
               </FormControl>
 
               {/* //button divs */}
-              <div className = "flex flex-nowrap"> 
+              <div className="flex flex-nowrap">
                 <div className="pt-8 flex flex-nowrap items-center gap-4 flex-col">
                   <div className="flex flex-col sm:flex-row items-center gap-2">
                     <button style={{
-                    background: 'transparent',
-                    padding: '8px',
-                    width: '120px',
-                    fontSize: '11px',
-                    border: '2px solid #fff',
-                    borderRadius: '20px',
-                    color: '#fff',
-                    textAlign: 'center',
+                      background: 'transparent',
+                      padding: '8px',
+                      width: '120px',
+                      fontSize: '11px',
+                      border: '2px solid #fff',
+                      borderRadius: '20px',
+                      color: '#fff',
+                      textAlign: 'center',
                     }} onClick={goback}>
-                    Cancel
+                      Cancel
                     </button>
-                     <button className="defaultButton ml-2" style = {{fontSize: '11px',
-                        width: '155px',
-                        height: '35px',
-                     }}>
-                        Sign In
+                    <button className="defaultButton ml-2" style={{
+                      fontSize: '11px',
+                      width: '155px',
+                      height: '35px',
+                    }}>
+                      Sign In
                     </button>
                   </div>
                   <Link to="/Signup" className="text-blue-500">Don't have an account yet? Sign up!</Link>

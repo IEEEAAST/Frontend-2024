@@ -69,7 +69,7 @@ export const Admin = () => {
       // It's an event
       await deleteDocument('events', item.id);
       setEvents(events.filter(event => event.id !== item.id));
-      
+
       if (selectedEvent?.id === item.id) {
         setSelectedEvent(null);
       }
@@ -167,9 +167,9 @@ export const Admin = () => {
                         <LightMode>
                           <IconButton
                             aria-label='Delete User'
-                            className='ml-auto' 
+                            className='ml-auto'
                             variant='outline'
-                            size='sm' 
+                            size='sm'
                             isRound={true}
                             colorScheme='red'
                             fontSize='20px'
@@ -197,17 +197,17 @@ export const Admin = () => {
                   {events.map(event => (
                     <div key={event.id} className={`flex items-center min-w-48 p-2 gap-2 ${selectedEvent === event ? "bg-[#516182]" : "bg-[#0b162a]"} rounded-md cursor-pointer mr-2`} onClick={() => setSelectedEvent(event)}>
                       <p>{event.title}</p>
-                      <LightMode><IconButton 
+                      <LightMode><IconButton
                         aria-label='Delete Event'
-                        className='ml-auto' 
-                        size='sm' 
-                        colorScheme='red' 
-                        borderRadius='full' 
+                        className='ml-auto'
+                        size='sm'
+                        colorScheme='red'
+                        borderRadius='full'
                         variant='outline'
                         fontSize='20px'
                         icon={<MdDeleteForever />}
                         onClick={() => openModal(event)}
-                        /></LightMode>
+                      /></LightMode>
                     </div>
                   ))}
                   <IconButton
@@ -240,10 +240,10 @@ export const Admin = () => {
                 </div>
                 <div className='w-full min-h-[63vh] overflow-y-auto max-h-[63vh] overflow-x-hidden customScrollbar'>
                   {selectedEvent && (
-                    <AdminEvent 
-                      event={selectedEvent} 
+                    <AdminEvent
+                      event={selectedEvent}
                       events={events}
-                      setEvents={events => setEvents(events)} 
+                      setEvents={events => setEvents(events)}
                       setSelectedEvent={event => setSelectedEvent(event)}
                     />
                   )}

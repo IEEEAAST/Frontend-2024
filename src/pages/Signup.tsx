@@ -49,12 +49,12 @@ export const SignUp = () => {
       const storedFormData = {
         firstname: formData.firstName,
         lastname: formData.lastName,
-        desc:"",
+        desc: "",
         email: formData.email,
-        likes: {events:[],articles:[]},
+        likes: { events: [], articles: [] },
         followers: [],
-        roles:[],
-        following:{events:[],users:[]}
+        roles: [],
+        following: { events: [], users: [] }
       };
       const res = await register(formData.email, formData.password);
       await setData("users", storedFormData, res.result?.user.uid);
