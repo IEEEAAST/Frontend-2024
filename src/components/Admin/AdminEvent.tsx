@@ -325,13 +325,18 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event, events, setEvents, setSe
               className='p-2 mt-4'
               fontSize='16px'
               leftIcon={<MdSave />}
-              isLoading={uploading || saving}>
+              isLoading={uploading || saving}
+              isDisabled={uploading || saving || eventData === event}
+              >
               Save
             </Button>
           </LightMode>
         </div>
       </form>
-      <div className='sticky top-4 self-start cursor-pointer' onClick={() => setIsModalOpen(true)}>
+      <div className='sticky top-4 self-start cursor-pointer' onClick={() => {
+        eventData === event ? navigate(`/event/${eventData.title}`) :
+        setIsModalOpen(true)
+        }}>
         <EventCard className='max-w-fit' event={eventData} disabled />
       </div>
       <Modal isOpen={isModalOpen} onClose={onClose} isCentered size={'xl'}>
