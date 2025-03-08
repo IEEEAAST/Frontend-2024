@@ -1,59 +1,64 @@
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import firebase from "firebase/compat/app";
 import { EventData } from '../../interfaces/EventData';
 import addStorage from '../../firebase/addStorage';
-import { Accordion, AccordionItem, AccordionButton, Spinner, AccordionIcon, AccordionPanel } from '@chakra-ui/react';
-import {Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button} from '@chakra-ui/react';
+import { Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, LightMode } from '@chakra-ui/react';
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button } from '@chakra-ui/react';
 import AdminSchedule from './AdminSchedule';
 import { AdminSponsors } from './AdminSponsors';
 import { AdminResources } from './AdminResources';
 import { AdminGallery } from './AdminGallery';
 import updateData from '../../firebase/updateData';
 import addDocument from '../../firebase/addData';
-import {Link, useNavigate} from 'react-router-dom';
-import { eventTypesWithColors,autoColorByTopic } from '../../utils';
+import { Link, useNavigate } from 'react-router-dom';
+import { eventTypesWithColors, autoColorByTopic } from '../../utils';
 import { EventCard } from '../common/EventCard';
+import { MdSave } from 'react-icons/md';
 
 interface AdminEventProps {
-    event: EventData;
+  event: EventData;
+  events: EventData[];
+  setEvents: (events: EventData[]) => void;
+  setSelectedEvent: (event: EventData) => void;
 }
 
-const convertDate = (date:firebase.firestore.Timestamp|null) => {
-    return date?.toDate().toISOString().slice(0, 16)||null;
+const convertDate = (date: firebase.firestore.Timestamp | null) => {
+  return date?.toDate().toISOString().slice(0, 16) || null;
 }
 
-const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
-    const navigate = useNavigate();
-    const originalEventTitle=event.title;
-    const [eventData, setEventData] = useState<EventData>({
-        ...event,
-        title: event.title || '',
-        formLink: event.formLink || '',
-        description: event.description || '',
-        type: event.type || eventTypesWithColors[0].type,
-        starttime: event.starttime || null,
-        endtime: event.endtime || null,
-        coverPhoto: event.coverPhoto || '',
-        registrationOpen: event.registrationOpen || false,
-        schedule: event.schedule || [],
-        gallery: event.gallery || [],
-    });
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const onClose = () => setIsModalOpen(false);
-    const [uploading, setUploading] = useState(false);
-    const [enableColor, setEnableColor] = useState(false);
-    const [colorPicker, setColorPicker] = useState<string | undefined>(undefined); //This only exists to save the selected color the put it back if you disable then re-enable the color picker
-    useEffect(() => {
-        const fileInput = document.querySelector('input[type="file"]');
-        if (fileInput) {
-            (fileInput as HTMLInputElement).value = '';
-        }
-    }, [event]);
+const AdminEvent: React.FC<AdminEventProps> = ({ event, events, setEvents, setSelectedEvent }) => {
+  const navigate = useNavigate();
+  const originalEventTitle = event.title;
+  const [eventData, setEventData] = useState<EventData>({
+    ...event,
+    title: event.title || '',
+    formLink: event.formLink || '',
+    description: event.description || '',
+    type: event.type || eventTypesWithColors[0].type,
+    starttime: event.starttime || null,
+    endtime: event.endtime || null,
+    coverPhoto: event.coverPhoto || '',
+    registrationOpen: event.registrationOpen || false,
+    schedule: event.schedule || [],
+    gallery: event.gallery || [],
+  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const onClose = () => setIsModalOpen(false);
+  const [uploading, setUploading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [enableColor, setEnableColor] = useState(false);
+  const [colorPicker, setColorPicker] = useState<string | undefined>(undefined); //This only exists to save the selected color the put it back if you disable then re-enable the color picker
+  useEffect(() => {
+    const fileInput = document.querySelector('input[type="file"]');
+    if (fileInput) {
+      (fileInput as HTMLInputElement).value = '';
+    }
+  }, [event]);
 
-    useEffect(() => {
-        setEnableColor(event.cardColor !== undefined);
-        setEventData(event);
-    }, [event]);
+  useEffect(() => {
+    setEnableColor(event.cardColor !== undefined);
+    setEventData(event);
+  }, [event]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -73,76 +78,99 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
             const { type, cardColor, ...rest } = eventData;
             setEventData({ ...rest, type: value, cardColor: enableColor?cardColor:autoColorByTopic(value) });
 
+    }
+  };
+
+  // Submit event data form
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
+    e.preventDefault();
+    const { id, ...eventDataWithoutId } = eventData;
+    setSaving(true);
+
+    if (id) {
+      const { error } = await updateData('events', id, eventDataWithoutId, enableColor ? [] : ["cardColor"]);
+      if (error) {
+        console.error(error);
+        alert('Error saving: ' + error);
+      } else {
+        if (confirm('Event updated successfully, would you like to navigate to the event page?')) {
+          navigate(`/event/${eventData.title}`);
         }
-    };
-
-    const handleSubmit = async (e: React.FormEvent): Promise<void> => {
-        e.preventDefault();
-        const { id, ...eventDataWithoutId } = eventData;
-
-
-        if (id) {
-            const { error } = await updateData('events', id, eventDataWithoutId, enableColor ? [] : ["cardColor"]);
-            if (error) {
-                console.error(error);
-            } else {
-                window.alert('Event updated successfully');
-                navigate(`/event/${eventData.title}`);
-
-            }
-        } else {
-            const { error } = await addDocument('events', eventDataWithoutId);
-            if (error) {
-                console.error(error);
-            } else {
-                window.alert('Event added successfully');
-                navigate(`/event/${eventData.title}`);
-            }
+      }
+    } else {
+      const { result, error } = await addDocument('events', eventDataWithoutId);
+      if (error) {
+        console.error(error);
+        alert('Error creating: ' + error);
+      } else { // Get the new ID and use it to select the created event
+        
+        const newEventData = {
+          ...eventData,
+          id: result?.id || null
         }
-    };
 
-    const uploadCover = async (file: File) => {
-        setUploading(true);
-        await addStorage(file, `events/${eventData.title}`).then((res) => {
-            setUploading(false);
-            setEventData({ ...eventData, coverPhoto: res.link });
-        });
-    };
+        setEvents([
+          ...events,
+          newEventData
+        ]);
 
-    return (
-        <div className='flex justify-between'>
-        <form onSubmit={handleSubmit} className='flex flex-col gap-4 p-4  rounded shadow-md w-full'>
-            <label className='flex flex-col'>
-                <span className='mb-2 font-semibold'>Title</span>
-                <input 
-                    type="text" 
-                    name="title" 
-                    onChange={handleChange} 
-                    value={eventData.title || ''} 
-                    className='p-2 rounded bg-gray-800'
-                    required
-                />
-            </label>
-            <div className='flex gap-4'>
-            <label className='flex flex-col'>
-                <span className='mb-2 font-semibold'>Form Link</span>
-                <input type="text"
-                    name="formLink"
-                    onChange={handleChange}
-                    value={eventData.formLink || ''}
-                    className='p-2 rounded bg-gray-800'
-                    required={eventData.registrationOpen}
-                />
-            </label>
-            <label className='flex h-fit gap-2 mb-auto mt-10'>
-                <span className='font-semibold'>Registration Open?</span>
-                <input type="checkbox"
-                    name="registrationOpen"
-                    checked={eventData.registrationOpen}
-                    onChange={(e) => setEventData({ ...eventData, registrationOpen: e.target.checked })}
-                    className='p-2 rounded bg-gray-800 w-6'
-                />
-            </label>
+        setEventData(newEventData);
+
+        setSelectedEvent(newEventData);
+
+
+        if (confirm('Event created successfully, would you like to navigate to the event page?')) {
+          navigate(`/event/${eventData.title}`);
+        }
+      }
+    }
+
+    setSaving(false);
+  };
+
+  // Upload event cover image
+  const uploadCover = async (file: File) => {
+    setUploading(true);
+    await addStorage(file, `events/${eventData.title}`).then((res) => {
+      setUploading(false);
+      setEventData({ ...eventData, coverPhoto: res.link });
+    });
+  };
+
+  return (
+    <div className='flex justify-between'>
+      <form onSubmit={handleSubmit} className='flex flex-col gap-4 p-4  rounded shadow-md w-full'>
+        <label className='flex flex-col'>
+          <span className='mb-2 font-semibold'>Title</span>
+          <input
+            type="text"
+            name="title"
+            onChange={handleChange}
+            value={eventData.title || ''}
+            className='p-2 rounded bg-gray-800'
+            required
+          />
+        </label>
+        <div className='flex gap-4'>
+          <label className='flex flex-col'>
+            <span className='mb-2 font-semibold'>Form Link</span>
+            <input type="text"
+              name="formLink"
+              onChange={handleChange}
+              value={eventData.formLink || ''}
+              className='p-2 rounded bg-gray-800'
+              required={eventData.registrationOpen}
+            />
+          </label>
+          <label className='flex h-fit gap-2 mb-auto mt-10'>
+            <span className='font-semibold'>Registration Open?</span>
+            <input type="checkbox"
+              name="registrationOpen"
+              checked={eventData.registrationOpen}
+              onChange={(e) => setEventData({ ...eventData, registrationOpen: e.target.checked })}
+              className='p-2 rounded bg-gray-800 w-6'
+            />
+          </label>
 
             </div>
             <label className='flex flex-col'>
@@ -250,79 +278,87 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event }) => {
                 />
             </label>
 
-            <Accordion allowMultiple>
-                <AccordionItem>
-                    <AccordionButton>
-                        Schedule
-                        <AccordionIcon />
-                    </AccordionButton>
-                    <AccordionPanel pb={4}>
-                    <AdminSchedule event={eventData} setEvent={setEventData} />
-                    </AccordionPanel>
-                </AccordionItem>
-                <AccordionItem>
-                    <AccordionButton>
-                        Sponsors
-                        <AccordionIcon />
-                    </AccordionButton>
-                    <AccordionPanel pb={4}>
-                        <AdminSponsors event={eventData} setEvent={setEventData}/>
-                    </AccordionPanel>
-                </AccordionItem>
-                <AccordionItem>
-                    <AccordionButton>
-                        Resources
-                        <AccordionIcon />
-                    </AccordionButton>
-                    <AccordionPanel pb={4}>
-                        <AdminResources event={eventData} setEvent={setEventData} setUploading={setUploading} />
-                    </AccordionPanel>
-                </AccordionItem>
-                <AccordionItem>
-                    <AccordionButton>
-                        Gallery
-                        <AccordionIcon />
-                    </AccordionButton>
-                    <AccordionPanel pb={4}>
-                        <AdminGallery event={eventData} setEvent={setEventData} setUploading={setUploading} />
-                    </AccordionPanel>
-                </AccordionItem>
-            </Accordion>
-            <div className='flex gap-4 w-full items-center'>
-            <button type="submit" className={`p-2 mt-4 bg-blue-500 text-white rounded hover:bg-blue-600 ${uploading && "opacity-25 cursor-not-allowed"}`} disabled={uploading}>
-                Submit
-            </button>
-            <Spinner size='lg' hidden={!uploading} className='mt-4'/>
-            </div>
-        </form>
-        <div className='sticky top-4 self-start cursor-pointer' onClick={() => setIsModalOpen(true)}>
-            <EventCard event={eventData} disabled/>
+        <Accordion allowMultiple>
+          <AccordionItem>
+            <AccordionButton>
+              Schedule
+              <AccordionIcon />
+            </AccordionButton>
+            <AccordionPanel pb={4}>
+              <AdminSchedule event={eventData} setEvent={setEventData} />
+            </AccordionPanel>
+          </AccordionItem>
+          <AccordionItem>
+            <AccordionButton>
+              Sponsors
+              <AccordionIcon />
+            </AccordionButton>
+            <AccordionPanel pb={4}>
+              <AdminSponsors event={eventData} setEvent={setEventData} />
+            </AccordionPanel>
+          </AccordionItem>
+          <AccordionItem>
+            <AccordionButton>
+              Resources
+              <AccordionIcon />
+            </AccordionButton>
+            <AccordionPanel pb={4}>
+              <AdminResources event={eventData} setEvent={setEventData} setUploading={setUploading} />
+            </AccordionPanel>
+          </AccordionItem>
+          <AccordionItem>
+            <AccordionButton>
+              Gallery
+              <AccordionIcon />
+            </AccordionButton>
+            <AccordionPanel pb={4}>
+              <AdminGallery event={eventData} setEvent={setEventData} setUploading={setUploading} />
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
+        <div className='flex gap-4 w-full items-center'>
+          <LightMode>
+            <Button 
+              type="submit" 
+              loadingText={uploading? 'Uploading': 'Saving'}
+              colorScheme='blue'
+              className='p-2 mt-4'
+              fontSize='16px'
+              leftIcon={<MdSave />}
+              isLoading={uploading || saving}>
+              Save
+            </Button>
+          </LightMode>
         </div>
-        <Modal isOpen={isModalOpen} onClose={onClose} isCentered size={'xl'}>
-            <ModalOverlay />
-            <ModalContent bg={"#151F33"}>
-            <ModalHeader>Save Changes?</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody >
-                    <p>You are about to leave to go to the event page of <strong>{eventData.title}</strong>. Do you want to save your changes?</p>
-            </ModalBody>
-            <ModalFooter>
-                <Button colorScheme="green" mr={3} onClick={handleSubmit}>
-                Save Changes
-                </Button>
-                <Link to={`/event/${originalEventTitle}`} className='text-white'>
-                    <Button colorScheme="red" mr={3}>
-                        Go Without Saving
-                    </Button>
-                </Link>
-                <Button colorScheme="blue" mr={3} onClick={onClose}>
-                Close
-                </Button>
-            </ModalFooter>
-            </ModalContent>
-        </Modal>
-        </div>
-    );
+      </form>
+      <div className='sticky top-4 self-start cursor-pointer' onClick={() => setIsModalOpen(true)}>
+        <EventCard className='max-w-fit' event={eventData} disabled />
+      </div>
+      <Modal isOpen={isModalOpen} onClose={onClose} isCentered size={'xl'}>
+        <ModalOverlay />
+        <ModalContent bg={"#151F33"}>
+          <ModalHeader>Save Changes?</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody >
+            <p>You are about to leave to go to the event page of <strong>{eventData.title}</strong>. Do you want to save your changes?</p>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="green" mr={3} onClick={handleSubmit}>
+              Save Changes
+            </Button>
+            <Link to={`/event/${originalEventTitle}`} className='text-white'>
+              <Button colorScheme="red" mr={3}>
+                Go Without Saving
+              </Button>
+            </Link>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </div>
+  );
 };
 
 export default AdminEvent;

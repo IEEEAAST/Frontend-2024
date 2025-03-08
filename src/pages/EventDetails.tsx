@@ -1,11 +1,10 @@
 import "../App.css";
 import "./styles/EventDetails.css";
 import { Link, useParams } from "react-router-dom";
-import { useState, useEffect, useCallback, useContext } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Sponsors } from "../components/EventDetails/Sponsors";
 import { Resources } from "../components/EventDetails/Resources";
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Spinner, Tooltip } from "@chakra-ui/react";
-import Bell from "../assets/notification-bell-white@2x.png";
 import PlusIcon from "../assets/plus.png";
 import { Schedule } from "../components/EventDetails/schedule";
 import Gallery from "../components/EventDetails/Gallery";
@@ -25,11 +24,8 @@ export const EventDetails = () => {
   const [sponsorIds, setSponsorIDs] = useState<IsponsorsIds>();
   const [isResourcesEnabled, setIsResourcesEnabled] = useState(false);
   const [isSponsorEnabled, setSponsorEnabled] = useState(false);
-  const [speakers, setSpeakers] = useState<IspksIds>();
+  const [_speakers, setSpeakers] = useState<IspksIds>();
   const [schedule, setSchedule] = useState<scheduleItem[]>([]);
-  const [isAnimating, setIsAnimating] = useState(false);
-
-
 
 
   const formatEventDate = (date: Date, format: string) => {

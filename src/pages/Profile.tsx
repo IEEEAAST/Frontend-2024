@@ -31,7 +31,7 @@ import getDocument from "../firebase/getData";
 import ArticleCard from "../components/Article/Card/ArticleCard.tsx"
 import subscribeToCollection from "../firebase/subscribeToCollection.js";
 import ArticleData from "../interfaces/ArticleData.tsx";
-import { toggleFollow } from "../utils.tsx";
+import { toggleFollow } from "../utils.ts";
 import UserData from "../interfaces/userData.tsx";
 
 interface currentUserData {
@@ -58,7 +58,7 @@ export const Profile = () => {
   const [selectedUserData, setSelectedUserData]= useState<UserData>();
 
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
-  const [edit, setEdit] = useState<boolean>(false);
+  const [_edit, setEdit] = useState<boolean>(false);
   const [self, setSelf] = useState<boolean>(false);
   const [articles, setArticles]= useState<ArticleData[]>();
   const { userData, setUserData, userId } = useContext(UserContext);

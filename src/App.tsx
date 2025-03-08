@@ -29,9 +29,9 @@ export const UserContext = createContext<{
   setUserId: React.Dispatch<React.SetStateAction<string | null>>;
 }>({
   userData: null,
-  setUserData: () => {},
+  setUserData: () => { },
   userId: null,
-  setUserId: () => {}
+  setUserId: () => { }
 });
 
 export const AppConfigContext = createContext<{
@@ -90,34 +90,34 @@ function App() {
       console.error("Error fetching app config:", error);
     }
   }
-  
+
   useEffect(() => {
     fetchUser();
     fetchAppConfig();
   }, []);
 
-  return loading? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex "/></div> : (
-      <UserContext.Provider value={{ userData, setUserData, userId, setUserId}}>
-        <AppConfigContext.Provider value={{appConfig}}>
-          <NavBar/>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/browse" element={<Dashboard />} />
-            <Route path="/event/:name" element={<EventDetails />} />
-            <Route path="/article/:name" element={<Article />} />
-            <Route path="/write" element={<WriteArticle />} />
-            <Route path="/mailconfirm" element={<MailDesign />} />
-            <Route path="/onboard" element={<Onboarding />} />
-            <Route path="/verify" element={<Verifying />} />
-            <Route path="/Signup" element={<SignUp />} />
-            <Route path="/signin" element={<Signin />} />
-            <Route path="/Profile/:name" element = {<Profile />} />
-            <Route path="/articles" element = {<ViewAllArticles />} />
-            <Route path="/events" element = {<ViewAllEvents/>}></Route>
-            <Route path="/admin" element = {<Admin/>}></Route>
-          </Routes>
-        </AppConfigContext.Provider>
-      </UserContext.Provider>
+  return loading ? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex " /></div> : (
+    <UserContext.Provider value={{ userData, setUserData, userId, setUserId }}>
+      <AppConfigContext.Provider value={{ appConfig }}>
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/browse" element={<Dashboard />} />
+          <Route path="/event/:name" element={<EventDetails />} />
+          <Route path="/article/:name" element={<Article />} />
+          <Route path="/write" element={<WriteArticle />} />
+          <Route path="/mailconfirm" element={<MailDesign />} />
+          <Route path="/onboard" element={<Onboarding />} />
+          <Route path="/verify" element={<Verifying />} />
+          <Route path="/Signup" element={<SignUp />} />
+          <Route path="/signin" element={<Signin />} />
+          <Route path="/Profile/:name" element={<Profile />} />
+          <Route path="/articles" element={<ViewAllArticles />} />
+          <Route path="/events" element={<ViewAllEvents />}></Route>
+          <Route path="/admin" element={<Admin />}></Route>
+        </Routes>
+      </AppConfigContext.Provider>
+    </UserContext.Provider>
   );
 }
 
