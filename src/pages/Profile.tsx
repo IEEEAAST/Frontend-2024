@@ -33,6 +33,7 @@ import subscribeToCollection from "../firebase/subscribeToCollection.js";
 import ArticleData from "../interfaces/ArticleData.tsx";
 import { toggleFollow } from "../utils.ts";
 import UserData from "../interfaces/userData.tsx";
+import { SocialIcon } from "../components/common/SocialIcon.tsx";
 
 interface currentUserData {
   mobile: string;
@@ -285,12 +286,19 @@ export const Profile = () => {
               <Text className="text-sm">{selectedUserData?.followers?.length || 0} Followers</Text>
               •︎
               <Text className="text-sm">{selectedUserData?.following?.users?.length || 0} Following</Text>
+              <div className="flex">
+                {selectedUserData?.socials?.map((social, index) => {
+                  return (
+                    <SocialIcon key={index} social={social} />
+                  );
+                })}
+                </div>
               </div>
               </div>
               <div className="flex justify-center flex-wrap-reverse  w-full lg:justify-end ">
               <TabList>
                 <Tab>Articles</Tab>
-                <Tab>Contributions</Tab>
+                {/*<Tab>Contributions</Tab> disabled for now*/ }
                 <Tab>About</Tab>
                 {/*self && <Tab>Settings</Tab>*/}
                 {/*!self&&<button className="defaultButton my-auto">Follow</button>*/}
@@ -323,13 +331,13 @@ export const Profile = () => {
                 })}</div>
               </Box>
             </TabPanel>
-            <TabPanel>
+            {/*<TabPanel> disabled for now
               <Box>
               <p>Contributions</p>
               </Box>
-            </TabPanel>
+            </TabPanel>*/}
             <TabPanel>
-              <Text className={"font-body"} mb={4}> description goes here:{currentUserData.desc}</Text>
+              <Text className={"font-body"} mb={4}>{currentUserData.desc}</Text>
             </TabPanel>
             {self && 
             <TabPanel>

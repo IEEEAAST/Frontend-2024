@@ -10,6 +10,7 @@ export default interface UserData {
   bookmarks: bookmark;
   followers: string[];
   following: following;
+  socials?: Social[];
 }
 
 interface likes {
@@ -25,3 +26,9 @@ interface following {
 interface bookmark {
   articles: string[];
 }
+
+export interface Social{
+  name:"Facebook"|"Instagram"|"LinkedIn";
+  url:string;
+}
+
