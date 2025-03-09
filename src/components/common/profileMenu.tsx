@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { Menu, MenuButton, MenuList, MenuItem, Avatar } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../App';
 import SignOut from '../../firebase/signout';
 
 const ProfileMenu = () => {
-  const { userData, setUserData, userId } = useContext(UserContext);
+  const { userData, userId } = useContext(UserContext);
 
   return (
     <Menu>

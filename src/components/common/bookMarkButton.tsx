@@ -7,6 +7,7 @@ import { toggleBookMark } from "../../utils.js";
 import ArticleData from "../../interfaces/ArticleData";
 import UserData from "../../interfaces/userData.js";
 import { Tooltip } from '@chakra-ui/react'
+import { auth } from "../../firebase/config.js";
 
 interface BookMarkButtonProps {
     item: ArticleData;
@@ -20,6 +21,13 @@ export const BookMarkButton: React.FC<BookMarkButtonProps> = ({ item, className 
         userId: string;
         setUserData: React.Dispatch<React.SetStateAction<UserData>>;
     };
+    const [isEmailVerified, setIsEmailVerified] = useState(false);
+      useEffect(() => {
+        if (auth.currentUser) {
+          setIsEmailVerified(auth.currentUser.emailVerified);
+        }
+      }, [auth.currentUser]);
+      const canLike=(userId&&isEmailVerified)?true:false;
 
     // Ensure bookmarks exist before reading them
     const initialBookMarks: string[] = userData?.bookmarks?.articles ?? [];
@@ -84,7 +92,7 @@ export const BookMarkButton: React.FC<BookMarkButtonProps> = ({ item, className 
     const bookmarkContent = (
         <div className={`flex gap-1 items-center ${className}`}>
             <img
-                className={`transition-transform duration-100 ease-linear ${userId ? 'hover:scale-125 cursor-pointer' : 'cursor-not-allowed'}`}
+                className={`transition-transform duration-100 ease-linear ${userId ? 'hover:scale-125 cursor-pointer' : 'cursor-not-allowed opacity-25'}`}
                 src={item.id && bookMarks.includes(item?.id) ? FilledBookmark : Bookmark}
                 onClick={handleBookmarkClick}
                 alt="Bookmark"
@@ -93,7 +101,7 @@ export const BookMarkButton: React.FC<BookMarkButtonProps> = ({ item, className 
     );
 
     return userId ? bookmarkContent : (
-        <Tooltip label="Sign in to bookmark posts!">
+        <Tooltip label={userId ? "Verify your email to bookmark posts!":"Sign in to bookmark posts!" } placement="top">
             {bookmarkContent}
         </Tooltip>
     );

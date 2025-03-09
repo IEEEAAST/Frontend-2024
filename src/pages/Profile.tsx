@@ -286,7 +286,7 @@ export const Profile = () => {
               <Text className="text-sm">{selectedUserData?.followers?.length || 0} Followers</Text>
               •︎
               <Text className="text-sm">{selectedUserData?.following?.users?.length || 0} Following</Text>
-              <div className="flex">
+              <div className="flex gap-1">
                 {selectedUserData?.socials?.map((social, index) => {
                   return (
                     <SocialIcon key={index} social={social} />

@@ -141,10 +141,9 @@ export const EventDetails = () => {
                 {eventData && <LikeButton item={eventData} type="event" className="font-body font-normal text-[16px] ml-2 mt-2"/>}
               </span>
               </span>    
+
               </div>
-              <span id="eventDesc" className="whitespace-pre-wrap"  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(eventData?.description ?? "Event not found.") }}></span>
-            </div>
-            <div id="eventDetailsWrapper">
+              <div id="eventDetailsWrapper">
                 {eventData?.location && (
                   <span>
                     Location: <strong>{eventData.location}</strong>
@@ -162,7 +161,14 @@ export const EventDetails = () => {
                 "Time: TBA"
                 }
               <span>Type: <strong>{eventData?.type}</strong></span>
+              
             </div>
+            <hr className="my-8 border-t-2 border-gray-300 w-[calc(100vw-45px)]" />
+              <span id="eventDesc" className="whitespace-pre-wrap w-[calc(100vw-45px)]"  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(eventData?.description ?? "Event not found.") }}></span>
+            </div>
+            
+
+
           </div>
           <Tabs variant="unstyled" style={{ margin: "60px 0px" }}>
             <TabList

@@ -13,8 +13,9 @@ interface ArticleWithAuthor extends ArticleData {
 }
 
 export const Bookmarks = () => {
-    const { userData } = useContext(UserContext);
-    const [articles, setArticles] = useState<ArticleWithAuthor[]>([])
+    const { userData, userId } = useContext(UserContext);
+    const [articles, setArticles] = useState<ArticleWithAuthor[]>([]);
+    const [loading, setLoading] = useState(true);
 
     const fetchData = async() => {
         const { result, error, ids } = await getCollection("articles");
@@ -59,6 +60,7 @@ export const Bookmarks = () => {
             }));
 
             setArticles(articlesWithAuthors);
+            setLoading(false);
         }
 
     }
@@ -69,8 +71,17 @@ export const Bookmarks = () => {
         fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-    
-    if (!articles) {
+
+    if(!userId) {
+        return(
+
+            <div className='flex flex-col items-center justify-center px-10 pt-28 h-screen'>
+                <h2 className='text-3xl'>You need to be signed in to view your bookmarks!</h2>
+                <p className='text-2xl'>You can sign in <Link to="/signin" className='text-blue-500 hover:underline'>here</Link></p>
+            </div>
+        )
+    }
+    if (loading) {
         return (
             <div className="flex items-center justify-center w-full h-[99vh]"><Spinner size="xl" /></div>
         );
@@ -79,8 +90,8 @@ export const Bookmarks = () => {
     if (articles.length === 0) {
         return (
             <div className='flex flex-col items-center justify-center px-10 pt-28 h-screen'>
-                <h2 className='text-3xl'>no bookmarks available!</h2>
-                <p className='text-2xl'>you can go to browse events and articles <Link to="/browse" className='text-blue-500 hover:underline'>Here</Link></p>
+                <h2 className='text-3xl'>No bookmarks available!</h2>
+                <p className='text-2xl'>You can go to browse events and articles <Link to="/browse" className='text-blue-500 hover:underline'>here</Link></p>
             </div>
         );
     }

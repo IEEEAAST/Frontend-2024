@@ -13,7 +13,10 @@ import getDocument from "../firebase/getData.js";
 import updateData from "../firebase/updateData.js";
 
 export const Onboarding = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    mobile: string;
+    profilePicture: File | null;
+  }>({
     mobile: "",
     profilePicture: null
   });
@@ -44,17 +47,17 @@ export const Onboarding = () => {
     window.open("/", "_self");
   }
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
     setFormData({ ...formData, profilePicture: file });
   };
   
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission, e.g., send data to server
     console.log(formData);
