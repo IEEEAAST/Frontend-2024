@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Spinner } from "@chakra-ui/react";
 import "./styles/Dashboard.css";
 import subscribeToCollection from "../firebase/subscribeToCollection.js"; // Import the new function
