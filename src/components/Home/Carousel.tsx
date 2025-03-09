@@ -36,7 +36,7 @@ export const SwipeCarousel = () => {
     <div className="relative rounded-2xl h-full">
       <Swiper
         modules={[Autoplay, Pagination]}
-        spaceBetween={30}
+        spaceBetween={width < 1024 && width >= 768? 10 : 30}
         slidesPerView={width >= 1024? 3 : width >= 768? 2 : 1}
         loop={true}
         pagination={{
