@@ -22,7 +22,6 @@ const EventHighlights = () => {
   useEffect(() => {
   getCollection('highlights').then((data) => {
     const sortedHighlights = (data.result || []).sort((a: EventHighlight, b: EventHighlight) => a.index - b.index);
-    console.log(sortedHighlights);
     setImages(sortedHighlights.map((highlight: EventHighlight) => highlight.url));
   });
 },[])

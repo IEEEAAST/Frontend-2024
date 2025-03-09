@@ -13,7 +13,6 @@ export const Sponsor = () => {
 
     getCollection("sponsors").then((response) => {
       if (response.result) {
-        console.log(response.result);
         setSponsors([...response.result, ...response.result]);
         setLoading(false);
       }

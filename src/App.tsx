@@ -22,7 +22,7 @@ import UserData from "./interfaces/userData";
 import { ViewAllEvents } from "./pages/ViewAllEvents";
 import { NavBar } from "./components/common/navbar";
 import Footer from "./components/common/Footer";
-import { Bookmark, Bookmarks } from "./pages/Bookmarks";
+import { Bookmarks } from "./pages/Bookmarks";
 
 export const UserContext = createContext<{
   [x: string]: any;
