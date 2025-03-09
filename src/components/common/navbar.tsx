@@ -22,12 +22,12 @@ interface ArticleData {
   caption: string;
   description: string;
   image: string;
-  likes : number;
+  likes: number;
   publishdate: string;
   title: string;
 }
 interface EventData {
-  coverPhoto : string;
+  coverPhoto: string;
   description: string;
   enddtime: any;
   formLink: string;
@@ -39,7 +39,7 @@ interface EventData {
   type: string;
 }
 
-export const NavBar : React.FC = () => {
+export const NavBar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const location = useLocation(); // Get the current location
@@ -49,25 +49,25 @@ export const NavBar : React.FC = () => {
   const [events, setEvents] = useState<EventData[]>([]);
   const [showSearch, setShowSearch] = useState(true)
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
-  useEffect(()=>{
+  useEffect(() => {
     getCollection("articles").then((res) => {
-      if (res.result){
+      if (res.result) {
         const article = res.result as ArticleData[];
         setArticle(article);
       }
     })
-  },[]);
+  }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     getCollection("events").then((res) => {
-      if (res.result){
+      if (res.result) {
         const events = res.result as EventData[];
         setEvents(events);
       }
     })
-  },[]);
+  }, []);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -86,12 +86,12 @@ export const NavBar : React.FC = () => {
   const titles = article.map(articleTitles => articleTitles.title)
   const filterArticles = searched ? titles.filter((t) =>
     t.toLowerCase().includes(searched.toLowerCase())
-  ):null;
+  ) : null;
 
 
   const EventTitle = events.map(e => e.title)
 
-    const filterEvents = searched ? EventTitle.filter((t) =>
+  const filterEvents = searched ? EventTitle.filter((t) =>
     t.toLowerCase().includes(searched.toLowerCase())
   ) : null;
 
@@ -101,7 +101,7 @@ export const NavBar : React.FC = () => {
       navigate(`/article/${handled}`);
     } else if (filterEvents?.includes(handled)) {
       navigate(`/event/${handled}`);
-    }else{
+    } else {
       console.log("no nav found")
     }
   };
@@ -151,72 +151,74 @@ export const NavBar : React.FC = () => {
   return (
     <>
       <div className="wrapper absolute flex items-start sm:items-center justify-between py-2 w-full z-50">
-      
-        {/* left */}        
+
+        {/* left */}
         <LogoButton />
-        
+
         {/* mid */}
         <div className="flex-1 justify-start hidden sm:flex">
           <div className="flex justify-center gap-3 ml-5 w-full">
             <button>
               <Link to="/" >
-              <div className="border-2 rounded-full border-white w-[40px]">
-                <img src={Home} alt="Home" height={90} width={45}  />
-              </div>
+                <div className="border-2 rounded-full border-white w-[40px]">
+                  <img src={Home} alt="Home" height={90} width={45} />
+                </div>
               </Link>
             </button>
             <button>
               <Link to="/browse" >
-              <div className="border-2 rounded-full border-white w-[40px] p-1">
-                <img src={Browse} alt="Browse" height={90} width={45}  />
-              </div>
+                <div className="border-2 rounded-full border-white w-[40px] p-1">
+                  <img src={Browse} alt="Browse" height={90} width={45} />
+                </div>
               </Link>
             </button>
 
             {/*search bar*/}
             <div className="nav-search">
               <div className="search-bar">
-                <img src={searchIcon} alt="search icon"/>
-                <input      
+                <img src={searchIcon} alt="search icon" />
+                <input
                   type="text"
                   placeholder="Search articles, events..."
                   value={searched}
                   onChange={handleSearch}
                   className="w-full"
                 />
-                </div>
-                <div className={`search-results ${(!showSearch || (filterArticles?.length==0&&filterEvents?.length==0)||searched.length==0)&&'hidden'}`}>
-                  {filterArticles?.map((a)=>(
-                    <div className="result" onClick={() => handleClick(a)}>{a}</div>
-                  ))}
-                  {filterEvents?.map((e)=>(
-                    <div className="result" onClick={() => handleClick(e)}>{e}</div>
-                  ))}
-                </div>
+              </div>
+              <div className={`search-results ${(!showSearch || (filterArticles?.length == 0 && filterEvents?.length == 0) || searched.length == 0) && 'hidden'}`}>
+                {filterArticles?.map((a) => (
+                  <div className="result" onClick={() => handleClick(a)}>{a}</div>
+                ))}
+                {filterEvents?.map((e) => (
+                  <div className="result" onClick={() => handleClick(e)}>{e}</div>
+                ))}
+              </div>
             </div>
             <div className="flex gap-2 mr-4">
-            {
-              (userData?.roles?.includes("admin") || userData?.roles?.includes("author")) &&
-            <button>
-              <Link to="/write" >
-              <div className="border-2 rounded-full border-white w-[40px] p-1">
-                <img src={Write} alt="Write Article" height={90} width={45}  />
-              </div>
-              </Link>
-            </button>
-            }
-            <button>
-              <div className="border-2 rounded-full border-white w-[40px] p-[7px]">
-                <img src={Bookmark} alt="Bookmarks" height={90} width={45}  />
-              </div>
-            </button>
-            <button>
-              {/* Removed temporarily until we figure out how to implement this
+              {
+                (userData?.roles?.includes("admin") || userData?.roles?.includes("author")) &&
+                <button>
+                  <Link to="/write" >
+                    <div className="border-2 rounded-full border-white w-[40px] p-1">
+                      <img src={Write} alt="Write Article" height={90} width={45} />
+                    </div>
+                  </Link>
+                </button>
+              }
+              <button>
+                <Link to="/bookmarks">
+                  <div className="border-2 rounded-full border-white w-[40px] p-[7px]">
+                    <img src={Bookmark} alt="Bookmarks" height={90} width={45} />
+                  </div>
+                </Link>
+              </button>
+              <button>
+                {/* Removed temporarily until we figure out how to implement this
               <div className="border-2 rounded-full border-white w-[40px] p-1">
                 <img src={Bell} alt="Notifications" height={90} width={45}  />
               </div>
               */}
-            </button>
+              </button>
             </div>
 
           </div>
@@ -232,9 +234,8 @@ export const NavBar : React.FC = () => {
         <div className="sm:hidden flex items-center ml-4 z-50">
           <div
             ref={menuRef}
-            className={`${
-              menuOpen ? "translate-x-0" : "-translate-x-full"
-            } fixed inset-y-0 left-0 w-3/4 transition-transform duration-300 ease-in-out z-40 flex flex-col sm:hidden`}
+            className={`${menuOpen ? "translate-x-0" : "-translate-x-full"
+              } fixed inset-y-0 left-0 w-3/4 transition-transform duration-300 ease-in-out z-40 flex flex-col sm:hidden`}
             style={{
               background: "linear-gradient(0deg, #1f396e 0%, #000b21 100%)",
               boxShadow: menuOpen ? "4px 0px 4px rgba(0, 0, 0, 0.5)" : "none",

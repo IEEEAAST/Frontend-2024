@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Menu, MenuButton, MenuList, MenuItem, Avatar, Button } from '@chakra-ui/react';
+import { Menu, MenuButton, MenuList, MenuItem, Avatar } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../App';
 import SignOut from '../../firebase/signout';

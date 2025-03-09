@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 
 export const Article = () => {
-  let { name } = useParams();
+  const { name } = useParams();
   console.log("title",name)
 
   return (
