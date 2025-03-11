@@ -68,7 +68,6 @@ export const Volunteers = () => {
 
           setHeadsByYear(groupedHeads);
           setIsLoading(false);
-          console.log(groupedHeads);
         } else {
           console.error('Failed to retrieve heads:', response.error);
           setIsLoading(false);
