@@ -11,7 +11,7 @@ import { AdminGallery } from './AdminGallery';
 import updateData from '../../firebase/updateData';
 import addDocument from '../../firebase/addData';
 import { Link, useNavigate } from 'react-router-dom';
-import { eventTypesWithColors, autoColorByTopic } from '../../utils';
+import { eventTypesWithColors, autoColorByTopic, convertBRTagsToNewLines, convertNewLinesToBRTags} from '../../utils';
 import { EventCard } from '../common/EventCard';
 import { MdSave } from 'react-icons/md';
 
@@ -67,7 +67,6 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event, events, setEvents, setSe
         const { name, value } = e.target;
             const starttimeInput = document.querySelector('input[name="starttime"]') as HTMLInputElement;
             if (starttimeInput) {
-            console.log('Start Time:', starttimeInput.value);
             }
         // Handle datetime-local input for starttime and endtime
         if (name === 'starttime' || name === 'endtime') {
@@ -87,7 +86,10 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event, events, setEvents, setSe
   // Submit event data form
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    const { id, ...eventDataWithoutId } = eventData;
+    const { id, ...eventDataWithoutId } = {
+      ...eventData,
+      description: convertNewLinesToBRTags(eventData.description),
+    };
     setSaving(true);
 
     if (id) {
@@ -189,7 +191,7 @@ const AdminEvent: React.FC<AdminEventProps> = ({ event, events, setEvents, setSe
                 <span className='mb-2 font-semibold'>Description</span>
                 <textarea 
                     name="description" 
-                    value={eventData.description} 
+                    value={convertBRTagsToNewLines(eventData.description)} 
                     onChange={handleChange} 
                     className='p-2 rounded bg-gray-800 h-40 resize-none customScrollbar'
                     required

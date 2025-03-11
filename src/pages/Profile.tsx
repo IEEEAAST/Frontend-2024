@@ -31,9 +31,10 @@ import getDocument from "../firebase/getData";
 import ArticleCard from "../components/Article/Card/ArticleCard.tsx"
 import subscribeToCollection from "../firebase/subscribeToCollection.js";
 import ArticleData from "../interfaces/ArticleData.tsx";
-import { toggleFollow } from "../utils.ts";
+import { convertNewLinesToBRTags, convertBRTagsToNewLines, toggleFollow } from "../utils.ts";
 import UserData from "../interfaces/userData.tsx";
 import { SocialIcon } from "../components/common/SocialIcon.tsx";
+import DOMPurify from "dompurify";
 
 interface currentUserData {
   mobile: string;
@@ -170,9 +171,9 @@ export const Profile = () => {
     const storedcurrentUserData = {
       mobile: currentUserData.mobile,
       imgurl: typeof currentUserData.profilePicture === "string" ? currentUserData.profilePicture : "",
-      desc: currentUserData.desc,
+      desc: convertNewLinesToBRTags(currentUserData.desc),
     };
-
+    console.log(storedcurrentUserData);
     event.preventDefault();
     const user = await getUser();
     const { newPassword, confirmPassword, oldPassword, mobile, profilePicture } = currentUserData;
@@ -237,7 +238,7 @@ export const Profile = () => {
       setTimeout(() => {
         setShowSuccess(false);
         setTimeout(() => {
-          window.location.reload();
+          //window.location.reload();
         }, 500)
       }, 1000);
     } catch (error) {
@@ -341,7 +342,7 @@ export const Profile = () => {
               </Box>
             </TabPanel>*/}
             <TabPanel>
-              <Text className={"font-body"} mb={4}>{currentUserData.desc}</Text>
+              <div className={"font-body mb-4"} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(currentUserData.desc ?? "") }}></div>
             </TabPanel>
             {self && 
             <TabPanel>
@@ -349,7 +350,7 @@ export const Profile = () => {
                 <div className="h-fit">
                   <div className="max-w-[600px]">
                     <Text fontFamily={"SF-Pro-Display-Bold"} fontSize={23} mb={4}>Edit Profile</Text>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={ handleSubmit }>
                       <Text fontFamily={"SF-Pro-Display-Bold"} mb={4}>Change your Profile Picture:</Text>
                       <FormControl isInvalid={showError && mobileInvalid}>
                         <label htmlFor="profile-picture">
@@ -409,7 +410,7 @@ export const Profile = () => {
                         className="w-full sm:w-3/4 md:w-2/3 lg:w-1/2 h-[200px] md:h-[300px] box-border resize-y"
                           id="desc"
                           name="Description"
-                          value={currentUserData.desc}
+                          value={convertBRTagsToNewLines(currentUserData.desc)}
                           onChange={handleChange}
                           placeholder="Describe yourself"
                           boxSizing="border-box"

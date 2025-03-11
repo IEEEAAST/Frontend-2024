@@ -40,6 +40,13 @@ export const autoColorByTopic = (topic: string): string => {
   return event ? event.color : "#A3A3A3";
 };
 
+export const convertNewLinesToBRTags = (text: string): string => {
+  return text.replace(/\n/g, '<br>');
+};
+
+export const convertBRTagsToNewLines = (text: string): string => {
+  return text.replace(/<br>/g, '\n');
+};
 
 export const toggleLike = async (
   item: EventData | ArticleData,
