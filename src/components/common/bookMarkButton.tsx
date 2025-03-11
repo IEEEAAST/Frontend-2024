@@ -27,7 +27,6 @@ export const BookMarkButton: React.FC<BookMarkButtonProps> = ({ item, className 
           setIsEmailVerified(auth.currentUser.emailVerified);
         }
       }, [auth.currentUser]);
-      const canLike=(userId&&isEmailVerified)?true:false;
 
     // Ensure bookmarks exist before reading them
     const initialBookMarks: string[] = userData?.bookmarks?.articles ?? [];
@@ -50,6 +49,7 @@ export const BookMarkButton: React.FC<BookMarkButtonProps> = ({ item, className 
             window.location.href = "/signin";
             return;
         }
+        if(!isEmailVerified) return;
 
         let isCurrentlyBookmarked: boolean;
 

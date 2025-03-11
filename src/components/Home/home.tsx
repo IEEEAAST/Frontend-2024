@@ -1,11 +1,9 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../App";
 import { AppConfigContext } from "../../App";
 import { RecruitmentCard } from "./RecruitmentCard";
-import UserData from "../../interfaces/userData";
-import { Center } from "@chakra-ui/react";
 
 export const HomeComp = () => {
     const [email, setEmail] = useState("");

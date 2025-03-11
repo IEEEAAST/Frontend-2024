@@ -35,6 +35,7 @@ import { convertNewLinesToBRTags, convertBRTagsToNewLines, toggleFollow } from "
 import UserData from "../interfaces/userData.tsx";
 import { SocialIcon } from "../components/common/SocialIcon.tsx";
 import DOMPurify from "dompurify";
+import {Social} from "../interfaces/userData.tsx";
 
 interface currentUserData {
   mobile: string;
@@ -46,6 +47,7 @@ interface currentUserData {
   confirmPassword: string;
   oldPassword: string;
   roles?: string[];
+  socials?: Social[];
 }
 
 
@@ -71,6 +73,15 @@ export const Profile = () => {
   // password regix
   const passwordRegix = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
 
+  const isValidUrl = (url: string) => {
+    try {
+      new URL(url);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
   // Define currentUserData state
   const [currentUserData, setCurrentUserData] = useState<currentUserData>({
     mobile: "",
@@ -81,12 +92,14 @@ export const Profile = () => {
     newPassword: "",
     confirmPassword: "",
     oldPassword: "",
-    roles: []
+    roles: [],
+    socials: []
   });
 
   useEffect(() => {
     // Scroll to top immediately when the component mounts
     window.scrollTo({ top: 0, behavior: 'instant' });
+    console.log(currentUserData);
   }, []);
 
   // Fetch user data and check if the `id` matches the logged-in user ID
@@ -110,6 +123,7 @@ export const Profile = () => {
           confirmPassword: "",
           oldPassword: "",
           roles: result.data()?.roles || [],
+          socials: result.data()?.socials || []
         });
       }
       const unsubscribe = subscribeToCollection("articles", ({ result, ids, error }: { result: any, ids: string[], error: any }) => {
@@ -149,16 +163,28 @@ export const Profile = () => {
       newPassword: "",
       confirmPassword: "",
       oldPassword: "",
-      roles: []
+      roles: [],
+      socials: []
     }));
   }, [location.pathname]);
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     const { id, value } = event.target;
-    setCurrentUserData({
-      ...currentUserData,
-      [id]: value,
-    });
+    if (["Facebook", "Instagram", "LinkedIn"].includes(id)) {
+      setCurrentUserData({
+        ...currentUserData,
+        socials: currentUserData.socials?.some(social => social.name === id)
+          ? currentUserData.socials.map(social =>
+              social.name === id ? { ...social, url: value } : social
+            )
+          : [...(currentUserData.socials || []), { name: id as "Facebook" | "Instagram" | "LinkedIn", url: value }]
+      });
+    } else {
+      setCurrentUserData({
+        ...currentUserData,
+        [id]: value,
+      });
+    }
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -233,12 +259,13 @@ export const Profile = () => {
     }
 
     try {
-      await updateData("users", user.uid, storedcurrentUserData);
+      const filteredSocials = currentUserData.socials?.filter(social => social.url !== "");
+      await updateData("users", user.uid, { ...storedcurrentUserData, socials: filteredSocials });
       setShowSuccess(true);
       setTimeout(() => {
         setShowSuccess(false);
         setTimeout(() => {
-          //window.location.reload();
+          window.location.reload();
         }, 500)
       }, 1000);
     } catch (error) {
@@ -494,6 +521,57 @@ export const Profile = () => {
                           {errorMessage}
                         </FormErrorMessage>
                       </FormControl>
+                        <Text fontFamily={'SF-Pro-Display-Bold'} my={4}>Social Media Links: </Text>
+                        <FormControl mb={4} isInvalid={showError && !currentUserData.socials?.every(social => social.url === "" || isValidUrl(social.url))}>
+                          <Input
+                            type="url"
+                            id="Facebook"
+                            name="Facebook"
+                            value={currentUserData.socials?.find(social => social.name === "Facebook")?.url || ""}
+                            onChange={handleChange}
+                            placeholder="Facebook URL"
+                            mb={4}
+                            style={{
+                              width: '80%',
+                              border: 'none',
+                              borderBottom: '1px solid rgb(4, 4, 62)',
+                              outline: 'none',
+                            }}
+                          />
+                          <Input
+                            type="url"
+                            id="Instagram"
+                            name="Instagram"
+                            value={currentUserData.socials?.find(social => social.name === "Instagram")?.url || ""}
+                            onChange={handleChange}
+                            placeholder="Instagram URL"
+                            mb={4}
+                            style={{
+                              width: '80%',
+                              border: 'none',
+                              borderBottom: '1px solid rgb(4, 4, 62)',
+                              outline: 'none',
+                            }}
+                          />
+                          <Input
+                            type="url"
+                            id="LinkedIn"
+                            name="LinkedIn"
+                            value={currentUserData.socials?.find(social => social.name === "LinkedIn")?.url || ""}
+                            onChange={handleChange}
+                            placeholder="LinkedIn URL"
+                            mb={4}
+                            style={{
+                              width: '80%',
+                              border: 'none',
+                              borderBottom: '1px solid rgb(4, 4, 62)',
+                              outline: 'none',
+                            }}
+                          />
+                          <FormErrorMessage mb={4} fontFamily={"SF-Pro-Text-Medium"}>
+                            {errorMessage}
+                          </FormErrorMessage>
+                        </FormControl>
 
                       <div className="flex flex-nowrap">
                         <div className="pt-8 flex flex-nowrap items-center gap-4 flex-col">
@@ -517,11 +595,20 @@ export const Profile = () => {
                             <button
                               className="defaultButton ml-2"
                               style={{
-                                fontSize: '16px',
-                                fontFamily: 'SF-Pro-Display-Bold',
-                                width: '155px',
-                                height: '35px',
+                              fontSize: '16px',
+                              fontFamily: 'SF-Pro-Display-Bold',
+                              width: '155px',
+                              height: '35px',
                               }}
+                              disabled={
+                              currentUserData.mobile === selectedUserData?.mobile &&
+                              currentUserData.desc === selectedUserData?.desc &&
+                              currentUserData.profilePicture === selectedUserData?.imgurl &&
+                              currentUserData.newPassword === "" &&
+                              currentUserData.confirmPassword === "" &&
+                              currentUserData.oldPassword === "" &&
+                              JSON.stringify(currentUserData.socials) === JSON.stringify(selectedUserData?.socials)
+                              }
                             >
                               Save
                             </button>
