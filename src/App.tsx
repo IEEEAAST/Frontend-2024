@@ -9,7 +9,7 @@ import { Spinner } from '@chakra-ui/react'
 import getDocument from "./firebase/getData"
 import { MailDesign } from "./pages/MailDesign";
 import { Onboarding } from "./pages/Onboarding";
-import { Vng } from "./pages/Verification";
+import { Verifying } from "./pages/Verification";
 import { SignUp } from "./pages/Signup";
 import { Signin } from "./pages/Signin";
 import { Dashboard } from "./pages/Dashboard";
