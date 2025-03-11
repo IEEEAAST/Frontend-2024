@@ -9,7 +9,7 @@ import { Spinner } from '@chakra-ui/react'
 import getDocument from "./firebase/getData"
 import { MailDesign } from "./pages/MailDesign";
 import { Onboarding } from "./pages/Onboarding";
-import { Verifying } from "./pages/Verification";
+import { Vng } from "./pages/Verification";
 import { SignUp } from "./pages/Signup";
 import { Signin } from "./pages/Signin";
 import { Dashboard } from "./pages/Dashboard";
@@ -22,7 +22,7 @@ import UserData from "./interfaces/userData";
 import { ViewAllEvents } from "./pages/ViewAllEvents";
 import { NavBar } from "./components/common/navbar";
 import Footer from "./components/common/Footer";
-import { Bookmark, Bookmarks } from "./pages/Bookmarks";
+import { Bookmarks } from "./pages/Bookmarks";
 
 export const UserContext = createContext<{
   [x: string]: any;
