@@ -163,7 +163,7 @@ export const EventDetails = () => {
               <span>Type: <strong>{eventData?.type}</strong></span>
               
             </div>
-            <hr className="my-8 border-t-2 border-gray-300 w-[calc(100vw-45px)]" />
+            <hr className="my-8 border-t-2 border-gray-300 w-[calc(100vw-45px)] opacity-25" />
               <span id="eventDesc" className="whitespace-pre-wrap w-[calc(100vw-45px)]"  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(eventData?.description ?? "Event not found.") }}></span>
             </div>
             
