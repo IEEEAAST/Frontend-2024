@@ -93,8 +93,6 @@ export const Profile = () => {
     const fetchData = async () => {
       const { result } = await getDocument("users", id);
       if (result) {
-        console.log(id);
-        console.log(userId);
         if (id === userId) {
           setSelf(true);
         }
@@ -133,6 +131,12 @@ export const Profile = () => {
 
     fetchData();
   }, [id, userData, userId]);
+
+  useEffect(() => {
+    if (userData && userId && selectedUserData) {
+      setSelf(id === userId);
+    }
+  }, [userData, userId, selectedUserData]);
 
   // Force update when the location changes
   useEffect(() => {
