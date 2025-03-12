@@ -9,6 +9,7 @@ import userData from './interfaces/userData';
 export const eventTypesWithColors = [
   { type: "AI", color: "#C058D3" },
   { type: "Conference", color: "#005F73" },
+  {type: "Cloud", color: "#A3A3A3"},
   { type: "Competition", color: "#FF4500" },
   { type: "Database", color: "#ffa1f2" },
   { type: "Game", color: "#b83232" },

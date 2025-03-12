@@ -10,8 +10,7 @@ import "../common/styles/Navbar.css";
 import Home from "../../assets/home.png";
 import Browse from "../../assets/browse.png";
 import Bookmark from "../../assets/save.png";
-import Write from "../../assets/write.png"
-import Bell from "../../assets/bell.png"
+import Write from "../../assets/write.png";
 import { LogoButton } from "./LogoButton.js";
 import UserData from "../../interfaces/userData.js";
 import { Avatar } from "@chakra-ui/react";

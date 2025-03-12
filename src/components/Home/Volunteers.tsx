@@ -91,7 +91,7 @@ export const Volunteers = () => {
         </Center>
       ) : (
         <div>
-          <Tabs className='relative' variant='unstyled' defaultIndex={0}>
+          <Tabs className='relative' variant='unstyled' defaultIndex={years.indexOf(new Date().getFullYear()) !== -1 ? years.indexOf(new Date().getFullYear()) : 0}>
             <TabList className='bg-[#151F33] rounded-full px-[20px] md:px-[30px] mt-4 gap-1 md:gap-2 justify-around w-fit mx-auto'>
               {years?.map((year) => (
                 <Tab key={year} w={'fit-content'} className="px-2 text-base md:text-lg lg:text-xl xl:text-2xl">
@@ -104,7 +104,7 @@ export const Volunteers = () => {
             <TabPanels>
               {years?.map((year) => (
                 <TabPanel key={year}>
-                  <Tabs className="relative" variant='unstyled' defaultIndex={0}>
+                    <Tabs className="relative" variant='unstyled' defaultIndex={0}>
                     <Center>
                       <TabList className="bg-[#151F33] rounded-full px-4 py-1 gap-2">
                         <Tab w={"80px"} h={"40px"} className="px-1 sm:px-2 md:px-3 text-xs sm:text-sm md:text-base lg:text-lg">
