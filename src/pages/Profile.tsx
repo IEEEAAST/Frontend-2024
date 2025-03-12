@@ -72,6 +72,9 @@ export const Profile = () => {
   
   // password regix
   const passwordRegix = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+  const purifyConfig = {
+    ALLOWED_TAGS: ['br', 'strong', 'em', 'ul', 'ol', 'li'],
+  };
 
   const isValidUrl = (url: string) => {
     try {
@@ -369,7 +372,7 @@ export const Profile = () => {
               </Box>
             </TabPanel>*/}
             <TabPanel>
-              <div className={"font-body mb-4"} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(currentUserData.desc ?? "") }}></div>
+              <div className={"font-body mb-4"} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(currentUserData.desc ?? "",purifyConfig) }}></div>
             </TabPanel>
             {self && 
             <TabPanel>

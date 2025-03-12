@@ -26,6 +26,9 @@ export const EventDetails = () => {
   const [isSponsorEnabled, setSponsorEnabled] = useState(false);
   const [_speakers, setSpeakers] = useState<IspksIds>();
   const [schedule, setSchedule] = useState<scheduleItem[]>([]);
+  const purifyConfig = {
+    ALLOWED_TAGS: ['br', 'strong', 'em', 'ul', 'ol', 'li'],
+  };
 
 
   const formatEventDate = (date: Date, format: string) => {
@@ -164,7 +167,7 @@ export const EventDetails = () => {
               
             </div>
             <hr className="my-8 border-t-2 border-gray-300 w-[calc(100vw-45px)] opacity-25" />
-              <span id="eventDesc" className="whitespace-pre-wrap w-[calc(100vw-45px)]"  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(eventData?.description ?? "Event not found.") }}></span>
+              <span id="eventDesc" className="whitespace-pre-wrap w-[calc(100vw-45px)]"  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(eventData?.description ?? "Event not found.",purifyConfig) }}></span>
             </div>
             
 
