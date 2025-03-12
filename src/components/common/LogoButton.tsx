@@ -4,11 +4,9 @@ import { UserContext } from '../../App';
 
 export const LogoButton = () => {
   const { userData } = useContext(UserContext);
-  const [isHovered, setIsHovered] = useState(false);
   const [isTimerComplete, setIsTimerComplete] = useState(false);
 
   const handleMouseEnter = () => {
-    setIsHovered(true);
     const hoverTimer = setTimeout(() => {
       setIsTimerComplete(true);
     }, 2000); // 2 seconds delay
@@ -18,7 +16,6 @@ export const LogoButton = () => {
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
     setIsTimerComplete(false); // Reset when the hover ends
   };
 

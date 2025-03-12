@@ -1,6 +1,5 @@
 import { Avatar } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import optionIcon from "../../../assets/more-ellipsis-white.png";
 import UserData from "../../../interfaces/userData";
 import ArticleData from "../../../interfaces/ArticleData";
 import { LikeButton } from "../../common/LikeButton";
