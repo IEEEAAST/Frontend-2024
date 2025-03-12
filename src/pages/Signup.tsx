@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Input, FormControl, FormErrorMessage, List, ListItem } from "@chakra-ui/react";
 import setData from "../firebase/setData";
 import register from "../firebase/register";
+import Triangle from "../assets/bg-triangle-ellipse@2x.png";
 
 interface FormData {
   firstName: string;
@@ -85,7 +86,7 @@ export const SignUp = () => {
           backgroundImage: "linear-gradient(to bottom, #1F396E, #1D0021)",
         }}
       ></div>
-      <div className="form-container relative z-10">
+      <div className="form-container relative z-10" style={{backgroundImage: `url(${Triangle})`, backgroundSize:"20%", backgroundRepeat: 'no-repeat', backgroundPosition: 'right bottom'}}>
         <div className="p-20 h-screen">
           <div className="max-w-[600px] mt-40 max-sm:mt-10">
             <h1 className="text-4xl sm:text-4xl" style={{ fontWeight: "bold" }}>
@@ -229,13 +230,6 @@ export const SignUp = () => {
                 </div>
               </div>
             </form>
-
-            <div
-              className="bottom-0 w-80 h-auto right-[-2vh] p-4 fixed max-sm:w-[45%] z-0"
-              style={{ zIndex: "-1" }}
-            >
-              <img src="src/assets/bg-triangle-ellipse@2x.png" alt="Triangle" />
-            </div>
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@ import { useState, ChangeEvent, FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { Input, FormControl, FormErrorMessage } from "@chakra-ui/react";
 import signIn from "../firebase/signin";
+import Triangle from "../assets/bg-triangle-ellipse@2x.png"
 
 interface FormData {
   firstName: string;
@@ -52,7 +53,7 @@ export const Signin = () => {
       <div className="h-screen w-[1vh] absolute left-0" style={{
         backgroundImage: "linear-gradient(to bottom, #1F396E, #1D0021)"
       }}></div>
-      <div className="form-container">
+      <div className="form-container" style={{backgroundImage: `url(${Triangle})`, backgroundSize:"20%", backgroundRepeat: 'no-repeat', backgroundPosition: 'right bottom'}}>
         <div className="p-20 h-screen">
           <div className="max-w-[600px] mt-40 max-sm:mt-10" style={{}}>
             <h1 className="text-4xl sm:text-4xl mb-8" style={{ fontWeight: 'bold' }}>
@@ -130,10 +131,6 @@ export const Signin = () => {
                 </div>
               </div>
             </form>
-
-            <div className="bottom-0 w-80 h-auto right-[-2vh] p-4 fixed max-sm:w-[45%] " >
-              <img src="src/assets/bg-triangle-ellipse@2x.png" alt="Triangle" />
-            </div>
           </div>
         </div>
       </div>
