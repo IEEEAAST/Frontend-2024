@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import getUserNotifications from "../../firebase/getUserNotifications";
 import Bell from "../../assets/notify-me-bell-white.png";
 
 export const NotificationDropdown = () => {
-  const [notifications, setNotifications] = useState([]);
+  const [notifications ] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dummyEmail = "mariam.alaafathy@gmail.com"; // Use your dummy email here
 
   useEffect(() => {
     getUserNotifications(dummyEmail).then((data) => {
-      setNotifications(data);
+      //setNotifications(data);
+      console.log(data);
     });
   }, []);
 

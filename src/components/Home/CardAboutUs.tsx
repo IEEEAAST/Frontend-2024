@@ -1,4 +1,3 @@
-import React from 'react';
 import Quote from '../../interfaces/Quote';
 
 interface CardAboutUsProps {

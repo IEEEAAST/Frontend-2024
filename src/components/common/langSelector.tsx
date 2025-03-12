@@ -1,10 +1,9 @@
-import { useState, useContext } from 'react';
-import { LangContext } from '../../App';
+import { useState } from 'react';
 import globe from "../../assets/navbar/globe.svg";
 import arrow from "../../assets/navbar/arrow-down.svg";
 
 export const LangSelector = () => {
-    const { lang, setLang } = useContext(LangContext);
+   // const { lang, setLang } = useContext(LangContext);
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const disLang: { name: string, id: string }[] = [
         { name: "English", id: "en" },
@@ -12,18 +11,19 @@ export const LangSelector = () => {
     ];
 
     const handleSelect = (languageId: string) => {
-        setLang(languageId);
+        //setLang(languageId);
+        console.log(languageId);
         setIsOpen(false);
     };
 
     return (
-        <div className="hidden relative inline-block text-left">
+        <div className="hidden relative text-left">
             <div 
                 className="z-10 px-4 flex rounded-full border h-12 bg-black bg-opacity-55 text-white text-lg font-body cursor-pointer appearance-none outline-none items-center justify-between w-40"
                 onClick={() => setIsOpen(!isOpen)}
             >
                 <img className="text-white" src={globe} alt="globe" width="20" />
-                {lang === "en" ? "English" : "العربية"}
+                {/*lang === "en" ? "English" : "العربية"*/}
                 <img className="text-white" src={arrow} alt="arrow" width="20" />
             </div>
             {isOpen && (
