@@ -37,6 +37,8 @@ import { SocialIcon } from "../components/common/SocialIcon.tsx";
 import DOMPurify from "dompurify";
 import {Social} from "../interfaces/userData.tsx";
 
+const defaultAvatar = <svg viewBox="0 0 128 128" className="w-full h-full bg-[#A0AEC0] rounded-full" role="img" aria-label=" avatar"><path fill="currentColor" d="M103,102.1388 C93.094,111.92 79.3504,118 64.1638,118 C48.8056,118 34.9294,111.768 25,101.7892 L25,95.2 C25,86.8096 31.981,80 40.6,80 L87.4,80 C96.019,80 103,86.8096 103,95.2 L103,102.1388 Z"></path><path fill="currentColor" d="M63.9961647,24 C51.2938136,24 41,34.2938136 41,46.9961647 C41,59.7061864 51.2938136,70 63.9961647,70 C76.6985159,70 87,59.7061864 87,46.9961647 C87,34.2938136 76.6985159,24 63.9961647,24"></path></svg>;
+
 interface currentUserData {
   mobile: string;
   firstname: string;
@@ -302,17 +304,22 @@ export const Profile = () => {
       <div className="pt-[100px] mx-8 md:mx-32 flex flex-col justify-center">
         <div className="bg-[url('https://img.freepik.com/free-vector/abstract-orange-background_698452-2541.jpg')] bg-cover bg-center mt-11 h-[100px] md:w-full md:h-[300px] rounded-3xl relative"></div>
         <div className=" ml-8 md:ml-16 -mt-14 md:-mt-20 z-0 relative mb-32 md:mb-44">
-          <img
-            className="absolute z-10 w-24 h-24 md:w-40 md:h-40 rounded-full object-cover mb-7"
-            src={
-              currentUserData.profilePicture
-                ? typeof currentUserData.profilePicture === "string"
-                  ? `${currentUserData.profilePicture}`
-                  : URL.createObjectURL(currentUserData.profilePicture)
-                : "src/assets/add-profile-picture-white@2x.png"
-            }
-            alt="Profile"
-        /></div>
+          {currentUserData.profilePicture ? (
+            <img
+              className="absolute z-10 w-24 h-24 md:w-40 md:h-40 rounded-full object-cover mb-7"
+              src={
+          typeof currentUserData.profilePicture === "string"
+            ? `${currentUserData.profilePicture}`
+            : URL.createObjectURL(currentUserData.profilePicture)
+              }
+              alt="Profile"
+            />
+          ) : (
+            <div className="absolute z-10 w-24 h-24 md:w-40 md:h-40 rounded-full mb-7">
+              {defaultAvatar}
+            </div>
+          )}
+        </div>
         <Tabs size='sm' variant={'unstyled'}>
           <div className="flex  justify-between items-center flex-wrap">
             <div className="flex flex-col">
