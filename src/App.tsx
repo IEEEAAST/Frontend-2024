@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createContext, useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { EventDetails } from "./pages/EventDetails";
@@ -21,6 +22,7 @@ import UserData from "./interfaces/userData";
 import { ViewAllEvents } from "./pages/ViewAllEvents";
 import { NavBar } from "./components/common/navbar";
 import Footer from "./components/common/Footer";
+import { Bookmarks } from "./pages/Bookmarks";
 
 export const UserContext = createContext<{
   [x: string]: any;
@@ -114,8 +116,9 @@ function App() {
           <Route path="/signin" element={<Signin />} />
           <Route path="/Profile/:name" element={<Profile />} />
           <Route path="/articles" element={<ViewAllArticles />} />
-          <Route path="/events" element={<ViewAllEvents />}></Route>
-          <Route path="/admin" element={<Admin />}></Route>
+          <Route path="/events" element={<ViewAllEvents />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/bookmarks" element={<Bookmarks />} />
         </Routes>
         <Footer />
       </AppConfigContext.Provider>

@@ -68,7 +68,7 @@
   .box {
     
     padding: 10px;
-    width: 100% /* Adjusted padding for better mobile responsiveness */
+    width: 90% /* Adjusted padding for better mobile responsiveness */
   }
 
   .box-title {

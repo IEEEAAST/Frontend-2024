@@ -51,9 +51,9 @@ const ArticleCard = ({ article, author }: ArticleCardProps) => {
               <button>
                 <BookMarkButton item={article} />
               </button>
-              <button>
+              {/* <button>
                 <img src={optionIcon} alt="options" />
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

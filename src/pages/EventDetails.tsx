@@ -26,6 +26,9 @@ export const EventDetails = () => {
   const [isSponsorEnabled, setSponsorEnabled] = useState(false);
   const [_speakers, setSpeakers] = useState<IspksIds>();
   const [schedule, setSchedule] = useState<scheduleItem[]>([]);
+  const purifyConfig = {
+    ALLOWED_TAGS: ['br', 'strong', 'em', 'ul', 'ol', 'li'],
+  };
 
 
   const formatEventDate = (date: Date, format: string) => {
@@ -141,10 +144,9 @@ export const EventDetails = () => {
                 {eventData && <LikeButton item={eventData} type="event" className="font-body font-normal text-[16px] ml-2 mt-2"/>}
               </span>
               </span>    
+
               </div>
-              <span id="eventDesc" className="whitespace-pre-wrap"  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(eventData?.description ?? "Event not found.") }}></span>
-            </div>
-            <div id="eventDetailsWrapper">
+              <div id="eventDetailsWrapper">
                 {eventData?.location && (
                   <span>
                     Location: <strong>{eventData.location}</strong>
@@ -162,7 +164,14 @@ export const EventDetails = () => {
                 "Time: TBA"
                 }
               <span>Type: <strong>{eventData?.type}</strong></span>
+              
             </div>
+            <hr className="my-8 border-t-2 border-gray-300 w-[calc(100vw-45px)] opacity-25" />
+              <span id="eventDesc" className="whitespace-pre-wrap w-[calc(100vw-45px)]"  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(eventData?.description ?? "Event not found.",purifyConfig) }}></span>
+            </div>
+            
+
+
           </div>
           <Tabs variant="unstyled" style={{ margin: "60px 0px" }}>
             <TabList

@@ -16,6 +16,7 @@ strong{
 
 #eventDetailsFlex {
     display:flex;
+    flex-direction: column;
     justify-content: space-between;
     min-width:calc(100% - 40px);
 }
@@ -31,10 +32,11 @@ strong{
     display:flex;
     flex-direction: column;
     gap:20px;
-    width:25%;
+    width:100%;
     height:100%;
     margin: 10px 0;
 }
+
 
 .iconButton {
     min-width: 35px;
