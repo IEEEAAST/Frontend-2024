@@ -246,7 +246,7 @@ export const Profile = () => {
     if (profilePicture) {
       console.log(currentUserData.profilePicture)
       if (typeof profilePicture !== "string") {
-        await addStorage(currentUserData.profilePicture, user.uid).then((res) => {
+        addStorage(currentUserData.profilePicture, `profilepics/${user.uid}`).then((res) => {
           storedcurrentUserData.imgurl = res.link;
         });
       }
