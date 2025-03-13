@@ -115,11 +115,11 @@ export const NavBar: React.FC = () => {
   const filterEvents = searched ? EventTitle.filter((t) =>
     t.toLowerCase().includes(searched.toLowerCase())
   ) : null;
-  const filterUsers = searched ? users.filter((user) =>(
-    (user.userData.firstname && user.userData.lastname) && (
-    user.userData.firstname.toLowerCase().includes(searched.toLowerCase()) ||
-    user.userData.lastname.toLowerCase().includes(searched.toLowerCase())))
-  ) : null;
+  const filterUsers = searched ? users.filter((user) => {
+    const fullName = `${user.userData.firstname}${user.userData.lastname}`.toLowerCase().replace(/\s+/g, '');
+    console.log(`fullName: ${fullName}\nsearched: ${searched.toLowerCase().replace(/\s+/g, '')}\nresult: ${fullName.includes(searched.toLowerCase().replace(/\s+/g, ''))}`);
+    return fullName.includes(searched.toLowerCase().replace(/\s+/g, ''));
+  }) : null;
 
   const handleClick = (handled: string) => {
     if (filterArticles?.includes(handled)) {
@@ -231,24 +231,24 @@ export const NavBar: React.FC = () => {
                 <div className="flex flex-col w-1/3">
                   <h2 className="text-white text-xl text-center font-extrabold">Articles</h2>
                 {filterArticles?.length == 0 && searched.length > 0 && <div className="result">No articles found</div>}
-                {filterArticles?.map((a) => (
-                  <div className="result" onClick={() => {handleClick(a);setShowSearch(false)}}>{a}</div>
+                {filterArticles?.map((a, index) => (
+                  <div key={index} className="result" onClick={() => {handleClick(a);setShowSearch(false)}}>{a}</div>
                 ))}
                 </div>
                 <div className="w-[2px] bg-[#00000070] mx-4"></div>
                 <div className="flex flex-col w-1/3">
                 <h2 className="text-white text-xl text-center font-extrabold">Events</h2>
                 {filterEvents?.length == 0 && searched.length > 0 && <div className="result">No events found</div>}
-                {filterEvents?.map((e) => (
-                  <div className="result" onClick={() => {handleClick(e);setShowSearch(false)}}>{e}</div>
+                {filterEvents?.map((e, index) => (
+                  <div key={index} className="result" onClick={() => {handleClick(e);setShowSearch(false)}}>{e}</div>
                 ))}
                 </div>
                 <div className="w-[2px] bg-[#00000070] mx-4"></div>
                 <div className="flex flex-col w-1/3">
                 <h2 className="text-white text-xl text-center font-extrabold">Users</h2>
                 {filterUsers?.length == 0 && searched.length > 0 && <div className="result">No users found</div>}
-                {filterUsers?.map((u) => (
-                    <Link to={`profile/${u.id}`} onClick={()=>{setShowSearch(false)}} className="result flex gap-2 items-center">
+                {filterUsers?.map((u, index) => (
+                    <Link key={index} to={`profile/${u.id}`} onClick={()=>{setShowSearch(false)}} className="result flex gap-2 items-center">
                     <Avatar src={u.userData?.imgurl} />
                     {u.userData?.firstname ? `${u.userData?.firstname} ${u.userData?.lastname}`: "Unknown User"}
                     </Link>
@@ -417,24 +417,24 @@ export const NavBar: React.FC = () => {
                 <div className="flex flex-col w-full">
                   <h2 className="text-white text-xl text-center font-extrabold">Articles</h2>
                   {filterArticles?.length == 0 && searched.length > 0 && <div className="result">No articles found</div>}
-                  {filterArticles?.map((a) => (
-                    <div className="result" onClick={() => {handleClick(a);setShowSearch(false)}}>{a}</div>
+                  {filterArticles?.map((a, index) => (
+                    <div key={index} className="result" onClick={() => {handleClick(a);setShowSearch(false)}}>{a}</div>
                   ))}
                 </div>
                 <div className="w-[2px] bg-[#00000070] mx-4"></div>
                 <div className="flex flex-col w-full">
                   <h2 className="text-white text-xl text-center font-extrabold">Events</h2>
                   {filterEvents?.length == 0 && searched.length > 0 && <div className="result">No events found</div>}
-                  {filterEvents?.map((e) => (
-                    <div className="result" onClick={() => {handleClick(e);setShowSearch(false)}}>{e}</div>
+                  {filterEvents?.map((e, index) => (
+                    <div className="result" key={index} onClick={() => {handleClick(e);setShowSearch(false)}}>{e}</div>
                   ))}
                 </div>
                 <div className="w-[2px] bg-[#00000070] mx-4"></div>
                 <div className="flex flex-col w-full">
                   <h2 className="text-white text-xl text-center font-extrabold">Users</h2>
                   {filterUsers?.length == 0 && searched.length > 0 && <div className="result">No users found</div>}
-                  {filterUsers?.map((u) => (
-                    <Link to={`profile/${u.id}`} onClick={()=>{setShowSearch(false)}} className="result flex gap-2 items-center">
+                  {filterUsers?.map((u, index) => (
+                    <Link key={index} to={`profile/${u.id}`} onClick={()=>{setShowSearch(false)}} className="result flex gap-2 items-center">
                       <Avatar src={u.userData?.imgurl} />
                       {u.userData?.firstname ? `${u.userData?.firstname} ${u.userData?.lastname}`: "Unknown User"}
                     </Link>
