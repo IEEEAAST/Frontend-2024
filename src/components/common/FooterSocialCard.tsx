@@ -8,7 +8,7 @@ interface FooterSocialCardProps {
 }
 
 const FooterSocialCard = ({ title, imgSrc, link, onOpen }: FooterSocialCardProps) => {
-  
+
   const handleClick = () => {
     if (title === "Frequently Asked Questions") {
       onOpen();
@@ -30,10 +30,10 @@ const FooterSocialCard = ({ title, imgSrc, link, onOpen }: FooterSocialCardProps
       {content}
     </a>
   ) : (
-    <div className="social-icon">
-      {content}
-    </div>
-  );
+      <div className="social-icon">
+        {content}
+      </div>
+    );
 };
 
 export default FooterSocialCard;

@@ -2,7 +2,7 @@ import More from "../../../assets/more-ellipsis-white.png";
 import React from "react";
 import ArticleData from "../../../interfaces/ArticleData.js";
 import { LikeButton } from "../../common/LikeButton.js";
-import {BookMarkButton} from "../../common/bookMarkButton.tsx"
+import {BookMarkButton} from "../../common/BookMarkButton.tsx"
 import "./styles/MainContent.css";
 
 interface LikeSaveShareProps {

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import UserData from "../../../interfaces/userData";
 import ArticleData from "../../../interfaces/ArticleData";
 import { LikeButton } from "../../common/LikeButton";
-import { BookMarkButton } from "../../common/bookMarkButton";
+import { BookMarkButton } from "../../common/BookMarkButton";
 
 interface ArticleCardProps {
   article: ArticleData;
