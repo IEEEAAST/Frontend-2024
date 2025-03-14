@@ -1,5 +1,5 @@
 import { useState, ChangeEvent, FormEvent, useContext, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import {
   Input,
   FormControl,
@@ -62,6 +62,7 @@ export const Profile = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [ passnotRegix, setPassNotRegix ] = useState<boolean>(true);
   const [selectedUserData, setSelectedUserData]= useState<UserData>();
+  const navigate = useNavigate();
 
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
   const [_edit, setEdit] = useState<boolean>(false);
@@ -326,7 +327,7 @@ useEffect(() => {
   };
 
   const goback = () => {
-    window.open("/", "_self");
+    navigate("/");
   };
 
   // Determine if Tabs should be displayed

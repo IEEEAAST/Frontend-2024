@@ -1,5 +1,5 @@
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Input, FormControl, FormErrorMessage, List, ListItem } from "@chakra-ui/react";
 import setData from "../firebase/setData";
 import register from "../firebase/register";
@@ -14,6 +14,7 @@ interface FormData {
 
 export const SignUp = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
@@ -59,7 +60,7 @@ export const SignUp = () => {
       };
       const res = await register(formData.email, formData.password);
       await setData("users", storedFormData, res.result?.user.uid);
-      window.open("/verify", "_self");
+      navigate("/verify");
     } else {
       setShowError(true);
     }

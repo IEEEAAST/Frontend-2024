@@ -3,10 +3,11 @@ import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { app } from "../firebase/config.js";
 import { Spinner } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 
 export const Verifying = () => {
-
+  const navigate = useNavigate();
   const [loading, isLoading] = useState(true);
   const auth = getAuth(app)
 
@@ -14,7 +15,7 @@ export const Verifying = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         if (user.emailVerified) {
-          window.open("/mailconfirm", "_self"); // Redirect to "/mail2" route
+          navigate("/mailconfirm"); // Redirect to "/mail2" route
         } else {
           sendVerifyEmail();
           isLoading(false);

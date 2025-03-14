@@ -8,6 +8,7 @@ import ArticleData from "../../interfaces/ArticleData";
 import UserData from "../../interfaces/userData.js";
 import { Tooltip } from '@chakra-ui/react'
 import { auth } from "../../firebase/config.js";
+import { useNavigate } from "react-router-dom";
 
 interface BookMarkButtonProps {
   item: ArticleData;
@@ -33,6 +34,7 @@ export const BookMarkButton: React.FC<BookMarkButtonProps> = ({ item, className 
 
   const [bookMarks, setBookMarks] = useState<string[]>(initialBookMarks);
   const [optimisticUpdate, setOptimisticUpdate] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   // Sync local state when userData changes (but only if not in optimistic update)
   useEffect(() => {
@@ -46,7 +48,7 @@ export const BookMarkButton: React.FC<BookMarkButtonProps> = ({ item, className 
     e.stopPropagation();
 
     if (!userId) {
-      window.location.href = "/signin";
+      navigate("/signin");
       return;
     }
     if(!isEmailVerified) return;
