@@ -117,7 +117,6 @@ export const NavBar: React.FC = () => {
   ) : null;
   const filterUsers = searched ? users.filter((user) => {
     const fullName = `${user.userData.firstname}${user.userData.lastname}`.toLowerCase().replace(/\s+/g, '');
-    console.log(`fullName: ${fullName}\nsearched: ${searched.toLowerCase().replace(/\s+/g, '')}\nresult: ${fullName.includes(searched.toLowerCase().replace(/\s+/g, ''))}`);
     return fullName.includes(searched.toLowerCase().replace(/\s+/g, ''));
   }) : null;
 
@@ -227,7 +226,7 @@ export const NavBar: React.FC = () => {
                   className="w-full"
                 />
               </div>
-              <div className={`search-results customScrollbar flex ${(!showSearch || (filterArticles?.length == 0 && filterEvents?.length == 0) || searched.length == 0) && 'hidden'}`}>
+              <div className={`search-results customScrollbar flex ${(!showSearch || (filterArticles?.length == 0 && filterEvents?.length == 0 && filterUsers?.length == 0) || searched.length == 0) && 'hidden'}`}>
                 <div className="flex flex-col w-1/3">
                   <h2 className="text-white text-xl text-center font-extrabold">Articles</h2>
                 {filterArticles?.length == 0 && searched.length > 0 && <div className="result">No articles found</div>}
