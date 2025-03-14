@@ -22,6 +22,18 @@ export interface IdUserData extends UserData {
 
 export const Admin = () => {
   const { userData, userId } = useContext(UserContext);
+  const [users, setUsers] = useState<IdUserData[]>([]);
+
+  const [events, setEvents] = useState<EventData[]>([]);
+  const [articles, setArticles] = useState<ArticleData[]>([]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalItem, setModalItem] = useState<UserData | EventData | ArticleData | null>(null);
+ 
+  const [selectedUser, setSelectedUser] = useState<IdUserData | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<EventData | null>(null);
+  const [selectedArticle, setSelectedArticle] = useState<ArticleData | null>(null);
+
   if (!userData || !userData?.roles?.includes('admin')) {
     return (
       <div className='pt-[120px] px-6 flex flex-col w-full items-center justify-center h-[60vh]'>
@@ -30,21 +42,13 @@ export const Admin = () => {
       </div>
     );
   }
-  const [users, setUsers] = useState<IdUserData[]>([]);
-  const [events, setEvents] = useState<EventData[]>([]);
-  const [articles, setArticles] = useState<ArticleData[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalItem, setModalItem] = useState<UserData | EventData | ArticleData | null>(null);
 
-  const [selectedUser, setSelectedUser] = useState<IdUserData | null>(null);
-  const [selectedEvent, setSelectedEvent] = useState<EventData | null>(null);
-  const [selectedArticle, setSelectedArticle] = useState<ArticleData | null>(null);
-  function openModal(item: UserData | EventData | ArticleData) {
+  const openModal = (item: UserData | EventData | ArticleData) => {
     setModalItem(item);
     setIsModalOpen(true);
   }
 
-  async function cleanItemStorage(item: IdUserData | EventData | ArticleData) {
+  const cleanItemStorage = async (item: IdUserData | EventData | ArticleData) => {
     if ('registrationOpen' in item) {
       await deleteStorageDir(`events/${item.title}`);
     }
@@ -56,7 +60,7 @@ export const Admin = () => {
     }
   }
 
-  async function handleDeleteItem(item: IdUserData | EventData | ArticleData) {
+  const handleDeleteItem = async (item: IdUserData | EventData | ArticleData) => {
     if ('firstname' in item) {
       // It's a user
       await deleteDocument('users', item.id);

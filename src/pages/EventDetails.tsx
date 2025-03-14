@@ -6,7 +6,7 @@ import { Sponsors } from "../components/EventDetails/Sponsors";
 import { Resources } from "../components/EventDetails/Resources";
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Spinner, Tooltip } from "@chakra-ui/react";
 import PlusIcon from "../assets/plus.png";
-import { Schedule } from "../components/EventDetails/schedule";
+import { Schedule } from "../components/EventDetails/Schedule";
 import Gallery from "../components/EventDetails/Gallery";
 import subscribeToDocumentsByField from "../firebase/subscribeToDocumentsByField";
 import { EventData } from "../interfaces/EventData";
@@ -14,6 +14,7 @@ import { Ivideo, Inote, IsponsorsIds, scheduleItem, IspksIds } from "../interfac
 import { LikeButton } from "../components/common/LikeButton";
 import getDocument from "../firebase/getData";
 import DOMPurify from "dompurify";
+import getDocumentsByField from "../firebase/getDataByField";
 
 export const EventDetails = () => {
   const { name: eventName } = useParams<{ name: string }>();
@@ -78,18 +79,7 @@ export const EventDetails = () => {
           setSpeakers(event.speakers);
         }
         if (event.schedule) {
-            const fetchSpeakers = async () => {
-              for (const item of event.schedule) {
-                if (item.speaker) {
-                  const speaker = await getDocument("speakers", item.speaker);
-                  if (speaker.result) {
-                    item.speaker = speaker.result?.data()?.name;
-                  }
-                }
-              }
-              setSchedule(event.schedule);
-            };
-            fetchSpeakers();
+          setSchedule(event.schedule);
         }
       }
     });
@@ -98,7 +88,6 @@ export const EventDetails = () => {
   }, [eventName]);
 
   useEffect(() => {
-    console.log(eventName);
     fetchData();
   }, [fetchData]);
   useEffect(() => {
