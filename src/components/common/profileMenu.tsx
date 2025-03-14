@@ -31,7 +31,14 @@ const ProfileMenu = () => {
           bg={'#151F33'}
           border={'1px solid #00091A'}
           _focus={{ bg: '#1e2c48' }}
-          onClick={userData ? () => { SignOut(); navigate('/') } : () => { }}
+          onClick={userData ? () => { 
+            SignOut(); 
+            navigate('/'); 
+            window.location.reload(); 
+            const { setUserData, setUserId } = useContext(UserContext);
+            setUserData(null);
+            setUserId(null);
+          } : () => { }}
         >
           Sign Out
         </MenuItem>

@@ -73,7 +73,15 @@ export const Profile = () => {
   const location = useLocation();
   
   // password regix
-  const passwordRegix = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+  const validatePassword = (password: string): boolean => {
+      return (
+          password.length >= 8 &&
+          /[a-z]/.test(password) &&
+          /[A-Z]/.test(password) &&
+          /\d/.test(password) &&
+          /[@$!%*?&]/.test(password)
+      );
+  };
   const purifyConfig = {
     ALLOWED_TAGS: ['br', 'strong', 'em', 'ul', 'ol', 'li'],
   };
@@ -104,9 +112,16 @@ export const Profile = () => {
   useEffect(() => {
     // Scroll to top immediately when the component mounts
     window.scrollTo({ top: 0, behavior: 'instant' });
-    console.log(currentUserData);
   }, []);
 
+useEffect(() => {
+  if (currentUserData.newPassword) {
+    const isPasswordValid = validatePassword(currentUserData.newPassword);
+    setPassNotRegix(!isPasswordValid);
+  } else {
+    setPassNotRegix(true);
+  }
+},[currentUserData])
   // Fetch user data and check if the `id` matches the logged-in user ID
   useEffect(() => {
     const fetchData = async () => {
@@ -228,7 +243,7 @@ export const Profile = () => {
 
       try {
         await reauthenticateWithCredential(user, credential);
-        if(!passwordRegix.test(newPassword)){
+        if(!validatePassword(newPassword)){
           setShowError(true);
           return;
         }
@@ -266,15 +281,39 @@ export const Profile = () => {
     try {
       const filteredSocials = currentUserData.socials?.filter(social => social.url !== "");
       await updateData("users", user.uid, { ...storedcurrentUserData, socials: filteredSocials });
+
+      if (currentUserData.newPassword !== "") {
+      try {
+        let credential = EmailAuthProvider.credential(userData?.email!, currentUserData.oldPassword);
+        await reauthenticateWithCredential(user, credential);
+
+        if (!validatePassword(currentUserData.newPassword)) {
+        setShowError(true);
+        setErrorMessage("Password does not meet the required criteria.");
+        return;
+        }
+
+        await setNewPassword(user, currentUserData.newPassword);
+        setPassNotRegix(false);
+      } catch (error) {
+        setShowError(true);
+        setIncorrectOldPassword(true);
+        setErrorMessage("Failed to change password. Please check your old password.");
+        return;
+      }
+      }
+
       setShowSuccess(true);
       setTimeout(() => {
-        setShowSuccess(false);
-        setTimeout(() => {
-          window.location.reload();
-        }, 500)
+      setShowSuccess(false);
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
       }, 1000);
     } catch (error) {
       console.error("Error updating user data:", error);
+      setShowError(true);
+      setErrorMessage("An error occurred while updating your profile.");
     }
   };
 
@@ -492,21 +531,23 @@ export const Profile = () => {
                             </FormErrorMessage>
                           : <FormErrorMessage mb={4} fontFamily={"SF-Pro-Text-Medium"}>
                               <List spacing={1} mt={2}>
-                                <ListItem>Invalid Password! Passwords should:</ListItem>
+                                {passnotRegix && (
+                                  <ListItem>Invalid Password! Passwords should:</ListItem>
+                                )}
                                 <ListItem>
-                                  ! Be at least 8 characters long
+                                  {!currentUserData.newPassword || currentUserData.newPassword.length < 8 ? "! Be at least 8 characters long" : null}
                                 </ListItem>
                                 <ListItem>
-                                  ! Contain at least one lowercase letter
+                                  {!currentUserData.newPassword || !/[a-z]/.test(currentUserData.newPassword) ? "! Contain at least one lowercase letter" : null}
                                 </ListItem>
                                 <ListItem>
-                                  ! Contain at least one uppercase letter
+                                  {!currentUserData.newPassword || !/[A-Z]/.test(currentUserData.newPassword) ? "! Contain at least one uppercase letter" : null}
                                 </ListItem>
                                 <ListItem>
-                                  ! Contain at least one digit
+                                  {!currentUserData.newPassword || !/\d/.test(currentUserData.newPassword) ? "! Contain at least one digit" : null}
                                 </ListItem>
                                 <ListItem>
-                                  ! Contain at least one special character (e.g., !@#$%^&*)
+                                  {!currentUserData.newPassword || !/[@$!%*?&]/.test(currentUserData.newPassword) ? "! Contain at least one special character (e.g., !@#$%^&*)" : null}
                                 </ListItem>
                               </List>
                             </FormErrorMessage>
