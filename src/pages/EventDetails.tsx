@@ -12,10 +12,7 @@ import subscribeToDocumentsByField from "../firebase/subscribeToDocumentsByField
 import { EventData } from "../interfaces/EventData";
 import { Ivideo, Inote, IsponsorsIds, scheduleItem, IspksIds } from "../interfaces/EventData";
 import { LikeButton } from "../components/common/LikeButton";
-import getDocument from "../firebase/getData";
 import DOMPurify from "dompurify";
-import getDocumentsByField from "../firebase/getDataByField";
-
 export const EventDetails = () => {
   const { name: eventName } = useParams<{ name: string }>();
   const [eventData, setEventData] = useState<EventData | null>(null);
