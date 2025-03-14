@@ -4,6 +4,7 @@ import { UserContext } from "../../App";
 import { useContext, useEffect, useState } from "react";
 import getData from "../../firebase/getData";
 import Recruiting from "../../interfaces/Recruiting";
+import { Link } from "react-router-dom";
 
 export const Joinus = () => {
   const { userData } = useContext(UserContext);
@@ -31,9 +32,11 @@ export const Joinus = () => {
                 Become a member and get the latest updates from us, about us, and about the latest in tech.
               </p>
               </div>
-              <button className="text-black font-bold text-xs border-2 border-black my-8 p-2 px-4 rounded-3xl max-w-fit" onClick={() => window.location.href = "/Signup"}>
+              <Link to="/signup">
+              <button className="text-black font-bold text-xs border-2 border-black my-8 p-2 px-4 rounded-3xl max-w-fit">
                 Become A Member
               </button>
+              </Link>
             </div>
           )}
           {!userData && <div className="h-full lg:w-[1.5px] bg-orange-200 opacity-75 rounded-3xl"></div>}

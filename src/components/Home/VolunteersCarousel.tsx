@@ -47,7 +47,7 @@ export const VolunteersCarousel = ({ headVolunteers }: { headVolunteers: HeadVol
         }}
         style={{ height: "400px" }}
         onSlideChange={(swiper) => {
-          setActiveIndex((swiper.realIndex+1)%headVolunteers.length);
+          setActiveIndex(width>=1024?((swiper.realIndex+1)%headVolunteers.length):swiper.realIndex);
         }}
       >
         {headVolunteers.map((volunteer, idx) => (
