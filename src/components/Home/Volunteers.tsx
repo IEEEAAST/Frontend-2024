@@ -120,7 +120,7 @@ export const Volunteers = () => {
                     <TabPanels>
                       <TabPanel>
                         {headsByYear[year] && headsByYear[year].boards.length > 0 ? (
-                          <VolunteersCarousel volunteers={headsByYear[year].boards} />
+                          <VolunteersCarousel headVolunteers={headsByYear[year].boards} />
                         ) : (
                           <p>No boards available for {year}</p>
                         )}
@@ -129,7 +129,7 @@ export const Volunteers = () => {
                       {
                         showHeads ? (headsByYear[year] && headsByYear[year].heads.length > 0 ? (  
                           <TabPanel>
-                            <VolunteersCarousel volunteers={headsByYear[year].heads} />
+                            <VolunteersCarousel headVolunteers={headsByYear[year].heads} />
                           </TabPanel>
                         ) : (
                           <p>No heads available for {year}</p>

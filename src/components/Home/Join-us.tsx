@@ -1,21 +1,11 @@
 import globe from "../../assets/public-visitor-globe-black.png";
 import member from "../../assets/members-people-black.png";
-import { UserContext } from "../../App";
-import { useContext, useEffect, useState } from "react";
-import getData from "../../firebase/getData";
-import Recruiting from "../../interfaces/Recruiting";
+import { AppConfigContext, UserContext } from "../../App";
+import { useContext } from "react";
 
 export const Joinus = () => {
   const { userData } = useContext(UserContext);
-  const [recruiting, setRecruiting] = useState<Recruiting | null>(null);
-
-  useEffect(() => {
-    // Fetch data from Firebase when the component mounts
-    getData("adminSettings", "recruitment").then((response) => {
-      const data = response.result?.data() as Recruiting;
-      setRecruiting(data); 
-    });
-  }, []); 
+  const recruitment = useContext(AppConfigContext).appConfig.recruitment;
 
   return (
     <div className="flex flex-col gap-4 w-full px-6 md:px-14 container mx-auto mb-16">
@@ -43,12 +33,12 @@ export const Joinus = () => {
             <p className="text-black text-2xl font-bold">For Volunteering</p>
             <p className="text-black text-lg text-center lg:text-left w-full lg:w-2/3">
             
-              {(recruiting?.formlink&&recruiting?.formlink.length>0)? "For the next generation of builders, you get to contribute your ideas, collaborate, and build." : "Unfortunately, we are not currently recruiting new volunteers. Please check again later!"}
+              {recruitment.recruiting? "For the next generation of builders, you get to contribute your ideas, collaborate, and build." : "Unfortunately, we are not currently recruiting new volunteers. Please check again later!"}
             </p>
             </div>
-            {(recruiting?.formlink&&recruiting.formlink.length>0) && (
-              <a href={recruiting.formlink} target="_blank" rel="noopener noreferrer">
-                <button className="text-black font-bold text-xs border-2 border-black my-8 p-2 px-5 rounded-3xl max-w-fit " onClick={() => window.open(recruiting.formlink,"_blank")}>
+            {recruitment.recruiting && (
+              <a href={recruitment.formLink} target="_blank" rel="noopener noreferrer">
+                <button className="text-black font-bold text-xs border-2 border-black my-8 p-2 px-5 rounded-3xl max-w-fit " onClick={() => window.open(recruitment.formLink,"_blank")}>
                   Volunteer
                 </button>
               </a>

@@ -4,7 +4,7 @@ import { useNavigate, Link, useLocation } from "react-router-dom";
 import { Link as ScrollLink, animateScroll, scroller } from 'react-scroll';
 import { UserContext } from "../../App"
 import SignOut from "../../firebase/signout"
-import ProfileMenu from "./profileMenu";
+import ProfileMenu from "./ProfileMenu";
 import getCollection from "../../firebase/getCollection.js";
 import "../common/styles/Navbar.css";
 import Home from "../../assets/home.png";
@@ -14,7 +14,6 @@ import Write from "../../assets/write.png";
 import { LogoButton } from "./LogoButton.js";
 import UserData from "../../interfaces/userData.js";
 import { Avatar } from "@chakra-ui/react";
-
 
 
 interface ArticleData {
@@ -27,6 +26,7 @@ interface ArticleData {
   publishdate: string;
   title: string;
 }
+
 interface EventData {
   coverPhoto: string;
   description: string;
@@ -115,11 +115,11 @@ export const NavBar: React.FC = () => {
   const filterEvents = searched ? EventTitle.filter((t) =>
     t.toLowerCase().includes(searched.toLowerCase())
   ) : null;
-  const filterUsers = searched ? users.filter((user) =>(
-    (user.userData.firstname && user.userData.lastname) && (
-    user.userData.firstname.toLowerCase().includes(searched.toLowerCase()) ||
-    user.userData.lastname.toLowerCase().includes(searched.toLowerCase())))
-  ) : null;
+
+  const filterUsers = searched ? users.filter((user) => {
+    const fullName = `${user.userData.firstname}${user.userData.lastname}`.toLowerCase().replace(/\s+/g, '');
+    return fullName.includes(searched.toLowerCase().replace(/\s+/g, ''));
+  }) : null;
 
   const handleClick = (handled: string) => {
     if (filterArticles?.includes(handled)) {
@@ -197,7 +197,7 @@ export const NavBar: React.FC = () => {
         {/* left */}
         <LogoButton />
 
-        {/* mid */}
+        {/* mid and right*/}
         <div className="flex-1 justify-start hidden sm:flex">
           <div className="flex justify-center gap-3 ml-5 w-full">
             <button>
@@ -227,46 +227,49 @@ export const NavBar: React.FC = () => {
                   className="w-full"
                 />
               </div>
-              <div className={`search-results customScrollbar flex ${(!showSearch || (filterArticles?.length == 0 && filterEvents?.length == 0) || searched.length == 0) && 'hidden'}`}>
+              <div className={`search-results customScrollbar flex ${(!showSearch || (filterArticles?.length == 0 && filterEvents?.length == 0 && filterUsers?.length == 0) || searched.length == 0) && 'hidden'}`}>
                 <div className="flex flex-col w-1/3">
                   <h2 className="text-white text-xl text-center font-extrabold">Articles</h2>
-                {filterArticles?.length == 0 && searched.length > 0 && <div className="result">No articles found</div>}
-                {filterArticles?.map((a) => (
-                  <div className="result" onClick={() => {handleClick(a);setShowSearch(false)}}>{a}</div>
-                ))}
+                  {filterArticles?.length == 0 && searched.length > 0 && <div className="result">No articles found</div>}
+                  {filterArticles?.map((a, index) => (
+                    <div key={index} className="result" onClick={() => {handleClick(a);setShowSearch(false)}}>{a}</div>
+                  ))}
                 </div>
                 <div className="w-[2px] bg-[#00000070] mx-4"></div>
+
                 <div className="flex flex-col w-1/3">
-                <h2 className="text-white text-xl text-center font-extrabold">Events</h2>
-                {filterEvents?.length == 0 && searched.length > 0 && <div className="result">No events found</div>}
-                {filterEvents?.map((e) => (
-                  <div className="result" onClick={() => {handleClick(e);setShowSearch(false)}}>{e}</div>
-                ))}
+                  <h2 className="text-white text-xl text-center font-extrabold">Events</h2>
+                  {filterEvents?.length == 0 && searched.length > 0 && <div className="result">No events found</div>}
+                  {filterEvents?.map((e, index) => (
+                    <div key={index} className="result" onClick={() => {handleClick(e);setShowSearch(false)}}>{e}</div>
+                  ))}
                 </div>
                 <div className="w-[2px] bg-[#00000070] mx-4"></div>
+
                 <div className="flex flex-col w-1/3">
-                <h2 className="text-white text-xl text-center font-extrabold">Users</h2>
-                {filterUsers?.length == 0 && searched.length > 0 && <div className="result">No users found</div>}
-                {filterUsers?.map((u) => (
-                    <Link to={`profile/${u.id}`} onClick={()=>{setShowSearch(false)}} className="result flex gap-2 items-center">
-                    <Avatar src={u.userData?.imgurl} />
-                    {u.userData?.firstname ? `${u.userData?.firstname} ${u.userData?.lastname}`: "Unknown User"}
+                  <h2 className="text-white text-xl text-center font-extrabold">Users</h2>
+                  {filterUsers?.length == 0 && searched.length > 0 && <div className="result">No users found</div>}
+                  {filterUsers?.map((u, index) => (
+                    <Link key={index} to={`profile/${u.id}`} onClick={()=>{setShowSearch(false)}} className="result flex gap-2 items-center">
+                      <Avatar src={u.userData?.imgurl} />
+                      {u.userData?.firstname ? `${u.userData?.firstname} ${u.userData?.lastname}`: "Unknown User"}
                     </Link>
-                ))}
+                  ))}
                 </div>
-                
               </div>
             </div>
+            {/* End of searchbar */}
+
             <div className="flex gap-2 mr-4">
               {
                 (userData?.roles?.includes("admin") || userData?.roles?.includes("author")) &&
-                <button>
-                  <Link to="/write" >
-                    <div className="border-2 rounded-full border-white w-[40px] p-1">
-                      <img src={Write} alt="Write Article" height={90} width={45} />
-                    </div>
-                  </Link>
-                </button>
+                  <button>
+                    <Link to="/write" >
+                      <div className="border-2 rounded-full border-white w-[40px] p-1">
+                        <img src={Write} alt="Write Article" height={90} width={45} />
+                      </div>
+                    </Link>
+                  </button>
               }
               <button>
                 <Link to="/bookmarks">
@@ -295,155 +298,155 @@ export const NavBar: React.FC = () => {
 
         {/* Hamburger menu for small screens */}
         <div className="sm:hidden flex items-center ml-4 z-50">
-          
-       <div
+
+          <div
             ref={menuRef}
             className={`${menuOpen ? "translate-x-0" : "-translate-x-full"
-              } fixed inset-y-0 left-0 w-3/4 transition-transform duration-300 ease-in-out z-40 flex flex-col sm:hidden`}
+} fixed inset-y-0 left-0 w-3/4 transition-transform duration-300 ease-in-out z-40 flex flex-col sm:hidden`}
             style={{
               background: "linear-gradient(0deg, #1f396e 0%, #000b21 100%)",
               boxShadow: menuOpen ? "4px 0px 4px rgba(0, 0, 0, 0.5)" : "none",
               opacity: 0.98,
             }}
           >{!mobileSearch?
-            <>
-            <button
-              className="w-full h-12 border-solid border-b my-2 flex justify-center items-center text-2xl"
-              style={{ borderColor: "#00050f" }}
-              onClick={() => {
-          setMenuOpen(false);
-          window.location.pathname === "/"
-            ? animateScroll.scrollToTop({ duration: 0 })
-            : navigate("/");
-              }}
-            >
-              Home
-            </button>
-            <button
-                className="w-full h-12 border-solid border-b my-2 flex justify-center items-center text-2xl"
-                style={{ borderColor: "#00050f" }}
-                onClick={() => {
-                  setMobileSearch(true);
-                }}
-              >
-                Search
-              </button>
-            <button
-              className="w-full h-12 border-solid border-b my-2 flex justify-center items-center text-2xl"
-              style={{ borderColor: "#00050f" }}
-              onClick={() => {
-          setMenuOpen(false);
-          navigate("/browse");
-              }}
-            >
+              <>
+                <button
+                  className="w-full h-12 border-solid border-b my-2 flex justify-center items-center text-2xl"
+                  style={{ borderColor: "#00050f" }}
+                  onClick={() => {
+                    setMenuOpen(false);
+                    window.location.pathname === "/"
+                      ? animateScroll.scrollToTop({ duration: 0 })
+                      : navigate("/");
+                  }}
+                >
+                  Home
+                </button>
+                <button
+                  className="w-full h-12 border-solid border-b my-2 flex justify-center items-center text-2xl"
+                  style={{ borderColor: "#00050f" }}
+                  onClick={() => {
+                    setMobileSearch(true);
+                  }}
+                >
+                  Search
+                </button>
+                <button
+                  className="w-full h-12 border-solid border-b my-2 flex justify-center items-center text-2xl"
+                  style={{ borderColor: "#00050f" }}
+                  onClick={() => {
+                    setMenuOpen(false);
+                    navigate("/browse");
+                  }}
+                >
 
-              Browse
-            </button>
-            <ScrollLink
-              to="aboutSection"
-              className="cursor-pointer text-2xl"
-              smooth={true}
-              duration={0}
-            >
-              <button
-          className="w-full h-12 border-solid border-b my-2 flex justify-center items-center"
-          style={{ borderColor: "#00050f" }}
-          onClick={() => {
-            setMenuOpen(false);
-            if (window.location.pathname !== "/") {
-              window.location.href = "/#aboutSection";
-            }
-          }}
-              >
-          About
-              </button>
-            </ScrollLink>
-            <ScrollLink
-              to="contactSection"
-              className="cursor-pointer text-2xl"
-              smooth={true}
-              duration={0}
-            >
-              <button
-          className="w-full h-12 border-solid border-b my-2 flex justify-center items-center"
-          style={{ borderColor: "#00050f" }}
-          onClick={() => {
-            setMenuOpen(false);
-            if (window.location.pathname !== "/") {
-              window.location.href = "/#contactSection";
-            }
-          }}
-              >
-          Contact
-              </button>
-            </ScrollLink>
-            <Link to={userData ? "" : "/signin"}>
-              <button
-          className="w-full h-12 border-solid border-b my-2 flex justify-center items-center text-2xl"
-          style={{ borderColor: "#00050f" }}
-          onClick={() => {
-            setMenuOpen(false);
-            if (userData) {
-              SignOut();
-              window.location.reload();
-            }
-          }}
-              >
-          {userData ? "Sign Out" : "Sign In"}
-              </button>
-            </Link>
-            </>:<>
-            <button
-              className="w-full h-12 border-solid border-b my-2 flex justify-center items-center text-2xl"
-              style={{ borderColor: "#00050f" }}
-              onClick={() => {
-                setMobileSearch(false);
-              }}
-            >
-              Back
-            </button>
-            <div className="nav-search !w-[95%]" ref={searchRef}>
-              <div className="search-bar">
-                <img src={searchIcon} alt="search icon" />
-                <input
-                  type="text"
-                  placeholder="Search articles, events..."
-                  value={searched}
-                  onChange={handleSearch}
-                  className="w-full"
-                />
-              </div>
-              <div className={`search-results customScrollbar flex flex-col ${(!showSearch || (filterArticles?.length == 0 && filterEvents?.length == 0) || searched.length == 0) && 'hidden'}`}>
-                <div className="flex flex-col w-full">
-                  <h2 className="text-white text-xl text-center font-extrabold">Articles</h2>
-                  {filterArticles?.length == 0 && searched.length > 0 && <div className="result">No articles found</div>}
-                  {filterArticles?.map((a) => (
-                    <div className="result" onClick={() => {handleClick(a);setShowSearch(false)}}>{a}</div>
-                  ))}
+                  Browse
+                </button>
+                <ScrollLink
+                  to="aboutSection"
+                  className="cursor-pointer text-2xl"
+                  smooth={true}
+                  duration={0}
+                >
+                  <button
+                    className="w-full h-12 border-solid border-b my-2 flex justify-center items-center"
+                    style={{ borderColor: "#00050f" }}
+                    onClick={() => {
+                      setMenuOpen(false);
+                      if (window.location.pathname !== "/") {
+                        window.location.href = "/#aboutSection";
+                      }
+                    }}
+                  >
+                    About
+                  </button>
+                </ScrollLink>
+                <ScrollLink
+                  to="contactSection"
+                  className="cursor-pointer text-2xl"
+                  smooth={true}
+                  duration={0}
+                >
+                  <button
+                    className="w-full h-12 border-solid border-b my-2 flex justify-center items-center"
+                    style={{ borderColor: "#00050f" }}
+                    onClick={() => {
+                      setMenuOpen(false);
+                      if (window.location.pathname !== "/") {
+                        window.location.href = "/#contactSection";
+                      }
+                    }}
+                  >
+                    Contact
+                  </button>
+                </ScrollLink>
+                <Link to={userData ? "" : "/signin"}>
+                  <button
+                    className="w-full h-12 border-solid border-b my-2 flex justify-center items-center text-2xl"
+                    style={{ borderColor: "#00050f" }}
+                    onClick={() => {
+                      setMenuOpen(false);
+                      if (userData) {
+                        SignOut();
+                        window.location.reload();
+                      }
+                    }}
+                  >
+                    {userData ? "Sign Out" : "Sign In"}
+                  </button>
+                </Link>
+              </>:<>
+                <button
+                  className="w-full h-12 border-solid border-b my-2 flex justify-center items-center text-2xl"
+                  style={{ borderColor: "#00050f" }}
+                  onClick={() => {
+                    setMobileSearch(false);
+                  }}
+                >
+                  Back
+                </button>
+                <div className="nav-search !w-[95%]" ref={searchRef}>
+                  <div className="search-bar">
+                    <img src={searchIcon} alt="search icon" />
+                    <input
+                      type="text"
+                      placeholder="Search articles, events..."
+                      value={searched}
+                      onChange={handleSearch}
+                      className="w-full"
+                    />
+                  </div>
+                  <div className={`search-results customScrollbar flex flex-col ${(!showSearch || (filterArticles?.length == 0 && filterEvents?.length == 0 && filterUsers?.length == 0) || searched.length == 0) && 'hidden'}`}>
+                    <div className="flex flex-col w-full">
+                      <h2 className="text-white text-xl text-center font-extrabold">Articles</h2>
+                      {filterArticles?.length == 0 && searched.length > 0 && <div className="result">No articles found</div>}
+                      {filterArticles?.map((a, index) => (
+                        <div key={index} className="result" onClick={() => {handleClick(a);setShowSearch(false)}}>{a}</div>
+                      ))}
+                    </div>
+                    <div className="w-[2px] bg-[#00000070] mx-4"></div>
+                    <div className="flex flex-col w-full">
+                      <h2 className="text-white text-xl text-center font-extrabold">Events</h2>
+                      {filterEvents?.length == 0 && searched.length > 0 && <div className="result">No events found</div>}
+                      {filterEvents?.map((e, index) => (
+                        <div className="result" key={index} onClick={() => {handleClick(e);setShowSearch(false)}}>{e}</div>
+                      ))}
+                    </div>
+                    <div className="w-[2px] bg-[#00000070] mx-4"></div>
+                    <div className="flex flex-col w-full">
+                      <h2 className="text-white text-xl text-center font-extrabold">Users</h2>
+                      {filterUsers?.length == 0 && searched.length > 0 && <div className="result">No users found</div>}
+                      {filterUsers?.map((u, index) => (
+                        <Link key={index} to={`profile/${u.id}`} onClick={()=>{setShowSearch(false)}} className="result flex gap-2 items-center">
+                          <Avatar src={u.userData?.imgurl} />
+                          {u.userData?.firstname ? `${u.userData?.firstname} ${u.userData?.lastname}`: "Unknown User"}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-                <div className="w-[2px] bg-[#00000070] mx-4"></div>
-                <div className="flex flex-col w-full">
-                  <h2 className="text-white text-xl text-center font-extrabold">Events</h2>
-                  {filterEvents?.length == 0 && searched.length > 0 && <div className="result">No events found</div>}
-                  {filterEvents?.map((e) => (
-                    <div className="result" onClick={() => {handleClick(e);setShowSearch(false)}}>{e}</div>
-                  ))}
-                </div>
-                <div className="w-[2px] bg-[#00000070] mx-4"></div>
-                <div className="flex flex-col w-full">
-                  <h2 className="text-white text-xl text-center font-extrabold">Users</h2>
-                  {filterUsers?.length == 0 && searched.length > 0 && <div className="result">No users found</div>}
-                  {filterUsers?.map((u) => (
-                    <Link to={`profile/${u.id}`} onClick={()=>{setShowSearch(false)}} className="result flex gap-2 items-center">
-                      <Avatar src={u.userData?.imgurl} />
-                      {u.userData?.firstname ? `${u.userData?.firstname} ${u.userData?.lastname}`: "Unknown User"}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-            </>
-          }
+              </>
+            }
           </div>
 
           <button
@@ -463,21 +466,21 @@ export const NavBar: React.FC = () => {
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M4 6h16M4 12h16m-7 6h7"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h16m-7 6h7"
               />
             </svg>
           </button>
-            <div
+          <div
             className={`fixed top-2 right-2 w-fit rounded-full ${userData?"shadow-[0_0_5px_3px_#000B21]":"mt-4"}`}
-            >
+          >
             {!userData ? <button className="font-bold text-sm">
-            <Link to={"/signin"} className=" bg-white px-4 py-4 rounded-full text-black  ">{"Sign In"}</Link>
+              <Link to={"/signin"} className=" bg-white px-4 py-4 rounded-full text-black  ">{"Sign In"}</Link>
             </button> : <ProfileMenu />
             }
-            </div>
+          </div>
         </div>
       </div>
     </>

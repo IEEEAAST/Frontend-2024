@@ -20,9 +20,10 @@ import getUser from "./firebase/auth";
 import { Profile } from "./pages/Profile";
 import UserData from "./interfaces/userData";
 import { ViewAllEvents } from "./pages/ViewAllEvents";
-import { NavBar } from "./components/common/navbar";
+import { NavBar } from "./components/common/Navbar";
 import Footer from "./components/common/Footer";
 import { Bookmarks } from "./pages/Bookmarks";
+import Recruitment from "./interfaces/Recruiting";
 
 export const UserContext = createContext<{
   [x: string]: any;
@@ -41,13 +42,16 @@ export const AppConfigContext = createContext<{
   appConfig: {
     contactEmail: string | null;
     headsCarouselSettings: any | null;
-    recruitingLink: string | null;
+    recruitment: Recruitment;
   };
 }>({
   appConfig: {
     contactEmail: null,
     headsCarouselSettings: null,
-    recruitingLink: null
+    recruitment: {
+      recruiting: false,
+      formLink: ""
+    }
   }
 });
 
@@ -60,7 +64,10 @@ function App() {
   const [appConfig, setAppConfig] = useState({
     contactEmail: null as string | null,
     headsCarouselSettings: null as any | null,
-    recruitingLink: null as string | null,
+    recruitment: {
+      recruiting: false,
+      formLink: "",
+    } as Recruitment,
   });
 
   const fetchUser = async () => {
@@ -87,7 +94,11 @@ function App() {
       setAppConfig({
         contactEmail: contactEmail.result?.data()?.email,
         headsCarouselSettings: headsCarouselSettings.result?.data(),
-        recruitingLink: recruitment.result?.data()?.formlink
+        //recruitingLink: recruitment.result?.data()?.formlink
+        recruitment: {
+          recruiting: recruitment.result?.data()?.recruiting || false,
+          formLink: recruitment.result?.data()?.formLink || ""
+        }
       });
     } catch (error) {
       console.error("Error fetching app config:", error);

@@ -51,11 +51,11 @@ const Footer = () => {
 
   useEffect(() => {
     SocialInfo[1].link = `mailto:${appConfig.contactEmail}`;
-    const recruitingLink = appConfig.recruitingLink;
+    const recruitment = appConfig.recruitment;
     getCollection('faq').then((data) => {
       const recruitmentFaq = {
         question: "How can I join you guys?",
-        answer: (recruitingLink && recruitingLink.length > 0) ?
+        answer: recruitment.recruiting ?
           `You can volunteer with us today by clicking ` :
           "Unfortunately, we are not currently recruiting new volunteers. Check again soon!",
         index: (data?.result?.length ?? 0) + 1
@@ -90,8 +90,17 @@ const Footer = () => {
             {faq.map((question, index) => (
               <div key={index} className="mb-4">
                 <li className="text-2xl">{question.question}</li>
-                <p className="text-lg text-gray-300">{question.answer}{(index==faq.length-1&&appConfig.recruitingLink&&appConfig.recruitingLink.length>0)&& (<><a target="_blank" className="text-blue-500" href={appConfig.recruitingLink}>here</a>!</>)}</p>
-                
+                <p className="text-lg text-gray-300">
+                  {question.answer}
+                  {(index == faq.length - 1
+                    && appConfig.recruitment.recruiting
+                  ) && (
+                      <>
+                        <a target="_blank" className="text-blue-500" href={appConfig.recruitment.formLink}>here</a>!
+                      </>
+                    )}
+                </p>
+
               </div>
             ))}
           </ModalBody>
