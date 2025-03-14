@@ -43,6 +43,7 @@ const AdminSchedule: React.FC<AdminScheduleProps> = ({ event, setEvent }) => {
     } else {
       setNewScheduleItem({ ...newScheduleItem, [name]: value });
     }
+    console.log(event.schedule)
   };
 
   const handleAddScheduleItem = () => {
@@ -88,6 +89,9 @@ const AdminSchedule: React.FC<AdminScheduleProps> = ({ event, setEvent }) => {
                     onChange={(e) => handleInputChange(e, index)}
                     className="py-2 rounded bg-gray-800 mt-1 text-center"
                   >
+                    <option disabled key={0} value={''}>
+                      -- Choose --
+                    </option>
                     {speakerList.map((speaker) => (
                       <option key={speaker.id} value={speaker.name}>
                         {speaker.name}
