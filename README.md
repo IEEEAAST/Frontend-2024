@@ -12,13 +12,13 @@ In an integrated VSCode terminal or Git Bash:
 git clone https://github.com/IEEE-AAST-Alexandria-Student-Branch/Frontend-2024
 ```
 
-- type: `cd Frontend-2024`
+- Open the directory: `cd Frontend-2024`
 
-- type: `npm install`
+- Install npm packages: `npm install`
 
 ## To run, after installing:
 
-- Type: `npm run dev`
+- Run development build: `npm run dev`
 
 ## Design guide:
 
@@ -31,6 +31,7 @@ The app is located at `src/App.tsx`
 The pages accessed by the router are in `src/pages/`
 
 All page-specific styles are in `src/pages/styles`
+<br/>(We will soon import the styles into tailwind)
 
 All components are stored in `src/components/`
 

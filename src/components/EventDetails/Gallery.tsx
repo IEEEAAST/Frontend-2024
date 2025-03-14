@@ -31,7 +31,7 @@ const Gallery: React.FC<GalleryProps> = ({ images }) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen]);
+  }, [isOpen] );
 
   return (
     <>
