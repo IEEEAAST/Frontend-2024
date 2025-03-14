@@ -264,9 +264,8 @@ useEffect(() => {
     if (profilePicture) {
       console.log(currentUserData.profilePicture)
       if (typeof profilePicture !== "string") {
-        addStorage(currentUserData.profilePicture, `profilepics/${user.uid}`).then((res) => {
-          storedcurrentUserData.imgurl = res.link;
-        });
+        const res = await addStorage(currentUserData.profilePicture, `profilepics/${user.uid}`);
+        storedcurrentUserData.imgurl = res.link;
       }
     }
 

@@ -1,5 +1,5 @@
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Input, FormControl, FormErrorMessage } from "@chakra-ui/react";
 import signIn from "../firebase/signin";
 import Triangle from "../assets/bg-triangle-ellipse@2x.png"
@@ -12,6 +12,7 @@ interface FormData {
 }
 
 export const Signin = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
@@ -34,7 +35,7 @@ export const Signin = () => {
     }, []);
 
   const goback = () => {
-    window.open("/", "_self")
+    navigate("/")
   }
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {

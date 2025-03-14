@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   Avatar,
@@ -14,6 +14,7 @@ import updateData from "../firebase/updateData.js";
 import Triangle from "../assets/bg-triangle-ellipse@2x.png";
 
 export const Onboarding = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<{
     mobile: string;
     profilePicture: File | null;
@@ -46,7 +47,7 @@ export const Onboarding = () => {
       }
     );
     await updateData("users", user.uid, storedFormData);
-    window.open("/", "_self");
+    navigate("/")
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
