@@ -218,7 +218,7 @@ export const NavBar: React.FC = () => {
             {/*search bar*/}
             <div className="nav-search" ref={searchRef}>
               <div className="search-bar">
-                <img src={searchIcon} alt="search icon" />
+                <img className='ml-4' src={searchIcon} alt="search icon" />
                 <input
                   type="text"
                   placeholder="Search articles, events..."
