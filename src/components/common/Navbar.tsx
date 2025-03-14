@@ -4,7 +4,7 @@ import { useNavigate, Link, useLocation } from "react-router-dom";
 import { Link as ScrollLink, animateScroll, scroller } from 'react-scroll';
 import { UserContext } from "../../App"
 import SignOut from "../../firebase/signout"
-import ProfileMenu from "./profileMenu";
+import ProfileMenu from "./ProfileMenu";
 import getCollection from "../../firebase/getCollection.js";
 import "../common/styles/Navbar.css";
 import Home from "../../assets/home.png";
@@ -197,7 +197,7 @@ export const NavBar: React.FC = () => {
         {/* left */}
         <LogoButton />
 
-        {/* mid */}
+        {/* mid and right*/}
         <div className="flex-1 justify-start hidden sm:flex">
           <div className="flex justify-center gap-3 ml-5 w-full">
             <button>
@@ -236,6 +236,7 @@ export const NavBar: React.FC = () => {
                   ))}
                 </div>
                 <div className="w-[2px] bg-[#00000070] mx-4"></div>
+
                 <div className="flex flex-col w-1/3">
                   <h2 className="text-white text-xl text-center font-extrabold">Events</h2>
                   {filterEvents?.length == 0 && searched.length > 0 && <div className="result">No events found</div>}
@@ -244,6 +245,7 @@ export const NavBar: React.FC = () => {
                   ))}
                 </div>
                 <div className="w-[2px] bg-[#00000070] mx-4"></div>
+
                 <div className="flex flex-col w-1/3">
                   <h2 className="text-white text-xl text-center font-extrabold">Users</h2>
                   {filterUsers?.length == 0 && searched.length > 0 && <div className="result">No users found</div>}
@@ -254,9 +256,10 @@ export const NavBar: React.FC = () => {
                     </Link>
                   ))}
                 </div>
-
               </div>
             </div>
+            {/* End of searchbar */}
+
             <div className="flex gap-2 mr-4">
               {
                 (userData?.roles?.includes("admin") || userData?.roles?.includes("author")) &&
@@ -413,7 +416,7 @@ export const NavBar: React.FC = () => {
                       className="w-full"
                     />
                   </div>
-                  <div className={`search-results customScrollbar flex flex-col ${(!showSearch || (filterArticles?.length == 0 && filterEvents?.length == 0) || searched.length == 0) && 'hidden'}`}>
+                  <div className={`search-results customScrollbar flex flex-col ${(!showSearch || (filterArticles?.length == 0 && filterEvents?.length == 0 && filterUsers?.length == 0) || searched.length == 0) && 'hidden'}`}>
                     <div className="flex flex-col w-full">
                       <h2 className="text-white text-xl text-center font-extrabold">Articles</h2>
                       {filterArticles?.length == 0 && searched.length > 0 && <div className="result">No articles found</div>}

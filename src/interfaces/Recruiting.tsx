@@ -1,4 +1,4 @@
-export default interface Recruiting {
+export default interface Recruitment {
   recruiting: boolean,
-  formlink: string
+  formLink: string
 }
