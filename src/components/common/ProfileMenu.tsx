@@ -34,7 +34,7 @@ const ProfileMenu = () => {
           onClick={userData ? () => { 
             SignOut(); 
             navigate('/'); 
-            window.location.reload(); 
+            navigate(0);
             const { setUserData, setUserId } = useContext(UserContext);
             setUserData(null);
             setUserId(null);

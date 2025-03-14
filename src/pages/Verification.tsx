@@ -32,7 +32,7 @@ export const Verifying = () => {
 
   const reloadPage = () => {
     if (auth.currentUser)
-      window.location.reload();
+      navigate(0);
   }
 
   return (loading

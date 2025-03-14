@@ -384,7 +384,7 @@ export const NavBar: React.FC = () => {
                       setMenuOpen(false);
                       if (userData) {
                         SignOut();
-                        window.location.reload();
+                        navigate(0);
                       }
                     }}
                   >

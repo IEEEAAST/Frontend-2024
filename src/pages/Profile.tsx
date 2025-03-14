@@ -308,7 +308,7 @@ useEffect(() => {
       setTimeout(() => {
       setShowSuccess(false);
       setTimeout(() => {
-        window.location.reload();
+        navigate(0);
       }, 500);
       }, 1000);
     } catch (error) {

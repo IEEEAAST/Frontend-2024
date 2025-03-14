@@ -23,6 +23,9 @@ export const SignUp = () => {
   });
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const email = queryParams.get("email");
     if (email) {

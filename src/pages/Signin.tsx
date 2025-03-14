@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Input, FormControl, FormErrorMessage } from "@chakra-ui/react";
 import signIn from "../firebase/signin";
@@ -29,6 +29,9 @@ export const Signin = () => {
       [id]: value,
     });
   };
+  useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
 
   const goback = () => {
     window.open("/", "_self")
