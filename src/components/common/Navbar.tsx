@@ -353,9 +353,7 @@ export const NavBar: React.FC = () => {
                     style={{ borderColor: "#00050f" }}
                     onClick={() => {
                       setMenuOpen(false);
-                      if (window.location.pathname !== "/") {
-                        window.location.href = "/#aboutSection";
-                      }
+                      navigate("/#aboutSection");
                     }}
                   >
                     About
@@ -372,9 +370,7 @@ export const NavBar: React.FC = () => {
                     style={{ borderColor: "#00050f" }}
                     onClick={() => {
                       setMenuOpen(false);
-                      if (window.location.pathname !== "/") {
-                        window.location.href = "/#contactSection";
-                      }
+                      navigate("/#contactSection");
                     }}
                   >
                     Contact
