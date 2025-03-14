@@ -78,7 +78,7 @@ const EventHighlights = () => {
           </div>
         </div>
       </div>
-      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+      <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
         <ModalOverlay />
         <ModalContent backgroundColor={"#151F33"}>
           <ModalHeader>Event Highlight</ModalHeader>

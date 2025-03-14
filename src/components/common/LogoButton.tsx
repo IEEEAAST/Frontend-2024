@@ -1,9 +1,11 @@
 import Logo from '../../assets/IEEEAAST.ico';
 import { useContext, useState } from 'react';
 import { UserContext } from '../../App';
+import { useNavigate } from 'react-router-dom';
 
 export const LogoButton = () => {
   const { userData } = useContext(UserContext);
+  const navigate = useNavigate();
   const [isTimerComplete, setIsTimerComplete] = useState(false);
 
   const handleMouseEnter = () => {
@@ -35,12 +37,12 @@ export const LogoButton = () => {
             isTimerComplete ? 'transform -translate-x-20 -rotate-180' : ''
           }`}
           onClick={() => {
-            window.location.href = '/';
+            navigate('/')
           }}
         />
         <button
           onClick={() => {
-            window.location.href = '/admin';
+            navigate('/admin')
           }}
           className={`absolute top-0 left-2 bg-blue-500 text-white px-4 py-2 rounded-full transition-opacity duration-500 text-xs text-center ${
             isTimerComplete ? 'opacity-100' : 'opacity-0'
