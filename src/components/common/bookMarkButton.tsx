@@ -8,6 +8,7 @@ import ArticleData from "../../interfaces/ArticleData";
 import UserData from "../../interfaces/userData.js";
 import { Tooltip } from '@chakra-ui/react'
 import { auth } from "../../firebase/config.js";
+import { useNavigate } from "react-router-dom";
 
 interface BookMarkButtonProps {
     item: ArticleData;
@@ -15,6 +16,7 @@ interface BookMarkButtonProps {
 }
 
 export const BookMarkButton: React.FC<BookMarkButtonProps> = ({ item, className }) => {
+    const navigate = useNavigate();
     // Get user data from context
     const { userData, userId, setUserData } = useContext(UserContext) as {
         userData: UserData;
@@ -46,7 +48,7 @@ export const BookMarkButton: React.FC<BookMarkButtonProps> = ({ item, className 
         e.stopPropagation();
 
         if (!userId) {
-            window.location.href = "/signin";
+            navigate("/signin");
             return;
         }
         if(!isEmailVerified) return;

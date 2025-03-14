@@ -8,6 +8,7 @@ import { EventData } from "../../interfaces/EventData";
 import { Tooltip } from '@chakra-ui/react'
 import { getAuth } from "firebase/auth";
 import { app } from "../../firebase/config.js";
+import { useNavigate } from "react-router-dom";
 
 interface LikeButtonProps {
   item: ArticleData | EventData;
@@ -20,6 +21,7 @@ export const LikeButton: React.FC<LikeButtonProps> = ({ item, type, className })
   const [localLikedBy, setLocalLikedBy] = useState<string[]>(item.likedBy || []);
   const [isAnimating, setIsAnimating] = useState(false);
   const [optimisticUpdate, setOptimisticUpdate] = useState(false);
+  const navigate = useNavigate();
   const auth = getAuth(app);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
 
@@ -41,7 +43,7 @@ export const LikeButton: React.FC<LikeButtonProps> = ({ item, type, className })
     e.preventDefault();
     e.stopPropagation();
 
-    if(!userId) window.location.href="/signin";
+    if(!userId) navigate("/signin");
 
     const liked = userId && localLikedBy.includes(userId);
 

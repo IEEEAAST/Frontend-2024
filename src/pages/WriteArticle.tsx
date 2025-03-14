@@ -6,6 +6,7 @@ import addStorage from "../firebase/addStorage.js";
 import firebase from "firebase/compat/app";
 import { articleTopics } from "../utils.js";
 import 'firebase/compat/firestore';
+import { useNavigate } from "react-router-dom";
 
 interface Article {
   article: string;
@@ -20,7 +21,7 @@ interface Article {
 
 
 export const WriteArticle = () => {
-
+  const navigate = useNavigate();
   const [formState, setFormState] = useState({
     article: '',
     caption: '',
@@ -104,7 +105,7 @@ export const WriteArticle = () => {
 
     await addData("articles", articleData);
     setSubmitting(false);
-    window.location.href = "/article/" + formState.title;
+    navigate("/article/" + formState.title)
   };
 
   return (

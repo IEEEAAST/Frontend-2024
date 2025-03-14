@@ -1,11 +1,12 @@
 import { useContext } from 'react';
 import { Menu, MenuButton, MenuList, MenuItem, Avatar } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../../App';
 import SignOut from '../../firebase/signout';
 
 const ProfileMenu = () => {
   const { userData, userId } = useContext(UserContext);
+  const navigate = useNavigate();
 
   return (
     <Menu>
@@ -30,7 +31,7 @@ const ProfileMenu = () => {
           bg={'#151F33'}
           border={'1px solid #00091A'}
           _focus={{ bg: '#1e2c48' }}
-          onClick={userData ? () => { SignOut(); window.location.href = '/'; } : () => { }}
+          onClick={userData ? () => { SignOut(); navigate('/') } : () => { }}
         >
           Sign Out
         </MenuItem>
