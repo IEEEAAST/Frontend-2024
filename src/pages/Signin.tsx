@@ -42,8 +42,10 @@ export const Signin = () => {
     event.preventDefault();
     setShowError(false);
     await signIn(formData.email, formData.password).then(res => {
-      if (!res.error)
+      if (!res.error){
         goback();
+        window.location.reload();
+        }
       else {
         setShowError(true);
         setErrorMessage(res.error);
