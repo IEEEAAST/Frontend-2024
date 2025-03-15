@@ -378,9 +378,9 @@ useEffect(() => {
               </div>
               <div className="flex justify-center flex-wrap-reverse  w-full lg:justify-end ">
               <TabList>
+                <Tab>About</Tab>
                 <Tab>Articles</Tab>
                 {/*<Tab>Contributions</Tab> disabled for now*/ }
-                <Tab>About</Tab>
                 {/*self && <Tab>Settings</Tab>*/}
                 {/*!self&&<button className="defaultButton my-auto">Follow</button>*/}
               </TabList>
@@ -405,13 +405,6 @@ useEffect(() => {
           </div>
 
           <TabPanels>
-            <TabPanel>
-              <Box>
-                <div className="flex flex-col gap-8 mt-[40px]">{articles?.map((article: ArticleData, index: number)=> {
-                  return <ArticleCard key={index} article={article}/>
-                })}</div>
-              </Box>
-            </TabPanel>
             {/*<TabPanel> disabled for now
               <Box>
               <p>Contributions</p>
@@ -419,6 +412,13 @@ useEffect(() => {
             </TabPanel>*/}
             <TabPanel>
               <div className={"font-body mb-4"} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(currentUserData.desc ?? "",purifyConfig) }}></div>
+            </TabPanel>
+            <TabPanel>
+              <Box>
+                <div className="flex flex-col gap-8 mt-[40px]">{articles?.map((article: ArticleData, index: number)=> {
+                  return <ArticleCard key={index} article={article}/>
+                })}</div>
+              </Box>
             </TabPanel>
             {self && 
             <TabPanel>
