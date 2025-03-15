@@ -97,8 +97,8 @@ export const Dashboard = () => {
   return (
     <div className="flex flex-col items-center bg-[#000B21] text-white header pt-28">
       {/* <div className="h-[120px] w-full"></div> */}
-      {<div className="w-full flex justify-center items-center px-4 mt-32 lg:mt-0 md:px-20 body">
-        <div className="relative w-full lg:w-[1733px] h-[400px] md:h-[450px] lg:h-[600px] rounded-[38px] overflow-hidden">
+      {<div className="w-full flex justify-center items-center px-4 mt-0 lg:mt-0 md:px-20 body">
+        <div className="relative w-full lg:w-[1733px] h-[300px] md:h-[450px] lg:h-[600px] rounded-[38px] overflow-hidden">
           <div className="absolute z-10 w-full h-full bg-gradient-to-t from-[#000B21A5] via-transparent bottom-0"></div>
           {(loadingArticles||loadingEvents) ? <div className="flex h-full w-full items-center justify-center"><Spinner size="xl" /></div>
           :
