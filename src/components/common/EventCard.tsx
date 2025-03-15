@@ -63,7 +63,7 @@ export const EventCard = ({ event, className, disabled }: EventCardProps) => {
         transformStyle: 'preserve-3d',
         transition: 'transform 0.1s'
       }}
-      className={`${'w-full h-[65px] bg-cardSmall bg-contain lg:w-[255px] lg:h-[330px] xl:h-[24.5vw] xl:w-[20vw] md:w-[218px] md:h-[275px] sm:h-[260px] sm:w-[200px] sm:bg-cardLarge sm:bg-cover'} rounded-[10px] md:rounded-[9px]`}
+      className={`${'w-full h-[65px] bg-cardSmall bg-blend-soft-light bg-contain lg:w-[255px] lg:h-[330px] xl:h-[24.5vw] xl:w-[20vw] md:w-[218px] md:h-[275px] sm:h-[260px] sm:w-[200px] sm:bg-cardLarge sm:bg-cover'} rounded-[10px] md:rounded-[9px]`}
       animate={controls}
     >
       <motion.div
@@ -76,7 +76,7 @@ export const EventCard = ({ event, className, disabled }: EventCardProps) => {
         >
           {event.title}
         </h3>
-        <div className='flex gap-1 sm:self-center sm:flex-col sm:py-1'>
+        <div className='flex gap-1 sm:self-center sm:flex-col sm:py-1 text-nowrap'>
           <p className={`${'font-thin text-[14px] sm:text-[13px] md:text-[14px] lg:text-[16px] xl:text-[17px] sm:flex sm:justify-center'}`}>
             {event.type}<span className='sm:hidden'> •</span>
           </p>
