@@ -115,8 +115,8 @@ export const ViewAllArticles = () => {
     <div className="flex flex-col items-center bg-[#000B21] text-white header mb-6 pt-4 md:pt-12 lg:pt-16">
       <div className="h-[150px] md:h-[150px] w-full"></div>
       <div className="w-full px-4 lg:px-[89px]">
-        <div className="flex justify-between items-center">
-          <h2 className="text-white md:text-[32px] lg:text-[45px] font-bold">All Articles</h2>
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-0">
+          <h2 className="text-white text-[32px] md:text-[45px] font-bold">All Articles</h2>
 
           {/* Sorting buttons */}
           <SortButton label="Date" filterKey="date" currentFilter={filter} changeFilter={changeFilter} />
