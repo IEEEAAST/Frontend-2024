@@ -146,7 +146,7 @@ export const SignUp = () => {
                   required
                   placeholder="Your Email"
                   style={{
-                    width: "80%",
+                    width: "100%",
                     border: "none",
                     borderBottom: "1px solid rgb(4, 4, 62)",
                     outline: "none",
@@ -167,7 +167,7 @@ export const SignUp = () => {
                   required
                   placeholder="Password"
                   style={{
-                    width: "80%",
+                    width: "100%",
                     border: "none",
                     borderBottom: "1px solid rgb(4, 4, 62)",
                     outline: "none",
@@ -198,7 +198,19 @@ export const SignUp = () => {
 
               <div className="flex flex-nowrap">
                 <div className="pt-8 flex flex-nowrap items-center gap-2 flex-col">
-                  <div className="flex">
+                  <div className="flex flex-col sm:flex-row items-center gap-2">
+
+                    <button
+                      className="defaultButton"
+                      style={{
+                        fontSize: "11px",
+                        width: "155px",
+                        height: "35px",
+                      }}
+                    >
+                      Send Email
+                    </button>
+
                     <Link to="/">
                       <button
                         style={{
@@ -210,23 +222,11 @@ export const SignUp = () => {
                           borderRadius: "20px",
                           color: "#fff",
                           textAlign: "center",
-                          marginBottom: "2vh",
                         }}
                       >
                         Cancel
                       </button>
                     </Link>
-
-                    <button
-                      className="defaultButton ml-2"
-                      style={{
-                        fontSize: "11px",
-                        width: "155px",
-                        height: "35px",
-                      }}
-                    >
-                      Send Email
-                    </button>
                   </div>
                   <Link to="/signin" className="text-blue-500">
                     Already have an account? Sign in!
