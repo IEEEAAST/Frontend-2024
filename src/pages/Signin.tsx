@@ -86,12 +86,12 @@ export const Signin = () => {
         backgroundImage: "linear-gradient(to bottom, #1F396E, #1D0021)"
       }}></div>
       <div className="form-container" style={{backgroundImage: `url(${Triangle})`, backgroundSize:"20%", backgroundRepeat: 'no-repeat', backgroundPosition: 'right bottom'}}>
-        <div className="p-20 h-screen">
-          <div className="max-w-[600px] mt-40 max-sm:mt-10" style={{}}>
-            <h1 className="text-4xl sm:text-4xl mb-8" style={{ fontWeight: 'bold' }}>
+        <div className="p-20 h-screen ">
+          <div className="max-w-[600px] sm:mt-40  max-sm:mt-10" style={{}}>
+            <h1 className="text-center sm:text-left text-4xl sm:text-4xl mb-8" style={{ fontWeight: 'bold' }}>
               Let's Sign you in!
             </h1>
-            <form className="" onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="mt-28 sm:mt-0">
               <FormControl mb={10} isInvalid={showError}>
                 <Input
                   type="email"
@@ -103,7 +103,7 @@ export const Signin = () => {
                   placeholder="Your Email"
                   mb={8}
                   style={{
-                    width: '80%',
+                    width: '100%',
                     border: 'none',
                     borderBottom: '1px solid rgb(4, 4, 62)',
                     outline: 'none',
@@ -121,7 +121,7 @@ export const Signin = () => {
                   placeholder="Password"
                   mb={4}
                   style={{
-                    width: '80%',
+                    width: '100%',
                     border: 'none',
                     borderBottom: '1px solid rgb(4, 4, 62)',
                     outline: 'none',
@@ -141,7 +141,14 @@ export const Signin = () => {
               <div className="flex flex-nowrap">
                 <div className="pt-8 flex flex-nowrap items-center gap-4 flex-col">
                   <div className="flex flex-col sm:flex-row items-center gap-2">
-                    <button style={{
+                    <button type="submit" className="defaultButton" style={{
+                      fontSize: '11px',
+                      width: '155px',
+                      height: '35px',
+                    }}>
+                      Sign In
+                    </button>
+                    <button type="button" style={{
                       background: 'transparent',
                       padding: '8px',
                       width: '120px',
@@ -152,13 +159,6 @@ export const Signin = () => {
                       textAlign: 'center',
                     }} onClick={goback}>
                       Cancel
-                    </button>
-                    <button className="defaultButton ml-2" style={{
-                      fontSize: '11px',
-                      width: '155px',
-                      height: '35px',
-                    }}>
-                      Sign In
                     </button>
                   </div>
                   <Link to="/Signup" className="text-blue-500">Don't have an account yet? Sign up!</Link>
