@@ -75,7 +75,7 @@ export const Signin = () => {
   };
 
   return (
-    <div>
+    <div className="min-h-fit">
         <Slide direction="top" in={showSentEmail} style={{ zIndex: 300 }}>
         <Alert status="success" variant="solid" zIndex={300}>
           <AlertIcon />
@@ -86,7 +86,7 @@ export const Signin = () => {
         backgroundImage: "linear-gradient(to bottom, #1F396E, #1D0021)"
       }}></div>
       <div className="form-container" style={{backgroundImage: `url(${Triangle})`, backgroundSize:"20%", backgroundRepeat: 'no-repeat', backgroundPosition: 'right bottom'}}>
-        <div className="p-20 h-screen ">
+        <div className="p-20 min-h-screen">
           <div className="max-w-[600px] sm:mt-40  max-sm:mt-10" style={{}}>
             <h1 className="text-center sm:text-left text-4xl sm:text-4xl mb-8" style={{ fontWeight: 'bold' }}>
               Let's Sign you in!
