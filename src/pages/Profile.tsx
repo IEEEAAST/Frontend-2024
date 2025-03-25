@@ -41,6 +41,9 @@ import { SocialIcon } from "../components/common/SocialIcon.tsx";
 import DOMPurify from "dompurify";
 import {Social} from "../interfaces/userData.tsx";
 import { FollowButton } from "../components/common/FollowButton.tsx";
+import { HoverIcon } from "../components/common/HoverIcon.tsx";
+import IEEELogoSmall from "../assets/ieeesmall.png";
+import Admin from "../assets/admin.png";
 
 const defaultAvatar = <svg viewBox="0 0 128 128" className="w-full h-full bg-[#A0AEC0] rounded-full" role="img" aria-label=" avatar"><path fill="currentColor" d="M103,102.1388 C93.094,111.92 79.3504,118 64.1638,118 C48.8056,118 34.9294,111.768 25,101.7892 L25,95.2 C25,86.8096 31.981,80 40.6,80 L87.4,80 C96.019,80 103,86.8096 103,95.2 L103,102.1388 Z"></path><path fill="currentColor" d="M63.9961647,24 C51.2938136,24 41,34.2938136 41,46.9961647 C41,59.7061864 51.2938136,70 63.9961647,70 C76.6985159,70 87,59.7061864 87,46.9961647 C87,34.2938136 76.6985159,24 63.9961647,24"></path></svg>;
 
@@ -106,6 +109,39 @@ export const Profile = () => {
 
   const [followers, setFollowers] = useState<IdUserData[]>();
   const [following, setFollowing] = useState<IdUserData[]>();
+
+  const setTargetFollowers = (
+    listSetter: React.Dispatch<React.SetStateAction<IdUserData[] | undefined>>,
+    userId: string,
+    newFollowers: string[]
+  ) => {
+    listSetter((prevList) => {
+      if (!prevList) return prevList;
+      return prevList.map((user) =>
+        user.id === userId
+          ? { ...user, data: { ...user.data, followers: newFollowers } }
+          : user
+      );
+    });
+  };
+
+  const setCurrentFollowing = (
+    setUserData: React.Dispatch<React.SetStateAction<UserData | null>>,
+    newFollowing: { users: string[] }
+  ) => {
+    setUserData((prevUserData) => {
+          if (!prevUserData) return null;
+          return {
+            ...prevUserData,
+            following: {
+              ...newFollowing,
+              events: prevUserData.following?.events || [],
+            },
+          };
+        });
+  };
+
+
   const fetchCurrentUserEmail = async () => {
     try {
       const user = await getUser();
@@ -294,7 +330,10 @@ export const Profile = () => {
           <div className="flex  justify-between items-center flex-wrap">
             
             <div className="flex flex-col">
-              <p className="text-2xl font-extrabold font-textmedium md:ml-16"> {currentUserData.firstname} {currentUserData.lastname}</p>
+              <div className="flex gap-2 items-center"><p className="text-2xl font-extrabold font-textmedium md:ml-16"> {currentUserData.firstname} {currentUserData.lastname}</p>
+              {selectedUserData.roles?.includes("admin") && <HoverIcon src={Admin} alt="Site Admin" hoverText="This user is a website admin!" />}
+              {selectedUserData.roles?.includes("volunteer") && <HoverIcon src={IEEELogoSmall} alt="Site Admin" hoverText="This user is an IEEE AAST volunteer!"/>}
+              </div>
               <div className="flex gap-[10px] items-center font-extralight md:ml-16 mb-7 md:mb-0">
               <Text className="text-sm cursor-pointer" onClick={async () => {
                 if (selectedUserData.followers.length > 0) {
@@ -302,7 +341,7 @@ export const Profile = () => {
                   setFollowers(users);
                 }
                 setShowFollowersModal(true);
-              }}>{selectedUserData?.followers?.length || 0} Followers</Text>
+              }}>{selectedUserData?.followers?.length || 0} {selectedUserData?.followers.length===1 ?"Follower":"Followers"}</Text>
               •︎
               <Text className="text-sm cursor-pointer" onClick={
                 async () => {
@@ -330,14 +369,21 @@ export const Profile = () => {
                 {self && <Tab>Settings</Tab>}
                 {(!self&&id&&userId) && 
                 <FollowButton
-                  userData={userData}
-                  selectedUserData={selectedUserData}
-                  id={id}
-                  userId={userId}
-                  setUserData={setUserData}
-                  setSelectedUserData={setSelectedUserData}
-                  className="my-auto"
-                />
+                targetUserData={selectedUserData}
+                currentUserData={userData}
+                targetUserId={id}
+                currentUserId={userId}
+                setTargetFollowers={(userId, updatedFollowers) =>
+                  setTargetFollowers(setFollowers, userId, updatedFollowers)
+                }
+                setCurrentFollowing={(userId, updatedFollowing) =>
+                {
+                  userId;
+                  setCurrentFollowing(setUserData, { users: updatedFollowing })
+                }
+                }
+                className="my-auto"
+              />
               }
               </TabList>
               
@@ -575,20 +621,42 @@ export const Profile = () => {
           <ModalContent backgroundColor={"#151F33"}>
         <ModalHeader fontSize={"2xl"}>Followers</ModalHeader>
         <ModalCloseButton />
-        <ModalBody minHeight="200px" className="flex flex-col gap-4 items-center justify-center">
+        <ModalBody minHeight="200px" className="flex flex-col gap-4 items-center">
           
             {showFollowersModal && selectedUserData?.followers && selectedUserData.followers.length > 0 ?(
           
             followers?.map((user, index) => (
-              <Link
-            key={index}
-            className="flex gap-4 items-center hover:bg-[#223457] p-2 rounded-xl transition-colors duration-200 w-full"
-            to={`/profile/${user.id}`}
-            onClick={() => setShowFollowersModal(false)}
-              >
-            <Avatar size="md" src={user.data.imgurl} />
-            <p>{user.data.firstname} {user.data.lastname}</p>
-              </Link>
+                <div
+                key={index}
+                className="flex gap-4 items-center justify-between hover:bg-[#223457] p-2 rounded-xl transition-colors duration-200 w-full cursor-pointer"
+                >
+                <Link
+                  className="flex gap-4 items-center"
+                  to={`/profile/${user.id}`}
+                  onClick={() => setShowFollowersModal(false)}
+                >
+                  <Avatar size="md" src={user.data.imgurl} />
+                  <p>{user.data.firstname} {user.data.lastname}</p>
+                </Link>
+                {(id && userId && user.id !== userId) && 
+
+                <FollowButton
+                targetUserData={user.data}
+                currentUserData={userData}
+                targetUserId={user.id}
+                currentUserId={userId}
+                setTargetFollowers={(userId, updatedFollowers) =>
+                  setTargetFollowers(setFollowers, userId, updatedFollowers)
+                }
+                setCurrentFollowing={(userId, updatedFollowing) =>
+                  {
+                    userId;
+                    setCurrentFollowing(setUserData, { users: updatedFollowing })}
+                }
+                className="follow-button ml-auto"
+                />
+              }
+                </div>
             ))
           
             ) :
@@ -604,24 +672,48 @@ export const Profile = () => {
           <ModalContent backgroundColor={"#151F33"}>
         <ModalHeader fontSize={"2xl"}>Following</ModalHeader>
         <ModalCloseButton />
-        <ModalBody minHeight="200px" className="flex flex-col gap-4 items-center justify-center">
+        <ModalBody minHeight="200px" className="flex flex-col gap-4 items-center ">
           
             {showFollowingModal && selectedUserData?.following?.users && selectedUserData.following.users.length > 0 ?(
           
             following?.map((user, index) => (
-              <Link
-            key={index}
-            className="flex gap-4 items-center hover:bg-[#223457] p-2 rounded-xl transition-colors duration-200 w-full"
-            to={`/profile/${user.id}`}
-            onClick={() => setShowFollowingModal(false)}
-              >
-            <Avatar size="md" src={user.data.imgurl} />
-            <p>{user.data.firstname} {user.data.lastname}</p>
-              </Link>
+                <Link
+                key={index}
+                className="flex gap-4 items-center hover:bg-[#223457] p-2 rounded-xl transition-colors duration-200 w-full cursor-pointer"
+                to={`/profile/${user.id}`}
+                onClick={(e) => {
+                if ((e.target as HTMLElement).closest(".follow-button")) {
+                e.preventDefault();
+                } else {
+                setShowFollowingModal(false);
+                }
+                }}
+                >
+                <Avatar size="md" src={user.data.imgurl} />
+                <p>{user.data.firstname} {user.data.lastname}</p>
+                {(id && userId && user.id !== userId) && 
+
+                <FollowButton
+                  targetUserData={user.data}
+                  currentUserData={userData}
+                  targetUserId={user.id}
+                  currentUserId={userId}
+                  setTargetFollowers={(userId, updatedFollowers) =>
+                  setTargetFollowers(setFollowing, userId, updatedFollowers)
+                  }
+                  setCurrentFollowing={(userId, updatedFollowing) =>
+                  {
+                    userId;
+                    setCurrentFollowing(setUserData, { users: updatedFollowing })}
+                  }
+                  className="follow-button ml-auto"
+                />
+                }
+                </Link>
             ))
           
             ) :
-           <p className="text-2xl font-bold">You are not following anyone yet!</p>
+           <p className="text-2xl font-bold my-auto">{self?"You are not following anyone yet!":"This user is not following anyone yet."}</p>
             
           }
         </ModalBody>

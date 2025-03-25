@@ -3,22 +3,22 @@ import { auth } from '../../firebase/config';
 import { toggleFollow } from '../../utils';
 
 interface FollowButtonProps {
-    userData: any;
-    selectedUserData: any;
-    id: string;
-    userId: string;
-    setSelectedUserData: (data: any) => void;
-    setUserData: (data: any) => void;
+    targetUserData: any;
+    currentUserData: any;
+    targetUserId: string;
+    currentUserId: string;
+    setTargetFollowers: (userId: string, updatedFollowers: string[]) => void;
+    setCurrentFollowing: (userId: string, updatedFollowing: string[]) => void;
     className?: string;
 }
 
 export const FollowButton: React.FC<FollowButtonProps> = ({
-    userData,
-    selectedUserData,
-    id,
-    userId,
-    setSelectedUserData,
-    setUserData,
+    targetUserData,
+    currentUserData,
+    targetUserId,
+    currentUserId,
+    setTargetFollowers,
+    setCurrentFollowing,
     className = "",
 
 }) => {
@@ -30,18 +30,26 @@ export const FollowButton: React.FC<FollowButtonProps> = ({
           setIsEmailVerified(auth.currentUser.emailVerified);
         }
       }, [auth.currentUser]);
-      const canFollow=(userId&&isEmailVerified)?true:false;
+      const canFollow=(currentUserId&&isEmailVerified)?true:false;
     return (
         <button
             className={`defaultButton ${className}`}
             onClick={() => {
-                if (userData && selectedUserData && id && userId) {
-                    toggleFollow(selectedUserData, userData, id, userId, setSelectedUserData, setUserData);
+                if(canFollow){
+                    toggleFollow(
+                        targetUserData,
+                        currentUserData,
+                        targetUserId,
+                        currentUserId,
+                        setTargetFollowers,
+                        setCurrentFollowing
+                    );
                 }
+
             }}
         >
             {canFollow ? (
-                userId && selectedUserData?.followers.includes(userId) ? (
+                currentUserId && targetUserData?.followers.includes(currentUserId) ? (
                     "Unfollow"
                 ) : (
                     "Follow"
