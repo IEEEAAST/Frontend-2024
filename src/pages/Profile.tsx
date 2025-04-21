@@ -345,7 +345,7 @@ export const Profile = () => {
   if(!currentUserData||!selectedUserData) return <Center h={'100vh'}><Spinner size='xl'/></Center>
 
   return (
-    <div>
+    <div className="overflow-x-hidden">
       <Slide direction="top" in={showSuccess} style={{ zIndex: 300 }}>
         <Alert status="success" variant="solid" zIndex={300}>
           <AlertIcon />
@@ -354,7 +354,7 @@ export const Profile = () => {
       </Slide>
       <div className="pt-[100px] mx-8 md:mx-32 flex flex-col justify-center">
         <div
-          className="bg-cover bg-center mt-6 md:mt-11 h-[200px] -left-[10%] w-[120%] md:left-0 md:w-full md:h-[300px] md:rounded-3xl relative flex items-start justify-end p-2 md:px-2"
+          className="bg-cover bg-center mt-6 md:mt-11 h-[200px] -left-[10%] w-[120%] md:left-0 md:w-full md:h-[300px] md:rounded-3xl relative flex items-start justify-end p-2"
           style={{
             backgroundImage: `url(${selectedUserData?.coverPhoto || defaultCover})`,
           }}
