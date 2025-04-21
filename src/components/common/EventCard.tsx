@@ -102,9 +102,9 @@ export const EventCard = ({ event, className, disabled }: EventCardProps) => {
         animate={controls}
       >
         <motion.div
-          className={`absolute w-full h-full backface-hidden text-center sm:flex sm:items-end sm:pb-16 px-3 pt-1 sm:px-8 xl:pb-24`}
+          className={`absolute w-full h-full backface-hidden text-center sm:flex sm:items-end sm:pb-16 px-3 pt-1 sm:px-8 xl:pb-24 items-center justify-center`}
         >
-          <div className='flex flex-col font-bold sm:gap-2'><p>{isEventOngoing(event)}</p>
+          <div className='flex flex-col font-bold sm:gap-2 justify-between sm:h-full sm:pt-8'><p className='opacity-75 sm:text-xl'>{isEventOngoing(event)}</p>
           <h3
             className={`overflow-hidden text-ellipsis whitespace-nowrap sm:whitespace-normal sm:overflow-visible font-bold w-full text-left sm:text-center text-[23px] sm:text-[18px] md:text-[20px] lg:text-[23px] ${
               event.title.length > 25 ? "xl:text-[1.5vw]" : "xl:text-[2vw]"
