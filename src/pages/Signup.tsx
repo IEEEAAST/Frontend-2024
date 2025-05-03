@@ -83,7 +83,11 @@ export const SignUp = () => {
           throw new Error(res.error);
         } else {
           // Save user data to Firestore
-          await setData("users", storedFormData, res.result?.user.uid);
+            const updatedFormData = {
+            ...storedFormData,
+            dateJoined: new Date().toISOString(),
+            };
+            await setData("users", updatedFormData, res.result?.user.uid);
 
           // Fetch the newly created user data and update UserContext
           const user = await getUser();

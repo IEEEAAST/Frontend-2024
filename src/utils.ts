@@ -228,8 +228,12 @@ export const handleGoogleSignIn = async (setLoading: (loading: string|null) => v
     };
     if (result?.user?.uid) {
       const userExists = await docExists("users", result.user.uid);
+      const newUser = {
+        ...storedEmptyUser,
+        dateJoined: new Date().toISOString(),
+        };
       if (!userExists) {
-        await setData("users", storedEmptyUser, result.user.uid);
+        await setData("users", newUser, result.user.uid);
         
       }
       window.location.reload();
