@@ -9,6 +9,7 @@ import getUser from "../firebase/auth";
 import getDocument from "../firebase/getData";
 import { UserContext } from "../App";
 import UserData from "../interfaces/userData";
+import { Timestamp } from "@firebase/firestore";
 
 interface FormData {
   firstName: string;
@@ -85,7 +86,7 @@ export const SignUp = () => {
           // Save user data to Firestore
             const updatedFormData = {
             ...storedFormData,
-            dateJoined: new Date().toISOString(),
+            dateJoined: Timestamp.now()
             };
             await setData("users", updatedFormData, res.result?.user.uid);
 

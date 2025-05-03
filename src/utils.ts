@@ -1,4 +1,5 @@
 import { arrayRemove, arrayUnion } from '@firebase/firestore';
+
 import updateData from './firebase/updateData';
 import getDocument from './firebase/getData';
 import { ensureUserFieldExist } from './firebase/addBookMarksMissingFields';
@@ -8,6 +9,7 @@ import userData from './interfaces/userData';
 import signInWithGoogle from './firebase/signInWithGoogle';
 import { docExists } from './firebase/docExists';
 import setData from './firebase/setData';
+import { Timestamp } from '@firebase/firestore';
 
 export const eventTypesWithColors = [
   { type: "AI", color: "#C058D3" },
@@ -230,8 +232,8 @@ export const handleGoogleSignIn = async (setLoading: (loading: string|null) => v
       const userExists = await docExists("users", result.user.uid);
       const newUser = {
         ...storedEmptyUser,
-        dateJoined: new Date().toISOString(),
-        };
+        dateJoined: Timestamp.now(),
+      };
       if (!userExists) {
         await setData("users", newUser, result.user.uid);
         
