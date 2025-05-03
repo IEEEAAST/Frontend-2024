@@ -118,39 +118,47 @@ export const EventDetails = () => {
           ></div>
           <div id="eventDetailsFlex">
             <div id="eventNameWrapper">
-              <div className="flex items-center gap-4">
-              <span className="text-[50px] font-display font-bold flex flex-wrap items-center w-auto whitespace-normal">
-              <span className="flex-shrink">{/* First part of the text */}
-                  {eventData?.title?.split(' ').slice(0, -1).join(' ') ?? "Error"}
-              </span>
-              <span className="flex items-center whitespace-nowrap">
-                &nbsp;{/* Space to separate */}
-                {eventData?.title?.split(' ').slice(-1)}{/* Last word */}
-                {eventData && <LikeButton item={eventData} type="event" className="font-body font-normal text-[16px] ml-2 mt-2"/>}
-              </span>
-              </span>    
-
-              </div>
-              <div id="eventDetailsWrapper">
-                {eventData?.location && (
-                  <span>
-                    Location: <strong>{eventData.location}</strong>
+              <div className="flex w-full items-center justify-between flex-col sm:flex-row">
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-4">
+                  <span className="text-[50px] font-display font-bold flex flex-wrap items-center w-auto whitespace-normal">
+                  <span className="flex-shrink">{/* First part of the text */}
+                      {eventData?.title?.split(' ').slice(0, -1).join(' ') ?? "Error"}
                   </span>
-                )
+                  <span className="flex items-center whitespace-nowrap">
+                    &nbsp;{/* Space to separate */}
+                    {eventData?.title?.split(' ').slice(-1)}{/* Last word */}
+                    {eventData && <LikeButton item={eventData} type="event" className="font-body font-normal text-[16px] ml-2 mt-2"/>}
+                  </span>
+                  </span>
+                  </div>
+                  <div id="eventDetailsWrapper">
+                    {eventData?.location && (
+                      <span>
+                        Location: <strong>{eventData.location}</strong>
+                      </span>
+                    )
+                        }
+                    {eventData?.starttime ? (
+                    <span>
+                      Time: from <strong>{formatEventDate(eventData.starttime.toDate(), "long")}</strong>
+                      {eventData.endtime && (
+                      <> to <strong>{formatEventDate(eventData.endtime.toDate(), "long")}</strong></>
+                      )}
+                    </span>
+                    ):
+                    "Time: TBA"
                     }
-                {eventData?.starttime ? (
-                <span>
-                  Time: from <strong>{formatEventDate(eventData.starttime.toDate(), "long")}</strong>
-                  {eventData.endtime && (
-                  <> to <strong>{formatEventDate(eventData.endtime.toDate(), "long")}</strong></>
-                  )}
-                </span>
-                ):
-                "Time: TBA"
-                }
-              <span>Type: <strong>{eventData?.type}</strong></span>
-              
-            </div>
+                  <span>Type: <strong>{eventData?.type}</strong></span>
+                  
+                    </div>
+                </div>
+                {(eventData?.registrationOpen&&eventData.formLink) ?
+              <Link className="flex justify-center mt-4" to={eventData.formLink}>{attendButton}</Link>:
+                  <Tooltip label="Registration for this event is currently closed." placement="left" hasArrow bg="gray.300" color="black" fontSize="md">
+                    {attendButton}
+                  </Tooltip>}
+              </div>
             <hr className="my-8 border-t-2 border-gray-300 w-[calc(100vw-45px)] opacity-25" />
               <span id="eventDesc" className="whitespace-pre-wrap w-[calc(100vw-45px)]"  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(eventData?.description ?? "Event not found.",purifyConfig) }}></span>
             </div>
@@ -158,11 +166,7 @@ export const EventDetails = () => {
 
 
           </div>
-          {(eventData?.registrationOpen&&eventData.formLink) ?
-              <Link className="flex justify-center mt-4 sm:hidden" to={eventData.formLink}>{attendButton}</Link>:
-                  <Tooltip label="Event registration link not available yet.">
-                    {attendButton}
-                  </Tooltip>}
+          
           <Tabs variant="unstyled" style={{ margin: "60px 0px" }}>
             <TabList
               bg={"#151F33"}
@@ -192,11 +196,6 @@ export const EventDetails = () => {
                   Notification button disabled until we get it working!!!
                 */ }
               </div>
-              {(eventData?.registrationOpen&&eventData.formLink) ?
-              <Link className="hidden sm:block" to={eventData.formLink}>{attendButton}</Link>:
-                  <Tooltip label="Event registration link not available yet.">
-                    {attendButton}
-                  </Tooltip>}
             </TabList>
             <TabPanels>
               <TabPanel>
