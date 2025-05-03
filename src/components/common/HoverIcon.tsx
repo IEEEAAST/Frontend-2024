@@ -15,7 +15,7 @@ export const HoverIcon: React.FC<HoverIconProps> = ({ src, alt, className, hover
     </div>
     return (
         (hoverText&&hoverText.length>0)?
-        <Tooltip label={hoverText}>
+        <Tooltip label={hoverText} shouldWrapChildren placement="auto">
             {content}
         </Tooltip>
         :

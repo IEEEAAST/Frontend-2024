@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
 import { Sponsors } from "../components/EventDetails/Sponsors";
 import { Resources } from "../components/EventDetails/Resources";
-import { Tabs, TabList, TabPanels, Tab, TabPanel, Spinner, Tooltip } from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Spinner, Tooltip, PlacementWithLogical, useMediaQuery } from "@chakra-ui/react";
 
 import { Schedule } from "../components/EventDetails/Schedule";
 import Gallery from "../components/EventDetails/Gallery";
@@ -27,7 +27,8 @@ export const EventDetails = () => {
   const purifyConfig = {
     ALLOWED_TAGS: ['br', 'strong', 'em', 'ul', 'ol', 'li'],
   };
-
+  const [isSmallScreen] = useMediaQuery("(max-width: 768px)");
+  const tooltipPosition = isSmallScreen ? "bottom" : "left";
 
   const formatEventDate = (date: Date, format: string) => {
     if (format === "long") {
@@ -155,9 +156,15 @@ export const EventDetails = () => {
                 </div>
                 {(eventData?.registrationOpen&&eventData.formLink) ?
               <Link className="flex justify-center mt-4" to={eventData.formLink}>{attendButton}</Link>:
-                  <Tooltip label="Registration for this event is currently closed." placement="left" hasArrow bg="gray.300" color="black" fontSize="md">
+                    <Tooltip
+                    label="Registration for this event is currently closed."
+                    placement={tooltipPosition as PlacementWithLogical | undefined}
+                    hasArrow
+                    fontSize="md"
+                    shouldWrapChildren
+                    >
                     {attendButton}
-                  </Tooltip>}
+                    </Tooltip>}
               </div>
             <hr className="my-8 border-t-2 border-gray-300 w-[calc(100vw-45px)] opacity-25" />
               <span id="eventDesc" className="whitespace-pre-wrap w-[calc(100vw-45px)]"  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(eventData?.description ?? "Event not found.",purifyConfig) }}></span>

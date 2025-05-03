@@ -101,7 +101,7 @@ export const LikeButton: React.FC<LikeButtonProps> = ({ item, type, className })
   );
 
   return canLike ? likeButtonContent : (
-    <Tooltip label={userId ? "Verify your email to like posts!":"Sign in to like posts!" } placement="top">
+    <Tooltip label={userId ? "Verify your email to like posts!":"Sign in to like posts!" } placement="auto" shouldWrapChildren>
       {likeButtonContent}
     </Tooltip>
   );

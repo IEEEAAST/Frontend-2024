@@ -103,7 +103,7 @@ export const BookMarkButton: React.FC<BookMarkButtonProps> = ({ item, className 
   );
 
   return userId ? bookmarkContent : (
-    <Tooltip label={userId ? "Verify your email to bookmark posts!":"Sign in to bookmark posts!" } placement="top">
+    <Tooltip shouldWrapChildren label={userId ? "Verify your email to bookmark posts!":"Sign in to bookmark posts!" } placement="auto">
       {bookmarkContent}
     </Tooltip>
   );
