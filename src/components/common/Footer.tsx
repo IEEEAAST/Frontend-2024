@@ -58,7 +58,7 @@ const Footer = () => {
   const [anonymous, setAnonymous] = useState((userId==null? true : false));
 
   useEffect(() => {
-    SocialInfo[1].link = `mailto:${appConfig.contactEmail}`;
+    SocialInfo[0].link = `mailto:${appConfig.contactEmail}`;
     const recruitment = appConfig.recruitment;
     getCollection("faq").then((data) => {
       const recruitmentFaq = {
