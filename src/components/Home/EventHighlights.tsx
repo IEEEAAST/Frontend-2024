@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import getCollection from '../../firebase/getCollection';
 interface EventHighlight{
   index: number;
@@ -16,9 +16,9 @@ import {
 } from '@chakra-ui/react'
 
 const EventHighlights = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [selectedImage, setSelectedImage] = React.useState('');
-  const [images, setImages] = React.useState<string[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState('');
+  const [images, setImages] = useState<string[]>([]);
   useEffect(() => {
   getCollection('highlights').then((data) => {
     const sortedHighlights = (data.result || []).sort((a: EventHighlight, b: EventHighlight) => a.index - b.index);
@@ -33,9 +33,9 @@ const EventHighlights = () => {
 
   return (
     <>
-      <div className="flex flex-col items-start w-full container mx-auto">
+      <div className="flex flex-col w-full justify-center">
         <p className="font-bold text-[30px] sm:text-[35px] md:text-[45px] mb-5 w-full mt-20 text-center">Event Highlights</p>
-        <div className="flex justify-center w-full">
+        <div className="flex justify-center w-full px-20 lg:px-28">
           <div className="grid sm:hidden grid-cols-3 sm:grid-cols-3 gap-4 p-4">
             <div onClick={()=>{onOpen(images[0])}} className="cursor-pointer col-span-1 sm:col-span-1" style={{ height: '200px' }}>
               <img src={images[0]} alt="Image 1" className="object-cover w-50 h-full border rounded-xl" />
