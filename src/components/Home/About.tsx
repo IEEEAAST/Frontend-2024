@@ -85,7 +85,7 @@ const About = () => {
           <Card key={index} {...card} />
         ))}
       </div>
-      <div className="box-container">
+      <div className="flex flex-col md:flex-row gap-4 px-10 mb-10">
         {branchNumbers.map((number, index) => (
           <NumbersCard key={index} {...number} />
         ))}
