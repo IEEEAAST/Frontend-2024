@@ -23,6 +23,7 @@ import { NavBar } from "./components/common/Navbar";
 import Footer from "./components/common/Footer";
 import { Bookmarks } from "./pages/Bookmarks";
 import Recruitment from "./interfaces/Recruiting";
+import { NotFound } from "./components/common/NotFound";
 
 export const UserContext = createContext<{
   [x: string]: any;
@@ -69,7 +70,6 @@ function App() {
   const [userId, setUserId] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [hideNavBar,setHideNavBar] = useState(false);
-
   const [appConfig, setAppConfig] = useState({
     contactEmail: null as string | null,
     headsCarouselSettings: null as any | null,
@@ -142,6 +142,7 @@ function App() {
           <Route path="/events" element={<ViewAllEvents />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/bookmarks" element={<Bookmarks />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
         </hideNavBarContext.Provider>
