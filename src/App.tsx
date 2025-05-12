@@ -151,7 +151,7 @@ function App() {
             backgroundImage: `url(${Background})`, 
             backgroundRepeat: "repeat-y", 
             backgroundSize: "100% 80%", 
-            backgroundPosition: `center ${scrollY * 100}px` 
+            backgroundPosition: `center ${(1-scrollY) * 150}px` 
           }}
         ></div>
         <Routes>
