@@ -24,8 +24,8 @@ import Footer from "./components/common/Footer";
 import { Bookmarks } from "./pages/Bookmarks";
 import Recruitment from "./interfaces/Recruiting";
 import { NotFound } from "./components/common/NotFound";
-import Background from "./assets/bg.png";
-
+import Background from "./assets/wavy-bg.png";
+import {animated, useSpring} from "react-spring";
 export const UserContext = createContext<{
   [x: string]: any;
   userData: UserData | null;
@@ -71,7 +71,6 @@ function App() {
   const [userId, setUserId] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [hideNavBar,setHideNavBar] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
   const [appConfig, setAppConfig] = useState({
     contactEmail: null as string | null,
     headsCarouselSettings: null as any | null,
@@ -81,6 +80,31 @@ function App() {
     } as Recruitment,
     coverPhoto: null as string | null
   });
+
+  const [scrollY, setScrollY] = useState(0);
+
+  // Update scrollY to account for the percentage of scroll from top to bottom
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercentage = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
+      setScrollY(scrollPercentage);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  // Create a spring animation for the parallax effect
+
+  const backgroundPosition = useSpring({
+    to: { backgroundPositionY: `${(1-scrollY) * 400-500}px` },
+    config: { tension: 150, friction: 20 },
+  }).backgroundPositionY;
 
   const fetchUser = async () => {
     try {
@@ -122,56 +146,51 @@ function App() {
   useEffect(() => {
     fetchUser();
     fetchAppConfig();
-
-
-  }, []);
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollRatio = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
-      setScrollY(scrollRatio);
-      console.log(scrollRatio);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
   }, []);
 
-  return loading ? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex " /></div> : (
+  return loading ? (
+    <div className="h-screen flex justify-center items-center">
+      <Spinner size={"xl"} className="flex " />
+    </div>
+  ) : (
     <UserContext.Provider value={{ userData, setUserData, userId, setUserId }}>
       <AppConfigContext.Provider value={{ appConfig }}>
         <hideNavBarContext.Provider value={{ hideNavBar, setHideNavBar }}>
-        <NavBar hideNavBar={hideNavBar}/>
-        <div 
-          className="fixed -z-20 opacity-[1%] w-full h-screen" 
-          style={{ 
-            backgroundImage: `url(${Background})`, 
-            backgroundRepeat: "repeat-y", 
-            backgroundSize: "100% 80%", 
-            backgroundPosition: `center ${(1-scrollY) * 150}px` 
-          }}
-        ></div>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/browse" element={<Dashboard />} />
-          <Route path="/event/:name" element={<EventDetails />} />
-          <Route path="/article/:name" element={<Article />} />
-          <Route path="/write" element={<WriteArticle />} />
-          <Route path="/onboard" element={<Onboarding />} />
-          <Route path="/verify" element={<Verifying />} />
-          <Route path="/Signup" element={<SignUp />} />
-          <Route path="/signin" element={<Signin />} />
-          <Route path="/Profile/:name" element={<Profile />} />
-          <Route path="/articles" element={<ViewAllArticles />} />
-          <Route path="/events" element={<ViewAllEvents />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/bookmarks" element={<Bookmarks />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <Footer />
+          <NavBar hideNavBar={hideNavBar} />
+          <animated.div
+            style={{
+              backgroundImage: `url(${Background})`,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "100% 120%",
+              backgroundPositionX: "center",
+              backgroundPositionY: backgroundPosition,
+              height: "100%",
+              width: "100%",
+              position: "fixed",
+              top: 0,
+              left: 0,
+              zIndex: -20,
+              opacity: 0.05,
+            }}
+          />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/browse" element={<Dashboard />} />
+            <Route path="/event/:name" element={<EventDetails />} />
+            <Route path="/article/:name" element={<Article />} />
+            <Route path="/write" element={<WriteArticle />} />
+            <Route path="/onboard" element={<Onboarding />} />
+            <Route path="/verify" element={<Verifying />} />
+            <Route path="/Signup" element={<SignUp />} />
+            <Route path="/signin" element={<Signin />} />
+            <Route path="/Profile/:name" element={<Profile />} />
+            <Route path="/articles" element={<ViewAllArticles />} />
+            <Route path="/events" element={<ViewAllEvents />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/bookmarks" element={<Bookmarks />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <Footer />
         </hideNavBarContext.Provider>
       </AppConfigContext.Provider>
     </UserContext.Provider>
