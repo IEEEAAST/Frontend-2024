@@ -170,7 +170,7 @@ function App() {
               top: 0,
               left: 0,
               zIndex: -20,
-              opacity: 0.05,
+              opacity: 0.2,
             }}
           />
           <Routes>
