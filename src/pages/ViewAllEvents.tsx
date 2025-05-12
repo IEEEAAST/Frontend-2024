@@ -149,7 +149,7 @@ export const ViewAllEvents = () => {
     <div className="w-full h-[60vh] flex items-center justify-center"><Spinner size="xl" /></div>
   )
   return(
-    <div className="flex flex-col items-center bg-[#000B21] text-white header">
+    <div className="flex flex-col items-center  text-white header">
       <div className="h-[150px] w-full"></div>
       <div className="flex flex-col md:flex-row justify-between items-center w-full px-4 lg:px-[89px] gap-4">
 

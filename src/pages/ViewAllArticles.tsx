@@ -112,7 +112,7 @@ export const ViewAllArticles = () => {
   }
 
   return (
-    <div className="flex flex-col items-center bg-[#000B21] text-white header mb-6 pt-4 md:pt-12 lg:pt-16">
+    <div className="flex flex-col items-center text-white header mb-6 pt-4 md:pt-12 lg:pt-16">
       <div className="h-[150px] md:h-[150px] w-full"></div>
       <div className="w-full px-4 lg:px-[89px]">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-0">

@@ -105,7 +105,7 @@ export const EventDetails = () => {
   return (loading 
     ? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex"/></div>
     : <>
-        <div className="h-28" style={{ borderColor: "#00091A", borderWidth: "4px" }}></div>
+        <div className="h-28"></div>
         <div id="eventPage">
           <div
             className="flex items-center justify-center mt-4 w-full h-[400px] rounded-3xl border-8"

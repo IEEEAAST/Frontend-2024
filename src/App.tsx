@@ -24,6 +24,7 @@ import Footer from "./components/common/Footer";
 import { Bookmarks } from "./pages/Bookmarks";
 import Recruitment from "./interfaces/Recruiting";
 import { NotFound } from "./components/common/NotFound";
+import Background from "./assets/bg.png";
 
 export const UserContext = createContext<{
   [x: string]: any;
@@ -70,6 +71,7 @@ function App() {
   const [userId, setUserId] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [hideNavBar,setHideNavBar] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
   const [appConfig, setAppConfig] = useState({
     contactEmail: null as string | null,
     headsCarouselSettings: null as any | null,
@@ -120,6 +122,22 @@ function App() {
   useEffect(() => {
     fetchUser();
     fetchAppConfig();
+
+
+  }, []);
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollRatio = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
+      setScrollY(scrollRatio);
+      console.log(scrollRatio);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   return loading ? <div className="h-screen flex justify-center items-center"><Spinner size={"xl"} className="flex " /></div> : (
@@ -127,6 +145,15 @@ function App() {
       <AppConfigContext.Provider value={{ appConfig }}>
         <hideNavBarContext.Provider value={{ hideNavBar, setHideNavBar }}>
         <NavBar hideNavBar={hideNavBar}/>
+        <div 
+          className="fixed -z-20 opacity-[1%] w-full h-screen" 
+          style={{ 
+            backgroundImage: `url(${Background})`, 
+            backgroundRepeat: "repeat-y", 
+            backgroundSize: "100% 80%", 
+            backgroundPosition: `center ${scrollY * 100}px` 
+          }}
+        ></div>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/browse" element={<Dashboard />} />
