@@ -35,7 +35,7 @@ const EventHighlights = () => {
     <>
       <div className="flex flex-col w-full justify-center">
         <p className="font-bold text-[30px] sm:text-[35px] md:text-[45px] mb-5 w-full mt-20 text-center">Event Highlights</p>
-        <div className="flex justify-center w-full px-20 lg:px-28">
+        <div className="flex justify-center w-full px-4 sm:px-20 lg:px-28">
           <div className="grid sm:hidden grid-cols-3 sm:grid-cols-3 gap-4 p-4">
             <div onClick={()=>{onOpen(images[0])}} className="cursor-pointer col-span-1 sm:col-span-1" style={{ height: '200px' }}>
               <img src={images[0]} alt="Image 1" className="object-cover w-50 h-full border rounded-xl" />
