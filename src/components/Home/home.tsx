@@ -43,16 +43,16 @@ export const HomeComp = () => {
 
     return (
         <div
-            className={`flex flex-col bg-cover bg-center w-full h-screen overflow-hidden bg-homeImage`}
+            className={`flex flex-col bg-cover bg-center w-full h-svh overflow-hidden bg-homeImage`}
         >
             {/* Background Gradient */}
             <div
-                className={`absolute w-full h-screen bg-gradient-to-t from-[#000B21]/90 via-transparent to-[#000B21]/90 transition-opacity duration-500 ${
+                className={`absolute w-full h-svh bg-gradient-to-t from-[#000B21]/90 via-transparent to-[#000B21]/90 transition-opacity duration-500 ${
                     hideNavBar ? "opacity-0" : "opacity-100"
                 }`}
             ></div>
             <div
-                className={`absolute w-full h-screen bg-gradient-to-r from-[#000B21]/90 via-transparent to-[#000B21]/90 transition-opacity duration-500 ${
+                className={`absolute w-full h-svh bg-gradient-to-r from-[#000B21]/90 via-transparent to-[#000B21]/90 transition-opacity duration-500 ${
                     hideNavBar ? "opacity-0" : "opacity-100"
                 }`}
             ></div>
@@ -65,7 +65,8 @@ export const HomeComp = () => {
                         : "mt-14"
                 } ${hideNavBar ? "opacity-0 pointer-events-none" : "opacity-100"}`}
             >
-                <div className="flex flex-col justify-start mx-4 md:mx-20 w-full container z-10">
+                <div className="flex flex-col justify-start mx-4 md:mx-20 w-full z-10 [@media(max-height:500px)]:flex-row [@media(max-height:500px)]:justify-between [@media(max-height:500px)]:pr-8">
+                    <div className="flex flex-col gap-2">
                     <div className="xl:text-4xl md:text-xl sm:text-sm font-bold [@media(max-height:500px)]:hidden">
                         <p>Fostering innovation through education</p>
                         <p>technology, and professional</p>
@@ -80,10 +81,10 @@ export const HomeComp = () => {
                         </div>
                     ) : (
                         <>
-                            <div className="flex mt-4 p-2 bg-white rounded-3xl w-[90%] max-w-md">
+                            <div className="flex mt-4 p-2 bg-white rounded-3xl w-[90%] max-w-md [@media(max-height:500px)]:max-w-xs [@media(max-height:500px)]:p-1  [@media(max-height:500px)]:mt-0">
                                 <input
                                     ref={inputRef}
-                                    className="w-4/6 text-black placeholder-black pl-2 text-sm focus:outline-none bg-transparent"
+                                    className="w-4/6 text-black placeholder-black pl-2 text-sm focus:outline-none bg-transparent [@media(max-height:500px)]:text-xs"
                                     type="email"
                                     placeholder="Email address"
                                     autoComplete="email"
@@ -92,24 +93,25 @@ export const HomeComp = () => {
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
                                 <button
-                                    className="w-2/6 text-sm bg-black rounded-3xl p-2"
+                                    className="w-2/6 text-sm bg-black rounded-3xl p-2 [@media(max-height:500px)]:text-xs [@media(max-height:500px)]:p-1"
                                     onClick={handleJoinUsClick}
                                 >
                                     Join Us
                                 </button>
                             </div>
-                            <div className="mt-4 text-sm font-normal">
+                            <div className="mt-4 text-sm font-normal  [@media(max-height:500px)]:mt-2">
                                 <p>Enter your email and become a member today.</p>
                             </div>
                         </>
                     )}
+                    </div>
                     <RecruitmentCard className={`transition-opacity ${hideNavBar&&"opacity-0"}`} />
                 </div>
             </div>
 
             {/* Footer Section */}
             <div className="flex justify-between w-full">
-                <Link to="https://aast.edu/en/" target="_blank" rel="noreferrer" className="flex ml-3 absolute z-10 w-20 h-20 left-0 sm:-translate-y-11">
+                <Link to="https://aast.edu/en/" target="_blank" rel="noreferrer" className={`${hideNavBar && "opacity-0"} flex ml-3 absolute z-10 w-20 h-20 left-0 -translate-y-2 sm:-translate-y-11 transition-opacity`}>
                 <div
                     className="w-20 h-20"
                     style={{backgroundImage: `url(${AAST})`, backgroundSize: "cover", backgroundPosition: "center"}}

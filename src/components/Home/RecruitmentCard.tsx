@@ -22,7 +22,7 @@ export const RecruitmentCard = ({ className = '' }: RecruitmentCardProps) => {
   const { appConfig } = useContext(AppConfigContext);
   return (
     <div
-      className={`bg-[#D3E4F5] text-black w-[calc(100%-150px)] sm:w-fit p-4 mt-4 rounded-2xl flex flex-col ${className}`}
+      className={`bg-[#D3E4F5] text-black w-fit p-4 mt-4 rounded-2xl flex flex-col ${className}  [@media(max-height:500px)]:p-2  [@media(max-height:500px)]:mt-0`}
     >
       {appConfig.recruitment.recruiting && appConfig.recruitment.formLink.length > 0 && (
         <>
@@ -40,7 +40,7 @@ export const RecruitmentCard = ({ className = '' }: RecruitmentCardProps) => {
           <div className="w-full mt-4 h-0 border opacity-10 border-black"></div>
         </>
       )}
-      <p className="font-textmedium font-extrabold text-md mt-2 text-center">
+      <p className="font-textmedium font-extrabold text-md mt-2 text-center  [@media(max-height:500px)]:text-[11px]">
         Connect with us on our socials!
       </p>
       <div className="flex justify-center mt-2 gap-2">
