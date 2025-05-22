@@ -16,13 +16,14 @@ import Feedback from "../../assets/feedback.png";
 import Linkedin from "../../assets/linkedin-white.png";
 import Contact from "../../assets/contact-envelope-white.png";
 import IEEEOrg from "../../assets/ieeeorg.png";
-import Deanery from "../../assets/aastDeanery.png";
+import AAST from "../../assets/aastlogo.png";
 import FooterSocialCard from "./FooterSocialCard";
 import { Element } from "react-scroll";
 import getCollection from "../../firebase/getCollection";
 import addData from "../../firebase/addData";
 import { AppConfigContext } from "../../App";
 import { UserContext } from "../../App";
+import { Link } from "react-router-dom";
 
 interface FAQ {
   question: string;
@@ -91,17 +92,17 @@ const Footer = () => {
             <FooterSocialCard key={index} {...social} />
           ))}
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center w-full justify-between">
           <a href="https://www.ieee.org/" target="_blank" rel="noreferrer">
             <img src={IEEEOrg} alt="IEEE logo" className="w-[100px] border-r border-[#707070] pr-2" />
           </a>
-          <a
-            href="https://aast.edu/en/student-affairs/alex/index.php"
+          <Link
+            to="https://aast.edu/en/"
             target="_blank"
             rel="noreferrer"
           >
-            <img src={Deanery} alt="AAST Deanery" className="w-12 ml-2" />
-          </a>
+            <img src={AAST} alt="AAST" className="w-20 ml-2" />
+          </Link>
         </div>
 
         {/* FAQ Modal */}

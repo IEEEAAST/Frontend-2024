@@ -6,6 +6,7 @@ import { AppConfigContext } from "../../App";
 import { RecruitmentCard } from "./RecruitmentCard";
 import { hideNavBarContext } from "../../App";
 import { CiImageOn } from "react-icons/ci";
+import AAST from "../../assets/aastlogo.png";
 
 export const HomeComp = () => {
     const [email, setEmail] = useState("");
@@ -108,6 +109,13 @@ export const HomeComp = () => {
 
             {/* Footer Section */}
             <div className="flex justify-between w-full">
+                <Link to="https://aast.edu/en/" target="_blank" rel="noreferrer">
+                <div
+                    className="p-2 ml-2 absolute z-10 w-20 h-20 left-0 sm:-translate-y-10"
+                    style={{backgroundImage: `url(${AAST})`, backgroundSize: "cover", backgroundPosition: "center"}}
+                >
+                </div>
+                </Link>
                 <div
                     className={`flex flex-col items-center justify-center w-full pb-4 z-10 transition-opacity relative ${
                         hideNavBar ? "opacity-0 pointer-events-none" : "opacity-100"
@@ -116,7 +124,7 @@ export const HomeComp = () => {
                     <p className="text-center w-40 sm:w-full">Join 120+ trusted distinguished partners.</p>
                 </div>
                 <div
-                    className="bg-slate-600 rounded-full p-2 mr-2 absolute z-10 cursor w-16 h-16 right-0 sm:-translate-y-8"
+                    className="bg-slate-600 rounded-full p-2 mr-2 absolute z-10 cursor-pointer w-16 h-16 right-0 sm:-translate-y-8"
                     onMouseEnter={() => setHideNavBar(true)}
                     onMouseLeave={() => setHideNavBar(false)}
                     onClick={() => setHideNavBar(!hideNavBar)}
