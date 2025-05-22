@@ -109,9 +109,9 @@ export const HomeComp = () => {
 
             {/* Footer Section */}
             <div className="flex justify-between w-full">
-                <Link to="https://aast.edu/en/" target="_blank" rel="noreferrer">
+                <Link to="https://aast.edu/en/" target="_blank" rel="noreferrer" className="flex ml-3 absolute z-10 w-20 h-20 left-0 sm:-translate-y-11">
                 <div
-                    className="p-2 ml-2 absolute z-10 w-20 h-20 left-0 sm:-translate-y-10"
+                    className="w-20 h-20"
                     style={{backgroundImage: `url(${AAST})`, backgroundSize: "cover", backgroundPosition: "center"}}
                 >
                 </div>
@@ -124,7 +124,7 @@ export const HomeComp = () => {
                     <p className="text-center w-40 sm:w-full">Join 120+ trusted distinguished partners.</p>
                 </div>
                 <div
-                    className="bg-slate-600 rounded-full p-2 mr-2 absolute z-10 cursor-pointer w-16 h-16 right-0 sm:-translate-y-8"
+                    className="bg-slate-600 rounded-full p-2 mr-3 absolute z-10 cursor-pointer w-16 h-16 right-0 sm:-translate-y-8"
                     onMouseEnter={() => setHideNavBar(true)}
                     onMouseLeave={() => setHideNavBar(false)}
                     onClick={() => setHideNavBar(!hideNavBar)}
