@@ -3,7 +3,6 @@
 Front end repo for the IEEE AAST Alex SB website for the 2024 season
 
 ## To set up:
-
 In an integrated VSCode terminal or Git Bash:
 
 - Clone this repo on your device:
